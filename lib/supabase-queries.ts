@@ -4,13 +4,20 @@
 // Always filter gpe tables: is_current = true
 // ============================================
 
-import { createSupabaseServerClient } from './supabase'
+import { createClient } from '@supabase/supabase-js'
+
+function getPublicClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
 
 export async function getAllCountries() {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('countries')
-    .select('id, iso2, iso3, name, currency, flag_emoji, region, coverage_level, payroll_complexity_score')
+    .select('id, iso2, iso3, name, currency_code, flag_emoji, region, coverage_level, payroll_complexity_score')
     .order('name', { ascending: true })
   if (error) { console.error('getAllCountries error:', error.message); return [] }
   return data ?? []
@@ -32,7 +39,7 @@ export async function getAllCountryCodes(): Promise<{ iso2: string }[]> {
 }
 
 export async function getCountryByCode(iso2: string) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('countries')
     .select('*')
@@ -43,7 +50,7 @@ export async function getCountryByCode(iso2: string) {
 }
 
 export async function getCountryCount(): Promise<number> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { count, error } = await supabase
     .from('countries')
     .select('*', { count: 'exact', head: true })
@@ -52,7 +59,7 @@ export async function getCountryCount(): Promise<number> {
 }
 
 export async function getTaxBrackets(iso2: string, taxYear?: number) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   let query = supabase
     .schema('gpe').from('tax_brackets')
     .select('*')
@@ -66,7 +73,7 @@ export async function getTaxBrackets(iso2: string, taxYear?: number) {
 }
 
 export async function getTaxYears(iso2: string): Promise<number[]> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .schema('gpe').from('tax_brackets')
     .select('tax_year')
@@ -79,7 +86,7 @@ export async function getTaxYears(iso2: string): Promise<number[]> {
 }
 
 export async function getSocialSecurity(iso2: string) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .schema('gpe').from('social_security')
     .select('*')
@@ -90,7 +97,7 @@ export async function getSocialSecurity(iso2: string) {
 }
 
 export async function getEmploymentRules(iso2: string) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .schema('gpe').from('employment_rules')
     .select('*')
@@ -102,7 +109,7 @@ export async function getEmploymentRules(iso2: string) {
 }
 
 export async function getPayrollCompliance(iso2: string) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .schema('gpe').from('payroll_compliance')
     .select('*')
@@ -114,10 +121,10 @@ export async function getPayrollCompliance(iso2: string) {
 }
 
 export async function getRelatedCountries(iso2: string, region: string) {
-  const supabase = await createSupabaseServerClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('countries')
-    .select('id, iso2, name, flag_emoji, currency, region, coverage_level, payroll_complexity_score')
+    .select('id, iso2, name, flag_emoji, currency_code, region, coverage_level, payroll_complexity_score')
     .eq('region', region)
     .neq('iso2', iso2.toUpperCase())
     .limit(4)

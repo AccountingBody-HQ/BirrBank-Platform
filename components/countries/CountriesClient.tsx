@@ -18,7 +18,7 @@ interface Country {
   iso3: string | null
   name: string
   flag_emoji: string | null
-  currency: string | null
+  currency_code: string | null
   region: string | null
   coverage_level: CoverageLevel | null
   payroll_complexity_score: number | null
@@ -58,7 +58,7 @@ export default function CountriesClient({ countries }: CountriesClientProps) {
       result = result.filter(c =>
         c.name.toLowerCase().includes(q) ||
         c.iso2.toLowerCase().includes(q) ||
-        (c.currency?.toLowerCase().includes(q) ?? false)
+        (c.currency_code?.toLowerCase().includes(q) ?? false)
       )
     }
 
@@ -188,7 +188,7 @@ export default function CountriesClient({ countries }: CountriesClientProps) {
               iso2={country.iso2}
               name={country.name}
               flag_emoji={country.flag_emoji}
-              currency={country.currency}
+              currency={country.currency_code}
               region={country.region}
               coverage_level={country.coverage_level}
               payroll_complexity_score={country.payroll_complexity_score}

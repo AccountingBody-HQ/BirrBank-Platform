@@ -203,9 +203,9 @@ export default async function CountryPage(
                         {country.region}
                       </span>
                     )}
-                    {country.currency && (
+                    {country.currency_code && (
                       <span className="font-mono bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs font-bold text-slate-300">
-                        {country.currency}
+                        {country.currency_code}
                       </span>
                     )}
                     {country.last_verified && (
@@ -294,7 +294,7 @@ export default async function CountryPage(
               {
                 label: 'Minimum Wage',
                 value: employmentRules?.minimum_wage
-                  ? fmtCurrency(employmentRules.minimum_wage, country.currency)
+                  ? fmtCurrency(employmentRules.minimum_wage, country.currency_code)
                   : '—',
                 sub: employmentRules?.payroll_frequency ?? 'Per annum',
                 icon: Scale,
@@ -361,10 +361,10 @@ export default async function CountryPage(
                             {bracket.bracket_label ?? `Band ${i + 1}`}
                           </td>
                           <td className="px-6 py-4 text-sm font-mono text-slate-600">
-                            {fmtCurrency(bracket.min_income, country.currency)}
+                            {fmtCurrency(bracket.min_income, country.currency_code)}
                             {' — '}
                             {bracket.max_income
-                              ? fmtCurrency(bracket.max_income, country.currency)
+                              ? fmtCurrency(bracket.max_income, country.currency_code)
                               : 'and above'}
                           </td>
                           <td className="px-6 py-4 text-right">
@@ -407,7 +407,7 @@ export default async function CountryPage(
                               </p>
                               {row.cap_amount && (
                                 <p className="text-xs text-slate-400 mt-0.5">
-                                  Capped at {fmtCurrency(row.cap_amount, country.currency)}
+                                  Capped at {fmtCurrency(row.cap_amount, country.currency_code)}
                                 </p>
                               )}
                             </div>
@@ -432,7 +432,7 @@ export default async function CountryPage(
                               </p>
                               {row.cap_amount && (
                                 <p className="text-xs text-slate-400 mt-0.5">
-                                  Capped at {fmtCurrency(row.cap_amount, country.currency)}
+                                  Capped at {fmtCurrency(row.cap_amount, country.currency_code)}
                                 </p>
                               )}
                             </div>
@@ -471,7 +471,7 @@ export default async function CountryPage(
               ) : (
                 <div className="grid sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {[
-                    { label: 'Minimum Wage',       value: fmtCurrency(employmentRules.minimum_wage, country.currency),         icon: '💰' },
+                    { label: 'Minimum Wage',       value: fmtCurrency(employmentRules.minimum_wage, country.currency_code),         icon: '💰' },
                     { label: 'Annual Leave',        value: fmt(employmentRules.annual_leave_days, ' days'),                      icon: '🏖️' },
                     { label: 'Sick Leave',          value: fmt(employmentRules.sick_leave_days, ' days'),                        icon: '🏥' },
                     { label: 'Notice Period',       value: fmt(employmentRules.notice_period_days, ' days'),                     icon: '📋' },
@@ -578,7 +578,7 @@ export default async function CountryPage(
             <MiniCalculator
               countryCode={code}
               countryName={country.name}
-              currency={country.currency}
+              currency={country.currency_code}
               taxBrackets={taxBrackets}
               socialSecurity={socialSecurity}
               minimumWage={employmentRules?.minimum_wage ?? null}
@@ -659,7 +659,7 @@ export default async function CountryPage(
                   iso2={c.iso2}
                   name={c.name}
                   flag_emoji={c.flag_emoji}
-                  currency={c.currency}
+                  currency={c.currency_code}
                   region={c.region}
                   coverage_level={c.coverage_level}
                   payroll_complexity_score={c.payroll_complexity_score}
