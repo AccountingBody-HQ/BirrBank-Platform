@@ -65,6 +65,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Inter", "IBM Plex Sans", "system-ui", "sans-serif"],
+        serif: ["var(--font-playfair)", "Georgia", "serif"],
         mono: ["IBM Plex Mono", "Fira Code", "monospace"],
       },
       fontSize: {

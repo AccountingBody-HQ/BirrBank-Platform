@@ -109,7 +109,7 @@ export default async function HomePage() {
 
             {/* left — headline and CTAs */}
             <div>
-              <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.05] tracking-tight mb-8">
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.05] tracking-tight mb-8 font-serif">
                 The world's most comprehensive<br />
                 <span className="text-blue-700">global payroll</span><br />
                 intelligence platform.
@@ -179,7 +179,7 @@ export default async function HomePage() {
                 <div className="h-px w-8 bg-blue-600" />
                 <span className="text-blue-600 text-xs font-bold uppercase tracking-[0.2em]">The Platform</span>
               </div>
-              <h2 className="text-4xl font-extrabold text-slate-900 leading-tight tracking-tight mb-6">
+              <h2 className="text-4xl font-extrabold text-slate-900 leading-tight tracking-tight mb-6 font-serif">
                 Everything you need for global payroll.
               </h2>
               <p className="text-slate-500 leading-relaxed text-base mb-8">
@@ -225,7 +225,7 @@ export default async function HomePage() {
                 <div className="h-px w-8 bg-blue-600" />
                 <span className="text-blue-600 text-xs font-bold uppercase tracking-[0.2em]">Popular Jurisdictions</span>
               </div>
-              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">Featured Countries</h2>
+              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight font-serif">Featured Countries</h2>
             </div>
             <Link href="/countries/"
               className="text-blue-700 font-bold text-sm uppercase tracking-wide flex items-center gap-1 hover:gap-2 transition-all">
@@ -262,7 +262,7 @@ export default async function HomePage() {
                 <div className="h-px w-8 bg-blue-600" />
                 <span className="text-blue-600 text-xs font-bold uppercase tracking-[0.2em]">Our Standards</span>
               </div>
-              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+              <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 font-serif">
                 Data held to the highest standard.
               </h2>
               <p className="text-slate-500 leading-relaxed">
@@ -296,7 +296,7 @@ export default async function HomePage() {
                   <div className="h-px w-8 bg-blue-600" />
                   <span className="text-blue-600 text-xs font-bold uppercase tracking-[0.2em]">Knowledge Base</span>
                 </div>
-                <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">Latest Insights</h2>
+                <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight font-serif">Latest Insights</h2>
               </div>
               <Link href="/insights/"
                 className="text-blue-700 font-bold text-sm uppercase tracking-wide flex items-center gap-1 hover:gap-2 transition-all">
@@ -332,7 +332,7 @@ export default async function HomePage() {
                 <div className="h-px w-8 bg-blue-400" />
                 <span className="text-blue-400 text-xs font-bold uppercase tracking-[0.2em]">Stay Current</span>
               </div>
-              <h2 className="text-4xl font-extrabold text-white tracking-tight leading-tight mb-6">
+              <h2 className="text-4xl font-extrabold text-white tracking-tight leading-tight mb-6 font-serif">
                 Get monthly global payroll updates.
               </h2>
               <p className="text-slate-400 leading-relaxed text-base max-w-md">
