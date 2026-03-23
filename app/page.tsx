@@ -158,14 +158,14 @@ export default async function HomePage() {
           </div>
 
           {/* Stat strip */}
-          <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-0 bg-slate-900/60 border border-slate-700/60 rounded-2xl overflow-hidden">
+          <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
               { value: '195', label: 'Countries', sub: 'Full global coverage' },
               { value: '10,000+', label: 'Data Points', sub: 'Per country record' },
               { value: 'Monthly', label: 'Updates', sub: 'Always current' },
               { value: 'Free', label: 'Core Access', sub: 'No account required' },
             ].map((s, i) => (
-              <div key={s.label} className={`px-8 py-8 text-center ${i < 3 ? 'border-r border-slate-700/60' : ''}`}>
+              <div key={s.label} className="text-left">
                 <div className="text-3xl font-black text-white tracking-tight">{s.value}</div>
                 <div className="text-sm font-bold text-slate-300 mt-1">{s.label}</div>
                 <div className="text-xs text-slate-500 mt-0.5">{s.sub}</div>
