@@ -2,18 +2,18 @@ import Link from 'next/link'
 import CountrySearch from '@/components/homepage/CountrySearch'
 import {
   Globe, Calculator, Building2, Shield, ArrowRight,
-  ChevronRight, TrendingUp, Lock, RefreshCw, Award
+  ChevronRight, Lock, RefreshCw, Award, TrendingUp
 } from 'lucide-react'
 
 const FEATURED_COUNTRIES = [
-  { code: 'gb', name: 'United Kingdom', corp: '25%', income: '20–45%', currency: 'GBP' },
-  { code: 'us', name: 'United States',  corp: '21%', income: '10–37%', currency: 'USD' },
-  { code: 'de', name: 'Germany',         corp: '15%', income: '14–45%', currency: 'EUR' },
-  { code: 'fr', name: 'France',          corp: '25%', income: '0–45%',  currency: 'EUR' },
-  { code: 'sg', name: 'Singapore',       corp: '17%', income: '0–22%',  currency: 'SGD' },
-  { code: 'ae', name: 'UAE',             corp: '9%',  income: '0%',     currency: 'AED' },
-  { code: 'au', name: 'Australia',       corp: '30%', income: '0–45%',  currency: 'AUD' },
-  { code: 'ch', name: 'Switzerland',     corp: '8.5%',income: '0–11.5%',currency: 'CHF' },
+  { code: 'gb', name: 'United Kingdom', income: '20–45%', ss_employer: '13.8%', currency: 'GBP' },
+  { code: 'us', name: 'United States',  income: '10–37%', ss_employer: '7.65%', currency: 'USD' },
+  { code: 'de', name: 'Germany',         income: '14–45%', ss_employer: '~20%',  currency: 'EUR' },
+  { code: 'fr', name: 'France',          income: '0–45%',  ss_employer: '~30%',  currency: 'EUR' },
+  { code: 'sg', name: 'Singapore',       income: '0–22%',  ss_employer: '17%',   currency: 'SGD' },
+  { code: 'ae', name: 'UAE',             income: '0%',     ss_employer: '12.5%', currency: 'AED' },
+  { code: 'au', name: 'Australia',       income: '0–45%',  ss_employer: '11%',   currency: 'AUD' },
+  { code: 'ch', name: 'Switzerland',     income: '0–11.5%',ss_employer: '~10%',  currency: 'CHF' },
 ]
 
 const REGIONS = [
@@ -27,39 +27,43 @@ const REGIONS = [
 const CAPABILITIES = [
   {
     icon: Globe,
-    label: '01',
-    title: 'Country Intelligence',
-    body: 'Income tax brackets, social security rates, employment rules, and compliance obligations — every country, one authoritative source.',
+    num: '01',
+    title: 'Country Payroll Data',
+    body: 'Income tax brackets, social security rates, payroll frequency rules, and employer obligations — every country, one authoritative source.',
     href: '/countries/',
+    cta: 'Browse countries',
   },
   {
     icon: Calculator,
-    label: '02',
+    num: '02',
     title: 'Payroll Calculators',
-    body: 'Net pay, employer costs, and full tax breakdowns. Built for precision across 195 jurisdictions.',
+    body: 'Net pay, employer on-costs, income tax, and social security — full line-by-line payroll breakdowns for 195 jurisdictions.',
     href: '/payroll-tools/',
+    cta: 'Open calculator',
   },
   {
     icon: Building2,
-    label: '03',
+    num: '03',
     title: 'EOR Intelligence',
-    body: 'Employer of Record cost modelling, provider analysis, and compliance guides for entity-free hiring.',
+    body: 'Employer of Record cost modelling, total employment cost estimators, and hiring guides for entity-free international payroll.',
     href: '/eor/',
+    cta: 'Explore EOR',
   },
   {
     icon: Shield,
-    label: '04',
-    title: 'HR & Compliance',
-    body: 'Global employment law by topic — minimum wage, leave, notice periods, probation, and termination rules.',
+    num: '04',
+    title: 'Employment Law',
+    body: 'Minimum wage, statutory leave, notice periods, probation rules, overtime, and termination obligations — by country.',
     href: '/hr-compliance/',
+    cta: 'View guides',
   },
 ]
 
 const STANDARDS = [
-  { icon: Award,      title: 'Government-sourced',  body: 'Every data point traced to an official tax authority or government publication.' },
-  { icon: RefreshCw,  title: 'Updated monthly',     body: 'Rates and thresholds reviewed and updated on a rolling monthly cycle.' },
-  { icon: Lock,       title: 'Expert verified',     body: 'Data reviewed by qualified payroll professionals before publication.' },
-  { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing from 195 countries toward complete global depth.' },
+  { icon: Award,      title: 'Government-sourced',     body: 'Every data point traced to an official tax authority or government publication.' },
+  { icon: RefreshCw,  title: 'Updated monthly',        body: 'Payroll rates and thresholds reviewed and updated on a rolling monthly cycle.' },
+  { icon: Lock,       title: 'Expert verified',        body: 'Data reviewed by qualified payroll professionals before publication.' },
+  { icon: TrendingUp, title: 'Expanding continuously', body: 'Coverage growing toward complete global depth across all 195 countries.' },
 ]
 
 export default async function HomePage() {
@@ -83,149 +87,162 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-white">
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           HERO
-      ════════════════════════════════════ */}
-      <section className="bg-white">
+      ══════════════════════════════════════════ */}
+      <section className="bg-white border-b-2 border-slate-950">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-[1fr_400px] min-h-[90vh]">
 
-          {/* Main hero grid */}
-          <div className="grid lg:grid-cols-[1fr_420px] gap-0 min-h-[88vh] items-center border-b border-slate-200">
+            {/* LEFT */}
+            <div className="flex flex-col justify-center py-24 pr-16 border-r-2 border-slate-950">
 
-            {/* LEFT — headline block */}
-            <div className="py-24 lg:pr-20 border-r border-slate-200">
-
-              <div className="flex items-center gap-3 mb-12">
-                <div className="w-8 h-px bg-blue-700" />
-                <span className="text-blue-700 text-xs font-bold uppercase tracking-[0.25em]">
-                  Global Payroll Intelligence
+              <div className="flex items-center gap-3 mb-10">
+                <div className="w-10 h-0.5 bg-blue-700" />
+                <span className="text-blue-700 text-xs font-black uppercase tracking-[0.3em]">
+                  Global Payroll Intelligence Platform
                 </span>
               </div>
 
-              <h1 className="font-serif text-[3.25rem] lg:text-[4.5rem] xl:text-[5.25rem] font-bold text-slate-950 leading-[1.0] tracking-tight mb-10">
-                The world standard<br />
-                for global payroll<br />
-                <span className="text-blue-700">intelligence.</span>
+              <h1 className="font-serif text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold text-slate-950 leading-[0.95] tracking-tighter mb-10">
+                The world<br />
+                standard for<br />
+                global payroll<br />
+                <em className="text-blue-700 not-italic">intelligence.</em>
               </h1>
 
-              <p className="text-xl text-slate-500 leading-relaxed max-w-xl mb-14 font-light">
-                Payroll data, calculators, and compliance guides for 195 countries. 
-                The reference platform for EOR firms, HR directors, lawyers, 
-                and global finance teams.
+              <p className="text-xl text-slate-500 leading-relaxed max-w-lg mb-12 font-light tracking-wide">
+                Payroll data, calculators, and employment compliance guides 
+                for 195 countries. The reference platform for EOR firms, 
+                HR directors, lawyers, and global finance teams.
               </p>
 
-              {/* Search */}
               <div className="mb-10">
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-slate-400 mb-3">
                   Search any country
                 </p>
                 <CountrySearch />
               </div>
 
-              {/* Region links */}
               <div className="flex flex-wrap gap-2">
                 {REGIONS.map(r => (
                   <Link key={r.slug}
                     href={`/countries/?region=${r.slug}`}
-                    className="text-xs font-semibold text-slate-500 hover:text-blue-700 border border-slate-200 hover:border-blue-300 px-4 py-2 transition-all">
-                    {r.name} <span className="text-slate-300 ml-1">{r.count}</span>
+                    className="text-xs font-bold text-slate-500 hover:text-blue-700 border border-slate-300 hover:border-blue-600 px-4 py-2 transition-all uppercase tracking-wider">
+                    {r.name}
+                    <span className="text-slate-300 ml-2 font-normal">{r.count}</span>
                   </Link>
                 ))}
               </div>
             </div>
 
-            {/* RIGHT — data preview panel */}
-            <div className="hidden lg:flex flex-col py-24 pl-12">
-
-              <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Live Data Preview</p>
-                <p className="text-xs text-slate-400">Sample from our country database</p>
+            {/* RIGHT — live data panel */}
+            <div className="hidden lg:flex flex-col border-b-0 bg-slate-950">
+              <div className="px-8 pt-10 pb-6 border-b border-slate-800">
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-1">
+                  Live Data Preview
+                </p>
+                <p className="text-xs text-slate-600">
+                  Income tax · Employer social security
+                </p>
               </div>
 
-              <div className="border border-slate-200 flex-1 flex flex-col overflow-hidden">
-                {/* Table header */}
-                <div className="grid grid-cols-[1fr_60px_60px] gap-0 bg-slate-950 px-4 py-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Country</span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 text-right">Corp</span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 text-right">Income</span>
-                </div>
-                {/* Table rows */}
-                {FEATURED_COUNTRIES.slice(0, 8).map((c, i) => (
+              {/* Column headers */}
+              <div className="grid grid-cols-[1fr_70px_70px] px-6 py-3 border-b border-slate-800">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-500">Country</span>
+                <span className="text-xs font-black uppercase tracking-widest text-slate-500 text-right">Income</span>
+                <span className="text-xs font-black uppercase tracking-widest text-slate-500 text-right">SS Emp.</span>
+              </div>
+
+              {/* Rows */}
+              <div className="flex-1 flex flex-col divide-y divide-slate-800/60">
+                {FEATURED_COUNTRIES.map(c => (
                   <Link key={c.code} href={`/countries/${c.code}/`}
-                    className="grid grid-cols-[1fr_60px_60px] gap-0 px-4 py-3 border-t border-slate-100 hover:bg-blue-50 transition-colors group">
-                    <div className="flex items-center gap-2.5">
+                    className="grid grid-cols-[1fr_70px_70px] px-6 py-4 hover:bg-slate-900 transition-colors group">
+                    <div className="flex items-center gap-3">
                       <img src={`https://flagcdn.com/20x15/${c.code}.png`}
-                        alt={c.name} width={20} height={15} className="shrink-0" />
-                      <span className="text-sm font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{c.name}</span>
+                        alt={c.name} width={20} height={15} className="shrink-0 opacity-90" />
+                      <span className="text-sm font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">{c.name}</span>
                     </div>
-                    <span className="text-sm text-slate-600 text-right font-mono">{c.corp}</span>
-                    <span className="text-sm text-slate-600 text-right font-mono">{c.income}</span>
+                    <span className="text-sm text-slate-400 text-right font-mono group-hover:text-blue-400 transition-colors">{c.income}</span>
+                    <span className="text-sm text-slate-400 text-right font-mono group-hover:text-blue-400 transition-colors">{c.ss_employer}</span>
                   </Link>
                 ))}
-                <Link href="/countries/"
-                  className="mt-auto border-t border-slate-200 bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between transition-colors group">
-                  <span className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-blue-700">View all 195 countries</span>
-                  <ArrowRight size={13} className="text-slate-400 group-hover:text-blue-700" />
-                </Link>
               </div>
+
+              <Link href="/countries/"
+                className="flex items-center justify-between px-6 py-5 border-t-2 border-slate-700 bg-blue-700 hover:bg-blue-600 transition-colors group">
+                <span className="text-xs font-black uppercase tracking-[0.3em] text-white">View all 195 countries</span>
+                <ArrowRight size={14} className="text-white group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
+
           </div>
 
-          {/* Stat bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-slate-200 border-b border-slate-200">
+          {/* Stat strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 border-t-2 border-slate-950">
             {[
-              { value: '195',     label: 'Countries covered' },
-              { value: '10,000+', label: 'Data points' },
-              { value: 'Monthly', label: 'Update cycle' },
-              { value: 'Free',    label: 'Core access' },
-            ].map(s => (
-              <div key={s.label} className="py-8 px-8 text-center">
-                <div className="text-3xl font-bold text-slate-950 tracking-tight">{s.value}</div>
-                <div className="text-slate-400 text-sm mt-1 font-medium">{s.label}</div>
+              { value: '195',     label: 'Countries',    sub: 'Full global coverage' },
+              { value: '10,000+', label: 'Data Points',  sub: 'Per country record' },
+              { value: 'Monthly', label: 'Update Cycle', sub: 'Always current' },
+              { value: 'Free',    label: 'Core Access',  sub: 'No account required' },
+            ].map((s, i) => (
+              <div key={s.label}
+                className={`py-10 px-8 text-center ${i < 3 ? 'border-r-2 border-slate-950' : ''}`}>
+                <div className="text-4xl font-black text-slate-950 tracking-tighter">{s.value}</div>
+                <div className="text-sm font-bold text-slate-700 mt-1 uppercase tracking-wider">{s.label}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{s.sub}</div>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           CAPABILITIES
-      ════════════════════════════════════ */}
+      ══════════════════════════════════════════ */}
       <section className="bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
 
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-20 mb-20">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-24 items-end mb-24 pb-16 border-b border-slate-800">
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-px bg-blue-500" />
-                <span className="text-blue-400 text-xs font-bold uppercase tracking-[0.25em]">Platform</span>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-0.5 bg-blue-500" />
+                <span className="text-blue-400 text-xs font-black uppercase tracking-[0.3em]">Platform</span>
               </div>
-              <h2 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
-                Built for professionals<br />who cannot afford<br />to get it wrong.
+              <h2 className="font-serif text-5xl lg:text-6xl font-bold text-white leading-[0.95] tracking-tighter">
+                Built for<br />
+                professionals<br />
+                who cannot<br />
+                afford to get<br />
+                it wrong.
               </h2>
             </div>
-            <div className="flex items-end">
-              <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
-                GlobalPayrollExpert brings together country tax data, payroll calculation, 
+            <div>
+              <p className="text-slate-400 text-xl leading-relaxed max-w-xl font-light mb-8">
+                GlobalPayrollExpert brings together payroll data, employment tax calculations, 
                 EOR intelligence, and employment law into one authoritative platform — 
                 verified, current, and free to access.
               </p>
+              <Link href="/countries/"
+                className="inline-flex items-center gap-3 border-2 border-blue-700 hover:bg-blue-700 text-blue-400 hover:text-white font-black text-xs uppercase tracking-[0.25em] px-8 py-4 transition-all">
+                Explore the platform <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-800">
             {CAPABILITIES.map(cap => (
               <Link key={cap.title} href={cap.href}
-                className="group px-0 sm:px-8 py-10 first:pl-0 last:pr-0 hover:bg-slate-900 transition-colors">
-                <div className="text-slate-700 text-xs font-bold uppercase tracking-widest mb-6">{cap.label}</div>
-                <div className="bg-blue-700 group-hover:bg-blue-600 text-white p-3 w-11 h-11 flex items-center justify-center mb-6 transition-colors">
+                className="group px-0 lg:px-10 py-10 first:pl-0 last:pr-0 hover:bg-slate-900/60 transition-colors">
+                <div className="text-slate-700 text-xs font-black uppercase tracking-[0.3em] mb-8">{cap.num}</div>
+                <div className="bg-blue-700 group-hover:bg-blue-500 text-white w-12 h-12 flex items-center justify-center mb-8 transition-colors">
                   <cap.icon size={20} />
                 </div>
-                <h3 className="font-bold text-white text-lg mb-3 group-hover:text-blue-300 transition-colors">{cap.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed mb-6">{cap.body}</p>
-                <div className="flex items-center gap-1 text-blue-500 text-xs font-bold uppercase tracking-widest group-hover:gap-2 transition-all">
-                  Explore <ChevronRight size={12} />
+                <h3 className="font-bold text-white text-lg mb-4 leading-tight group-hover:text-blue-300 transition-colors">{cap.title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-8">{cap.body}</p>
+                <div className="flex items-center gap-2 text-blue-500 text-xs font-black uppercase tracking-[0.25em] group-hover:gap-3 transition-all">
+                  {cap.cta} <ChevronRight size={12} />
                 </div>
               </Link>
             ))}
@@ -233,113 +250,105 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           COUNTRY DATA TABLE
-      ════════════════════════════════════ */}
-      <section className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
+      ══════════════════════════════════════════ */}
+      <section className="bg-white border-y-2 border-slate-950">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
 
-          <div className="flex items-end justify-between mb-14">
+          <div className="flex items-end justify-between mb-16">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-px bg-blue-700" />
-                <span className="text-blue-700 text-xs font-bold uppercase tracking-[0.25em]">Country Data</span>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-0.5 bg-blue-700" />
+                <span className="text-blue-700 text-xs font-black uppercase tracking-[0.3em]">Payroll Data</span>
               </div>
-              <h2 className="font-serif text-4xl lg:text-5xl font-bold text-slate-950 leading-tight tracking-tight">
-                Featured jurisdictions.
+              <h2 className="font-serif text-5xl lg:text-6xl font-bold text-slate-950 leading-[0.95] tracking-tighter">
+                Featured<br />jurisdictions.
               </h2>
             </div>
             <Link href="/countries/"
-              className="hidden sm:flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-widest hover:gap-3 transition-all">
-              All 195 countries <ArrowRight size={15} />
+              className="hidden sm:flex items-center gap-2 text-blue-700 font-black text-xs uppercase tracking-[0.25em] hover:gap-3 transition-all border-b-2 border-blue-700 pb-1">
+              All 195 countries <ArrowRight size={13} />
             </Link>
           </div>
 
           {/* Desktop table */}
-          <div className="hidden lg:block border border-slate-200">
-            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] bg-slate-950 px-6 py-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Country</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Corp Tax</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Income Tax</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Currency</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400"></span>
+          <div className="hidden lg:block border-2 border-slate-950">
+            <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr_140px] bg-slate-950 px-8 py-5">
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Country</span>
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Income Tax</span>
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Employer SS</span>
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">Currency</span>
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400"></span>
             </div>
             {FEATURED_COUNTRIES.map((c, i) => (
               <Link key={c.code} href={`/countries/${c.code}/`}
-                className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] px-6 py-5 border-t border-slate-100 hover:bg-slate-50 transition-colors group items-center">
-                <div className="flex items-center gap-4">
+                className="grid grid-cols-[2.5fr_1fr_1fr_1fr_140px] px-8 py-6 border-t-2 border-slate-100 hover:bg-blue-50 hover:border-blue-100 transition-colors group items-center">
+                <div className="flex items-center gap-5">
                   <img src={`https://flagcdn.com/32x24/${c.code}.png`}
-                    alt={c.name} width={28} height={21} />
-                  <span className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">{c.name}</span>
+                    alt={c.name} width={28} height={21} className="shrink-0" />
+                  <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors text-base">{c.name}</span>
                 </div>
-                <span className="font-mono text-slate-700 font-semibold">{c.corp}</span>
-                <span className="font-mono text-slate-700">{c.income}</span>
-                <span className="text-slate-500 font-medium">{c.currency}</span>
-                <span className="flex items-center gap-1 text-blue-700 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
-                  View data <ChevronRight size={11} />
+                <span className="font-mono text-slate-700 font-semibold">{c.income}</span>
+                <span className="font-mono text-slate-700 font-semibold">{c.ss_employer}</span>
+                <span className="text-slate-500 font-semibold tracking-wider">{c.currency}</span>
+                <span className="flex items-center gap-1.5 text-blue-700 text-xs font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                  View full data <ChevronRight size={11} />
                 </span>
               </Link>
             ))}
           </div>
 
-          {/* Mobile grid */}
-          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {FEATURED_COUNTRIES.map(c => (
+          {/* Mobile cards */}
+          <div className="lg:hidden grid sm:grid-cols-2 gap-0 border-2 border-slate-950">
+            {FEATURED_COUNTRIES.map((c, i) => (
               <Link key={c.code} href={`/countries/${c.code}/`}
-                className="group border border-slate-200 hover:border-blue-300 p-5 transition-all relative">
-                <div className="absolute top-0 left-0 w-0 h-0.5 bg-blue-700 group-hover:w-full transition-all duration-300" />
-                <div className="flex items-center gap-3 mb-4">
+                className="group border-b-2 border-r-0 sm:odd:border-r-2 border-slate-950 p-6 hover:bg-blue-50 transition-colors relative">
+                <div className="flex items-center gap-3 mb-5">
                   <img src={`https://flagcdn.com/28x21/${c.code}.png`}
                     alt={c.name} width={28} height={21} />
-                  <span className="font-bold text-slate-900">{c.name}</span>
+                  <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{c.name}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Corp Tax</div>
-                    <div className="font-mono font-semibold text-slate-800">{c.corp}</div>
+                    <div className="text-slate-400 text-xs font-black uppercase tracking-wider mb-1">Income Tax</div>
+                    <div className="font-mono font-bold text-slate-800">{c.income}</div>
                   </div>
                   <div>
-                    <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Income Tax</div>
-                    <div className="font-mono font-semibold text-slate-800">{c.income}</div>
+                    <div className="text-slate-400 text-xs font-black uppercase tracking-wider mb-1">Employer SS</div>
+                    <div className="font-mono font-bold text-slate-800">{c.ss_employer}</div>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
 
-          <div className="mt-8 sm:hidden">
-            <Link href="/countries/"
-              className="flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-widest">
-              All 195 countries <ArrowRight size={15} />
-            </Link>
-          </div>
-
         </div>
       </section>
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           DATA STANDARDS
-      ════════════════════════════════════ */}
-      <section className="bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
-          <div className="grid lg:grid-cols-[1fr_3fr] gap-20">
+      ══════════════════════════════════════════ */}
+      <section className="bg-white border-b-2 border-slate-950">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+          <div className="grid lg:grid-cols-[1fr_3fr] gap-24">
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-px bg-blue-700" />
-                <span className="text-blue-700 text-xs font-bold uppercase tracking-[0.25em]">Our Standards</span>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-0.5 bg-blue-700" />
+                <span className="text-blue-700 text-xs font-black uppercase tracking-[0.3em]">Our Standards</span>
               </div>
-              <h2 className="font-serif text-4xl font-bold text-slate-950 leading-tight tracking-tight">
-                Data held to the highest standard.
+              <h2 className="font-serif text-4xl lg:text-5xl font-bold text-slate-950 leading-[0.95] tracking-tighter">
+                Data held<br />to the<br />highest<br />standard.
               </h2>
             </div>
-            <div className="grid sm:grid-cols-2 gap-0 border-l border-t border-slate-200">
+            <div className="grid sm:grid-cols-2 gap-0 border-l-2 border-t-2 border-slate-950">
               {STANDARDS.map((s, i) => (
                 <div key={s.title}
-                  className={`p-8 border-r border-b border-slate-200 ${i % 2 !== 0 ? 'border-r-0' : ''}`}>
-                  <div className="bg-blue-700 text-white p-2.5 w-10 h-10 flex items-center justify-center mb-5">
-                    <s.icon size={18} />
+                  className={`p-10 border-r-2 border-b-2 border-slate-950 ${i % 2 !== 0 ? 'border-r-0' : ''}`}>
+                  <div className="bg-blue-700 text-white w-12 h-12 flex items-center justify-center mb-6">
+                    <s.icon size={20} />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base mb-2">{s.title}</h3>
+                  <h3 className="font-bold text-slate-900 text-lg mb-3">{s.title}</h3>
                   <p className="text-slate-500 text-sm leading-relaxed">{s.body}</p>
                 </div>
               ))}
@@ -348,41 +357,40 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           INSIGHTS
-      ════════════════════════════════════ */}
+      ══════════════════════════════════════════ */}
       {insights.length > 0 && (
-        <section className="bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
-            <div className="flex items-end justify-between mb-14">
+        <section className="bg-slate-50 border-b-2 border-slate-950">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+            <div className="flex items-end justify-between mb-16">
               <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-px bg-blue-700" />
-                  <span className="text-blue-700 text-xs font-bold uppercase tracking-[0.25em]">Insights</span>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-0.5 bg-blue-700" />
+                  <span className="text-blue-700 text-xs font-black uppercase tracking-[0.3em]">Payroll Intelligence</span>
                 </div>
-                <h2 className="font-serif text-4xl lg:text-5xl font-bold text-slate-950 tracking-tight">
+                <h2 className="font-serif text-5xl lg:text-6xl font-bold text-slate-950 leading-[0.95] tracking-tighter">
                   Latest analysis.
                 </h2>
               </div>
               <Link href="/insights/"
-                className="hidden sm:flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-widest hover:gap-3 transition-all">
-                All articles <ArrowRight size={15} />
+                className="hidden sm:flex items-center gap-2 text-blue-700 font-black text-xs uppercase tracking-[0.25em] hover:gap-3 transition-all border-b-2 border-blue-700 pb-1">
+                All articles <ArrowRight size={13} />
               </Link>
             </div>
-            <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-slate-200">
+            <div className="grid sm:grid-cols-3 gap-0 border-l-2 border-t-2 border-slate-950">
               {insights.map((article: any) => (
                 <Link key={article.slug?.current}
                   href={`/insights/${article.slug?.current}/`}
-                  className="group border-r border-b border-slate-200 p-10 hover:bg-slate-50 transition-colors relative">
-                  <div className="absolute top-0 left-0 h-0.5 w-0 bg-blue-700 group-hover:w-full transition-all duration-300" />
+                  className="group border-r-2 border-b-2 border-slate-950 p-10 hover:bg-white transition-colors relative">
                   {article.category && (
-                    <div className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-4">{article.category}</div>
+                    <div className="text-xs font-black text-blue-700 uppercase tracking-[0.25em] mb-5">{article.category}</div>
                   )}
                   <h3 className="font-bold text-slate-900 text-lg leading-snug mb-4 group-hover:text-blue-700 transition-colors">{article.title}</h3>
                   {article.excerpt && (
                     <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{article.excerpt}</p>
                   )}
-                  <div className="mt-6 flex items-center gap-1 text-blue-700 text-xs font-bold uppercase tracking-widest group-hover:gap-2 transition-all">
+                  <div className="mt-8 flex items-center gap-2 text-blue-700 text-xs font-black uppercase tracking-[0.25em] group-hover:gap-3 transition-all">
                     Read article <ChevronRight size={12} />
                   </div>
                 </Link>
@@ -392,41 +400,46 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ════════════════════════════════════
+      {/* ══════════════════════════════════════════
           EMAIL CAPTURE
-      ════════════════════════════════════ */}
+      ══════════════════════════════════════════ */}
       <section className="bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-8 h-px bg-blue-500" />
-              <span className="text-blue-400 text-xs font-bold uppercase tracking-[0.25em]">Stay Informed</span>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-0.5 bg-blue-500" />
+                <span className="text-blue-400 text-xs font-black uppercase tracking-[0.3em]">Stay Informed</span>
+              </div>
+              <h2 className="font-serif text-5xl lg:text-6xl font-bold text-white leading-[0.95] tracking-tighter mb-8">
+                Monthly payroll<br />updates.<br />
+                <span className="text-slate-600">Free. No noise.</span>
+              </h2>
+              <p className="text-slate-400 text-lg leading-relaxed max-w-md font-light">
+                Payroll rate changes, new country data, employment law updates, 
+                and compliance alerts — once a month, direct to your inbox.
+              </p>
             </div>
-            <h2 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-6">
-              Monthly global payroll updates.<br />
-              <span className="text-slate-500">Free. No noise.</span>
-            </h2>
-            <p className="text-slate-400 text-lg leading-relaxed mb-12 max-w-xl">
-              Rate changes, new country data, compliance alerts, and analysis — 
-              once a month, direct to your inbox.
-            </p>
-            <form action="/api/subscribe" method="POST"
-              className="flex flex-col sm:flex-row gap-0 max-w-lg border border-slate-700">
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="your@email.com"
-                className="flex-1 px-6 py-4 bg-slate-900 text-white placeholder:text-slate-600 outline-none focus:bg-slate-800 transition-colors text-base border-r border-slate-700"
-              />
-              <button type="submit"
-                className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-8 py-4 transition-colors text-sm uppercase tracking-widest whitespace-nowrap">
-                Subscribe
-              </button>
-            </form>
-            <p className="text-slate-700 text-xs mt-5 uppercase tracking-wider">
-              No spam · Unsubscribe any time · We respect your privacy
-            </p>
+            <div>
+              <form action="/api/subscribe" method="POST" className="mb-5">
+                <div className="flex border-2 border-slate-700 focus-within:border-blue-600 transition-colors">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="your@email.com"
+                    className="flex-1 px-6 py-5 bg-slate-900 text-white placeholder:text-slate-600 outline-none text-base font-medium"
+                  />
+                  <button type="submit"
+                    className="bg-blue-700 hover:bg-blue-600 text-white font-black px-10 py-5 transition-colors text-xs uppercase tracking-[0.25em] whitespace-nowrap border-l-2 border-slate-700">
+                    Subscribe
+                  </button>
+                </div>
+              </form>
+              <p className="text-slate-700 text-xs font-bold uppercase tracking-[0.2em]">
+                No spam · Unsubscribe any time · We respect your privacy
+              </p>
+            </div>
           </div>
         </div>
       </section>
