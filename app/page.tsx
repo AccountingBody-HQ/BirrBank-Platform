@@ -109,7 +109,7 @@ export default async function HomePage() {
             </div>
 
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              Your complete <span className="text-blue-400">global payroll</span><br />intelligence platform.
+              Your complete<br /><span className="text-blue-400">global payroll</span><br />intelligence platform.
             </h1>
 
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
