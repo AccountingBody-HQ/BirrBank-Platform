@@ -122,6 +122,23 @@ export default async function HomePage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
+              {/* Quick capability links */}
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mb-8">
+              {[
+                { label: 'Country Data',       href: '/countries/',    icon: '🌍' },
+                { label: 'Payroll Calculator', href: '/payroll-tools/', icon: '🧮' },
+                { label: 'EOR Intelligence',   href: '/eor/',          icon: '🏢' },
+                { label: 'Employment Law',     href: '/hr-compliance/', icon: '⚖️' },
+              ].map(item => (
+                <Link key={item.href} href={item.href}
+                  className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-500/40 rounded-xl px-4 py-3 transition-all group">
+                  <span className="text-base leading-none">{item.icon}</span>
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
               {REGIONS.map(r => (
                 <Link key={r.slug} href={`/countries/?region=${r.slug}`}
