@@ -28,6 +28,9 @@ import MiniCalculator from '@/components/countries/MiniCalculator'
 // ── Revalidate every 24 hours ──────────────────────────────────────────────
 export const revalidate = 86400
 
+// ── Allow dynamic rendering for countries not in generateStaticParams ────────
+export const dynamicParams = true
+
 // ── generateStaticParams ───────────────────────────────────────────────────
 export async function generateStaticParams() {
   const codes = await getAllCountryCodes()
