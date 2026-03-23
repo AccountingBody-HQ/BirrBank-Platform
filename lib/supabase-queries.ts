@@ -54,7 +54,7 @@ export async function getCountryCount(): Promise<number> {
 export async function getTaxBrackets(iso2: string, taxYear?: number) {
   const supabase = await createSupabaseServerClient()
   let query = supabase
-    .from('gpe.tax_brackets')
+    .schema('gpe').from('tax_brackets')
     .select('*')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
@@ -68,7 +68,7 @@ export async function getTaxBrackets(iso2: string, taxYear?: number) {
 export async function getTaxYears(iso2: string): Promise<number[]> {
   const supabase = await createSupabaseServerClient()
   const { data, error } = await supabase
-    .from('gpe.tax_brackets')
+    .schema('gpe').from('tax_brackets')
     .select('tax_year')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
@@ -81,7 +81,7 @@ export async function getTaxYears(iso2: string): Promise<number[]> {
 export async function getSocialSecurity(iso2: string) {
   const supabase = await createSupabaseServerClient()
   const { data, error } = await supabase
-    .from('gpe.social_security')
+    .schema('gpe').from('social_security')
     .select('*')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
@@ -92,7 +92,7 @@ export async function getSocialSecurity(iso2: string) {
 export async function getEmploymentRules(iso2: string) {
   const supabase = await createSupabaseServerClient()
   const { data, error } = await supabase
-    .from('gpe.employment_rules')
+    .schema('gpe').from('employment_rules')
     .select('*')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
@@ -104,7 +104,7 @@ export async function getEmploymentRules(iso2: string) {
 export async function getPayrollCompliance(iso2: string) {
   const supabase = await createSupabaseServerClient()
   const { data, error } = await supabase
-    .from('gpe.payroll_compliance')
+    .schema('gpe').from('payroll_compliance')
     .select('*')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
