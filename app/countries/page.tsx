@@ -51,7 +51,7 @@ export default async function CountriesPage() {
                 <div className="bg-blue-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
                   <Globe size={20} />
                 </div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                <h1 className="font-serif text-3xl lg:text-4xl font-bold text-white tracking-tight">
                   All Countries
                 </h1>
                 {/* Count badge */}
