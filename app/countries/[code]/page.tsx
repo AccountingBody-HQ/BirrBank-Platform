@@ -399,7 +399,7 @@ export default async function CountryPage(
                               <p className="text-sm font-medium text-slate-700">
                                 {row.contribution_type}
                               </p>
-                              {row.employee_cap_annual ?? row.employer_cap_annual && (
+                              {(row.employee_cap_annual ?? row.employer_cap_annual) && (
                                 <p className="text-xs text-slate-400 mt-0.5">
                                   Capped at {fmtCurrency(row.employee_cap_annual ?? row.employer_cap_annual, country.currency_code)}
                                 </p>
@@ -424,7 +424,7 @@ export default async function CountryPage(
                               <p className="text-sm font-medium text-slate-700">
                                 {row.contribution_type}
                               </p>
-                              {row.employee_cap_annual ?? row.employer_cap_annual && (
+                              {(row.employee_cap_annual ?? row.employer_cap_annual) && (
                                 <p className="text-xs text-slate-400 mt-0.5">
                                   Capped at {fmtCurrency(row.employee_cap_annual ?? row.employer_cap_annual, country.currency_code)}
                                 </p>
