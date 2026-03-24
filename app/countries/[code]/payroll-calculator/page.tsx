@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
+import { createSupabaseServerClient } from '@/lib/supabase'
 import Calculator from '@/components/Calculator'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
 import type { Metadata } from 'next'
@@ -16,7 +16,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { code } = await params
-  const supabase = await createClient()
+  const supabase = await createSupabaseServerClient()
   const { data: country } = await supabase
     .from('countries')
     .select('name, currency_code')
@@ -42,7 +42,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
   const { code } = await params
   const { salary, period } = await searchParams
   const upperCode = code.toUpperCase()
-  const supabase = await createClient()
+  const supabase = await createSupabaseServerClient()
 
   // ── Load country ──────────────────────────────────────────────────────────
   const { data: country } = await supabase
