@@ -74,20 +74,23 @@ Respond ONLY with a JSON object in this exact format, no other text:
       })
 
       const data = await response.json()
-      const text = data.content?.[0]?.text ?? ''
+      console.log('Full API response:', JSON.stringify(data))
+
+      // Check for API errors
+      if (data.error) throw new Error('API error: ' + data.error.message)
+      if (!data.content || !data.content[0]) throw new Error('Empty response from API: ' + JSON.stringify(data))
+
+      const text = data.content[0].text ?? ''
+      console.log('Text response:', text.slice(0, 300))
 
       // Strip markdown code blocks if present
-      const cleaned = text
-        .replace(/```json/g, '')
-        .replace(/```/g, '')
-        .trim()
+      const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim()
 
       // Find JSON object in response
       const start = cleaned.indexOf('{')
       const end = cleaned.lastIndexOf('}')
       if (start === -1 || end === -1) {
-        console.error('Raw response:', text)
-        throw new Error('No JSON found in response')
+        throw new Error('No JSON in: ' + cleaned.slice(0, 200))
       }
       const jsonStr = cleaned.slice(start, end + 1)
       const parsed = JSON.parse(jsonStr)
