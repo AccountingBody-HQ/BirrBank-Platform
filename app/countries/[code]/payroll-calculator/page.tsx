@@ -81,13 +81,13 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
 
   const ssRates: SocialSecurityRate[] = (rawSS ?? []).flatMap((s) => [
     {
-      contribution_type: 'employer_' + s.contribution_type,
+      contribution_type: 'employer',
       rate_percent: Number(s.employer_rate),
       cap_amount: s.employer_cap_annual !== null ? Number(s.employer_cap_annual) : null,
       description: s.contribution_type,
     },
     {
-      contribution_type: 'employee_' + s.contribution_type,
+      contribution_type: 'employee',
       rate_percent: Number(s.employee_rate),
       cap_amount: s.employee_cap_annual !== null ? Number(s.employee_cap_annual) : null,
       description: s.contribution_type,
