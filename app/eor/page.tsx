@@ -45,7 +45,7 @@ export const metadata = {
 }
 
 async function getEORCountries() {
-  const { data } = await supabase
+  const { data } = await supabase.schema('gpe')
     .from('eor_guides')
     .select(`
       country_code,

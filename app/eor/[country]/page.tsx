@@ -26,7 +26,7 @@ const severityBadge: Record<string, string> = {
 }
 
 async function getEORGuide(countryCode: string) {
-  const { data, error } = await supabase
+  const { data, error } = await supabase.schema('gpe')
     .from('eor_guides')
     .select('*')
     .eq('country_code', countryCode.toUpperCase())
@@ -46,7 +46,7 @@ async function getCountry(countryCode: string) {
 }
 
 export async function generateStaticParams() {
-  const { data } = await supabase
+  const { data } = await supabase.schema('gpe')
     .from('eor_guides')
     .select('country_code')
     .eq('is_current', true)
