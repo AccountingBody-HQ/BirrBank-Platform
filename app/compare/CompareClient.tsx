@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+
 
 interface Country {
   iso2: string
@@ -361,20 +361,70 @@ export default function CompareClient({ countries }: Props) {
             )}
           </div>
 
-          {/* Chart */}
+          {/* Cost breakdown cards — one per country in own currency */}
           {(grossA > 0 || grossB > 0) && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-semibold text-slate-900 mb-6">Employer Cost Breakdown</h3>
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={chartData} margin={{ left: 16, right: 16, top: 0, bottom: 0 }}>
-                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                  <YAxis tickFormatter={v => '$' + (v / 1000).toFixed(0) + 'k'} tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(v) => typeof v === "number" ? v.toLocaleString() : ""} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: 13 }} />
-                  <Legend />
-                  <Bar dataKey={dataA.country.name} fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey={dataB.country.name} fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="grid sm:grid-cols-2 gap-5">
+              {[
+                { data: dataA, gross: grossA, color: 'blue', accent: 'border-blue-200 bg-blue-50', badge: 'bg-blue-600', bar: 'bg-blue-500' },
+                { data: dataB, gross: grossB, color: 'violet', accent: 'border-violet-200 bg-violet-50', badge: 'bg-violet-600', bar: 'bg-violet-500' },
+              ].map(({ data: d, gross, color, accent, badge, bar }) => {
+                if (!d || gross <= 0) return null
+                const empSS = Math.round(gross * getSSRate(d.ss, 'employer') / 100)
+                const totalCost = Math.round(employerCost(d, gross))
+                const currency = d.country.currency_code
+                const sym = ({ GBP: '£', USD: '$', EUR: '€', AUD: 'A$', CAD: 'C$', JPY: '¥', SGD: 'S$', AED: 'د.إ', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', CHF: 'Fr', INR: '₹' } as Record<string,string>)[currency] ?? currency + ' '
+                const f = (n: number) => sym + Math.round(n).toLocaleString('en-GB')
+                const ssRate = getSSRate(d.ss, 'employer')
+                const netRate = ssRate > 0 ? (empSS / totalCost) * 100 : 0
+                const grossRate = (gross / totalCost) * 100
+
+                return (
+                  <div key={d.country.iso2} className={`rounded-2xl border-2 ${accent} overflow-hidden`}>
+                    {/* Card header */}
+                    <div className="px-6 py-4 flex items-center gap-3">
+                      <img src={`https://flagcdn.com/28x21/${d.country.iso2.toLowerCase()}.png`} width={28} height={21} alt={d.country.name} className="rounded-sm shadow-sm" />
+                      <div>
+                        <div className="font-bold text-slate-900">{d.country.name}</div>
+                        <div className="text-xs text-slate-500">{currency} · Annual gross {f(gross)}</div>
+                      </div>
+                    </div>
+
+                    {/* Cost rows */}
+                    <div className="bg-white mx-4 mb-4 rounded-xl overflow-hidden border border-slate-100">
+                      {[
+                        { label: 'Gross Salary', value: f(gross), sub: null },
+                        { label: 'Employer SS', value: f(empSS), sub: `${ssRate.toFixed(1)}% of gross` },
+                        { label: 'Total Employer Cost', value: f(totalCost), sub: null, highlight: true },
+                      ].map((row, i) => (
+                        <div key={row.label} className={`flex items-center justify-between px-5 py-3.5 ${i > 0 ? 'border-t border-slate-100' : ''} ${row.highlight ? 'bg-slate-50' : ''}`}>
+                          <div>
+                            <div className={`text-sm ${row.highlight ? 'font-bold text-slate-900' : 'text-slate-600'}`}>{row.label}</div>
+                            {row.sub && <div className="text-xs text-slate-400 mt-0.5">{row.sub}</div>}
+                          </div>
+                          <div className={`font-mono text-sm ${row.highlight ? 'font-black text-slate-900 text-base' : 'font-semibold text-slate-700'}`}>{row.value}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Visual bar */}
+                    <div className="px-4 pb-4">
+                      <div className="text-xs text-slate-500 mb-2">Cost composition</div>
+                      <div className="flex rounded-full overflow-hidden h-3 bg-slate-200">
+                        <div className={`${bar} opacity-60 h-full transition-all`} style={{ width: `${grossRate}%` }} title={`Gross: ${grossRate.toFixed(0)}%`} />
+                        <div className={`${bar} h-full transition-all`} style={{ width: `${netRate}%` }} title={`Employer SS: ${netRate.toFixed(0)}%`} />
+                      </div>
+                      <div className="flex gap-4 mt-2">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <div className={`w-2.5 h-2.5 rounded-sm ${bar} opacity-60`} /> Gross salary
+                        </div>
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <div className={`w-2.5 h-2.5 rounded-sm ${bar}`} /> Employer SS
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           )}
 
