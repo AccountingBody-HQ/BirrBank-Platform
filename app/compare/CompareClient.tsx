@@ -271,10 +271,7 @@ export default function CompareClient({ countries }: Props) {
               </div>
             </div>
 
-            {/* VS divider — hidden on mobile */}
-            <div className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 rounded-full items-center justify-center pointer-events-none z-20">
-              <span className="text-white text-xs font-black">VS</span>
-            </div>
+
 
             {/* Country B */}
             <div className="relative">
