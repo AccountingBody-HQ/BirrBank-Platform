@@ -108,48 +108,56 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
       {/* ══ HERO variant ══ */}
       {isHero ? (
         <div className="relative">
-          <div className="flex items-center bg-white rounded-2xl shadow-2xl shadow-black/40 border-2 border-transparent focus-within:border-blue-500 transition-all duration-200 overflow-hidden">
-            <div className="flex items-center justify-center w-14 shrink-0 self-stretch">
-              {loading
-                ? <Loader2 size={17} className="animate-spin text-blue-500" />
-                : <Search size={17} className="text-slate-400" />
-              }
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 sm:bg-white sm:rounded-2xl sm:shadow-2xl sm:shadow-black/40 sm:border-2 sm:border-transparent sm:focus-within:border-blue-500 sm:transition-all sm:duration-200 sm:overflow-hidden">
+            <div className="flex items-center bg-white rounded-2xl sm:rounded-none sm:bg-transparent shadow-2xl shadow-black/40 sm:shadow-none border-2 border-transparent focus-within:border-blue-500 sm:border-none sm:focus-within:border-none flex-1 transition-all duration-200 overflow-hidden">
+              <div className="flex items-center justify-center w-14 shrink-0 self-stretch">
+                {loading
+                  ? <Loader2 size={17} className="animate-spin text-blue-500" />
+                  : <Search size={17} className="text-slate-400" />
+                }
+              </div>
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onFocus={() => { if (results && debouncedQuery.length >= 2) setOpen(true) }}
+                placeholder={placeholder ?? defaultPlaceholder}
+                className="flex-1 py-4 text-base font-medium text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
+                autoComplete="off"
+              />
+              {query && (
+                <button
+                  onClick={() => { setQuery(''); setResults(null); setOpen(false); inputRef.current?.focus() }}
+                  className="flex items-center justify-center w-8 h-8 mr-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all shrink-0"
+                >
+                  <X size={14} />
+                </button>
+              )}
+              <div className="hidden sm:block p-2 shrink-0">
+                <button
+                  onClick={submitSearch}
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-sm font-bold rounded-xl transition-all duration-150 whitespace-nowrap"
+                >
+                  Search
+                </button>
+              </div>
             </div>
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onFocus={() => { if (results && debouncedQuery.length >= 2) setOpen(true) }}
-              placeholder={placeholder ?? defaultPlaceholder}
-              className="flex-1 py-4 text-base font-medium text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
-              autoComplete="off"
-            />
-            {query && (
-              <button
-                onClick={() => { setQuery(''); setResults(null); setOpen(false); inputRef.current?.focus() }}
-                className="flex items-center justify-center w-8 h-8 mr-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all shrink-0"
-              >
-                <X size={14} />
-              </button>
-            )}
-            <div className="p-2 shrink-0">
-              <button
-                onClick={submitSearch}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-sm font-bold rounded-xl transition-all duration-150 whitespace-nowrap"
-              >
-                Search
-              </button>
-            </div>
+            <button
+              onClick={submitSearch}
+              className="sm:hidden w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-2xl transition-all shadow-lg shadow-blue-600/30"
+            >
+              Search
+            </button>
           </div>
         </div>
       ) : (
         /* ══ NAV variant ══ */
-        <div className="flex items-center gap-1.5 bg-slate-900/60 border border-slate-700/60 hover:border-slate-600 focus-within:border-blue-500/70 focus-within:bg-slate-900/80 rounded-lg transition-all duration-200 px-3 py-2">
+        <div className="flex items-center gap-2 bg-white/10 hover:bg-white/15 focus-within:bg-white/15 border border-white/15 hover:border-white/25 focus-within:border-blue-400/60 rounded-lg transition-all duration-200 px-3 py-2">
           {loading
-            ? <Loader2 size={13} className="animate-spin text-blue-400 shrink-0" />
-            : <Search size={13} className="text-slate-500 shrink-0" />
+            ? <Loader2 size={13} className="animate-spin text-blue-300 shrink-0" />
+            : <Search size={13} className="text-slate-300 shrink-0" />
           }
           <input
             ref={inputRef}
@@ -159,13 +167,13 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
             onKeyDown={handleKeyDown}
             onFocus={() => { if (results && debouncedQuery.length >= 2) setOpen(true) }}
             placeholder={placeholder ?? defaultPlaceholder}
-            className="flex-1 min-w-0 text-sm text-white placeholder:text-slate-600 bg-transparent outline-none font-medium"
+            className="flex-1 min-w-0 text-sm text-white placeholder:text-slate-400 bg-transparent outline-none font-medium"
             autoComplete="off"
           />
           {query && (
             <button
               onClick={() => { setQuery(''); setResults(null); setOpen(false); inputRef.current?.focus() }}
-              className="text-slate-600 hover:text-slate-400 transition-colors shrink-0"
+              className="text-slate-400 hover:text-white transition-colors shrink-0"
             >
               <X size={12} />
             </button>
