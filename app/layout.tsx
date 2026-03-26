@@ -85,6 +85,9 @@ export const metadata: Metadata = {
       'Employer costs, tax brackets, employment law, and compliance data for every country.',
     images: ['/og-default.png'],
   },
+  verification: {
+    google: "Ke1xcsC2rYKaBT_PbROsCHNgOJ8s3IjRNyzQuI6JBt4",
+  },
   alternates: {
     canonical: 'https://globalpayrollexpert.com',
   },
