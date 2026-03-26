@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { ArrowUpDown, ArrowUp, ArrowDown, Download, Search } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowUpDown, ArrowUp, ArrowDown, Download, Search, ArrowRight } from 'lucide-react'
 
 export interface ComplianceRow {
   country_code: string
@@ -48,7 +49,6 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
           ? a.country_name.localeCompare(b.country_name)
           : b.country_name.localeCompare(a.country_name)
       }
-      // Sort by numeric value — push nulls to bottom
       const av = a.value_numeric ?? -Infinity
       const bv = b.value_numeric ?? -Infinity
       return sortDir === 'asc' ? av - bv : bv - av
@@ -103,7 +103,7 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
 
       {/* Table — desktop */}
       <div className="hidden lg:block rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="grid grid-cols-[2.5fr_1.5fr_1.5fr] bg-slate-900 px-6 py-4">
+        <div className="grid grid-cols-[2.5fr_1.5fr_1.5fr_120px] bg-slate-900 px-6 py-4">
           <button
             onClick={() => handleSort('country')}
             className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors text-left"
@@ -117,15 +117,17 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
             {valueLabel} <SortIcon col="value" />
           </button>
           <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Applies To</span>
+          <span />
         </div>
 
         {filtered.length === 0 ? (
           <div className="px-6 py-12 text-center text-slate-400 text-sm">No countries match your filter.</div>
         ) : (
           filtered.map((row, i) => (
-            <div
+            <Link
               key={row.country_code}
-              className={`grid grid-cols-[2.5fr_1.5fr_1.5fr] px-6 py-4 items-center ${i > 0 ? 'border-t border-slate-100' : ''} hover:bg-blue-50 transition-colors group`}
+              href={`/countries/${row.country_code.toLowerCase()}/`}
+              className={`grid grid-cols-[2.5fr_1.5fr_1.5fr_120px] px-6 py-4 items-center ${i > 0 ? 'border-t border-slate-100' : ''} hover:bg-blue-50 transition-colors group`}
             >
               <div className="flex items-center gap-3">
                 <img
@@ -141,7 +143,10 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
               </div>
               <div className="font-mono font-semibold text-slate-800">{row.value_display}</div>
               <div className="text-sm text-slate-500 capitalize">{row.applies_to?.replace(/_/g, ' ') ?? '—'}</div>
-            </div>
+              <div className="flex items-center gap-1 text-blue-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                View country <ArrowRight size={11} />
+              </div>
+            </Link>
           ))
         )}
       </div>
@@ -149,7 +154,11 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
       {/* Cards — mobile */}
       <div className="lg:hidden grid sm:grid-cols-2 gap-4">
         {filtered.map(row => (
-          <div key={row.country_code} className="bg-white border border-slate-200 rounded-xl p-5">
+          <Link
+            key={row.country_code}
+            href={`/countries/${row.country_code.toLowerCase()}/`}
+            className="group bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-5 transition-all"
+          >
             <div className="flex items-center gap-3 mb-3">
               <img
                 src={`https://flagcdn.com/28x21/${row.country_code.toLowerCase()}.png`}
@@ -157,14 +166,15 @@ export default function ComplianceComparisonTable({ rows, valueLabel }: Props) {
                 width={28} height={21}
                 className="rounded-sm shadow-sm"
               />
-              <span className="font-bold text-slate-800">{row.country_name}</span>
+              <span className="font-bold text-slate-800 group-hover:text-blue-700 transition-colors flex-1">{row.country_name}</span>
+              <ArrowRight size={13} className="text-slate-300 group-hover:text-blue-500 transition-colors shrink-0" />
             </div>
             <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">{valueLabel}</div>
             <div className="font-mono font-semibold text-slate-800 text-lg">{row.value_display}</div>
             {row.applies_to && (
               <div className="text-xs text-slate-500 mt-2 capitalize">{row.applies_to.replace(/_/g, ' ')}</div>
             )}
-          </div>
+          </Link>
         ))}
       </div>
 
