@@ -1,6 +1,7 @@
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { createHash } from 'crypto'
 
 export async function POST(req: Request) {
   const { userId } = await auth()
@@ -20,30 +21,12 @@ export async function POST(req: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  // Ensure user profile exists
-  const user = await currentUser()
-  const email = user?.emailAddresses?.[0]?.emailAddress || ''
-  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || email
+  // Generate a deterministic hash from user + country + salary + period
+  // This prevents duplicates at the database level
+  const hashInput = `${userId}:${country_code.toUpperCase()}:${gross_salary}:${period}`
+  const calculation_hash = createHash('sha256').update(hashInput).digest('hex')
 
-  await supabase
-    .from('profiles')
-    .upsert({ id: userId, email, full_name: fullName }, { onConflict: 'id' })
-
-  // Only block duplicate if identical save within last 5 seconds
-  const { data: recent } = await supabase
-    .schema('gpe')
-    .from('saved_calculations')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('country_code', country_code.toUpperCase())
-    .gte('created_at', new Date(Date.now() - 5000).toISOString())
-    .limit(1)
-
-  if (recent && recent.length > 0) {
-    return NextResponse.json({ success: true, duplicate: true, message: 'Already saved' })
-  }
-
-  // Save the calculation
+  // Attempt insert — database unique constraint will reject true duplicates
   const { error } = await supabase
     .schema('gpe')
     .from('saved_calculations')
@@ -56,11 +39,51 @@ export async function POST(req: Request) {
       results: calculation_result,
       data_snapshot: calculation_result,
       rates_valid_as_of: new Date().toISOString().split('T')[0],
+      calculation_hash,
     })
 
   if (error) {
-    console.error('Save calculation error:', error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    // Unique constraint violation — already saved
+    if (error.code === '23505') {
+      return NextResponse.json({ 
+        success: true, 
+        duplicate: true, 
+        message: 'This calculation is already saved in your dashboard.' 
+      })
+    }
+    // Profile not found — user signed up before webhook was live
+    if (error.code === '23503') {
+      // Create profile on the fly as fallback
+      const { createClient: createAdminClient } = await import('@supabase/supabase-js')
+      const { currentUser } = await import('@clerk/nextjs/server')
+      const user = await currentUser()
+      const email = user?.emailAddresses?.[0]?.emailAddress || ''
+      const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || email
+      await supabase.from('profiles').upsert({ id: userId, email, full_name: fullName }, { onConflict: 'id' })
+      
+      // Retry the insert
+      const { error: retryError } = await supabase
+        .schema('gpe')
+        .from('saved_calculations')
+        .insert({
+          user_id: userId,
+          country_code: country_code.toUpperCase(),
+          name: label || `${country_code.toUpperCase()} — ${new Date().toLocaleDateString('en-GB')}`,
+          calculation_type: 'payroll',
+          inputs: { gross_salary, period },
+          results: calculation_result,
+          data_snapshot: calculation_result,
+          rates_valid_as_of: new Date().toISOString().split('T')[0],
+          calculation_hash,
+        })
+      if (retryError && retryError.code !== '23505') {
+        console.error('Retry save error:', retryError.message)
+        return NextResponse.json({ error: 'Failed to save calculation.' }, { status: 500 })
+      }
+      return NextResponse.json({ success: true })
+    }
+    console.error('Save calculation error:', error.message, error.code)
+    return NextResponse.json({ error: 'Failed to save calculation.' }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })

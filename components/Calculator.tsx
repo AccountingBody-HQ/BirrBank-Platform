@@ -31,6 +31,7 @@ interface CalculatorProps {
   isAuthenticated?: boolean
   initialSalary?: string
   initialPeriod?: 'monthly' | 'annual'
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'duplicate' | 'error'
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -71,6 +72,7 @@ export default function Calculator({
   isAuthenticated = false,
   initialSalary,
   initialPeriod,
+  saveStatus = 'idle',
 }: CalculatorProps) {
   const [gross, setGross] = useState<string>(initialSalary || '')
   const [period, setPeriod] = useState<'monthly' | 'annual'>(initialPeriod || 'annual')
@@ -312,10 +314,25 @@ export default function Calculator({
                     }
                     onSaveRequest(result, parseFloat(gross), period)
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 px-3.5 py-2 text-xs font-medium text-white transition-all"
+                  disabled={saveStatus === 'saving'}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 disabled:opacity-60 disabled:cursor-not-allowed px-3.5 py-2 text-xs font-medium text-white transition-all"
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                  {isAuthenticated ? 'Save Calculation' : 'Sign in to Save'}
+                  {saveStatus === 'saving' ? (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                      Saving…
+                    </>
+                  ) : saveStatus === 'saved' ? (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Saved
+                    </>
+                  ) : (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                      {isAuthenticated ? 'Save Calculation' : 'Sign in to Save'}
+                    </>
+                  )}
                 </button>
               )}
             </div>
