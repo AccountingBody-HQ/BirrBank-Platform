@@ -173,7 +173,7 @@ export default function PricingPage() {
                 <div className="space-y-3 mb-8">
                   {/* Monthly button — links to Lemon Squeezy checkout */}
                   <a
-                    href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/monthly"
+                    href="https://accounting-body.lemonsqueezy.com/buy/1456734"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
@@ -181,7 +181,7 @@ export default function PricingPage() {
                   </a>
                   {/* Annual button */}
                   <a
-                    href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/annual"
+                    href="https://accounting-body.lemonsqueezy.com/buy/1456757"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
@@ -291,7 +291,7 @@ export default function PricingPage() {
               Browse free data <ArrowRight size={15} />
             </Link>
             <a
-              href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/monthly"
+              href="https://accounting-body.lemonsqueezy.com/buy/1456734"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
