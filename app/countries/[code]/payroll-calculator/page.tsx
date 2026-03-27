@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getCalculatorStructuredData, getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { createSupabaseServerClient } from '@/lib/supabase'
-import Calculator from '@/components/Calculator'
+import CalculatorWithSave from '@/components/CalculatorWithSave'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
 import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
 import { Calculator as CalcIcon, ChevronRight, Shield, RefreshCw, Award, ArrowRight } from 'lucide-react'
 import CalculatorModalWrapper from '@/components/CalculatorModalWrapper'
 
@@ -119,6 +120,8 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
   ])
 
   const taxYear = new Date().getFullYear()
+  const { userId } = await auth()
+  const isAuthenticated = !!userId
 
 
 
@@ -219,14 +222,14 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
 
               {/* Calculator — 2/3 width */}
               <div className="lg:col-span-2">
-                <Calculator
+                <CalculatorWithSave
                   countryCode={upperCode}
                   countryName={country.name}
                   currencyCode={country.currency_code}
                   taxBrackets={taxBrackets}
                   ssRates={ssRates}
                   taxYear={taxYear}
-                  isAuthenticated={false}
+                  isAuthenticated={isAuthenticated}
                 />
               </div>
 
