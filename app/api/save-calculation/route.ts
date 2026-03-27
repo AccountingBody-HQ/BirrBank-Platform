@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
@@ -20,6 +20,25 @@ export async function POST(req: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
+  // Ensure user profile exists before saving calculation
+  const user = await currentUser()
+  const email = user?.emailAddresses?.[0]?.emailAddress || ''
+  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || email
+
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .upsert({
+      id: userId,
+      email,
+      full_name: fullName,
+    }, { onConflict: 'id' })
+
+  if (profileError) {
+    console.error('Profile upsert error:', profileError.message)
+    return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
+  }
+
+  // Now save the calculation
   const { error } = await supabase
     .schema('gpe')
     .from('saved_calculations')
