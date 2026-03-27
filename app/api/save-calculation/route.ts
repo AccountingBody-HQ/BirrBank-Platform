@@ -29,36 +29,17 @@ export async function POST(req: Request) {
     .from('profiles')
     .upsert({ id: userId, email, full_name: fullName }, { onConflict: 'id' })
 
-  // Check for duplicate — same user, country, salary, period saved in last 60 seconds
-  const { data: existing } = await supabase
+  // Only block duplicate if identical save within last 5 seconds
+  const { data: recent } = await supabase
     .schema('gpe')
     .from('saved_calculations')
     .select('id')
     .eq('user_id', userId)
     .eq('country_code', country_code.toUpperCase())
-    .eq('calculation_type', 'payroll')
-    .gte('created_at', new Date(Date.now() - 60000).toISOString())
+    .gte('created_at', new Date(Date.now() - 5000).toISOString())
     .limit(1)
 
-  if (existing && existing.length > 0) {
-    return NextResponse.json({ success: true, duplicate: true })
-  }
-
-  // Also check for same gross_salary and period combination
-  const { data: sameCalc } = await supabase
-    .schema('gpe')
-    .from('saved_calculations')
-    .select('id, inputs')
-    .eq('user_id', userId)
-    .eq('country_code', country_code.toUpperCase())
-    .eq('calculation_type', 'payroll')
-    .limit(20)
-
-  const isDuplicate = sameCalc?.some((c: any) => 
-    c.inputs?.gross_salary === gross_salary && c.inputs?.period === period
-  )
-
-  if (isDuplicate) {
+  if (recent && recent.length > 0) {
     return NextResponse.json({ success: true, duplicate: true, message: 'Already saved' })
   }
 
