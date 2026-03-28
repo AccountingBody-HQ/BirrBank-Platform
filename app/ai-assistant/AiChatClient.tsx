@@ -159,7 +159,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   }
 
   return (
-    <div className="flex flex-col bg-slate-50" style={{ height: "calc(100vh - 65px)" }}>
+    <div className="flex flex-col bg-slate-50" style={{ height: "calc(100vh - 64px)", overflow: "hidden" }}>
 
       {/* Header */}
       <div className="border-b border-slate-200 bg-white shrink-0 shadow-sm">
@@ -188,7 +188,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
 
       {/* Welcome screen */}
       {!hasMessages && (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 pb-8 overflow-y-auto">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 pb-8 min-h-0 overflow-y-auto">
           <div className="w-full max-w-2xl">
             <div className="text-center mb-6">
               <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
@@ -235,7 +235,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
       {/* Chat view */}
       {hasMessages && (
         <>
-          <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0" style={{ overscrollBehavior: "contain" }}>
             <div className="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
