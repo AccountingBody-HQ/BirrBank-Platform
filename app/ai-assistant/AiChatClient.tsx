@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -35,7 +34,7 @@ function SignUpPrompt() {
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center my-2">
       <h3 className="text-slate-900 font-bold text-lg mb-1">Enjoying PayrollExpert AI?</h3>
-      <p className="text-slate-500 text-sm mb-4">Create a free account for 10 questions per month — no payment needed.</p>
+      <p className="text-slate-500 text-sm mb-4">Create a free account for 10 questions per month.</p>
       <div className="flex gap-2 justify-center">
         <a href="/sign-up/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Create free account</a>
         <a href="/sign-in/" className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Sign in</a>
@@ -51,28 +50,21 @@ function UpgradePrompt() {
       <div className="p-6">
         <h3 className="text-slate-900 font-bold text-lg mb-1">Upgrade to Pro</h3>
         <p className="text-slate-500 text-sm mb-4">You have used your 10 free questions this month.</p>
-        <div className="grid grid-cols-2 gap-2 mb-5">
-          {["Unlimited AI questions","Save calculations","PDF exports","Termination rules","Contractor rules","Tax treaty data","Remote work rules","Rate-change alerts"].map(f => (
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          {["Unlimited AI questions","Save calculations","PDF exports","Termination rules","Contractor rules","Tax treaty data","Remote work rules","Rate alerts"].map(f => (
             <div key={f} className="flex items-center gap-1.5 text-slate-600 text-xs">
               <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg>{f}
             </div>
           ))}
         </div>
         <div className="flex gap-2">
-          <a href="/pricing/" className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm transition-colors">Upgrade — £29/mo</a>
-          <a href="/pricing/" className="text-center bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm transition-colors">£249/yr</a>
+          <a href="/pricing/" className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm">Upgrade - 29/mo</a>
+          <a href="/pricing/" className="text-center bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm">249/yr</a>
         </div>
       </div>
     </div>
   );
 }
-
-const SUGGESTIONS = [
-  "What are the UK income tax brackets for 2025/26?",
-  "Compare employer costs in Germany vs Netherlands",
-  "How does social security work in Singapore?",
-  "What notice period is required in France?",
-];
 
 function AIIcon() {
   return (
@@ -83,6 +75,13 @@ function AIIcon() {
     </div>
   );
 }
+
+const SUGGESTIONS = [
+  "What are the UK income tax brackets for 2025/26?",
+  "Compare employer costs in Germany vs Netherlands",
+  "How does social security work in Singapore?",
+  "What notice period is required in France?",
+];
 
 export default function AiChatClient({ countries, userId, isPro, monthlyUsage, freeAnonLimit, freeUserLimit }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -97,6 +96,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const hasMessages = messages.length > 0 || thinking;
 
   useEffect(() => { setAnonCount(getAnonCount()); }, []);
 
@@ -106,8 +106,6 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
     const near = el.scrollHeight - el.scrollTop - el.clientHeight < 200;
     if (near) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  const hasMessages = messages.length > 0 || thinking;
 
   function handleCountryChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const code = e.target.value;
@@ -141,14 +139,14 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
       if (!res.ok) throw new Error();
       const reader = res.body!.getReader();
       const decoder = new TextDecoder();
-      let text2 = "";
+      let txt = "";
       let first = true;
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        text2 += decoder.decode(value, { stream: true });
-        if (first) { setThinking(false); setMessages(p => [...p, { role: "assistant", content: text2 }]); first = false; }
-        else { setMessages(p => { const u = [...p]; u[u.length-1] = { role: "assistant", content: text2 }; return u; }); }
+        txt += decoder.decode(value, { stream: true });
+        if (first) { setThinking(false); setMessages(p => [...p, { role: "assistant", content: txt }]); first = false; }
+        else { setMessages(p => { const u = [...p]; u[u.length-1] = { role: "assistant", content: txt }; return u; }); }
       }
       if (!userId && getAnonCount() >= freeAnonLimit) setShowLimit("anon");
       if (userId && !isPro && usageCount + 1 >= freeUserLimit) setShowLimit("free");
@@ -162,47 +160,11 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   }
 
-  const InputBar = ({ autoFocus = false }: { autoFocus?: boolean }) => (
-    <div className="w-full">
-      {countryName && (
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs text-slate-400">Context:</span>
-          <span className="inline-flex items-center gap-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">
-            {countryName}
-            <button onClick={() => { setCountryCode(""); setCountryName(""); }} className="ml-1 hover:text-blue-900 font-bold">×</button>
-          </span>
-        </div>
-      )}
-      <div className="flex gap-2 items-end">
-        <textarea
-          ref={autoFocus ? textareaRef : undefined}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={showLimit ? "Create an account or upgrade to continue..." : "Ask about global payroll, EOR, employment law..."}
-          disabled={!!showLimit || loading}
-          rows={1}
-          className="flex-1 bg-white border border-slate-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-3.5 text-sm resize-none focus:outline-none transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
-          style={{ minHeight: "52px", maxHeight: "140px" }}
-        />
-        <button onClick={() => sendMessage()} disabled={!input.trim() || loading || !!showLimit}
-          className="bg-blue-600 hover:bg-blue-700 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl px-4 py-3.5 transition-colors shrink-0 shadow-sm">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
-          </svg>
-        </button>
-      </div>
-      <p className="text-slate-400 text-xs mt-2 text-center">
-        PayrollExpert AI covers global payroll, EOR, HR compliance, and employment law only. Always confirm with a qualified professional.
-      </p>
-    </div>
-  );
-
   return (
     <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
 
       {/* Header */}
-      <div className="border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
+      <div className="border-b border-slate-200 bg-white shrink-0 shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -226,11 +188,11 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
         </div>
       </div>
 
-      {/* Welcome screen — input directly below cards */}
+      {/* Welcome screen */}
       {!hasMessages && (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 overflow-y-auto">
           <div className="w-full max-w-2xl">
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
                 <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
@@ -243,16 +205,36 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
               {SUGGESTIONS.map(s => (
                 <button key={s} onClick={() => sendMessage(s)}
                   className="text-left bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl px-4 py-3.5 text-slate-700 text-sm transition-all shadow-sm">
-                  <span className="text-blue-600 font-bold mr-1">→</span>{s}
+                  <span className="text-blue-600 font-bold mr-1">+</span>{s}
                 </button>
               ))}
             </div>
-            <InputBar autoFocus={true} />
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
+              <div className="flex gap-2 items-end">
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask about global payroll, EOR, employment law..."
+                  rows={1}
+                  className="flex-1 bg-transparent text-slate-800 placeholder-slate-400 text-sm resize-none focus:outline-none"
+                  style={{ minHeight: "28px", maxHeight: "120px" }}
+                />
+                <button onClick={() => sendMessage()} disabled={!input.trim() || loading}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-30 text-white rounded-xl px-4 py-2.5 transition-colors shrink-0">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <p className="text-slate-400 text-xs mt-2.5 text-center">Covers payroll, EOR, HR compliance, and employment law only. Always confirm with a qualified professional.</p>
           </div>
         </div>
       )}
 
-      {/* Chat screen */}
+      {/* Chat view */}
       {hasMessages && (
         <>
           <div ref={scrollRef} className="flex-1 overflow-y-auto">
@@ -303,10 +285,30 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
             </div>
           </div>
 
-          {/* Fixed input at bottom during chat */}
-          <div className="border-t border-slate-200 bg-white shadow-lg">
-            <div className="max-w-3xl mx-auto px-4 py-4">
-              <InputBar />
+          <div className="border-t border-slate-200 bg-white shrink-0 shadow-lg">
+            <div className="max-w-3xl mx-auto px-4 py-3">
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm px-4 py-3">
+                <div className="flex gap-2 items-end">
+                  <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={showLimit ? "Create an account or upgrade to continue..." : "Ask about global payroll, EOR, employment law..."}
+                    disabled={!!showLimit || loading}
+                    rows={1}
+                    className="flex-1 bg-transparent text-slate-800 placeholder-slate-400 text-sm resize-none focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ minHeight: "28px", maxHeight: "120px" }}
+                  />
+                  <button onClick={() => sendMessage()} disabled={!input.trim() || loading || !!showLimit}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl px-4 py-2.5 transition-colors shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p className="text-slate-400 text-xs mt-2 text-center">Covers payroll, EOR, HR compliance, and employment law only. Always confirm with a qualified professional.</p>
             </div>
           </div>
         </>
