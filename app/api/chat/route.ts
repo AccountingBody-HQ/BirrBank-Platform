@@ -10,81 +10,126 @@ const supabase = createClient(
 const SYSTEM_PROMPT = `You are PayrollExpert AI, the world's most knowledgeable global payroll assistant. You answer questions about payroll, employment law, tax, social security, and HR compliance for any country in the world.
 
 When answering:
-- Be specific and cite exact rates, thresholds, and rules where you know them
+- ALWAYS use the live database data provided in your context first — it is verified and current
+- Be specific and cite exact rates, thresholds, and rules from the database data
 - Always recommend consulting a qualified professional for specific situations
 - Always cite the official source (government tax authority, ministry of labour etc.)
 - If you have country-specific data in your context, use it and reference it clearly
 - Keep answers structured and professional — your users are HR directors, payroll professionals, lawyers, and finance teams
 - If you do not know something with confidence, say so clearly`;
 
+const COUNTRY_MAP: Record<string, string> = {
+  "uk": "GB", "united kingdom": "GB", "britain": "GB", "england": "GB",
+  "us": "US", "usa": "US", "united states": "US", "america": "US",
+  "germany": "DE", "german": "DE",
+  "france": "FR", "french": "FR",
+  "netherlands": "NL", "dutch": "NL", "holland": "NL",
+  "ireland": "IE", "irish": "IE",
+  "australia": "AU", "australian": "AU",
+  "canada": "CA", "canadian": "CA",
+  "singapore": "SG",
+  "uae": "AE", "united arab emirates": "AE", "dubai": "AE",
+  "japan": "JP", "japanese": "JP",
+  "sweden": "SE", "swedish": "SE",
+  "denmark": "DK", "danish": "DK",
+  "norway": "NO", "norwegian": "NO",
+  "switzerland": "CH", "swiss": "CH",
+  "belgium": "BE", "belgian": "BE",
+  "spain": "ES", "spanish": "ES",
+  "italy": "IT", "italian": "IT",
+  "portugal": "PT", "portuguese": "PT",
+  "poland": "PL", "polish": "PL",
+  "india": "IN", "indian": "IN",
+};
+
+function detectCountry(message: string): string | null {
+  const lower = message.toLowerCase();
+  for (const [keyword, code] of Object.entries(COUNTRY_MAP)) {
+    if (lower.includes(keyword)) return code;
+  }
+  return null;
+}
+
+async function fetchCountryData(countryCode: string) {
+  const [taxRes, ssRes, rulesRes] = await Promise.all([
+    supabase.schema("gpe").from("tax_brackets")
+      .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
+      .eq("country_code", countryCode).eq("is_current", true)
+      .order("bracket_order"),
+    supabase.schema("gpe").from("social_security")
+      .select("contribution_type,rate_percent,cap_amount,notes")
+      .eq("country_code", countryCode).eq("is_current", true),
+    supabase.schema("gpe").from("employment_rules")
+      .select("minimum_wage,annual_leave_days,notice_period_days,probation_period_days,payroll_frequency")
+      .eq("country_code", countryCode).eq("is_current", true).single(),
+  ]);
+  return {
+    taxBrackets: taxRes.data || [],
+    ss: ssRes.data || [],
+    rules: rulesRes.data,
+  };
+}
+
+function buildCountryContext(countryCode: string, countryName: string, data: any): string {
+  const { taxBrackets, ss, rules } = data;
+  if (!taxBrackets.length && !ss.length && !rules) return "";
+
+  let ctx = `\n\nVERIFIED LIVE DATABASE DATA FOR ${countryName || countryCode} (use this data — it is current and verified):\n`;
+
+  if (taxBrackets.length > 0) {
+    ctx += "Income Tax Brackets:\n";
+    taxBrackets.forEach((b: any) => {
+      const upper = b.upper_limit ? `to ${b.upper_limit}` : "and above";
+      ctx += `  ${b.bracket_name || ""}: ${b.lower_limit} ${upper} @ ${b.rate}%\n`;
+    });
+  }
+  if (ss.length > 0) {
+    ctx += "Social Security Contributions:\n";
+    ss.forEach((s: any) => {
+      ctx += `  ${s.contribution_type}: ${s.rate_percent}%${s.cap_amount ? " (annual cap: " + s.cap_amount + ")" : ""}${s.notes ? " — " + s.notes : ""}\n`;
+    });
+  }
+  if (rules) {
+    ctx += "Employment Rules:\n";
+    if (rules.minimum_wage) ctx += `  Minimum wage: ${rules.minimum_wage}\n`;
+    if (rules.annual_leave_days) ctx += `  Annual leave: ${rules.annual_leave_days} days\n`;
+    if (rules.notice_period_days) ctx += `  Notice period: ${rules.notice_period_days} days\n`;
+    if (rules.payroll_frequency) ctx += `  Payroll frequency: ${rules.payroll_frequency}\n`;
+  }
+  return ctx;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const { message, countryCode, countryName, history = [] } = await req.json();
+    const { message, countryCode: passedCode, countryName: passedName, history = [] } = await req.json();
 
     if (!message) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    // 1. Generate embedding for the user message
+    const detectedCode = passedCode || detectCountry(message);
+    const countryCode = detectedCode;
+    const countryName = passedName || countryCode || "";
+
     const embeddingResponse = await openai.embeddings.create({
       model: "text-embedding-3-small",
       input: message,
     });
     const queryEmbedding = embeddingResponse.data[0].embedding;
 
-    // 2. Vector search — find top 5 matching chunks
     const { data: chunks } = await supabase.rpc("match_gpe_embeddings", {
       query_embedding: queryEmbedding,
       match_count: 5,
       filter_country: countryCode || null,
     });
 
-    // 3. Fetch live country data from Supabase if country context set
     let countryContext = "";
     if (countryCode) {
-      const [taxRes, ssRes, rulesRes] = await Promise.all([
-        supabase.schema("gpe").from("tax_brackets")
-          .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
-          .eq("country_code", countryCode).eq("is_current", true).eq("tier", "free")
-          .order("bracket_order"),
-        supabase.schema("gpe").from("social_security")
-          .select("contribution_type,rate_percent,cap_amount,notes")
-          .eq("country_code", countryCode).eq("is_current", true),
-        supabase.schema("gpe").from("employment_rules")
-          .select("minimum_wage,annual_leave_days,notice_period_days,probation_period_days")
-          .eq("country_code", countryCode).eq("is_current", true).single(),
-      ]);
-
-      const taxBrackets = taxRes.data || [];
-      const ss = ssRes.data || [];
-      const rules = rulesRes.data;
-
-      if (taxBrackets.length > 0 || ss.length > 0 || rules) {
-        countryContext = `\n\nLIVE DATABASE DATA FOR ${countryName || countryCode}:\n`;
-        if (taxBrackets.length > 0) {
-          countryContext += "Income Tax Brackets:\n";
-          taxBrackets.forEach((b: any) => {
-            const upper = b.upper_limit ? `to ${b.upper_limit}` : "and above";
-            countryContext += `  ${b.bracket_name || ""}: ${b.lower_limit} ${upper} @ ${b.rate}%\n`;
-          });
-        }
-        if (ss.length > 0) {
-          countryContext += "Social Security:\n";
-          ss.forEach((s: any) => {
-            countryContext += `  ${s.contribution_type}: ${s.rate_percent}%${s.cap_amount ? " (cap: " + s.cap_amount + ")" : ""}\n`;
-          });
-        }
-        if (rules) {
-          countryContext += "Employment Rules:\n";
-          if (rules.minimum_wage) countryContext += `  Minimum wage: ${rules.minimum_wage}\n`;
-          if (rules.annual_leave_days) countryContext += `  Annual leave: ${rules.annual_leave_days} days\n`;
-          if (rules.notice_period_days) countryContext += `  Notice period: ${rules.notice_period_days} days\n`;
-        }
-      }
+      const data = await fetchCountryData(countryCode);
+      countryContext = buildCountryContext(countryCode, countryName, data);
     }
 
-    // 4. Build context from vector search
     let vectorContext = "";
     if (chunks && chunks.length > 0) {
       vectorContext = "\n\nRELEVANT KNOWLEDGE BASE CONTENT:\n";
@@ -93,20 +138,18 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 5. Build messages array
     const messages: any[] = [
       { role: "system", content: SYSTEM_PROMPT + countryContext + vectorContext },
       ...history.slice(-10),
       { role: "user", content: message },
     ];
 
-    // 6. Stream response from GPT-4o-mini
     const stream = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages,
       stream: true,
-      max_tokens: 1000,
-      temperature: 0.3,
+      max_tokens: 1500,
+      temperature: 0.2,
     });
 
     const encoder = new TextEncoder();
@@ -120,7 +163,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Save conversation record for usage tracking
     if (req.headers.get("x-user-id")) {
       const userId = req.headers.get("x-user-id");
       const supabaseAdmin = createClient(
