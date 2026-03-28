@@ -199,7 +199,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
 
       {/* Header */}
       <div className="border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
