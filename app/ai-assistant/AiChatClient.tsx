@@ -163,7 +163,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   }
 
   return (
-    <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
+    <div className="flex flex-col bg-slate-50" style={{ height: "calc(100vh - 65px)" }}>
 
       {/* Header */}
       <div className="border-b border-slate-200 bg-white shrink-0 shadow-sm">
@@ -239,7 +239,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
       {/* Chat view */}
       {hasMessages && (
         <>
-          <div ref={scrollRef} className="flex-1 overflow-y-auto">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
             <div className="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
