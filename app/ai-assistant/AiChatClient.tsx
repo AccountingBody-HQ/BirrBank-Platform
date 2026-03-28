@@ -1,8 +1,7 @@
 
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -25,7 +24,6 @@ interface Props {
 }
 
 const ANON_KEY = "gpe_ai_anon_count";
-
 function getAnonCount(): number {
   try { return parseInt(localStorage.getItem(ANON_KEY) || "0", 10); } catch { return 0; }
 }
@@ -46,11 +44,12 @@ function CopyButton({ text }: { text: string }) {
     });
   }
   return (
-    <button onClick={copy} className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 mt-2">
+    <button onClick={copy}
+      className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 mt-3 ml-auto">
       {copied ? (
-        <><svg className="w-3.5 h-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg><span className="text-green-400">Copied</span></>
+        <><svg className="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg><span className="text-green-500">Copied</span></>
       ) : (
-        <><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg><span>Copy</span></>
+        <><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg><span>Copy response</span></>
       )}
     </button>
   );
@@ -58,50 +57,50 @@ function CopyButton({ text }: { text: string }) {
 
 function SignUpPrompt() {
   return (
-    <div className="mx-auto max-w-lg border border-blue-500/30 bg-blue-600/5 rounded-2xl p-8 text-center my-4">
+    <div className="mx-auto max-w-lg bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-8 text-center my-4">
       <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
         <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
         </svg>
       </div>
-      <h3 className="text-white font-bold text-xl mb-2">Enjoying PayrollExpert AI?</h3>
-      <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-md mx-auto">
-        Create a free account to continue. Free accounts get 10 AI questions per month — no payment required.
+      <h3 className="text-slate-900 font-bold text-xl mb-2">Enjoying PayrollExpert AI?</h3>
+      <p className="text-slate-500 text-sm leading-relaxed mb-6">
+        Create a free account to continue. Get 10 AI questions per month — no payment required.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/sign-up/" className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
+        <a href="/sign-up/" className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
           Create free account
         </a>
-        <a href="/sign-in/" className="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
+        <a href="/sign-in/" className="inline-flex items-center justify-center bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
           Sign in
         </a>
       </div>
-      <p className="text-slate-600 text-xs mt-4">No credit card required</p>
+      <p className="text-slate-400 text-xs mt-4">No credit card required</p>
     </div>
   );
 }
 
 function UpgradePrompt() {
   return (
-    <div className="mx-auto max-w-lg border border-slate-700 bg-slate-900 rounded-2xl overflow-hidden my-4">
+    <div className="mx-auto max-w-lg bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm my-4">
       <div className="h-1 bg-gradient-to-r from-blue-600 to-indigo-600" />
       <div className="p-8">
-        <h3 className="text-white font-bold text-xl mb-2">Upgrade to PayrollExpert Pro</h3>
-        <p className="text-slate-400 text-sm mb-6">You have used your 10 free questions this month. Upgrade for unlimited access.</p>
+        <h3 className="text-slate-900 font-bold text-xl mb-1">Upgrade to PayrollExpert Pro</h3>
+        <p className="text-slate-500 text-sm mb-6">You have used your 10 free questions this month.</p>
         <div className="grid sm:grid-cols-2 gap-2.5 mb-6">
           {["Unlimited AI questions","Save unlimited calculations","Full PDF exports","Termination rules — all countries","Contractor classification rules","Double taxation treaty data","Remote work PE rules","Rate-change email alerts"].map((f) => (
-            <div key={f} className="flex items-center gap-2 text-slate-300 text-sm">
-              <svg className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            <div key={f} className="flex items-center gap-2 text-slate-600 text-sm">
+              <svg className="w-4 h-4 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
               {f}
             </div>
           ))}
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href="/pricing/" className="flex-1 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors text-sm">
+          <a href="/pricing/" className="flex-1 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors text-sm">
             Upgrade to Pro — £29/mo
           </a>
-          <a href="/pricing/" className="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold px-5 py-3.5 rounded-xl transition-colors text-sm">
-            £249/yr
+          <a href="/pricing/" className="inline-flex items-center justify-center bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold px-5 py-3.5 rounded-xl transition-colors text-sm">
+            £249/yr — save £99
           </a>
         </div>
       </div>
@@ -113,7 +112,7 @@ const SUGGESTIONS = [
   "What are the income tax brackets in the UK?",
   "Compare employer costs in Germany vs Netherlands",
   "How does social security work in Singapore?",
-  "What notice period is required in France?",
+  "What is the notice period required in France?",
 ];
 
 export default function AiChatClient({ countries, userId, isPro, monthlyUsage, freeAnonLimit, freeUserLimit }: Props) {
@@ -128,18 +127,15 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   const [usageCount, setUsageCount] = useState(monthlyUsage);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setAnonCount(getAnonCount()); }, []);
 
-  function isNearBottom() {
-    const el = messagesRef.current;
-    if (!el) return true;
-    return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
-  }
-
   useEffect(() => {
-    if (isNearBottom()) {
+    const el = containerRef.current;
+    if (!el) return;
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
+    if (isNearBottom || thinking) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, thinking]);
@@ -231,53 +227,56 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
 
       {/* Header */}
-      <div className="border-b border-slate-800/60 bg-slate-950/90 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
               </svg>
             </div>
             <div>
-              <div className="text-white font-semibold text-sm">PayrollExpert AI</div>
-              <div className="text-slate-500 text-xs">Verified global payroll data</div>
+              <div className="text-slate-900 font-bold text-sm">PayrollExpert AI</div>
+              <div className="text-slate-400 text-xs">Verified global payroll data</div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <select value={countryCode} onChange={handleCountryChange}
-              className="bg-slate-800/80 border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-blue-500 max-w-[160px]">
+              className="bg-white border border-slate-200 text-slate-600 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 max-w-[160px]">
               <option value="">All countries</option>
               {countries.map((c) => <option key={c.iso2} value={c.iso2}>{c.name}</option>)}
             </select>
-            {!userId && <a href="/sign-in/" className="text-blue-400 hover:text-blue-300 text-xs font-medium transition-colors">Sign in</a>}
+            {!userId && (
+              <a href="/sign-in/" className="text-blue-600 hover:text-blue-700 text-xs font-semibold transition-colors">Sign in</a>
+            )}
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={messagesRef} className="flex-1 overflow-y-auto">
+      <div ref={containerRef} className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-4 py-8">
 
           {/* Welcome state */}
           {messages.length === 0 && !thinking && (
-            <div className="text-center py-12">
-              <div className="w-14 h-14 bg-blue-600/10 border border-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <svg className="w-7 h-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="text-center py-10">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
               </div>
-              <h2 className="text-white font-bold text-2xl mb-2">PayrollExpert AI</h2>
-              <p className="text-slate-400 text-sm max-w-md mx-auto mb-8 leading-relaxed">
-                Ask me anything about payroll, employment law, tax, social security, and HR compliance for any country in the world.
+              <h2 className="text-slate-900 font-bold text-2xl mb-2">PayrollExpert AI</h2>
+              <p className="text-slate-500 text-sm max-w-md mx-auto mb-10 leading-relaxed">
+                Instant answers on payroll, employment law, tax, social security, and HR compliance — backed by verified country data for 195 jurisdictions.
               </p>
               <div className="grid sm:grid-cols-2 gap-3 max-w-xl mx-auto">
                 {SUGGESTIONS.map((s) => (
                   <button key={s} onClick={() => { setInput(s); textareaRef.current?.focus(); }}
-                    className="text-left bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/40 rounded-xl px-4 py-3.5 text-slate-300 text-sm transition-all leading-snug">
+                    className="text-left bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl px-4 py-4 text-slate-700 text-sm transition-all leading-snug shadow-sm hover:shadow-md">
+                    <span className="text-blue-600 font-bold text-base mr-1.5">→</span>
                     {s}
                   </button>
                 ))}
@@ -286,27 +285,29 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
           )}
 
           {/* Message list */}
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6">
             {messages.map((msg, i) => (
-              <div key={i} className={msg.role === "user" ? "flex justify-end" : "flex justify-start group"}>
+              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "user" ? (
-                  <div className="max-w-[75%] bg-blue-600 text-white rounded-2xl rounded-tr-sm px-5 py-3.5 text-sm leading-relaxed">
+                  <div className="max-w-[75%] bg-blue-600 text-white rounded-2xl rounded-tr-sm px-5 py-3.5 text-sm leading-relaxed shadow-sm">
                     {msg.content}
                   </div>
                 ) : (
-                  <div className="flex-1 max-w-full">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="flex-1 group">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center shrink-0">
                         <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                         </svg>
                       </div>
-                      <span className="text-slate-400 text-xs font-medium">PayrollExpert AI</span>
+                      <span className="text-slate-500 text-xs font-semibold uppercase tracking-wide">PayrollExpert AI</span>
                     </div>
-                    <div className="prose prose-invert prose-sm max-w-none text-slate-200 prose-headings:text-white prose-headings:font-semibold prose-strong:text-white prose-li:text-slate-300 prose-a:text-blue-400 prose-code:text-blue-300 prose-code:bg-slate-800 prose-code:px-1 prose-code:rounded">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-6 py-5 shadow-sm">
+                      <div className="prose prose-sm max-w-none text-slate-700 prose-headings:text-slate-900 prose-headings:font-bold prose-strong:text-slate-900 prose-li:text-slate-700 prose-a:text-blue-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:rounded prose-code:text-xs">
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      </div>
+                      <CopyButton text={msg.content} />
                     </div>
-                    <CopyButton text={msg.content} />
                   </div>
                 )}
               </div>
@@ -315,20 +316,20 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
             {/* Thinking indicator */}
             {thinking && (
               <div className="flex justify-start">
-                <div className="flex-1 max-w-full">
-                  <div className="flex items-center gap-2 mb-3">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
                     <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center shrink-0">
                       <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                       </svg>
                     </div>
-                    <span className="text-slate-400 text-xs font-medium">PayrollExpert AI</span>
+                    <span className="text-slate-500 text-xs font-semibold uppercase tracking-wide">PayrollExpert AI</span>
                   </div>
-                  <div className="flex items-center gap-1.5 py-2">
+                  <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-6 py-4 shadow-sm inline-flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay:"0ms"}} />
                     <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay:"150ms"}} />
                     <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay:"300ms"}} />
-                    <span className="text-slate-500 text-xs ml-2">Searching verified data...</span>
+                    <span className="text-slate-400 text-xs ml-1">Searching verified data...</span>
                   </div>
                 </div>
               </div>
@@ -343,14 +344,14 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
       </div>
 
       {/* Input */}
-      <div className="border-t border-slate-800/60 bg-slate-950/90 backdrop-blur-sm">
+      <div className="border-t border-slate-200 bg-white shadow-lg">
         <div className="max-w-3xl mx-auto px-4 py-4">
           {countryName && (
             <div className="flex items-center gap-2 mb-2.5">
-              <span className="text-xs text-slate-600">Context:</span>
-              <span className="inline-flex items-center gap-1.5 bg-blue-600/10 border border-blue-500/20 text-blue-400 text-xs font-medium px-2.5 py-1 rounded-full">
+              <span className="text-xs text-slate-400">Context:</span>
+              <span className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">
                 {countryName}
-                <button onClick={() => { setCountryCode(""); setCountryName(""); }} className="hover:text-white ml-0.5">×</button>
+                <button onClick={() => { setCountryCode(""); setCountryName(""); }} className="hover:text-blue-900 ml-0.5 font-bold">×</button>
               </span>
             </div>
           )}
@@ -361,17 +362,17 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
               placeholder={showLimit ? "Create an account or upgrade to continue..." : "Ask about payroll, tax, employment law..."}
               disabled={!!showLimit || loading}
               rows={1}
-              className="flex-1 bg-slate-800/60 border border-slate-700 focus:border-blue-500/60 text-slate-200 placeholder-slate-600 rounded-xl px-4 py-3.5 text-sm resize-none focus:outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex-1 bg-white border border-slate-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-3.5 text-sm resize-none focus:outline-none transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               style={{ minHeight: "52px", maxHeight: "160px" }}
             />
             <button onClick={sendMessage} disabled={!input.trim() || loading || !!showLimit}
-              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl px-4 py-3.5 transition-colors shrink-0">
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl px-4 py-3.5 transition-colors shrink-0 shadow-sm">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
               </svg>
             </button>
           </div>
-          <p className="text-slate-700 text-xs mt-2.5 text-center">
+          <p className="text-slate-400 text-xs mt-2.5 text-center">
             PayrollExpert AI uses verified data. Always confirm with a qualified professional.
           </p>
         </div>
