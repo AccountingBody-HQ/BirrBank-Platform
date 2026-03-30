@@ -4,7 +4,7 @@
 
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, BookOpen, Clock, Layers } from "lucide-react"
+import { ArrowRight, BookOpen, Layers } from "lucide-react"
 import { getInsightArticles, getInsightCount } from "@/lib/sanity"
 import { getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 import InsightsClient from "./InsightsClient"
@@ -21,12 +21,6 @@ export const metadata: Metadata = {
     url: "https://globalpayrollexpert.com/insights/",
     type: "website",
   },
-}
-
-function estimateReadTime(excerpt: string | null): number {
-  if (!excerpt) return 3
-  const words = excerpt.split(" ").filter((w) => w.length > 0).length
-  return Math.max(3, Math.ceil(words / 4))
 }
 
 export default async function InsightsPage({
@@ -146,43 +140,30 @@ export default async function InsightsPage({
                 <Link
                   key={article._id}
                   href={"/insights/" + article.slug?.current + "/"}
-                  className="group flex flex-col bg-white rounded-2xl p-7 shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10),0_1px_6px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-200 border border-slate-100 hover:border-slate-200"
+                  className="group flex flex-col bg-white rounded-2xl shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.10)] hover:-translate-y-0.5 transition-all duration-200 border border-slate-100 hover:border-blue-200 overflow-hidden"
                 >
-                  {/* Top row: category + read time */}
-                  <div className="flex items-center justify-between mb-4">
-                    {article.category ? (
-                      <span className="inline-flex items-center bg-slate-900 text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
-                        {article.category}
+                  {/* Blue top bar — always visible, brightens on hover */}
+                  <div className="h-1 bg-blue-600 group-hover:h-1.5 group-hover:bg-blue-500 transition-all duration-200" />
+
+                  <div className="flex flex-col flex-1 p-7">
+                    {/* Category + read time row */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
+                        {article.category || "Analysis"}
                       </span>
-                    ) : (
-                      <span className="inline-flex items-center bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
-                        Analysis
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1 text-slate-400 text-xs font-medium">
-                      <Clock size={11} />
-                      {estimateReadTime(article.excerpt)} min
-                    </span>
-                  </div>
 
-                  {/* Title */}
-                  <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors duration-150">
-                    {article.title}
-                  </h2>
+                    </div>
 
-                  {/* Excerpt — 2 lines only */}
-                  {article.excerpt && (
-                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 flex-1">
-                      {article.excerpt}
-                    </p>
-                  )}
+                    {/* Title */}
+                    <h2 className="font-bold text-slate-900 text-lg leading-snug flex-1 group-hover:text-blue-700 transition-colors duration-150">
+                      {article.title}
+                    </h2>
 
-                  {/* Footer */}
-                  <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-blue-600 text-sm font-bold group-hover:gap-2.5 transition-all duration-150">
+                    {/* Footer */}
+                    <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-1.5 text-blue-600 text-sm font-bold group-hover:gap-2.5 transition-all duration-150">
                       Read article
                       <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-150" />
-                    </span>
+                    </div>
                   </div>
                 </Link>
               ))}
