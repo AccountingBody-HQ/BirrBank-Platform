@@ -1,6 +1,5 @@
 // ============================================
 // GLOBALPAYROLLEXPERT — INSIGHTS LISTING PAGE
-// /insights/ — Matches homepage design system
 // ============================================
 
 import type { Metadata } from "next"
@@ -15,13 +14,10 @@ export const metadata: Metadata = {
   title: "Insights — Global Payroll Analysis & Intelligence",
   description:
     "Expert analysis on global payroll, employment law, EOR strategy, tax compliance, and HR policy. In-depth articles for payroll professionals and global employers.",
-  alternates: {
-    canonical: "https://globalpayrollexpert.com/insights/",
-  },
+  alternates: { canonical: "https://globalpayrollexpert.com/insights/" },
   openGraph: {
     title: "Insights — Global Payroll Analysis & Intelligence",
-    description:
-      "Expert analysis on global payroll, employment law, EOR strategy, tax compliance, and HR policy.",
+    description: "Expert analysis on global payroll, employment law, EOR strategy, tax compliance, and HR policy.",
     url: "https://globalpayrollexpert.com/insights/",
     type: "website",
   },
@@ -87,7 +83,6 @@ export default async function InsightsPage({
               strategy, tax compliance, and HR policy across 195 jurisdictions.
             </p>
           </div>
-
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
               { value: "195",     label: "Countries Covered" },
@@ -115,71 +110,61 @@ export default async function InsightsPage({
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
 
-          {/* Article count */}
+          {/* Count row */}
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shrink-0">
               <Layers size={14} className="text-white" />
             </div>
             <div>
               <p className="text-sm font-bold text-slate-900">
-                {totalCount === 0
-                  ? "No articles found"
-                  : totalCount === 1
-                  ? "1 article"
-                  : totalCount + " articles"}
+                {totalCount === 0 ? "No articles found" : totalCount === 1 ? "1 article" : totalCount + " articles"}
               </p>
               <p className="text-xs text-slate-500">
-                {search
-                  ? "matching " + "“" + search + "”"
-                  : topic !== "all"
-                  ? "in " + topic.replace("-", " ")
-                  : "across all topics"}
+                {search ? "matching “" + search + "”" : topic !== "all" ? "in " + topic.replace("-", " ") : "across all topics"}
               </p>
             </div>
           </div>
 
-          {/* Article grid */}
+          {/* Grid */}
           {articles.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((article) => (
                 <Link
                   key={article._id}
                   href={"/insights/" + article.slug?.current + "/"}
-                  className="group flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+                  className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-[0_4px_24px_rgba(0,0,0,0.08)] transition-all duration-200 overflow-hidden"
                 >
-                  {/* Solid top bar — always visible, not hover-only */}
-                  <div className="h-1 bg-gradient-to-r from-blue-600 to-blue-400" />
-
-                  <div className="flex flex-col flex-1 p-6">
-                    {/* Category */}
-                    {article.category && (
-                      <div className="mb-3">
-                        <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border border-blue-100">
-                          {article.category}
-                        </span>
-                      </div>
+                  {/* Card header band — dark, authoritative */}
+                  <div className="bg-slate-900 px-5 py-3 flex items-center justify-between">
+                    {article.category ? (
+                      <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">
+                        {article.category}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                        Analysis
+                      </span>
                     )}
+                    <ArrowRight
+                      size={13}
+                      className="text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-200"
+                    />
+                  </div>
 
-                    {/* Title */}
+                  {/* Card body */}
+                  <div className="flex flex-col flex-1 p-6">
                     <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors">
                       {article.title}
                     </h2>
 
-                    {/* Excerpt */}
                     {article.excerpt && (
                       <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
                         {article.excerpt}
                       </p>
                     )}
 
-                    {/* Footer */}
-                    <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-blue-600 text-sm font-semibold group-hover:text-blue-700 transition-colors">
-                        Read article
-                      </span>
-                      <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-blue-600 flex items-center justify-center transition-all duration-200">
-                        <ArrowRight size={13} className="text-slate-500 group-hover:text-white transition-colors" />
-                      </div>
+                    <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all duration-200">
+                      Read article <ArrowRight size={13} />
                     </div>
                   </div>
                 </Link>
@@ -199,21 +184,14 @@ export default async function InsightsPage({
             </div>
           )}
 
-          {/* ══════ PAGINATION ══════ */}
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-16 flex items-center justify-center gap-1.5">
               {page > 1 && (
                 <PaginationLink page={page - 1} topic={topic} search={search} label="Prev" variant="text" />
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <PaginationLink
-                  key={p}
-                  page={p}
-                  topic={topic}
-                  search={search}
-                  label={String(p)}
-                  isActive={p === page}
-                />
+                <PaginationLink key={p} page={p} topic={topic} search={search} label={String(p)} isActive={p === page} />
               ))}
               {page < totalPages && (
                 <PaginationLink page={page + 1} topic={topic} search={search} label="Next" variant="text" />
@@ -227,22 +205,17 @@ export default async function InsightsPage({
       <section className="relative overflow-hidden" style={{ backgroundColor: "#0d1f3c" }}>
         <div
           className="absolute inset-0"
-          style={{
-            background: "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)" }}
         />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
-                Stay Informed
-              </p>
+              <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Stay Informed</p>
               <h2 className="font-serif text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-6">
                 Get the latest payroll<br />intelligence delivered.
               </h2>
               <p className="text-slate-400 leading-relaxed text-lg max-w-md">
-                Rate changes, employment law updates, and compliance alerts — once
-                a month, direct to your inbox.
+                Rate changes, employment law updates, and compliance alerts — once a month, direct to your inbox.
               </p>
             </div>
             <div>
