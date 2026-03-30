@@ -107,7 +107,7 @@ export default async function InsightsPage({
       </section>
 
       {/* ══════ ARTICLE GRID ══════ */}
-      <section className="bg-white">
+      <section className="bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
 
           {/* Count row */}
@@ -127,45 +127,35 @@ export default async function InsightsPage({
 
           {/* Grid */}
           {articles.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {articles.map((article) => (
                 <Link
                   key={article._id}
                   href={"/insights/" + article.slug?.current + "/"}
-                  className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-[0_4px_24px_rgba(0,0,0,0.08)] transition-all duration-200 overflow-hidden"
+                  className="group flex flex-col bg-white rounded-xl border-l-4 border-l-blue-600 border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-200 p-6"
                 >
-                  {/* Card header band — dark, authoritative */}
-                  <div className="bg-slate-900 px-5 py-3 flex items-center justify-between">
-                    {article.category ? (
-                      <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">
-                        {article.category}
-                      </span>
-                    ) : (
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                        Analysis
-                      </span>
-                    )}
-                    <ArrowRight
-                      size={13}
-                      className="text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-200"
-                    />
-                  </div>
+                  {/* Category */}
+                  {article.category && (
+                    <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">
+                      {article.category}
+                    </p>
+                  )}
 
-                  {/* Card body */}
-                  <div className="flex flex-col flex-1 p-6">
-                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors">
-                      {article.title}
-                    </h2>
+                  {/* Title */}
+                  <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors flex-1">
+                    {article.title}
+                  </h2>
 
-                    {article.excerpt && (
-                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
-                        {article.excerpt}
-                      </p>
-                    )}
+                  {/* Excerpt */}
+                  {article.excerpt && (
+                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-5">
+                      {article.excerpt}
+                    </p>
+                  )}
 
-                    <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all duration-200">
-                      Read article <ArrowRight size={13} />
-                    </div>
+                  {/* Read more */}
+                  <div className="flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all duration-200 pt-4 border-t border-slate-100">
+                    Read article <ArrowRight size={13} />
                   </div>
                 </Link>
               ))}
