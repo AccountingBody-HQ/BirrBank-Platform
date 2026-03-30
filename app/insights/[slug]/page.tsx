@@ -81,22 +81,12 @@ function estimateReadTime(body: any[]): number {
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   const isExternal = href.startsWith("http")
-  if (isExternal) {
-    return (
-      
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
-      >
-        {children}
-      </a>
-    )
-  }
+  const extraProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {}
   return (
     
       href={href}
       className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+      {...extraProps}
     >
       {children}
     </a>
