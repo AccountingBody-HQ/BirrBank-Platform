@@ -1,6 +1,6 @@
 // ============================================
 // GLOBALPAYROLLEXPERT — INSIGHTS LISTING PAGE
-// /insights/ — Premium design, no dates, 9 per page
+// /insights/ — Matches homepage design system
 // ============================================
 
 import type { Metadata } from "next"
@@ -26,24 +26,6 @@ export const metadata: Metadata = {
     url: "https://globalpayrollexpert.com/insights/",
     type: "website",
   },
-}
-
-// --- CATEGORY ACCENT COLOURS ---
-const CATEGORY_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
-  payroll:          { bg: "bg-blue-50",    text: "text-blue-700",    dot: "bg-blue-500" },
-  "employment law": { bg: "bg-indigo-50",  text: "text-indigo-700",  dot: "bg-indigo-500" },
-  "employment-law": { bg: "bg-indigo-50",  text: "text-indigo-700",  dot: "bg-indigo-500" },
-  eor:              { bg: "bg-sky-50",     text: "text-sky-700",     dot: "bg-sky-500" },
-  tax:              { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
-  hr:               { bg: "bg-violet-50",  text: "text-violet-700",  dot: "bg-violet-500" },
-  compliance:       { bg: "bg-amber-50",   text: "text-amber-700",   dot: "bg-amber-500" },
-  "country report": { bg: "bg-teal-50",   text: "text-teal-700",    dot: "bg-teal-500" },
-  "country-report": { bg: "bg-teal-50",   text: "text-teal-700",    dot: "bg-teal-500" },
-}
-
-function getCategoryStyle(category: string | null) {
-  if (!category) return { bg: "bg-slate-50", text: "text-slate-600", dot: "bg-slate-400" }
-  return CATEGORY_STYLES[category.toLowerCase()] || { bg: "bg-slate-50", text: "text-slate-600", dot: "bg-slate-400" }
 }
 
 // --- PAGE ---
@@ -90,7 +72,7 @@ export default async function InsightsPage({
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
-              <BookOpen size={13} className="text-blue-400" />
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
               <span className="text-blue-300 text-xs font-semibold tracking-wide">
                 Intelligence &amp; Analysis
               </span>
@@ -111,10 +93,10 @@ export default async function InsightsPage({
           {/* Stat strip */}
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: "195", label: "Countries Covered" },
-              { value: "Expert", label: "Verified Content" },
-              { value: "Monthly", label: "New Analysis" },
-              { value: "Free", label: "Full Access" },
+              { value: "195",     label: "Countries Covered" },
+              { value: "Expert",  label: "Verified Content"  },
+              { value: "Monthly", label: "New Analysis"      },
+              { value: "Free",    label: "Full Access"       },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="text-2xl font-black text-white tracking-tight">{s.value}</div>
@@ -125,7 +107,7 @@ export default async function InsightsPage({
         </div>
       </section>
 
-      {/* ══════ FILTERS + ARTICLES ══════ */}
+      {/* ══════ FILTERS ══════ */}
       <section className="bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
           <InsightsClient />
@@ -135,6 +117,7 @@ export default async function InsightsPage({
       {/* ══════ ARTICLE GRID ══════ */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+
           {/* Article count */}
           <div className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-3">
@@ -162,64 +145,45 @@ export default async function InsightsPage({
 
           {/* Article grid */}
           {articles.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-              {articles.map((article, index) => {
-                const catStyle = getCategoryStyle(article.category)
-                return (
-                  <Link
-                    key={article._id}
-                    href={"/insights/" + article.slug?.current + "/"}
-                    className="group relative bg-white border border-slate-200 hover:border-slate-300 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col"
-                  >
-                    {/* Coloured top accent */}
-                    <div className={"h-1 " + catStyle.dot} />
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.map((article) => (
+                <Link
+                  key={article._id}
+                  href={"/insights/" + article.slug?.current + "/"}
+                  className="group bg-white border border-slate-200 hover:border-blue-300 hover:shadow-lg rounded-2xl overflow-hidden transition-all duration-200 flex flex-col"
+                >
+                  {/* Hover-reveal top accent — matches homepage card style */}
+                  <div className="h-1.5 bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                    <div className="p-7 flex flex-col flex-1">
-                      {/* Category badge */}
-                      {article.category && (
-                        <div className="mb-5">
-                          <span
-                            className={
-                              "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest " +
-                              catStyle.bg +
-                              " " +
-                              catStyle.text
-                            }
-                          >
-                            <span className={"w-1.5 h-1.5 rounded-full " + catStyle.dot} />
-                            {article.category}
-                          </span>
-                        </div>
-                      )}
+                  <div className="p-7 flex flex-col flex-1">
+                    {/* Category label — plain, matches homepage */}
+                    {article.category && (
+                      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">
+                        {article.category}
+                      </span>
+                    )}
 
-                      {/* Title */}
-                      <h2 className="font-serif text-xl font-bold text-slate-900 leading-snug mb-4 group-hover:text-blue-700 transition-colors" style={{ letterSpacing: "-0.015em" }}>
-                        {article.title}
-                      </h2>
+                    {/* Title */}
+                    <h2
+                      className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors"
+                    >
+                      {article.title}
+                    </h2>
 
-                      {/* Excerpt */}
-                      {article.excerpt && (
-                        <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
-                          {article.excerpt}
-                        </p>
-                      )}
+                    {/* Excerpt */}
+                    {article.excerpt && (
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
+                        {article.excerpt}
+                      </p>
+                    )}
 
-                      {/* Read more */}
-                      <div className="mt-7 pt-5 border-t border-slate-100 flex items-center justify-between">
-                        <span className="text-blue-600 text-sm font-bold group-hover:text-blue-700 transition-colors">
-                          Read article
-                        </span>
-                        <div className="w-8 h-8 rounded-full bg-blue-50 group-hover:bg-blue-600 flex items-center justify-center transition-all duration-300">
-                          <ArrowRight
-                            size={14}
-                            className="text-blue-600 group-hover:text-white transition-colors"
-                          />
-                        </div>
-                      </div>
+                    {/* Read more */}
+                    <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                      Read article <ArrowRight size={14} />
                     </div>
-                  </Link>
-                )
-              })}
+                  </div>
+                </Link>
+              ))}
             </div>
           ) : (
             <div className="text-center py-24">
@@ -292,9 +256,7 @@ export default async function InsightsPage({
                 Stay Informed
               </p>
               <h2 className="font-serif text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-6">
-                Get the latest payroll
-                <br />
-                intelligence delivered.
+                Get the latest payroll<br />intelligence delivered.
               </h2>
               <p className="text-slate-400 leading-relaxed text-lg max-w-md">
                 Rate changes, employment law updates, and compliance alerts — once

@@ -1,6 +1,6 @@
 // ============================================
 // GLOBALPAYROLLEXPERT — SINGLE ARTICLE PAGE
-// /insights/[slug]/ — Full article from Sanity CMS
+// /insights/[slug]/ — Matches GPE homepage design
 // CANONICAL TAG → accountingbody.com (SEO owner)
 // ============================================
 
@@ -8,24 +8,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PortableText } from "@portabletext/react"
-import {
-  ArrowLeft,
-  ArrowRight,
-  Calendar,
-  Tag,
-  User,
-  Globe,
-} from "lucide-react"
-import {
-  getInsightBySlug,
-  getRelatedArticles,
-  urlFor,
-} from "@/lib/sanity"
-import {
-  getArticleStructuredData,
-  getBreadcrumbStructuredData,
-  jsonLd,
-} from "@/lib/structured-data"
+import { ArrowLeft, ArrowRight, Calendar, Clock, Globe, Tag, User } from "lucide-react"
+import { getInsightBySlug, getRelatedArticles, urlFor } from "@/lib/sanity"
+import { getArticleStructuredData, getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 import EmailCapture from "@/components/EmailCapture"
 
 // --- DYNAMIC METADATA WITH CANONICAL → ACCOUNTINGBODY ---
@@ -36,15 +21,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const article = await getInsightBySlug(slug)
-
-  if (!article) {
-    return { title: "Article Not Found" }
-  }
+  if (!article) return { title: "Article Not Found" }
 
   return {
     title: article.title,
     description: article.excerpt || undefined,
-    // CRITICAL: Canonical points to accountingbody.com — they own the SEO
     alternates: {
       canonical: "https://accountingbody.com/study/" + slug,
     },
@@ -74,7 +55,7 @@ export async function generateMetadata({
   }
 }
 
-// --- HELPER: FORMAT DATE ---
+// --- HELPERS ---
 function formatDate(dateString: string): string {
   try {
     return new Date(dateString).toLocaleDateString("en-GB", {
@@ -87,42 +68,52 @@ function formatDate(dateString: string): string {
   }
 }
 
+function estimateReadTime(body: any[]): number {
+  if (!body) return 3
+  const text = body
+    .map((block: any) =>
+      block._type === "block" && block.children
+        ? block.children.map((c: any) => c.text || "").join(" ")
+        : ""
+    )
+    .join(" ")
+  const words = text.split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.ceil(words / 220))
+}
+
 // --- PORTABLE TEXT COMPONENTS ---
-// Custom renderers to match GPE design system
 const portableTextComponents = {
   block: {
     h2: ({ children }: any) => (
-      <h2 className="font-serif text-2xl font-bold text-slate-900 tracking-tight mt-12 mb-4">
+      <h2 className="font-serif text-2xl font-bold text-slate-900 tracking-tight mt-12 mb-4 leading-snug">
         {children}
       </h2>
     ),
     h3: ({ children }: any) => (
-      <h3 className="font-serif text-xl font-bold text-slate-900 tracking-tight mt-10 mb-3">
+      <h3 className="font-serif text-xl font-bold text-slate-900 tracking-tight mt-10 mb-3 leading-snug">
         {children}
       </h3>
     ),
     h4: ({ children }: any) => (
-      <h4 className="font-bold text-slate-900 mt-8 mb-2">
-        {children}
-      </h4>
+      <h4 className="font-bold text-slate-900 mt-8 mb-2">{children}</h4>
     ),
     normal: ({ children }: any) => (
-      <p className="text-slate-600 leading-relaxed mb-5">{children}</p>
+      <p className="text-slate-600 leading-[1.85] mb-5 text-[17px]">{children}</p>
     ),
     blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-blue-600 pl-6 my-8 text-slate-700 italic leading-relaxed">
+      <blockquote className="border-l-4 border-blue-600 pl-6 my-8 text-slate-700 italic leading-relaxed bg-blue-50/50 py-4 pr-4 rounded-r-xl">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }: any) => (
-      <ul className="list-disc list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed">
+      <ul className="list-disc list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed text-[17px]">
         {children}
       </ul>
     ),
     number: ({ children }: any) => (
-      <ol className="list-decimal list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed">
+      <ol className="list-decimal list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed text-[17px]">
         {children}
       </ol>
     ),
@@ -140,13 +131,10 @@ const portableTextComponents = {
       const href = value?.href || "#"
       const isExternal = href.startsWith("http")
       return (
-        <a
+        
           href={href}
           className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
-          {...(isExternal && {
-            target: "_blank",
-            rel: "noopener noreferrer",
-          })}
+          {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
         >
           {children}
         </a>
@@ -162,15 +150,15 @@ const portableTextComponents = {
     image: ({ value }: any) => {
       if (!value?.asset) return null
       return (
-        <figure className="my-8">
+        <figure className="my-10">
           <img
             src={urlFor(value).width(800).quality(90).url()}
             alt={value.alt || ""}
-            className="w-full rounded-xl shadow-sm"
+            className="w-full rounded-2xl shadow-sm"
             loading="lazy"
           />
           {value.caption && (
-            <figcaption className="text-center text-sm text-slate-500 mt-3">
+            <figcaption className="text-center text-sm text-slate-400 mt-3 italic">
               {value.caption}
             </figcaption>
           )}
@@ -180,44 +168,44 @@ const portableTextComponents = {
   },
 }
 
-// --- COUNTRY DATA FOR RELATED COUNTRIES ---
+// --- COUNTRY MAP ---
 const COUNTRY_MAP: Record<string, { name: string; code: string }> = {
   GB: { name: "United Kingdom", code: "gb" },
-  US: { name: "United States", code: "us" },
-  DE: { name: "Germany", code: "de" },
-  FR: { name: "France", code: "fr" },
-  NL: { name: "Netherlands", code: "nl" },
-  IE: { name: "Ireland", code: "ie" },
-  AU: { name: "Australia", code: "au" },
-  CA: { name: "Canada", code: "ca" },
-  SG: { name: "Singapore", code: "sg" },
-  AE: { name: "UAE", code: "ae" },
-  JP: { name: "Japan", code: "jp" },
-  SE: { name: "Sweden", code: "se" },
-  DK: { name: "Denmark", code: "dk" },
-  NO: { name: "Norway", code: "no" },
-  CH: { name: "Switzerland", code: "ch" },
-  BE: { name: "Belgium", code: "be" },
-  ES: { name: "Spain", code: "es" },
-  IT: { name: "Italy", code: "it" },
-  PT: { name: "Portugal", code: "pt" },
-  PL: { name: "Poland", code: "pl" },
-  IN: { name: "India", code: "in" },
-  BR: { name: "Brazil", code: "br" },
-  MX: { name: "Mexico", code: "mx" },
-  KR: { name: "South Korea", code: "kr" },
-  ZA: { name: "South Africa", code: "za" },
-  NG: { name: "Nigeria", code: "ng" },
-  KE: { name: "Kenya", code: "ke" },
-  EG: { name: "Egypt", code: "eg" },
-  SA: { name: "Saudi Arabia", code: "sa" },
-  IL: { name: "Israel", code: "il" },
-  ET: { name: "Ethiopia", code: "et" },
-  CN: { name: "China", code: "cn" },
-  HK: { name: "Hong Kong", code: "hk" },
-  NZ: { name: "New Zealand", code: "nz" },
-  AT: { name: "Austria", code: "at" },
-  FI: { name: "Finland", code: "fi" },
+  US: { name: "United States",  code: "us" },
+  DE: { name: "Germany",        code: "de" },
+  FR: { name: "France",         code: "fr" },
+  NL: { name: "Netherlands",    code: "nl" },
+  IE: { name: "Ireland",        code: "ie" },
+  AU: { name: "Australia",      code: "au" },
+  CA: { name: "Canada",         code: "ca" },
+  SG: { name: "Singapore",      code: "sg" },
+  AE: { name: "UAE",            code: "ae" },
+  JP: { name: "Japan",          code: "jp" },
+  SE: { name: "Sweden",         code: "se" },
+  DK: { name: "Denmark",        code: "dk" },
+  NO: { name: "Norway",         code: "no" },
+  CH: { name: "Switzerland",    code: "ch" },
+  BE: { name: "Belgium",        code: "be" },
+  ES: { name: "Spain",          code: "es" },
+  IT: { name: "Italy",          code: "it" },
+  PT: { name: "Portugal",       code: "pt" },
+  PL: { name: "Poland",         code: "pl" },
+  IN: { name: "India",          code: "in" },
+  BR: { name: "Brazil",         code: "br" },
+  MX: { name: "Mexico",         code: "mx" },
+  KR: { name: "South Korea",    code: "kr" },
+  ZA: { name: "South Africa",   code: "za" },
+  NG: { name: "Nigeria",        code: "ng" },
+  KE: { name: "Kenya",          code: "ke" },
+  EG: { name: "Egypt",          code: "eg" },
+  SA: { name: "Saudi Arabia",   code: "sa" },
+  IL: { name: "Israel",         code: "il" },
+  ET: { name: "Ethiopia",       code: "et" },
+  CN: { name: "China",          code: "cn" },
+  HK: { name: "Hong Kong",      code: "hk" },
+  NZ: { name: "New Zealand",    code: "nz" },
+  AT: { name: "Austria",        code: "at" },
+  FI: { name: "Finland",        code: "fi" },
 }
 
 // --- PAGE ---
@@ -228,27 +216,23 @@ export default async function InsightArticlePage({
 }) {
   const { slug } = await params
   const article = await getInsightBySlug(slug)
+  if (!article) notFound()
 
-  if (!article) {
-    notFound()
-  }
-
-  // Fetch related articles
   const relatedArticles = await getRelatedArticles({
     currentSlug: slug,
     category: article.category,
     countries: article.countries,
   })
 
-  // Resolve country references
   const relatedCountries = (article.countries || [])
     .map((code: string) => COUNTRY_MAP[code.toUpperCase()])
     .filter(Boolean)
 
-  // Structured data
+  const readTime = estimateReadTime(article.body || [])
+
   const articleStructuredData = getArticleStructuredData({
     title: article.title,
-    slug: slug,
+    slug,
     excerpt: article.excerpt || undefined,
     publishedAt: article.publishedAt || undefined,
     category: article.category || undefined,
@@ -256,49 +240,57 @@ export default async function InsightArticlePage({
   })
 
   const breadcrumbData = getBreadcrumbStructuredData([
-    { name: "Home", href: "/" },
+    { name: "Home",     href: "/"          },
     { name: "Insights", href: "/insights/" },
     { name: article.title, href: "/insights/" + slug + "/" },
   ])
 
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd(articleStructuredData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleStructuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }} />
 
       {/* ══════ ARTICLE HEADER ══════ */}
-      <section className="bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-16">
+      <section className="relative bg-slate-950 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-20">
+
           {/* Back link */}
           <Link
             href="/insights/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-10"
           >
             <ArrowLeft size={14} />
             All articles
           </Link>
 
           <div className="max-w-3xl">
-            {/* Category + date */}
-            <div className="flex flex-wrap items-center gap-3 mb-5">
+            {/* Category + meta row */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               {article.category && (
                 <span className="inline-flex items-center gap-1.5 bg-blue-600/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs font-bold text-blue-300 uppercase tracking-widest">
-                  <Tag size={11} />
+                  <Tag size={10} />
                   {article.category}
                 </span>
               )}
-              {article.publishedAt && (
-                <span className="flex items-center gap-1.5 text-slate-500 text-xs">
-                  <Calendar size={11} />
-                  {formatDate(article.publishedAt)}
+              <div className="flex items-center gap-4 text-slate-500 text-xs">
+                {article.publishedAt && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={11} />
+                    {formatDate(article.publishedAt)}
+                  </span>
+                )}
+                <span className="flex items-center gap-1.5">
+                  <Clock size={11} />
+                  {readTime} min read
                 </span>
-              )}
+              </div>
             </div>
 
             {/* Title */}
@@ -318,28 +310,21 @@ export default async function InsightArticlePage({
 
             {/* Author */}
             {article.author?.name && (
-              <div className="flex items-center gap-3 mt-8 pt-6 border-t border-slate-800">
+              <div className="flex items-center gap-3 mt-10 pt-8 border-t border-slate-800">
                 {article.author.image ? (
                   <img
-                    src={urlFor(article.author.image)
-                      .width(40)
-                      .height(40)
-                      .url()}
+                    src={urlFor(article.author.image).width(44).height(44).url()}
                     alt={article.author.name}
-                    className="w-10 h-10 rounded-full"
+                    className="w-11 h-11 rounded-full"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
-                    <User size={16} className="text-white" />
+                  <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+                    <User size={18} className="text-white" />
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-semibold text-white">
-                    {article.author.name}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    GlobalPayrollExpert Editorial
-                  </p>
+                  <p className="text-sm font-semibold text-white">{article.author.name}</p>
+                  <p className="text-xs text-slate-500">GlobalPayrollExpert Editorial</p>
                 </div>
               </div>
             )}
@@ -351,44 +336,52 @@ export default async function InsightArticlePage({
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
           <div className="grid lg:grid-cols-[1fr_300px] gap-16">
+
             {/* Main content */}
-            <article className="max-w-none">
+            <article>
               {/* Hero image */}
               {article.mainImage && (
                 <figure className="mb-12">
                   <img
-                    src={urlFor(article.mainImage)
-                      .width(900)
-                      .quality(90)
-                      .url()}
+                    src={urlFor(article.mainImage).width(900).quality(90).url()}
                     alt={article.title}
                     className="w-full rounded-2xl shadow-sm"
                   />
                 </figure>
               )}
 
-              {/* Portable Text body */}
+              {/* Body */}
               {article.body && (
-                <div className="prose-gpe">
-                  <PortableText
-                    value={article.body}
-                    components={portableTextComponents}
-                  />
-                </div>
+                <PortableText
+                  value={article.body}
+                  components={portableTextComponents}
+                />
               )}
+
+              {/* Bottom nav */}
+              <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+                <Link
+                  href="/insights/"
+                  className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 text-sm font-semibold transition-colors"
+                >
+                  <ArrowLeft size={14} />
+                  All articles
+                </Link>
+              </div>
             </article>
 
-            {/* Sidebar */}
+            {/* ══════ SIDEBAR ══════ */}
             <aside className="hidden lg:block">
-              <div className="sticky top-24 space-y-8">
+              <div className="sticky top-24 space-y-6">
+
                 {/* Related countries */}
                 {relatedCountries.length > 0 && (
                   <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
-                    <h3 className="font-bold text-slate-900 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-                      <Globe size={14} className="text-blue-600" />
-                      Related countries
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <Globe size={13} className="text-blue-600" />
+                      Related Countries
                     </h3>
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       {relatedCountries.map((country: any) => (
                         <Link
                           key={country.code}
@@ -396,11 +389,7 @@ export default async function InsightArticlePage({
                           className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all group"
                         >
                           <img
-                            src={
-                              "https://flagcdn.com/20x15/" +
-                              country.code +
-                              ".png"
-                            }
+                            src={"https://flagcdn.com/20x15/" + country.code + ".png"}
                             alt={country.name}
                             width={20}
                             height={15}
@@ -409,6 +398,7 @@ export default async function InsightArticlePage({
                           <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">
                             {country.name}
                           </span>
+                          <ArrowRight size={12} className="ml-auto text-slate-300 group-hover:text-blue-500 transition-colors" />
                         </Link>
                       ))}
                     </div>
@@ -417,47 +407,38 @@ export default async function InsightArticlePage({
 
                 {/* Quick links */}
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
-                  <h3 className="font-bold text-slate-900 text-sm uppercase tracking-widest mb-4">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4">
                     Explore
                   </h3>
-                  <div className="space-y-2">
-                    <Link
-                      href="/countries/"
-                      className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all group"
-                    >
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">
-                        All Countries
-                      </span>
-                      <ArrowRight
-                        size={13}
-                        className="text-slate-400 group-hover:text-blue-600 transition-colors"
-                      />
-                    </Link>
-                    <Link
-                      href="/payroll-tools/"
-                      className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all group"
-                    >
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">
-                        Payroll Calculators
-                      </span>
-                      <ArrowRight
-                        size={13}
-                        className="text-slate-400 group-hover:text-blue-600 transition-colors"
-                      />
-                    </Link>
-                    <Link
-                      href="/compare/"
-                      className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all group"
-                    >
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">
-                        Compare Countries
-                      </span>
-                      <ArrowRight
-                        size={13}
-                        className="text-slate-400 group-hover:text-blue-600 transition-colors"
-                      />
-                    </Link>
+                  <div className="space-y-1">
+                    {[
+                      { label: "All Countries",       href: "/countries/"     },
+                      { label: "Payroll Calculators", href: "/payroll-tools/" },
+                      { label: "Compare Countries",   href: "/compare/"       },
+                      { label: "EOR Intelligence",    href: "/eor/"           },
+                      { label: "Employment Law",      href: "/hr-compliance/" },
+                    ].map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 transition-all group"
+                      >
+                        <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">
+                          {link.label}
+                        </span>
+                        <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-500 transition-colors" />
+                      </Link>
+                    ))}
                   </div>
+                </div>
+
+                {/* Disclaimer */}
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                  <p className="text-xs text-amber-800 leading-relaxed">
+                    <span className="font-bold">Data disclaimer:</span> This article is for
+                    informational purposes only. Always verify rates and obligations with
+                    official sources or a qualified professional.
+                  </p>
                 </div>
               </div>
             </aside>
@@ -495,27 +476,20 @@ export default async function InsightArticlePage({
                 >
                   <div className="h-1.5 bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="p-7 flex flex-col flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      {related.category && (
-                        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
-                          {related.category}
-                        </span>
-                      )}
-                      {related.publishedAt && (
-                        <span className="text-xs text-slate-400">
-                          {formatDate(related.publishedAt)}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-bold text-slate-900 text-lg mb-3 leading-snug group-hover:text-blue-700 transition-colors">
+                    {related.category && (
+                      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
+                        {related.category}
+                      </span>
+                    )}
+                    <h3 className="font-bold text-slate-900 text-lg mb-3 leading-snug group-hover:text-blue-700 transition-colors flex-1">
                       {related.title}
                     </h3>
                     {related.excerpt && (
-                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-4">
                         {related.excerpt}
                       </p>
                     )}
-                    <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                    <div className="flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
                       Read article <ArrowRight size={14} />
                     </div>
                   </div>
@@ -527,16 +501,10 @@ export default async function InsightArticlePage({
       )}
 
       {/* ══════ EMAIL CAPTURE ══════ */}
-      <section
-        className="relative overflow-hidden"
-        style={{ backgroundColor: "#0d1f3c" }}
-      >
+      <section className="relative overflow-hidden" style={{ backgroundColor: "#0d1f3c" }}>
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)" }}
         />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -545,9 +513,7 @@ export default async function InsightArticlePage({
                 Stay Informed
               </p>
               <h2 className="font-serif text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-6">
-                Never miss a payroll
-                <br />
-                regulation change.
+                Never miss a payroll<br />regulation change.
               </h2>
               <p className="text-slate-400 leading-relaxed text-lg max-w-md">
                 Monthly updates on rate changes, employment law, and compliance
