@@ -107,7 +107,7 @@ export default async function InsightsPage({
       </section>
 
       {/* ══════ ARTICLE GRID ══════ */}
-      <section className="bg-white">
+      <section className="bg-[#f8f9fb]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
 
           {/* Count row */}
@@ -135,45 +135,32 @@ export default async function InsightsPage({
 
           {/* Grid */}
           {articles.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((article) => (
                 <Link
                   key={article._id}
                   href={"/insights/" + article.slug?.current + "/"}
-                  className="group flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 overflow-hidden"
+                  className="group flex flex-col bg-white rounded-2xl p-8 shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-250 border border-transparent hover:border-blue-100"
                 >
-                  {/* Colour block top — category drives the feel */}
-                  <div className="bg-gradient-to-br from-slate-900 to-slate-800 px-6 pt-6 pb-8">
-                    {article.category ? (
-                      <span className="inline-flex items-center gap-1.5 bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-400/20">
+                  {/* Category pill */}
+                  {article.category && (
+                    <div className="mb-5">
+                      <span className="inline-flex items-center bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
                         {article.category}
                       </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 bg-white/10 text-slate-300 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                        Analysis
-                      </span>
-                    )}
-                  </div>
-
-                  {/* White body — overlaps the colour block with negative margin */}
-                  <div className="flex flex-col flex-1 bg-white mx-3 -mt-4 rounded-xl shadow-sm px-5 py-5 border border-slate-100">
-                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors">
-                      {article.title}
-                    </h2>
-
-                    {article.excerpt && (
-                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 flex-1">
-                        {article.excerpt}
-                      </p>
-                    )}
-
-                    <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-3 transition-all duration-200">
-                      Read article <ArrowRight size={13} />
                     </div>
-                  </div>
+                  )}
 
-                  {/* Bottom padding outside inner card */}
-                  <div className="h-3 bg-white" />
+                  {/* Title */}
+                  <h2 className="font-bold text-slate-900 text-xl leading-snug mb-6 group-hover:text-blue-700 transition-colors flex-1">
+                    {article.title}
+                  </h2>
+
+                  {/* Read more */}
+                  <div className="flex items-center gap-2 text-blue-600 text-sm font-bold group-hover:gap-3 transition-all duration-200 pt-5 border-t border-slate-100">
+                    Read article
+                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+                  </div>
                 </Link>
               ))}
             </div>
