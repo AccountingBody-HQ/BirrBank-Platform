@@ -58,7 +58,7 @@ export default function Navigation() {
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
               <div className="hidden sm:flex items-baseline leading-none">
-                <span className="font-black text-slate-900 text-sm tracking-tight">HR</span><span className="font-black text-teal-600 text-sm tracking-tight">Lake</span>
+                <span className="font-black text-slate-900 text-sm tracking-tight">HR</span><span className="font-black text-teal-600 text-sm tracking-tight" style={{marginLeft:'-0.5px'}}>Lake</span>
               </div>
             </Link>
 

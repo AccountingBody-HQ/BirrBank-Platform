@@ -71,7 +71,7 @@ export default function Footer() {
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
               <div className="flex items-baseline leading-none">
-                <span className="font-black text-white text-sm tracking-tight">HR</span><span className="font-black text-teal-400 text-sm tracking-tight">Lake</span>
+                <span className="font-black text-white text-sm tracking-tight">HR</span><span className="font-black text-teal-400 text-sm tracking-tight" style={{marginLeft:'-0.5px'}}>Lake</span>
               </div>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
