@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Globe, Twitter, Linkedin, Mail } from "lucide-react";
+import { Twitter, Linkedin, Mail, Droplets } from "lucide-react";
 
 const footerLinks = {
   "Countries": [
@@ -38,68 +38,62 @@ const footerLinks = {
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-navy-950 text-white">
-      <div className="border-b border-white/10">
-        <div className="container-hrlake py-12">
-          <div className="max-w-xl">
-            <h3 className="text-xl font-bold mb-1">Stay ahead of global payroll changes</h3>
-            <p className="text-slate-400 text-sm mb-4">
-              Rate changes, new employment laws, and compliance updates — delivered free.
-            </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Your work email"
-                className="flex-1 h-10 px-4 rounded-md bg-white/10 border border-white/20 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
-              />
-              <button
-                type="submit"
-                className="h-10 px-5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold transition-colors shrink-0"
-              >
-                Subscribe
-              </button>
-            </form>
-            <p className="text-xs text-slate-600 mt-2">No spam. Unsubscribe any time.</p>
+    <footer style={{backgroundColor: '#020f1f'}} className="text-white">
+
+      {/* Tagline band */}
+      <div className="border-b border-white/5">
+        <div className="container-hrlake py-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)'}}>
+                  <Droplets size={17} className="text-white" strokeWidth={2.5} />
+                </div>
+                <div className="flex items-baseline gap-0">
+                  <span className="font-black text-white text-base tracking-tight">HR</span>
+                  <span className="font-black text-teal-400 text-base tracking-tight">Lake</span>
+                </div>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
+                Where global HR knowledge dives deep. Trusted by enterprise HR teams,
+                payroll directors, EOR firms, and lawyers worldwide.
+              </p>
+            </div>
+            <div className="lg:max-w-sm w-full">
+              <p className="text-xs font-semibold uppercase tracking-widest text-teal-500 mb-2">Stay ahead of changes</p>
+              <p className="text-slate-400 text-sm mb-3">Rate changes, new employment laws, compliance alerts — free, once a month.</p>
+              <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  type="email"
+                  placeholder="Your work email"
+                  className="flex-1 h-10 px-4 rounded-md bg-white/5 border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-teal-500 transition-colors"
+                />
+                <button
+                  type="submit"
+                  className="h-10 px-5 rounded-md text-white text-sm font-semibold transition-all shrink-0 hover:opacity-90"
+                  style={{background: 'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)'}}
+                >
+                  Subscribe
+                </button>
+              </form>
+              <p className="text-xs text-slate-700 mt-2">No spam. Unsubscribe any time.</p>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Main links */}
       <div className="container-hrlake py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 mb-4 group" aria-label="HRLake home">
-              <div className="w-8 h-8 rounded-lg bg-gradient-blue flex items-center justify-center shadow-sm">
-                <Globe size={18} className="text-white" strokeWidth={2.5} />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-bold text-white text-sm tracking-tight">GlobalPayroll</span>
-                <span className="font-bold text-blue-400 text-sm tracking-tight">Expert</span>
-              </div>
-            </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              The world&apos;s leading global payroll and HR intelligence platform.
-              Trusted by enterprise HR teams, lawyers, and payroll directors.
-            </p>
-            <div className="flex items-center gap-2">
-              <a href="https://twitter.com/hrlake" target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center rounded-md text-slate-500 hover:text-white hover:bg-white/10 transition-colors" aria-label="Twitter">
-                <Twitter size={16} />
-              </a>
-              <a href="https://linkedin.com/company/hrlake" target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center rounded-md text-slate-500 hover:text-white hover:bg-white/10 transition-colors" aria-label="LinkedIn">
-                <Linkedin size={16} />
-              </a>
-              <a href="mailto:hello@hrlake.com" className="w-8 h-8 flex items-center justify-center rounded-md text-slate-500 hover:text-white hover:bg-white/10 transition-colors" aria-label="Email">
-                <Mail size={16} />
-              </a>
-            </div>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">
                 {heading}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {links.map(({ label, href }) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-slate-500 hover:text-white transition-colors">
+                    <Link href={href} className="text-sm text-slate-500 hover:text-teal-400 transition-colors">
                       {label}
                     </Link>
                   </li>
@@ -109,15 +103,34 @@ export default function Footer() {
           ))}
         </div>
       </div>
-      <div className="border-t border-white/10">
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/5">
         <div className="container-hrlake py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-slate-600">&copy; {year} HRLake.com — All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-slate-600">&copy; {year} HRLake.com — All rights reserved.</p>
+            <div className="flex items-center gap-1">
+              <a href="https://twitter.com/hrlake" target="_blank" rel="noopener noreferrer"
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-600 hover:text-teal-400 transition-colors" aria-label="Twitter">
+                <Twitter size={14} />
+              </a>
+              <a href="https://linkedin.com/company/hrlake" target="_blank" rel="noopener noreferrer"
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-600 hover:text-teal-400 transition-colors" aria-label="LinkedIn">
+                <Linkedin size={14} />
+              </a>
+              <a href="mailto:hello@hrlake.com"
+                className="w-7 h-7 flex items-center justify-center rounded text-slate-600 hover:text-teal-400 transition-colors" aria-label="Email">
+                <Mail size={14} />
+              </a>
+            </div>
+          </div>
           <p className="text-xs text-slate-700 text-center sm:text-right max-w-md">
             Data is provided for informational purposes only and does not constitute
             professional legal, tax, or payroll advice. Always verify with a qualified adviser.
           </p>
         </div>
       </div>
+
     </footer>
   );
 }
