@@ -92,31 +92,52 @@ export default async function HomePage() {
       {/* ══════ HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0"
-          style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
+          style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}}>
+        </div>
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
 
           <div className="max-w-3xl">
+
+            {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
               <span className="text-blue-300 text-xs font-semibold tracking-wide">Where global HR knowledge dives deep</span>
             </div>
 
-            <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
+            {/* Headline */}
+            <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
               The deep source for<br /><span className="text-blue-400">global payroll</span><br />intelligence.
             </h1>
 
-            <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
+            {/* Sub */}
+            <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-8">
               Payroll data, calculators, and employment compliance guides for 195 countries.
               The reference platform for EOR firms, HR directors, lawyers, and global finance teams.
             </p>
 
+            {/* Trust line */}
+            <div className="flex flex-wrap items-center gap-3 mb-10">
+              <span className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Trusted by</span>
+              {[
+                'EOR Providers',
+                'Global Law Firms',
+                'HR Directors',
+                'Finance Teams',
+                'Payroll Consultants',
+              ].map(label => (
+                <span key={label} className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-white/5 border border-white/8 rounded-full px-3 py-1">
+                  <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {/* Search */}
             <div className="max-w-xl mb-8">
               <SearchBar variant="hero" placeholder="Search any country, payroll guide, or topic…" />
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Quick capability links */}
-            </div>
+            {/* Quick nav */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mb-8">
               <Link href="/countries/"
                 className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
@@ -139,8 +160,10 @@ export default async function HomePage() {
                 <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Employment Law</span>
               </Link>
             </div>
+
+            {/* Region pills */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
+              <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
               {REGIONS.map(r => (
                 <Link key={r.slug} href={`/countries/?region=${r.slug}`}
                   className="text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
@@ -153,18 +176,40 @@ export default async function HomePage() {
           {/* Stat strip */}
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: '195', label: 'Countries', sub: 'Full global coverage' },
+              { value: '195',     label: 'Countries',   sub: 'Full global coverage' },
               { value: '10,000+', label: 'Data Points', sub: 'Per country record' },
-              { value: 'Monthly', label: 'Updates', sub: 'Always current' },
-              { value: 'Free', label: 'Core Access', sub: 'No account required' },
-            ].map((s, i) => (
+              { value: 'Monthly', label: 'Updates',     sub: 'Always current' },
+              { value: 'Free',    label: 'Core Access', sub: 'No account required' },
+            ].map(s => (
               <div key={s.label} className="text-center">
                 <div className="text-3xl font-black text-white tracking-tight">{s.value}</div>
-                <div className="text-sm font-bold text-slate-300 mt-1">{s.label}</div>
+                <div className="text-sm font-bold text-blue-400 mt-1">{s.label}</div>
                 <div className="text-xs text-slate-500 mt-0.5">{s.sub}</div>
               </div>
             ))}
           </div>
+
+          {/* Social proof bar */}
+          <div className="mt-10 pt-8 border-t border-slate-800/60">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-600 mb-5 text-center">
+              The reference standard for global payroll professionals
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[
+                { stat: '195',     desc: 'Countries covered' },
+                { stat: '50,000+', desc: 'Monthly users' },
+                { stat: '100%',    desc: 'Government-sourced data' },
+                { stat: 'Free',    desc: 'Always free to access' },
+              ].map(item => (
+                <div key={item.desc}
+                  className="flex flex-col items-center text-center bg-white/3 border border-white/6 rounded-2xl px-4 py-5">
+                  <span className="text-xl font-black text-white tracking-tight">{item.stat}</span>
+                  <span className="text-xs text-slate-500 mt-1 leading-snug">{item.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
