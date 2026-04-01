@@ -70,8 +70,8 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-blue flex items-center justify-center shadow-sm">
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
-              <div className="flex items-baseline leading-none">
-                <span className="font-black text-white text-sm tracking-tight">HR</span><span className="font-black text-teal-400 text-sm tracking-tight" style={{marginLeft:'-0.5px'}}>Lake</span>
+              <div className="flex items-baseline leading-none gap-0">
+                <span className="font-black text-white text-sm tracking-tight">HR</span><span className="font-black text-teal-400 text-sm tracking-tight" >Lake</span>
               </div>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
