@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About HRLake — Methodology, Data Standards & Mission',
-  description: 'The most comprehensive global payroll intelligence platform. Data methodology, verification standards, and a mission to cover every country.',
+  description: 'The deep source for global HR intelligence. Data methodology, verification standards, and our mission to cover every country.',
   alternates: {
     canonical: 'https://hrlake.com/about/',
   },
@@ -102,7 +102,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-14">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Who It&apos;s For</p>
-            <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Built for global payroll professionals.</h2>
+            <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Built for global HR and EOR professionals.</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {WHO_ITS_FOR.map(item => (

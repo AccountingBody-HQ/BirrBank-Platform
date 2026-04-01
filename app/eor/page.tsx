@@ -40,8 +40,8 @@ const speedColour: Record<string, string> = {
 }
 
 export const metadata = {
-  title: 'Employer of Record (EOR) Intelligence | HRLake',
-  description: 'EOR guides, cost estimators, and compliance intelligence for 195 countries. Know the real cost of hiring internationally before you commit.',
+  title: 'EOR Intelligence — The World\'s Most Comprehensive EOR Resource | HRLake',
+  description: 'The world\'s most comprehensive EOR intelligence platform. Employer of Record guides, cost estimators, compliance data, and hiring intelligence for 195 countries.',
 }
 
 async function getEORCountries() {
@@ -77,14 +77,13 @@ export default async function EORHubPage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
               <Building2 size={13} className="text-blue-400" />
-              <span className="text-blue-300 text-xs font-semibold tracking-wide">Employer of Record Intelligence</span>
+              <span className="text-blue-300 text-xs font-semibold tracking-wide">The world's most comprehensive EOR intelligence</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              The EOR intelligence<br /><span className="text-blue-400">platform for global</span><br />hiring decisions.
+              The deep source for<br /><span className="text-blue-400">EOR intelligence</span><br />worldwide.
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
-              Employer of Record cost modelling, compliance risk ratings, and country-by-country EOR guides.
-              Know the real numbers before you hire internationally.
+              The most comprehensive Employer of Record intelligence platform on the web. Cost modelling, compliance risk ratings, hiring guides, and country-by-country EOR data — everything EOR firms and global employers need in one place.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#estimator" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-xl transition-colors text-sm">

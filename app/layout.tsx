@@ -33,11 +33,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || 'https://hrlake.com'
   ),
   title: {
-    default: 'HRLake — World-Class Global Payroll Intelligence',
+    default: 'HRLake — The Deep Source for Global HR Intelligence',
     template: '%s | HRLake',
   },
   description:
-    'World-class global payroll and HR intelligence. Employer costs, tax brackets, employment law, and compliance data for every country.',
+    'The deep source for global HR intelligence. Employer costs, tax brackets, employment law, and compliance data for 195 countries.',
   keywords: [
     'global payroll',
     'employer of record',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     url: 'https://hrlake.com',
     siteName: 'HRLake',
-    title: 'HRLake — World-Class Global Payroll Intelligence',
+    title: 'HRLake — The Deep Source for Global HR Intelligence',
     description:
       'Employer costs, tax brackets, employment law, and compliance data for every country.',
     images: [
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HRLake — World-Class Global Payroll Intelligence',
+    title: 'HRLake — The Deep Source for Global HR Intelligence',
     description:
       'Employer costs, tax brackets, employment law, and compliance data for every country.',
     images: ['/og-default.png'],
