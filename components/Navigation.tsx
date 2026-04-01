@@ -29,8 +29,8 @@ export default function Navigation() {
         <div className="flex h-16 items-center gap-6">
 
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <Globe className="h-5 w-5 text-blue-500" />
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-4">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0"><Globe className="h-4 w-4 text-white" /></div>
             <span className="text-base font-bold text-white tracking-tight hidden sm:block">
               HRLake
             </span>
