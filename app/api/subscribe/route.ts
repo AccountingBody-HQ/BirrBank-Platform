@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
           <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b;">
             <div style="background: #0f172a; padding: 32px; border-radius: 8px 8px 0 0;">
               <h1 style="color: white; margin: 0; font-size: 20px;">HRLake</h1>
-              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global Payroll Intelligence Platform</p>
+              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global HR, EOR and Payroll Intelligence</p>
             </div>
             <div style="background: #f8fafc; padding: 32px; border: 1px solid #e2e8f0; border-top: none;">
               <h2 style="color: #1e293b; margin: 0 0 16px;">Your payroll calculation</h2>
@@ -77,17 +77,17 @@ export async function POST(request: NextRequest) {
           <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b;">
             <div style="background: #0f172a; padding: 32px; border-radius: 8px 8px 0 0;">
               <h1 style="color: white; margin: 0; font-size: 20px;">HRLake</h1>
-              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global Payroll Intelligence Platform</p>
+              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global HR, EOR and Payroll Intelligence</p>
             </div>
             <div style="background: #f8fafc; padding: 32px; border: 1px solid #e2e8f0; border-top: none;">
               <h2 style="color: #1e293b; margin: 0 0 16px;">You are subscribed.</h2>
               <p style="color: #475569; line-height: 1.6;">Thank you for subscribing to HRLake monthly updates.</p>
               <p style="color: #475569; line-height: 1.6;">Once a month you will receive:</p>
               <ul style="color: #475569; line-height: 1.8; padding-left: 20px;">
-                <li>Payroll rate changes across key jurisdictions</li>
-                <li>New country data additions</li>
-                <li>Employment law updates</li>
-                <li>Compliance deadline alerts</li>
+                <li>Employment rate changes across key jurisdictions</li>
+                <li>New country HR and payroll data additions</li>
+                <li>Employment law and EOR intelligence updates</li>
+                <li>HR compliance and payroll deadline alerts</li>
               </ul>
               <a href="https://hrlake.com/countries/" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 16px;">Explore country data</a>
             </div>
