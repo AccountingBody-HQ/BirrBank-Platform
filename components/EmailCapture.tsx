@@ -12,7 +12,7 @@ interface EmailCaptureProps {
 export default function EmailCapture({
   source = 'inline',
   variant = 'default',
-  title = 'Monthly global payroll updates.',
+  title = 'Monthly HR and employment updates.',
   subtitle = 'Rate changes, new country data, and compliance alerts — once a month, free.',
 }: EmailCaptureProps) {
   const [email, setEmail] = useState('')

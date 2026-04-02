@@ -89,13 +89,38 @@ export default function Footer() {
         {/* EMAIL CAPTURE STRIP — shown on all pages except homepage */}
         {!isHomepage && (
           <div className="border-t border-slate-800 py-12">
-            <div className="max-w-xl">
-              <EmailCapture
-                source="footer"
-                variant="dark"
-                title="Monthly global payroll updates."
-                subtitle="Rate changes, new country data, and compliance alerts — once a month, free."
-              />
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Stay Informed</p>
+                <h2 className="font-serif text-3xl font-bold text-white leading-tight tracking-tight mb-4">
+                  Monthly HR and<br />employment updates.<br />
+                  <span className="text-slate-500">Free. No noise.</span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed mb-6">
+                  Once a month, direct to your inbox — everything that matters across HR compliance, payroll, and EOR.
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Monthly employment rate changes by country",
+                    "New country data as it is published",
+                    "HR compliance alerts and law changes",
+                    "EOR market intelligence and cost updates",
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 mt-2" />
+                      <span className="text-slate-400 text-sm leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <EmailCapture
+                  source="footer"
+                  variant="dark"
+                  title="Subscribe to updates"
+                  subtitle="Join thousands of HR and payroll professionals."
+                />
+              </div>
             </div>
           </div>
         )}
