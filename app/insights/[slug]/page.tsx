@@ -1,6 +1,6 @@
 // ============================================
 // GLOBALPAYROLLEXPERT — SINGLE ARTICLE PAGE
-// /insights/[slug]/ — Matches GPE homepage design
+// /insights/[slug]/ — Matches HRLake homepage design
 // CANONICAL TAG → accountingbody.com (SEO owner)
 // ============================================
 

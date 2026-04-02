@@ -96,7 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // ── Insights articles intentionally EXCLUDED ──────────────────────────────
-  // Canonical owner is accountingbody.com — GPE must not submit these to
+  // Canonical owner is accountingbody.com — HRLake must not submit these to
   // Google. The /insights/ listing page is included in STATIC_PAGES above
   // but individual article URLs are omitted here.
 
