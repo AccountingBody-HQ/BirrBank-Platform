@@ -15,7 +15,7 @@ const footerLinks = {
     { label: 'Payroll Tools',      href: '/payroll-tools/' },
     { label: 'Global Calculator',  href: '/payroll-tools/global-calculator/' },
   ],
-  'Employer Guides': [
+  'Global Intelligence': [
     { label: 'EOR Intelligence',   href: '/eor/' },
     { label: 'HR Compliance',      href: '/hr-compliance/' },
     { label: 'Insights',           href: '/insights/' },
@@ -57,8 +57,8 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-slate-400 mb-6">
-              World-class global payroll and HR intelligence. Payroll data,
-              calculators, and compliance guides for every country.
+              Global HR, EOR and payroll intelligence. Employment data,
+              compliance guides, and workforce cost tools for every country.
             </p>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-400" />

@@ -116,7 +116,7 @@ export default async function HomePage() {
           style={{ backgroundImage: 'linear-gradient(rgba(148,187,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(148,187,255,0.8) 1px, transparent 1px)', backgroundSize: '72px 72px' }} />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
-          <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-16 items-start">
+          <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-16 items-center">
 
             {/* Left — copy */}
             <div>
