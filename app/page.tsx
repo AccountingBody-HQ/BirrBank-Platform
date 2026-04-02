@@ -3,21 +3,32 @@ import Link from 'next/link'
 import { getHomepageStructuredData, jsonLd } from '@/lib/structured-data'
 import SearchBar from '@/components/SearchBar'
 import EmailCapture from '@/components/EmailCapture'
-import { Globe, Calculator, Building2, Shield, ArrowRight, ChevronRight, Lock, RefreshCw, Award, TrendingUp, CheckCircle } from 'lucide-react'
+import {
+  Globe, Calculator, Building2, Shield, ArrowRight, ChevronRight,
+  Lock, RefreshCw, Award, TrendingUp
+} from 'lucide-react'
 
 const FEATURED_COUNTRIES = [
-  { code: 'gb', name: 'United Kingdom', income: '20–45%', ss_employer: '13.8%', currency: 'GBP' },
-  { code: 'us', name: 'United States',  income: '10–37%', ss_employer: '7.65%', currency: 'USD' },
-  { code: 'de', name: 'Germany',         income: '14–45%', ss_employer: '~20%',  currency: 'EUR' },
-  { code: 'fr', name: 'France',          income: '0–45%',  ss_employer: '~30%',  currency: 'EUR' },
-  { code: 'sg', name: 'Singapore',       income: '0–22%',  ss_employer: '17%',   currency: 'SGD' },
-  { code: 'ae', name: 'UAE',             income: '0%',     ss_employer: '12.5%', currency: 'AED' },
-  { code: 'au', name: 'Australia',       income: '0–45%',  ss_employer: '11%',   currency: 'AUD' },
-  { code: 'ch', name: 'Switzerland',     income: '0–11.5%',ss_employer: '~10%',  currency: 'CHF' },
-  { code: 'ca', name: 'Canada',          income: '15–33%', ss_employer: '~7.5%', currency: 'CAD' },
-  { code: 'nl', name: 'Netherlands',     income: '9–49.5%',ss_employer: '~19%',  currency: 'EUR' },
-  { code: 'jp', name: 'Japan',           income: '5–45%',  ss_employer: '~16%',  currency: 'JPY' },
-  { code: 'in', name: 'India',           income: '0–30%',  ss_employer: '12%',   currency: 'INR' },
+  { code: 'gb', name: 'United Kingdom', income: '20–45%', ss_employer: '13.8%',  currency: 'GBP' },
+  { code: 'us', name: 'United States',  income: '10–37%', ss_employer: '7.65%',  currency: 'USD' },
+  { code: 'de', name: 'Germany',        income: '14–45%', ss_employer: '~20%',   currency: 'EUR' },
+  { code: 'fr', name: 'France',         income: '0–45%',  ss_employer: '~30%',   currency: 'EUR' },
+  { code: 'sg', name: 'Singapore',      income: '0–22%',  ss_employer: '17%',    currency: 'SGD' },
+  { code: 'ae', name: 'UAE',            income: '0%',     ss_employer: '12.5%',  currency: 'AED' },
+  { code: 'au', name: 'Australia',      income: '0–45%',  ss_employer: '11%',    currency: 'AUD' },
+  { code: 'ch', name: 'Switzerland',    income: '0–11.5%',ss_employer: '~10%',   currency: 'CHF' },
+  { code: 'ca', name: 'Canada',         income: '15–33%', ss_employer: '~7.5%',  currency: 'CAD' },
+  { code: 'nl', name: 'Netherlands',    income: '9–49.5%',ss_employer: '~19%',   currency: 'EUR' },
+  { code: 'jp', name: 'Japan',          income: '5–45%',  ss_employer: '~16%',   currency: 'JPY' },
+  { code: 'in', name: 'India',          income: '0–30%',  ss_employer: '12%',    currency: 'INR' },
+]
+
+const PREVIEW_COUNTRIES = [
+  { code: 'gb', name: 'United Kingdom', tax: '20–45%', ss: '13.8%' },
+  { code: 'de', name: 'Germany',        tax: '14–45%', ss: '~20%'  },
+  { code: 'sg', name: 'Singapore',      tax: '0–22%',  ss: '17%'   },
+  { code: 'us', name: 'United States',  tax: '10–37%', ss: '7.65%' },
+  { code: 'ae', name: 'UAE',            tax: '0%',     ss: '12.5%' },
 ]
 
 const REGIONS = [
@@ -31,8 +42,8 @@ const REGIONS = [
 const CAPABILITIES = [
   {
     icon: Globe,
-    title: 'Country Payroll Data',
-    body: 'Income tax brackets, social security rates, payroll frequency, and employer obligations — every country, one authoritative source.',
+    title: 'Country Employment Data',
+    body: 'Income tax brackets, employer contributions, employment obligations, and statutory requirements — every jurisdiction, one authoritative source.',
     href: '/countries/',
     cta: 'Browse countries',
     accent: 'bg-blue-50 text-blue-700',
@@ -41,8 +52,8 @@ const CAPABILITIES = [
   },
   {
     icon: Calculator,
-    title: 'Payroll Calculators',
-    body: 'Net pay, employer on-costs, income tax, and social security — full line-by-line payroll breakdowns for 195 jurisdictions.',
+    title: 'Payroll Calculator',
+    body: 'Net pay, employer on-costs, income tax, and social security — full line-by-line cost breakdowns for 195 jurisdictions.',
     href: '/payroll-tools/',
     cta: 'Open calculator',
     accent: 'bg-indigo-50 text-indigo-700',
@@ -52,12 +63,12 @@ const CAPABILITIES = [
   {
     icon: Building2,
     title: 'EOR Intelligence',
-    body: 'Employer of Record cost modelling, total employment cost estimators, and hiring guides for entity-free international payroll.',
+    body: 'Employer of Record cost modelling, total employment cost estimators, and hiring guides for entity-free international hiring.',
     href: '/eor/',
     cta: 'Explore EOR',
-    accent: 'bg-sky-50 text-sky-700',
-    border: 'hover:border-sky-300',
-    top: 'bg-sky-600',
+    accent: 'bg-teal-50 text-teal-700',
+    border: 'hover:border-teal-300',
+    top: 'bg-teal-600',
   },
   {
     icon: Shield,
@@ -65,21 +76,27 @@ const CAPABILITIES = [
     body: 'Minimum wage, statutory leave, notice periods, probation rules, overtime, and termination obligations — by country.',
     href: '/hr-compliance/',
     cta: 'View guides',
-    accent: 'bg-teal-50 text-teal-700',
-    border: 'hover:border-teal-300',
-    top: 'bg-teal-600',
+    accent: 'bg-sky-50 text-sky-700',
+    border: 'hover:border-sky-300',
+    top: 'bg-sky-600',
   },
 ]
 
 const STANDARDS = [
   { icon: Award,      title: 'Government-sourced',     body: 'Every data point traced to an official tax authority or government publication.' },
-  { icon: RefreshCw,  title: 'Updated monthly',        body: 'Payroll rates and thresholds reviewed on a rolling monthly cycle.' },
-  { icon: Lock,       title: 'Expert verified',        body: 'Data reviewed by qualified payroll professionals before publication.' },
+  { icon: RefreshCw,  title: 'Updated monthly',        body: 'Employment rates and statutory thresholds reviewed on a rolling monthly cycle.' },
+  { icon: Lock,       title: 'Expert verified',        body: 'Data reviewed by qualified HR and employment law professionals before publication.' },
   { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing toward complete global depth across all 195 countries.' },
 ]
 
+const UPDATE_ITEMS = [
+  'Monthly employment rate changes by country',
+  'New country data as it is published',
+  'HR compliance alerts and law changes',
+  'EOR market intelligence and cost updates',
+]
+
 export default async function HomePage() {
-  // Fetch latest 3 Insights articles from Sanity (via centralised client)
   const insights = await getInsightArticles({ limit: 3 })
 
   return (
@@ -89,88 +106,135 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: jsonLd(getHomepageStructuredData()) }}
       />
 
-      {/* ══════ HERO ══════ */}
+      {/* HERO */}
       <section className="relative bg-slate-950 overflow-hidden">
+
+        {/* Background depth layers */}
         <div className="absolute inset-0"
-          style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}}>
-        </div>
+          style={{ background: 'radial-gradient(ellipse at 65% 0%, rgba(30,111,255,0.13) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.5) 0%, transparent 50%)' }} />
+        <div className="absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: 'linear-gradient(rgba(148,187,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(148,187,255,0.8) 1px, transparent 1px)', backgroundSize: '72px 72px' }} />
+
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
+          <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-16 items-start">
 
-          <div className="max-w-3xl">
-
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              <span className="text-blue-300 text-xs font-semibold tracking-wide">Where global HR knowledge dives deep</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
-              The deep source for<br /><span className="text-blue-400">global HR</span><br />intelligence.
-            </h1>
-
-            {/* Sub */}
-            <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-8">
-              Payroll data, calculators, and employment compliance guides for 195 countries.
-              The reference platform for EOR firms, HR directors, lawyers, and global finance teams.
-            </p>
-
-            {/* Trust line */}
-            <div className="flex flex-wrap items-center gap-3 mb-10">
-              <span className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Trusted by</span>
-              {[
-                'EOR Providers',
-                'Global Law Firms',
-                'HR Directors',
-                'Finance Teams',
-                'Payroll Consultants',
-              ].map(label => (
-                <span key={label} className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-white/5 border border-white/8 rounded-full px-3 py-1">
-                  <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
-                  {label}
+            {/* Left — copy */}
+            <div>
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <span className="text-blue-300 text-xs font-semibold tracking-wide">
+                  Where HR, EOR and payroll knowledge dives deep
                 </span>
-              ))}
-            </div>
+              </div>
 
-            {/* Search */}
-            <div className="max-w-xl mb-8">
-              <SearchBar variant="hero" placeholder="Search any country, payroll guide, or topic…" />
-            </div>
+              {/* Headline */}
+              <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6"
+                style={{ letterSpacing: '-0.025em' }}>
+                The deep source for<br />
+                <span className="text-blue-400">global HR</span><br />
+                intelligence.
+              </h1>
 
-            {/* Quick nav */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mb-8">
-              <Link href="/countries/"
-                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
-                <Globe size={16} className="text-blue-400 shrink-0" />
-                <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Country Data</span>
-              </Link>
-              <Link href="/payroll-tools/"
-                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
-                <Calculator size={16} className="text-blue-400 shrink-0" />
-                <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Payroll Calculator</span>
-              </Link>
-              <Link href="/eor/"
-                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
-                <Building2 size={16} className="text-blue-400 shrink-0" />
-                <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">EOR Intelligence</span>
-              </Link>
-              <Link href="/hr-compliance/"
-                className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
-                <Shield size={16} className="text-blue-400 shrink-0" />
-                <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Employment Law</span>
-              </Link>
-            </div>
+              {/* Subheading */}
+              <p className="text-lg text-slate-400 leading-relaxed max-w-xl mb-8">
+                Country employment data, payroll calculations, and EOR intelligence
+                for 195 jurisdictions — the reference platform for HR directors,
+                global law firms, EOR providers, and finance teams worldwide.
+              </p>
 
-            {/* Region pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
-              {REGIONS.map(r => (
-                <Link key={r.slug} href={`/countries/?region=${r.slug}`}
-                  className="text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
-                  {r.name} <span className="text-slate-300 ml-1">{r.count}</span>
+              {/* Trust strip */}
+              <div className="flex flex-wrap items-center gap-3 mb-10">
+                <span className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Trusted by</span>
+                {['EOR Providers', 'Global Law Firms', 'HR Directors', 'Finance Teams', 'Payroll Consultants'].map(label => (
+                  <span key={label}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1">
+                    <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
+                    {label}
+                  </span>
+                ))}
+              </div>
+
+              {/* Search */}
+              <div className="max-w-xl mb-8">
+                <SearchBar variant="hero" placeholder="Search any country, employment guide, or topic…" />
+              </div>
+
+              {/* Quick nav */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mb-10">
+                <Link href="/countries/"
+                  className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
+                  <Globe size={16} className="text-blue-400 shrink-0" />
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Country Data</span>
                 </Link>
-              ))}
+                <Link href="/payroll-tools/"
+                  className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
+                  <Calculator size={16} className="text-blue-400 shrink-0" />
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Payroll Calculator</span>
+                </Link>
+                <Link href="/eor/"
+                  className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
+                  <Building2 size={16} className="text-blue-400 shrink-0" />
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">EOR Intelligence</span>
+                </Link>
+                <Link href="/hr-compliance/"
+                  className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
+                  <Shield size={16} className="text-blue-400 shrink-0" />
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Employment Law</span>
+                </Link>
+              </div>
+
+              {/* Region pills */}
+              <div className="pt-2 flex flex-wrap items-center gap-2">
+                <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider mr-1">Browse by region:</span>
+                {REGIONS.map(r => (
+                  <Link key={r.slug} href={`/countries/?region=${r.slug}`}
+                    className="text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
+                    {r.name} <span className="text-slate-500 ml-1">{r.count}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
+
+            {/* Right — live data preview card */}
+            <div className="hidden lg:block pt-6">
+              <div className="rounded-2xl border border-white/10 overflow-hidden bg-white/[0.03] backdrop-blur-sm">
+                <div className="bg-white/5 border-b border-white/10 px-5 py-3.5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Live Data</span>
+                  </div>
+                  <span className="text-xs text-slate-600">195 countries</span>
+                </div>
+                <div className="grid grid-cols-[1fr_70px_60px] px-5 py-2 border-b border-white/5">
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Country</span>
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Tax</span>
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">SS</span>
+                </div>
+                {PREVIEW_COUNTRIES.map((c, i) => (
+                  <Link key={c.code} href={`/countries/${c.code}/`}
+                    className={`grid grid-cols-[1fr_70px_60px] px-5 py-3.5 items-center hover:bg-white/5 transition-colors group ${i > 0 ? 'border-t border-white/[0.06]' : ''}`}>
+                    <div className="flex items-center gap-2.5">
+                      <img src={`https://flagcdn.com/20x15/${c.code}.png`} alt={c.name} width={20} height={15} className="rounded-sm opacity-90" />
+                      <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors truncate">{c.name}</span>
+                    </div>
+                    <span className="font-mono text-xs text-blue-300">{c.tax}</span>
+                    <span className="font-mono text-xs text-slate-400">{c.ss}</span>
+                  </Link>
+                ))}
+                <div className="border-t border-white/10 bg-blue-600/10 px-5 py-3.5">
+                  <Link href="/countries/"
+                    className="flex items-center justify-between text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors group">
+                    <span>View all 195 countries</span>
+                    <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+              <p className="text-xs text-slate-600 text-center mt-4 leading-relaxed">
+                Government-sourced · Verified monthly<br />Free to access — no account required
+              </p>
+            </div>
+
           </div>
 
           {/* Stat strip */}
@@ -188,27 +252,24 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-
-
         </div>
       </section>
 
-      {/* ══════ CAPABILITIES ══════ */}
+      {/* CAPABILITIES */}
       <section className="bg-slate-50 border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-14">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">The Platform</p>
             <div className="flex items-end justify-between gap-6">
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">
-                Everything you need<br />for global payroll.
+                Everything you need for<br />global HR and workforce compliance.
               </h2>
               <p className="hidden lg:block text-slate-500 max-w-md leading-relaxed">
-                One authoritative source for country payroll data, calculations, EOR intelligence,
-                and employment law — verified, current, and free to access.
+                One authoritative source for country employment data, payroll calculations,
+                EOR intelligence, and employment law — verified, current, and free to access.
               </p>
             </div>
           </div>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {CAPABILITIES.map(cap => (
               <Link key={cap.title} href={cap.href}
@@ -230,12 +291,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════ COUNTRY TABLE ══════ */}
+      {/* COUNTRY TABLE */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Payroll Data</p>
+              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Country Data</p>
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">
                 Featured jurisdictions.
               </h2>
@@ -251,7 +312,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr_140px] bg-slate-900 px-6 py-4">
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Country</span>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Income Tax</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Employer SS</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Employer Contribution</span>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Currency</span>
               <span />
             </div>
@@ -265,7 +326,7 @@ export default async function HomePage() {
                 <span className="font-mono text-slate-700 font-medium">{c.income}</span>
                 <span className="font-mono text-slate-700 font-medium">{c.ss_employer}</span>
                 <span className="text-slate-500 font-medium">{c.currency}</span>
-                <span className="flex items-center gap-1 text-blue-600 text-xs font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="flex items-center gap-1 text-blue-600 text-xs font-bold uppercase tracking-wide opacity-40 group-hover:opacity-100 transition-all">
                   View data <ChevronRight size={11} />
                 </span>
               </Link>
@@ -297,7 +358,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════ DATA STANDARDS ══════ */}
+      {/* DATA STANDARDS */}
       <section className="bg-slate-50 border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -307,9 +368,9 @@ export default async function HomePage() {
                 Data held to<br />the highest standard.
               </h2>
               <p className="text-slate-500 leading-relaxed text-lg mb-8">
-                Every data point on HRLake is sourced directly from official government 
-                and tax authority publications, verified by qualified payroll professionals, 
-                and updated monthly.
+                Every data point on HRLake is sourced directly from official government
+                and tax authority publications, verified by qualified HR and employment
+                law professionals, and updated monthly.
               </p>
               <Link href="/about/"
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors">
@@ -332,8 +393,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════ INSIGHTS ══════ */}
-      {insights.length > 0 && (
+      {/* INSIGHTS */}
+      {insights.length > 0 ? (
         <section className="bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
             <div className="flex items-end justify-between mb-12">
@@ -368,31 +429,65 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+      ) : (
+        <section className="bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Intelligence</p>
+                <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight">Latest analysis.</h2>
+              </div>
+              <Link href="/insights/"
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                All articles <ArrowRight size={15} />
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-6">
+              {[1,2,3].map(n => (
+                <div key={n} className="bg-slate-50 border border-slate-200 rounded-2xl p-7 animate-pulse">
+                  <div className="h-3 bg-slate-200 rounded w-1/3 mb-4" />
+                  <div className="h-5 bg-slate-200 rounded w-3/4 mb-2" />
+                  <div className="h-5 bg-slate-200 rounded w-1/2 mb-6" />
+                  <div className="h-3 bg-slate-200 rounded w-full mb-2" />
+                  <div className="h-3 bg-slate-200 rounded w-5/6" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
-      {/* ══════ EMAIL CAPTURE ══════ */}
-      <section className="relative overflow-hidden" style={{backgroundColor: '#0d1f3c'}}>
+      {/* EMAIL CAPTURE */}
+      <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0"
-          style={{background: 'radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)'}} />
+          style={{ background: 'radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.10) 0%, transparent 60%)' }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-[#a0522d] text-xs font-bold uppercase tracking-widest mb-4">Stay Informed</p>
+              <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Stay Informed</p>
               <h2 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-6">
-                Monthly payroll updates.<br />
+                Monthly HR and<br />employment updates.<br />
                 <span className="text-slate-500">Free. No noise.</span>
               </h2>
-              <p className="text-slate-400 leading-relaxed text-lg max-w-md">
-                Payroll rate changes, new country data, employment law updates, 
-                and compliance alerts — once a month, direct to your inbox.
+              <p className="text-slate-400 leading-relaxed text-lg mb-8 max-w-md">
+                Once a month, direct to your inbox — everything that matters
+                across HR compliance, payroll, and EOR.
               </p>
+              <ul className="space-y-3">
+                {UPDATE_ITEMS.map(item => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0 mt-2" />
+                    <span className="text-slate-400 text-sm leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div>
               <EmailCapture
                 source="homepage"
                 variant="dark"
                 title="Subscribe to updates"
-                subtitle="Join thousands of payroll professionals."
+                subtitle="Join thousands of HR and payroll professionals."
               />
             </div>
           </div>
