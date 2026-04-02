@@ -1,9 +1,3 @@
-// ============================================
-// GLOBALPAYROLLEXPERT — SINGLE ARTICLE PAGE
-// /insights/[slug]/ — Matches HRLake homepage design
-// CANONICAL TAG → accountingbody.com (SEO owner)
-// ============================================
-
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -26,7 +20,7 @@ export async function generateMetadata({
     title: article.title,
     description: article.excerpt || undefined,
     alternates: {
-      canonical: "https://accountingbody.com/study/" + slug,
+      canonical: "https://hrlake.com/insights/" + slug + "/",
     },
     openGraph: {
       title: article.title,
@@ -493,37 +487,7 @@ export default async function InsightArticlePage({
         </section>
       )}
 
-      {/* ══════ EMAIL CAPTURE ══════ */}
-      <section className="relative overflow-hidden" style={{ backgroundColor: "#0d1f3c" }}>
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)" }}
-        />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
-                Stay Informed
-              </p>
-              <h2 className="font-serif text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-6">
-                Never miss a payroll<br />regulation change.
-              </h2>
-              <p className="text-slate-400 leading-relaxed text-lg max-w-md">
-                Monthly updates on rate changes, employment law, and compliance
-                alerts — direct to your inbox.
-              </p>
-            </div>
-            <div>
-              <EmailCapture
-                source="article"
-                variant="dark"
-                title="Subscribe to updates"
-                subtitle="Join thousands of payroll professionals."
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+
     </div>
   )
 }
