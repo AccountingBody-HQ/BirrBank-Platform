@@ -18,7 +18,7 @@ interface CountryCardProps {
   currency: string | null
   region: string | null
   hrlake_coverage_level: CoverageLevel | null
-  payroll_complexity_score: number | null
+  payroll_complexity_score?: number | null
 }
 
 // Badge colour and label per coverage level
@@ -38,7 +38,6 @@ export default function CountryCard({
   currency,
   region,
   hrlake_coverage_level,
-  payroll_complexity_score,
 }: CountryCardProps) {
   const code = iso2.toLowerCase()
   const coverage = hrlake_coverage_level ? COVERAGE_CONFIG[hrlake_coverage_level] ?? DEFAULT_COVERAGE : DEFAULT_COVERAGE
