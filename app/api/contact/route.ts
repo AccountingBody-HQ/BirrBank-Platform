@@ -75,7 +75,7 @@ export async function POST(req: Request) {
             Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: 'HRLake <noreply@hrlake.com>',
+            from: 'HRLake <onboarding@resend.dev>',
             to: [process.env.ADMIN_EMAIL || 'admin@hrlake.com'],
             subject,
             html,
