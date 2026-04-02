@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const ADMIN_SECRET = 'hrlake-admin-2025-secure'
+const ADMIN_SECRET = 'Wolega@888'
 
 export async function POST(req: Request) {
   const { password } = await req.json()
