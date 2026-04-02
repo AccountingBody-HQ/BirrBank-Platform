@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { User, Calculator, Crown, ArrowRight, BookmarkCheck, TrendingUp, Shield } from 'lucide-react'
 
 export const metadata = {
-  title: 'Dashboard',
+  title: 'Dashboard | HRLake',
   description: 'Your HRLake account dashboard.',
 }
 
