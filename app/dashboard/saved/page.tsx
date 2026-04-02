@@ -6,7 +6,7 @@ import { Calculator, ArrowLeft, ArrowRight, Globe } from 'lucide-react'
 import DeleteButton from '@/components/DeleteButton'
 
 export const metadata = {
-  title: 'Saved Calculations',
+  title: 'Saved Calculations | HRLake',
   description: 'Your saved payroll calculations.',
 }
 
