@@ -484,8 +484,8 @@ export default function Calculator({
           {/* Email capture — after results */}
           <div className="rounded-2xl border border-blue-100 bg-blue-50 p-6">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-1">Stay informed</p>
-            <h3 className="font-bold text-slate-900 text-lg mb-1">Get this calculation emailed to you.</h3>
-            <p className="text-slate-500 text-sm mb-4">We will send you a summary plus monthly global payroll updates — rate changes and compliance alerts.</p>
+            <h3 className="font-bold text-slate-900 text-lg mb-1">Stay up to date on global employment costs.</h3>
+            <p className="text-slate-500 text-sm mb-4">Monthly HR and payroll updates — rate changes, new country data, and compliance alerts. Free, no spam.</p>
             <EmailCapture
               source="calculator_results"
               variant="compact"
