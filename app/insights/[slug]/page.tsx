@@ -376,7 +376,18 @@ export default async function InsightArticlePage({
 
               {article.body && (
                 <PortableText
-                  value={article.body}
+                  value={(() => {
+                    const blocks = article.body as any[]
+                    if (!blocks || !blocks.length) return blocks
+                    const first = blocks[0]
+                    if (first?._type === "block" && first?.children) {
+                      const firstText = first.children.map((c: any) => c.text || "").join("").trim()
+                      if (article.excerpt && firstText && article.excerpt.startsWith(firstText.substring(0, 80))) {
+                        return blocks.slice(1)
+                      }
+                    }
+                    return blocks
+                  })()}
                   components={portableTextComponents}
                 />
               )}
