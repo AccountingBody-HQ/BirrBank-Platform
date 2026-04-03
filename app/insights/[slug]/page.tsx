@@ -329,11 +329,7 @@ export default async function InsightArticlePage({
               {article.title}
             </h1>
 
-            {article.excerpt && (
-              <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
-                {article.excerpt}
-              </p>
-            )}
+
 
             {article.author?.name && (
               <div className="flex items-center gap-3 mt-10 pt-8 border-t border-slate-800">
