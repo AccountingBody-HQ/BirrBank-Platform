@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@sanity/client'
 
 const SITE_MAP: Record<string, string> = {
   HRLake: 'hrlake',
@@ -44,11 +45,9 @@ function markdownToBlocks(markdown: string): any[] {
   const lines = markdown.split('\n')
   const blocks: any[] = []
   let i = 0
-
   while (i < lines.length) {
     const line = lines[i]
     if (!line.trim()) { i++; continue }
-
     if (line.startsWith('# ')) {
       blocks.push({ _type: 'block', _key: makeKey(), style: 'h1', children: [{ _type: 'span', _key: makeKey(), text: line.slice(2).trim(), marks: [] }], markDefs: [] })
       i++; continue
@@ -65,7 +64,6 @@ function markdownToBlocks(markdown: string): any[] {
       blocks.push({ _type: 'block', _key: makeKey(), style: 'h4', children: [{ _type: 'span', _key: makeKey(), text: line.slice(5).trim(), marks: [] }], markDefs: [] })
       i++; continue
     }
-
     if (line.match(/^[-*+] /)) {
       while (i < lines.length && lines[i].match(/^[-*+] /)) {
         blocks.push({ _type: 'block', _key: makeKey(), style: 'normal', listItem: 'bullet', level: 1, children: parseInline(lines[i].replace(/^[-*+] /, '').trim()), markDefs: [] })
@@ -73,7 +71,6 @@ function markdownToBlocks(markdown: string): any[] {
       }
       continue
     }
-
     if (line.match(/^\d+\. /)) {
       while (i < lines.length && lines[i].match(/^\d+\. /)) {
         blocks.push({ _type: 'block', _key: makeKey(), style: 'normal', listItem: 'number', level: 1, children: parseInline(lines[i].replace(/^\d+\. /, '').trim()), markDefs: [] })
@@ -81,9 +78,7 @@ function markdownToBlocks(markdown: string): any[] {
       }
       continue
     }
-
     if (line.trim() === '---' || line.trim() === '***') { i++; continue }
-
     const paraLines: string[] = []
     while (i < lines.length && lines[i].trim() && !lines[i].match(/^#{1,4} /) && !lines[i].match(/^[-*+] /) && !lines[i].match(/^\d+\. /) && lines[i].trim() !== '---') {
       paraLines.push(lines[i].trim())
@@ -114,14 +109,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'content, site, contentType, canonicalOwner and showOnSites are required' }, { status: 400 })
     }
 
-    const token     = process.env.SANITY_API_TOKEN?.trim()
+    const token     = process.env.SANITY_WRITE_TOKEN?.trim()
     const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '4rllejq1'
     const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET    ?? 'production'
 
     console.log('TOKEN DEBUG:', token ? `starts:${token.charCodeAt(0)} ends:${token.charCodeAt(token.length-1)} length:${token.length}` : 'NOT SET')
+
     if (!token) {
-      return NextResponse.json({ error: 'SANITY_API_TOKEN is not set' }, { status: 500 })
+      return NextResponse.json({ error: 'SANITY_WRITE_TOKEN is not set' }, { status: 500 })
     }
+
+    const client = createClient({
+      projectId,
+      dataset,
+      apiVersion: '2021-06-07',
+      token,
+      useCdn: false,
+    })
 
     const title       = extractTitle(content, topic)
     const slug        = generateSlug(title)
@@ -156,23 +160,11 @@ export async function POST(req: NextRequest) {
       doc.relatedCountryCode = countryTags[0]
     }
 
-    const mutation  = { mutations: [{ create: doc }] }
-    const url       = `https://${projectId}.api.sanity.io/v2021-06-07/data/mutate/${dataset}`
-    const sanityRes = await fetch(url, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer \${token}` },
-      body:    JSON.stringify(mutation),
-    })
-
-    const sanityData = await sanityRes.json()
-    if (!sanityRes.ok) {
-      console.error('Sanity error:', sanityData)
-      return NextResponse.json({ error: sanityData?.message ?? 'Sanity publish failed' }, { status: 500 })
-    }
+    const result = await client.create(doc)
 
     return NextResponse.json({
       success:        true,
-      documentId:     sanityData?.results?.[0]?.id ?? null,
+      documentId:     result._id,
       title,
       slug,
       showOnSites:    mappedSites,
@@ -184,4 +176,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message ?? 'Internal server error' }, { status: 500 })
   }
 }
-// force redeploy Sun Apr  5 17:58:51 UTC 2026
