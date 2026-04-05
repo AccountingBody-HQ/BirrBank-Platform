@@ -150,6 +150,83 @@ ACCURACY RULES:
 - Worked examples must use invented but realistic figures — never invent regulatory figures
 - All technical content must be accurate to current professional standards`,
 
+  'Payroll Guide': `
+CONTENT TYPE: Payroll Guide
+PURPOSE: A precise, operationally authoritative guide to running payroll in a specific country or on a specific payroll topic. Must be the definitive reference for a payroll manager, HR director or finance controller who needs to understand and manage payroll compliantly. This is HRLake's specialist payroll content — it must reflect all three pillars: the HR context of employment, the EOR implications where relevant, and the payroll mechanics in full technical detail.
+
+REQUIRED SECTIONS (use these headings exactly):
+1. Payroll Overview — governance framework, which authority administers payroll compliance, key legislation
+2. Payroll Frequency and Payment Deadlines — how often payroll must run, statutory payment dates, cut-off rules, consequences of late payment
+3. Gross Pay Components — base salary, allowances, bonuses, overtime, benefits-in-kind and their payroll treatment
+4. Employee Statutory Deductions — income tax withholding mechanics, employee social contributions, pension deductions, order of deductions
+5. Employer Payroll Contributions — what the employer pays on top of gross salary, contribution rates and thresholds (with verification caveat), secondary costs of employment
+6. Net Pay Calculation — how net pay is derived, common calculation errors, rounding rules
+7. Payslip Legal Requirements — mandatory payslip contents by law, format requirements, delivery obligations
+8. Payroll Filing and Reporting Obligations — what must be filed, with which authority, on what schedule, in what format
+9. Year-End Payroll Obligations — annual reconciliation, employee certificates, final submissions, correction procedures
+10. EOR and Contractor Payroll Considerations — how EOR structures affect payroll administration, IR35/contractor rules where applicable
+11. Common Payroll Compliance Errors — specific, named mistakes payroll teams make in this jurisdiction — not generic cautions
+12. Official Payroll Authorities and Resources — named authorities, portals and official guidance sources
+
+THREE-PILLAR BALANCE RULE FOR PAYROLL GUIDES:
+- Every Payroll Guide must acknowledge the HR context — how payroll connects to employment contracts, offer letters, and HR policy
+- Where EOR is relevant to the jurisdiction, flag the payroll implications of an EOR structure explicitly
+- Never write a Payroll Guide that reads like a pure accountancy document — it must speak to the HR professional running or overseeing payroll, not just the payroll technician
+
+ACCURACY RULES FOR PAYROLL GUIDES:
+- All contribution rates, tax thresholds and filing deadlines must carry: "as of [current year] — verify with [authority name] for the latest figures"
+- Always name the specific payroll authority (e.g., HMRC for UK PAYE, URSSAF for French social contributions, ZUS for Polish social insurance, BIR for Philippines payroll tax)
+- Distinguish clearly and explicitly between: (a) employee deductions from gross pay, (b) employer contributions on top of gross pay, and (c) total employment cost
+- Never blend payroll rules, rates or thresholds from different jurisdictions in the same calculation example
+- Where employer and employee rates differ for the same contribution type, always state both separately
+- Payroll figures in worked examples must be invented but realistic — never use round numbers that signal fabrication (e.g., use £42,500 not £50,000)
+
+COPYRIGHT RULES FOR PAYROLL GUIDES:
+- Do not reproduce HMRC, IRS, URSSAF or any tax authority guidance verbatim
+- Do not mirror the structure of known payroll guides from ADP, Deel, Remote, Papaya Global or similar EOR/payroll providers
+- Express all regulatory requirements in original explanatory language`,
+
+  'Accounting Guide': `
+CONTENT TYPE: Accounting Guide
+PURPOSE: A technically precise, professionally authoritative guide on an accounting, finance or financial reporting topic. Must be suitable for qualified accountants, finance managers, CFOs and students at professional level. Must go beyond surface definitions into practical application, professional judgement and real-world complexity. This is AccountingBody's core content — it must reflect the platform's position as a trusted professional development resource benchmarked against Big Four technical publications and professional study texts.
+
+REQUIRED SECTIONS (use these headings exactly):
+1. Topic Overview — what this accounting area covers, why it matters in practice, and what professional problems it solves
+2. Applicable Standards and Framework — which accounting standards govern this area (IFRS, UK GAAP, US GAAP) — explain at a high level in your own teaching language without reproducing any standard text
+3. Core Recognition and Measurement Principles — the fundamental rules: when to recognise, how to measure, what basis to use
+4. Practical Application with Worked Illustration — a full worked example using invented but realistic company names, figures and scenarios. Must include journal entries where relevant, clearly labelled as illustrative
+5. Key Judgements and Estimates — where professional judgement is required, what factors influence the judgement, and what the consequences of different judgements are
+6. Disclosure Requirements — what must be disclosed in financial statements, where, and in what form
+7. Differences Between IFRS and UK/US GAAP — where the frameworks diverge materially, flag it clearly and explain the practical implication
+8. Common Errors and Audit Findings — specific, named mistakes finance teams and preparers make — based on common audit findings and professional experience, not generic cautions
+9. Key Takeaways — 5-7 bullet points a finance professional or student can act on or remember immediately
+
+WORKED EXAMPLE RULES FOR ACCOUNTING GUIDES:
+- Every worked example must use a fully invented company name (e.g., "Hartwell Engineering Ltd" or "Meridian Retail Group") — never use real company names
+- All figures must be invented but realistic — use specific amounts like £2,847,000 not round numbers like £3,000,000 which signal fabrication
+- Journal entries must always show: account name, debit/credit, amount, and a one-line explanation of the entry
+- Never label a journal entry as "correct" without explaining why — always state the accounting principle it applies
+- If an example spans multiple periods, always show the comparative clearly
+
+ACCURACY RULES FOR ACCOUNTING GUIDES:
+- Never reproduce IFRS Foundation, IASB, FASB, FRC or ASB standard text verbatim — not even short phrases
+- Express all standard requirements in original teaching language — restate the requirement in your own professional voice
+- Where standards are cited (e.g., IFRS 15, IAS 36), reference them by name but do not reproduce paragraph text or definitions
+- Never invent standard references — only cite standards that genuinely apply to the topic
+- Where a topic is subject to ongoing interpretation or debate in the profession, acknowledge this rather than presenting one view as definitive
+- All technical content must reflect current standards — flag if a standard has been recently amended
+
+COPYRIGHT RULES FOR ACCOUNTING GUIDES:
+- Do not reproduce or closely paraphrase Kaplan, BPP, ICAEW, ACCA, CIMA or any professional body study materials
+- Do not mirror the structure, worked example scenarios or teaching sequence of known textbooks
+- Do not reproduce any examination question or past paper scenario — all examples must be original
+- The safe harbour: if your worked example could appear in a Kaplan textbook without modification, rebuild it from scratch with different figures, different company, different scenario
+
+INSIGHT DENSITY FOR ACCOUNTING GUIDES:
+- Every paragraph must contain a professional insight that goes beyond what a student could find in a basic textbook definition
+- The common errors section must name actual, specific mistakes — "failing to disaggregate performance obligations under IFRS 15 when a contract contains both a product sale and an installation service" is a specific error. "Not understanding the standard" is not
+- The worked illustration must demonstrate something genuinely instructive — not just a mechanical calculation, but a scenario that illuminates a judgement call or a common misconception`,
+
   'Article': `
 CONTENT TYPE: Article
 PURPOSE: A high-quality, well-researched editorial article on a topic relevant to the platform audience. Must be original, insightful and go beyond what a reader could find by Googling for 30 seconds.

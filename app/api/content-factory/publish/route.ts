@@ -14,6 +14,8 @@ const CONTENT_TYPE_MAP: Record<string, string> = {
   'EOR Guide': 'eor-guide',
   'Tax Guide': 'tax-guide',
   'Course': 'tutorial',
+  'Payroll Guide': 'guide',
+  'Accounting Guide': 'guide',
   'Article': 'article',
 }
 
