@@ -264,10 +264,10 @@ Custom domain: hrlake.com (pending DNS cutover)
 ## Remaining Build Tasks
 
 1. ⏳ Run batch_publish.py — generate all 160 Sanity articles
-2. 🔧 Build /countries/[code]/payroll-guide/ page template
-3. 🔧 Build /countries/[code]/hr-compliance/ page template
-4. 🔧 Build /countries/[code]/leave-benefits/ page template
-5. 🔧 Build /countries/[code]/compliance-calendar/ page template
+2. ✅ Built /countries/[code]/payroll-guide/ page template
+3. ✅ Built /countries/[code]/hr-compliance/ page template
+4. ✅ Built /countries/[code]/leave-benefits/ page template
+5. ✅ Built /countries/[code]/compliance-calendar/ page template
 6. 🔧 Build /admin/country-builder/ admin page
 7. ❌ Set OPENAI_API_KEY in Vercel for RAG embeddings
 8. ❌ Set NEXT_PUBLIC_SENTRY_DSN in Vercel for error monitoring
