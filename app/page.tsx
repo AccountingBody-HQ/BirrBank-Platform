@@ -143,11 +143,11 @@ export default async function HomePage() {
               </p>
 
               {/* Trust strip */}
-              <div className="flex flex-wrap items-center gap-3 mb-10">
+              <div className="flex items-center gap-3 mb-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <span className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Trusted by</span>
                 {['EOR Providers', 'Global Law Firms', 'HR Directors', 'Finance Teams', 'Payroll Consultants'].map(label => (
                   <span key={label}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1">
+                    className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1">
                     <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
                     {label}
                   </span>
@@ -184,11 +184,11 @@ export default async function HomePage() {
               </div>
 
               {/* Region pills */}
-              <div className="pt-2 flex flex-wrap items-center gap-2">
+              <div className="pt-2 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider mr-1">Browse by region:</span>
                 {REGIONS.map(r => (
                   <Link key={r.slug} href={`/countries/?region=${r.slug}`}
-                    className="text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
+                    className="shrink-0 text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
                     {r.name} <span className="text-slate-500 ml-1">{r.count}</span>
                   </Link>
                 ))}

@@ -65,7 +65,7 @@ export default function InsightsClient() {
     <div className="space-y-6">
 
       {/* TOPIC FILTER PILLS */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {INSIGHT_TOPICS.map((topic) => {
           const isActive = currentTopic === topic.slug
           const Icon = TOPIC_ICONS[topic.slug] || Globe
