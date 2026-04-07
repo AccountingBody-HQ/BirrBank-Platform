@@ -166,34 +166,36 @@ export default async function HomePage() {
                 <Link href="/countries/"
                   className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
                   <Globe size={16} className="text-blue-400 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Country Data</span>
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors whitespace-nowrap">Country Data</span>
                 </Link>
                 <Link href="/payroll-tools/"
                   className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
                   <Calculator size={16} className="text-blue-400 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Payroll Calculator</span>
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors whitespace-nowrap">Payroll Calculator</span>
                 </Link>
                 <Link href="/eor/"
                   className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
                   <Building2 size={16} className="text-blue-400 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">EOR Intelligence</span>
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors whitespace-nowrap">EOR Intelligence</span>
                 </Link>
                 <Link href="/hr-compliance/"
                   className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 rounded-xl px-4 py-3.5 transition-all group">
                   <Shield size={16} className="text-blue-400 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors leading-tight">Employment Law</span>
+                  <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors whitespace-nowrap">Employment Law</span>
                 </Link>
               </div>
 
               {/* Region pills */}
-              <div className="pt-2 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider mr-1">Browse by region:</span>
+              <div className="pt-2">
+                <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider block mb-3">Browse by region:</span>
+                <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {REGIONS.map(r => (
                   <Link key={r.slug} href={`/countries/?region=${r.slug}`}
                     className="shrink-0 text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
                     {r.name} <span className="text-slate-500 ml-1">{r.count}</span>
                   </Link>
                 ))}
+                </div>
               </div>
             </div>
 
