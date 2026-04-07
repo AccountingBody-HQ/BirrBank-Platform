@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 import { ArrowRight, ArrowLeft, CheckCircle, XCircle, AlertCircle, Building2, ChevronRight } from 'lucide-react'
 import EORCostEstimator from '@/components/EORCostEstimator'
+import CountrySubNav from '@/components/CountrySubNav'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -72,6 +73,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
   if (!guide || !countryData) {
     return (
       <main className="bg-white flex items-center justify-center">
+      <CountrySubNav code={country.iso2} countryName={country.name} />
         <div className="text-center max-w-md px-6">
           <p className="text-5xl mb-6">🌍</p>
           <h1 className="font-serif text-3xl font-bold text-slate-900 mb-4">EOR guide coming soon</h1>

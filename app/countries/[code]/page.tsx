@@ -184,6 +184,7 @@ export default async function CountryPage(
 
   return (
     <main className="bg-slate-50 flex-1">
+      <CountrySubNav code={code} countryName={country.name} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(getCountryStructuredData({
@@ -288,8 +289,6 @@ export default async function CountryPage(
         </div>
       </section>
 
-
-      <CountrySubNav code={code} countryName={country.name} />
 
       {/* ══════ SECTION 2 — KEY PAYROLL FIGURES ══════ */}
       <section className="bg-white border-b border-slate-200">
@@ -644,11 +643,16 @@ export default async function CountryPage(
               <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Explore {country.name}</p>
               <div className="space-y-2">
                 {[
-                  { href: `/countries/${code}/payroll-calculator/`, icon: Calculator, label: 'Full Payroll Calculator',  sub: 'Complete line-by-line breakdown' },
-                  { href: `/countries/${code}/tax-guide/`,          icon: BookOpen,   label: 'Tax Guide',               sub: 'All rates and allowances' },
-                  { href: `/countries/${code}/employmentlaw/`,       icon: Scale,      label: 'Employment Law',          sub: 'Leave, notice, probation' },
-                  { href: `/countries/${code}/hiring-guide/`,        icon: Briefcase,  label: 'Hiring Guide',            sub: `How to hire in ${country.name}` },
-                  { href: `/compare/?a=${code}`,                     icon: Globe,      label: 'Compare Countries',       sub: 'Side-by-side cost comparison' },
+                  { href: `/countries/${code}/payroll-calculator/`, icon: Calculator,  label: 'Payroll Calculator',      sub: 'Full gross-to-net breakdown' },
+                  { href: `/countries/${code}/tax-guide/`,          icon: BookOpen,    label: 'Tax Guide',               sub: 'Income, corporate, VAT rates' },
+                  { href: `/countries/${code}/payroll-guide/`,      icon: TrendingUp,  label: 'Payroll Guide',           sub: 'Payroll process and obligations' },
+                  { href: `/countries/${code}/employmentlaw/`,      icon: Scale,       label: 'Employment Law',          sub: 'Contracts, notice, termination' },
+                  { href: `/countries/${code}/hiring-guide/`,       icon: Briefcase,   label: 'Hiring Guide',            sub: `How to hire in ${country.name}` },
+                  { href: `/countries/${code}/hr-compliance/`,      icon: Shield,      label: 'HR Compliance',           sub: 'Working time, data protection' },
+                  { href: `/countries/${code}/leave-benefits/`,     icon: Calendar,    label: 'Leave & Benefits',        sub: 'Annual, sick, parental leave' },
+                  { href: `/countries/${code}/compliance-calendar/`,icon: CheckCircle, label: 'Compliance Calendar',     sub: 'Filing deadlines and penalties' },
+                  { href: `/eor/${code}/`,                          icon: Globe,       label: 'EOR Guide',               sub: `Employer of Record in ${country.name}` },
+                  { href: `/compare/?a=${code}`,                    icon: Building2,   label: 'Compare Countries',       sub: 'Side-by-side cost comparison' },
                 ].map(link => (
                   <Link
                     key={link.href}
