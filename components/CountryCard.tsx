@@ -45,9 +45,13 @@ export default function CountryCard({
 
         {/* Top row: flag + name */}
         <div className="flex items-center gap-3">
-          <span className="text-2xl leading-none shrink-0" role="img" aria-label={name}>
-            {flag_emoji ?? '🌐'}
-          </span>
+          <img
+            src={`https://flagcdn.com/32x24/${code}.png`}
+            alt={name}
+            width={32}
+            height={24}
+            className="rounded-sm shadow-sm shrink-0 object-cover"
+          />
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate text-sm leading-tight">
               {name}
