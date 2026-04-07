@@ -1,14 +1,6 @@
-// ============================================
-// GLOBALPAYROLLEXPERT — COUNTRY CARD
-// Reusable card for the countries index grid
-// Used in: app/countries/page.tsx
-// ============================================
-
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Calculator, BookOpen, Scale } from 'lucide-react'
 
-// Coverage level comes from public.countries.hrlake_coverage_level
-// Values: full | partial | basic | none
 type CoverageLevel = 'full' | 'partial' | 'basic' | 'none'
 
 interface CountryCardProps {
@@ -21,68 +13,94 @@ interface CountryCardProps {
   payroll_complexity_score?: number | null
 }
 
-// Badge colour and label per coverage level
 const COVERAGE_CONFIG: Record<CoverageLevel, { label: string; className: string }> = {
-  full:    { label: 'Verified',  className: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' },
-  partial: { label: 'Partial',   className: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200' },
-  basic:   { label: 'Basic',     className: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200' },
+  full:    { label: 'Verified',    className: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' },
+  partial: { label: 'Partial',     className: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200' },
+  basic:   { label: 'Basic',       className: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200' },
   none:    { label: 'Coming Soon', className: 'bg-slate-100 text-slate-400 ring-1 ring-slate-200' },
 }
-
 const DEFAULT_COVERAGE = { label: 'Coming Soon', className: 'bg-slate-100 text-slate-400 ring-1 ring-slate-200' }
 
 export default function CountryCard({
-  iso2,
-  name,
-  flag_emoji,
-  currency,
-  region,
-  hrlake_coverage_level,
+  iso2, name, flag_emoji, currency, region, hrlake_coverage_level,
 }: CountryCardProps) {
   const code = iso2.toLowerCase()
-  const coverage = hrlake_coverage_level ? COVERAGE_CONFIG[hrlake_coverage_level] ?? DEFAULT_COVERAGE : DEFAULT_COVERAGE
+  const coverage = hrlake_coverage_level
+    ? COVERAGE_CONFIG[hrlake_coverage_level] ?? DEFAULT_COVERAGE
+    : DEFAULT_COVERAGE
   const isAvailable = hrlake_coverage_level && hrlake_coverage_level !== 'none'
 
   return (
-    <Link
-      href={`/countries/${code}/`}
-      className="group relative bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-5 transition-all duration-200 flex flex-col gap-3"
-    >
-      {/* Top row: flag + name */}
-      <div className="flex items-center gap-3">
-        <span className="text-2xl leading-none" role="img" aria-label={name}>
-          {flag_emoji ?? '🌐'}
-        </span>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate text-sm leading-tight">
-            {name}
-          </p>
-          {region && (
-            <p className="text-xs text-slate-400 mt-0.5 truncate">{region}</p>
-          )}
-        </div>
-      </div>
+    <div className="group relative bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl overflow-hidden transition-all duration-200 flex flex-col">
 
-      {/* Middle row: currency + coverage badge */}
-      <div className="flex items-center justify-between gap-2">
-        {currency ? (
-          <span className="text-xs font-mono font-semibold text-slate-500 bg-slate-50 border border-slate-200 rounded px-2 py-0.5">
-            {currency}
+      {/* Coverage bar */}
+      <div className={`h-1 ${
+        hrlake_coverage_level === 'full' ? 'bg-emerald-400' :
+        hrlake_coverage_level === 'partial' ? 'bg-amber-400' :
+        'bg-slate-200'
+      }`} />
+
+      {/* Main link area */}
+      <Link href={`/countries/${code}/`} className="flex flex-col gap-3 p-5 flex-1">
+
+        {/* Top row: flag + name */}
+        <div className="flex items-center gap-3">
+          <span className="text-2xl leading-none shrink-0" role="img" aria-label={name}>
+            {flag_emoji ?? '🌐'}
           </span>
-        ) : (
-          <span />
-        )}
-        <span className={`text-xs font-semibold rounded-full px-2.5 py-0.5 ${coverage.className}`}>
-          {coverage.label}
-        </span>
-      </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-slate-900 group-hover:text-blue-700 transition-colors truncate text-sm leading-tight">
+              {name}
+            </p>
+            {region && (
+              <p className="text-xs text-slate-400 mt-0.5 truncate">{region}</p>
+            )}
+          </div>
+          <ChevronRight size={14} className="text-slate-300 group-hover:text-blue-400 shrink-0 transition-colors" />
+        </div>
 
+        {/* Currency + coverage */}
+        <div className="flex items-center justify-between gap-2">
+          {currency ? (
+            <span className="text-xs font-mono font-semibold text-slate-500 bg-slate-50 border border-slate-200 rounded px-2 py-0.5">
+              {currency}
+            </span>
+          ) : <span />}
+          <span className={`text-xs font-semibold rounded-full px-2.5 py-0.5 ${coverage.className}`}>
+            {coverage.label}
+          </span>
+        </div>
+      </Link>
 
-
-      {/* Arrow — appears on hover */}
-      <div className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
-        <ChevronRight size={14} className="text-blue-500" />
-      </div>
-    </Link>
+      {/* Quick sub-page links — only for available countries */}
+      {isAvailable && (
+        <div className="border-t border-slate-100 px-5 py-2.5 flex items-center gap-1">
+          <Link href={`/countries/${code}/payroll-calculator/`}
+            className="flex items-center gap-1 text-xs text-slate-400 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
+            title="Payroll Calculator"
+          >
+            <Calculator size={12} /> Calc
+          </Link>
+          <Link href={`/countries/${code}/tax-guide/`}
+            className="flex items-center gap-1 text-xs text-slate-400 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
+            title="Tax Guide"
+          >
+            <BookOpen size={12} /> Tax
+          </Link>
+          <Link href={`/countries/${code}/employmentlaw/`}
+            className="flex items-center gap-1 text-xs text-slate-400 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
+            title="Employment Law"
+          >
+            <Scale size={12} /> Law
+          </Link>
+          <Link href={`/eor/${code}/`}
+            className="ml-auto text-xs text-slate-400 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50"
+            title="EOR Guide"
+          >
+            EOR
+          </Link>
+        </div>
+      )}
+    </div>
   )
 }
