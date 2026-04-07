@@ -15,9 +15,26 @@ const navLinks = [
   { label: 'Insights', href: '/insights/' },
 ]
 
+const countryDropdown = [
+  { label: 'All Countries', href: '/countries/', sub: 'Browse all 20 countries' },
+  { label: 'Compare Countries', href: '/compare/', sub: 'Side-by-side cost comparison' },
+  { label: 'Global Calculator', href: '/payroll-tools/global-calculator/', sub: 'Multi-country payroll tool' },
+  { label: 'EOR Intelligence', href: '/eor/', sub: 'Employer of Record guides' },
+]
+
+const toolsDropdown = [
+  { label: 'Payroll Tools', href: '/payroll-tools/', sub: 'All payroll tools' },
+  { label: 'Global Calculator', href: '/payroll-tools/global-calculator/', sub: 'Multi-country calculator' },
+  { label: 'Currency Converter', href: '/payroll-tools/currency-converter/', sub: 'Live exchange rates' },
+  { label: 'Compare Countries', href: '/compare/', sub: 'Side-by-side comparison' },
+  { label: 'AI Assistant', href: '/ai-assistant/', sub: 'Ask HR and payroll questions' },
+]
+
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [countriesOpen, setCountriesOpen] = useState(false)
+  const [toolsOpen, setToolsOpen] = useState(false)
   const { isSignedIn, user } = useUser()
   const { signOut } = useClerk()
 
@@ -38,15 +55,55 @@ export default function Navigation() {
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex items-center gap-0.5 flex-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
+            <div className="relative"
+              onMouseEnter={() => setCountriesOpen(true)}
+              onMouseLeave={() => setCountriesOpen(false)}
+            >
+              <Link href="/countries/"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
               >
-                {link.label}
+                Countries <ChevronDown size={12} />
               </Link>
-            ))}
+              {countriesOpen && (
+                <div className="absolute left-0 top-full mt-1 w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-2 z-50">
+                  {countryDropdown.map(item => (
+                    <Link key={item.href} href={item.href}
+                      className="block px-4 py-2.5 hover:bg-slate-800 transition-colors"
+                      onClick={() => setCountriesOpen(false)}
+                    >
+                      <p className="text-sm font-semibold text-white">{item.label}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{item.sub}</p>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Link href="/eor/" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">EOR</Link>
+            <Link href="/hr-compliance/" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">HR Compliance</Link>
+            <div className="relative"
+              onMouseEnter={() => setToolsOpen(true)}
+              onMouseLeave={() => setToolsOpen(false)}
+            >
+              <Link href="/payroll-tools/"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
+              >
+                Tools <ChevronDown size={12} />
+              </Link>
+              {toolsOpen && (
+                <div className="absolute left-0 top-full mt-1 w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-2 z-50">
+                  {toolsDropdown.map(item => (
+                    <Link key={item.href} href={item.href}
+                      className="block px-4 py-2.5 hover:bg-slate-800 transition-colors"
+                      onClick={() => setToolsOpen(false)}
+                    >
+                      <p className="text-sm font-semibold text-white">{item.label}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{item.sub}</p>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Link href="/insights/" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Insights</Link>
           </nav>
 
           {/* SEARCH — desktop */}
