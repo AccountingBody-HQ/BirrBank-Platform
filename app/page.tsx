@@ -143,8 +143,9 @@ export default async function HomePage() {
               </p>
 
               {/* Trust strip */}
-              <div className="flex items-center gap-3 mb-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <span className="text-slate-500 text-xs font-semibold uppercase tracking-widest">Trusted by</span>
+              <div className="mb-10">
+                <span className="text-slate-500 text-xs font-semibold uppercase tracking-widest block mb-3">Trusted by</span>
+                <div className="flex items-center gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {['EOR Providers', 'Global Law Firms', 'HR Directors', 'Finance Teams', 'Payroll Consultants'].map(label => (
                   <span key={label}
                     className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1">
