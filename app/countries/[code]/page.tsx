@@ -270,6 +270,11 @@ export default async function CountryPage(
                   { href: `/countries/${code}/tax-guide/`,          icon: BookOpen,   label: 'Tax Guide' },
                   { href: `/countries/${code}/employmentlaw/`,       icon: Scale,      label: 'Employment Law' },
                   { href: `/countries/${code}/hiring-guide/`,        icon: Briefcase,  label: 'Hiring Guide' },
+                  { href: `/countries/${code}/payroll-guide/`,      icon: TrendingUp,  label: 'Payroll Guide' },
+                  { href: `/countries/${code}/hr-compliance/`,       icon: Shield,      label: 'HR Compliance' },
+                  { href: `/countries/${code}/leave-benefits/`,      icon: Calendar,    label: 'Leave & Benefits' },
+                  { href: `/countries/${code}/compliance-calendar/`, icon: CheckCircle, label: 'Compliance Calendar' },
+                  { href: `/eor/${code}/`,                           icon: Globe,       label: 'EOR Guide' },
                 ].map(btn => (
                   <Link
                     key={btn.href}
@@ -287,6 +292,35 @@ export default async function CountryPage(
           </div>
         </div>
       </section>
+
+
+      {/* ══════ COUNTRY SUB-NAVIGATION STRIP ══════ */}
+      <nav className="bg-white border-b border-slate-200 sticky top-16 z-40 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center gap-0 min-w-max">
+            {[
+              { href: `/countries/${code}/`,                    label: 'Overview' },
+              { href: `/countries/${code}/payroll-calculator/`, label: 'Calculator' },
+              { href: `/countries/${code}/tax-guide/`,          label: 'Tax Guide' },
+              { href: `/countries/${code}/payroll-guide/`,      label: 'Payroll Guide' },
+              { href: `/countries/${code}/employmentlaw/`,      label: 'Employment Law' },
+              { href: `/countries/${code}/hiring-guide/`,       label: 'Hiring Guide' },
+              { href: `/countries/${code}/hr-compliance/`,      label: 'HR Compliance' },
+              { href: `/countries/${code}/leave-benefits/`,     label: 'Leave & Benefits' },
+              { href: `/countries/${code}/compliance-calendar/`,label: 'Compliance Calendar' },
+              { href: `/eor/${code}/`,                          label: 'EOR Guide' },
+            ].map(tab => (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                className="shrink-0 px-4 py-3.5 text-sm font-medium text-slate-500 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all whitespace-nowrap"
+              >
+                {tab.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </nav>
 
       {/* ══════ SECTION 2 — KEY PAYROLL FIGURES ══════ */}
       <section className="bg-white border-b border-slate-200">
