@@ -30,6 +30,40 @@ const toolsDropdown = [
   { label: 'AI Assistant', href: '/ai-assistant/', sub: 'Ask HR and payroll questions' },
 ]
 
+function MobileSection({ label, links, onClose }: {
+  label: string
+  links: { label: string; href: string; sub?: string }[]
+  onClose: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+      >
+        {label}
+        <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="ml-3 border-l border-slate-800 pl-3 mb-1">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={onClose}
+              className="flex flex-col px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+            >
+              <span className="text-sm font-medium text-slate-300 group-hover:text-white">{link.label}</span>
+              {link.sub && <span className="text-xs text-slate-500 group-hover:text-slate-400">{link.sub}</span>}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
@@ -193,7 +227,15 @@ export default function Navigation() {
             <SearchBar variant="nav" placeholder="Search countries…" />
           </div>
           <nav className="px-2 pb-2">
-            {navLinks.map((link) => (
+            {/* Countries expandable section */}
+            <MobileSection label="Countries" links={countryDropdown} onClose={() => setMobileOpen(false)} />
+            {/* Tools expandable section */}
+            <MobileSection label="Tools" links={toolsDropdown} onClose={() => setMobileOpen(false)} />
+            {/* Remaining flat links */}
+            {[
+              { label: 'HR Compliance', href: '/hr-compliance/' },
+              { label: 'Insights', href: '/insights/' },
+            ].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
