@@ -4,6 +4,8 @@ import { createSupabaseServerClient } from '@/lib/supabase'
 import { getEmploymentRules } from '@/lib/supabase-queries'
 import { ChevronRight, Scale, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+import CountrySubNav from '@/components/CountrySubNav'
+
 
 interface PageProps {
   params: Promise<{ code: string }>
@@ -90,6 +92,7 @@ export default async function EmploymentLawPage({ params }: PageProps) {
 
   return (
     <main className="bg-white flex-1">
+      <CountrySubNav code={code} countryName={country.name} />
 
       {/* ══════ HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">

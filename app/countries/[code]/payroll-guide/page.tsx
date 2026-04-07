@@ -6,6 +6,8 @@ import { ChevronRight, DollarSign, ArrowRight } from 'lucide-react'
 import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import type { Metadata } from 'next'
+import CountrySubNav from '@/components/CountrySubNav'
+
 
 interface PageProps {
   params: Promise<{ code: string }>
@@ -92,6 +94,7 @@ export default async function PayrollGuidePage({ params }: PageProps) {
 
   return (
     <main className="bg-white flex-1">
+      <CountrySubNav code={code} countryName={country.name} />
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-14">

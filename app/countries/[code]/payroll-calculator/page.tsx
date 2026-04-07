@@ -8,6 +8,8 @@ import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { Calculator as CalcIcon, ChevronRight, Shield, RefreshCw, Award, ArrowRight } from 'lucide-react'
 import CalculatorModalWrapper from '@/components/CalculatorModalWrapper'
+import CountrySubNav from '@/components/CountrySubNav'
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -143,6 +145,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
       />
 
       <main className="bg-white flex-1">
+      <CountrySubNav code={code} countryName={country.name} />
 
         {/* ══════ HERO HEADER ══════ */}
         <section className="relative bg-slate-950 overflow-hidden">
