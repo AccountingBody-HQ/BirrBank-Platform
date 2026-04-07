@@ -31,14 +31,7 @@ export default function CountryCard({
   const isAvailable = hrlake_coverage_level && hrlake_coverage_level !== 'none'
 
   return (
-    <div className="group relative bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl overflow-hidden transition-all duration-200 flex flex-col">
-
-      {/* Coverage bar */}
-      <div className={`h-1 ${
-        hrlake_coverage_level === 'full' ? 'bg-emerald-400' :
-        hrlake_coverage_level === 'partial' ? 'bg-amber-400' :
-        'bg-slate-200'
-      }`} />
+    <div className="group relative bg-white border border-slate-200 hover:border-l-4 hover:border-l-blue-500 hover:border-blue-200 rounded-xl overflow-hidden transition-all duration-200 flex flex-col">
 
       {/* Main link area */}
       <Link href={`/countries/${code}/`} className="flex flex-col gap-3 p-5 flex-1">
