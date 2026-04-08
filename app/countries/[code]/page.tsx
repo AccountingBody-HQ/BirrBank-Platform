@@ -28,6 +28,7 @@ import MiniCalculator from '@/components/countries/MiniCalculator'
 import AiCountryWidget from '@/components/AiCountryWidget'
 import { auth } from '@clerk/nextjs/server'
 import CountrySubNav from '@/components/CountrySubNav'
+import { createClient } from '@supabase/supabase-js'
 
 // ── Revalidate every 24 hours ──────────────────────────────────────────────
 export const dynamic = "force-dynamic"
