@@ -1,10 +1,18 @@
 import { createClient } from '@supabase/supabase-js'
-import { getComparisonStructuredData, jsonLd } from '@/lib/structured-data'
+import { getComparisonStructuredData, getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 import CompareClient from './CompareClient'
 
 export const metadata = {
   title: 'Country Comparison Tool — Employer Cost Side-by-Side | HRLake',
   description: 'Compare employer costs, tax rates, and employment law side-by-side for any two countries. Free HR and payroll comparison tool for global hiring decisions.',
+  alternates: { canonical: 'https://hrlake.com/compare/' },
+  openGraph: {
+    title: 'Country Comparison Tool — Employer Cost Side-by-Side | HRLake',
+    description: 'Compare employer costs, tax rates, and employment law side-by-side for any two countries. Free HR and payroll comparison tool for global hiring decisions.',
+    url: 'https://hrlake.com/compare/',
+    siteName: 'HRLake',
+    type: 'website',
+  },
 }
 
 export const dynamic = 'force-dynamic'
@@ -18,10 +26,18 @@ export default async function ComparePage() {
   const { data: countries } = await supabase
     .from('countries')
     .select('iso2, name, currency_code, flag_emoji')
+    .eq('is_active', true)
     .order('name', { ascending: true })
 
   return (
     <main className="bg-white flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: 'https://hrlake.com' },
+          { name: 'Compare Countries', href: 'https://hrlake.com/compare/' },
+        ])) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(getComparisonStructuredData([
