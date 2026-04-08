@@ -7,7 +7,7 @@ import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
-import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 
 
 interface PageProps {
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title,
       description,
-      url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
+      href: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
       siteName: 'HRLake',
       type: 'website',
     },
@@ -89,8 +89,8 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
 
   return (
     <>
-      <script {...jsonLd(structuredData)} />
-      <script {...jsonLd(breadcrumb)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }} />
       <main className="bg-white flex-1">
       <CountrySubNav code={code} countryName={country.name} />
       <section className="relative bg-slate-950 overflow-hidden">
