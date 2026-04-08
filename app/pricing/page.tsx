@@ -3,7 +3,6 @@ import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 import { ArrowRight, Check, X } from 'lucide-react'
 
 import type { Metadata } from 'next'
-import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
   title: 'Pricing — Free and Pro Plans | HRLake',
