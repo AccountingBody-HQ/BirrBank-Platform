@@ -244,7 +244,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
 
                 {/* Data standards card */}
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">About This Data</p>
+                  <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Explore {country.name}</p>
                   <ul className="space-y-3">
                     {[
                     { label: 'Country Overview', href: `/countries/${code.toLowerCase()}/` },
@@ -284,6 +284,47 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
                   </Link>
                 </div>
 
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ══════ FAQ ══════ */}
+        <section className="bg-white border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+            <div className="max-w-3xl">
+              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Common Questions</p>
+              <h2 className="font-serif text-2xl lg:text-3xl font-bold text-slate-900 mb-10" style={{ letterSpacing: '-0.02em' }}>
+                About the {country.name} Payroll Calculator
+              </h2>
+              <div className="space-y-8">
+                {[
+                  {
+                    q: `What does the ${country.name} payroll calculator include?`,
+                    a: `The calculator covers gross-to-net salary, income tax using the current ${country.name} tax brackets, employee social security contributions, employer social security, total employer cost, and effective tax rates. Results are available as both monthly and annual figures.`,
+                  },
+                  {
+                    q: 'How accurate are the tax rates?',
+                    a: `Rates are sourced from official government publications and updated for the current tax year (${taxYear}). For individual tax planning or payroll processing, always confirm with a qualified ${country.name} payroll professional or tax adviser.`,
+                  },
+                  {
+                    q: 'What is total employer cost?',
+                    a: `Total employer cost is the full amount an employer pays to employ someone — it is the gross salary plus employer-side social security and payroll tax contributions. This is the real cost of a hire and is often significantly higher than the gross salary figure alone.`,
+                  },
+                  {
+                    q: 'Can I export or save my results?',
+                    a: 'Yes. You can export a PDF summary of any calculation using the Export PDF button after running a calculation. Pro users can also save calculations to their dashboard for future reference.',
+                  },
+                  {
+                    q: `Is this calculator free to use?`,
+                    a: 'The core payroll calculator is completely free — no account required. Pro features such as saving calculations to your dashboard and accessing multi-country comparison tools require a Pro subscription.',
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="border-b border-slate-100 pb-8 last:border-0 last:pb-0">
+                    <h3 className="font-semibold text-slate-900 mb-2">{item.q}</h3>
+                    <p className="text-slate-500 text-sm leading-relaxed">{item.a}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
