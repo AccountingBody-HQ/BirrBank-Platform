@@ -93,8 +93,8 @@ const FAQS = [
 
 export default function PricingPage() {
   const breadcrumb = getBreadcrumbStructuredData([
-    { name: 'Home', url: 'https://hrlake.com/' },
-    { name: 'Pricing', url: 'https://hrlake.com/pricing/' },
+    { name: 'Home', href: 'https://hrlake.com/' },
+    { name: 'Pricing', href: 'https://hrlake.com/pricing/' },
   ])
   const faqSchema = {
     '@context': 'https://schema.org',
