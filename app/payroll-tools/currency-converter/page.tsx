@@ -1,13 +1,30 @@
 import CurrencyConverterClient from './CurrencyConverterClient'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 
 export const metadata = {
   title: 'Salary Currency Converter | HRLake',
   description: 'Convert any salary between currencies using live exchange rates. Benchmark compensation across international markets for HR and global workforce planning.',
+  alternates: { canonical: 'https://hrlake.com/payroll-tools/currency-converter/' },
+  openGraph: {
+    title: 'Salary Currency Converter | HRLake',
+    description: 'Convert any salary between currencies using live exchange rates. Benchmark compensation across international markets for HR and global workforce planning.',
+    url: 'https://hrlake.com/payroll-tools/currency-converter/',
+    siteName: 'HRLake',
+    type: 'website',
+  },
 }
+
+const breadcrumb = getBreadcrumbStructuredData([
+  { name: 'Home', href: 'https://hrlake.com' },
+  { name: 'Payroll Tools', href: 'https://hrlake.com/payroll-tools/' },
+  { name: 'Currency Converter', href: 'https://hrlake.com/payroll-tools/currency-converter/' },
+])
 
 export default function CurrencyConverterPage() {
   return (
-    <main className="bg-white flex-1">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }} />
+      <main className="bg-white flex-1">
 
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">
@@ -53,5 +70,6 @@ export default function CurrencyConverterPage() {
       </section>
 
     </main>
+    </>
   )
 }
