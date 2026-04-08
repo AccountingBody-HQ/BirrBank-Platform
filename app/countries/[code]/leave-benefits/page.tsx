@@ -7,6 +7,7 @@ import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 
 
 interface PageProps {
@@ -72,8 +73,25 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     { label: '13th Month Pay', value: employmentRules.thirteenth_month_pay ? 'Required' : 'Not required' },
   ] : []
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Leave and Benefits in ${country.name}`,
+    description: `Statutory leave entitlements and mandatory benefits for employers in ${country.name}.`,
+    url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
+  }
+  const breadcrumb = getBreadcrumbStructuredData([
+    { name: 'Home', url: 'https://hrlake.com' },
+    { name: 'Countries', url: 'https://hrlake.com/countries/' },
+    { name: country.name, url: `https://hrlake.com/countries/${code.toLowerCase()}/` },
+    { name: 'Leave and Benefits', url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/` },
+  ])
+
   return (
-    <main className="bg-white flex-1">
+    <>
+      <script {...jsonLd(structuredData)} />
+      <script {...jsonLd(breadcrumb)} />
+      <main className="bg-white flex-1">
       <CountrySubNav code={code} countryName={country.name} />
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
@@ -256,5 +274,6 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
         </div>
       </section>
     </main>
+    </>
   )
 }
