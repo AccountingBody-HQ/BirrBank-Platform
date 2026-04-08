@@ -58,8 +58,8 @@ function UpgradePrompt() {
           ))}
         </div>
         <div className="flex gap-2">
-          <a href="/pricing/" className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm">Upgrade - 29/mo</a>
-          <a href="/pricing/" className="text-center bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm">249/yr</a>
+          <a href="/pricing/" className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm">Upgrade — $29/mo</a>
+          <a href="/pricing/" className="text-center bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm">$249/yr</a>
         </div>
       </div>
     </div>
@@ -101,9 +101,8 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
 
   useEffect(() => {
     if (!scrollRef.current) return;
-    const el = scrollRef.current;
-    const near = el.scrollHeight - el.scrollTop - el.clientHeight < 200;
-  }, [messages]);
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, thinking]);
 
   function handleCountryChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const code = e.target.value;

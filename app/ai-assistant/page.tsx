@@ -22,7 +22,7 @@ async function getCountries() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
-  const { data } = await supabase.from("countries").select("iso2,name").order("name");
+  const { data } = await supabase.from("countries").select("iso2,name").eq("is_active", true).order("name");
   return data || [];
 }
 
