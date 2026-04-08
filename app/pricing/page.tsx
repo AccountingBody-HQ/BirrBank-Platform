@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 import { ArrowRight, Check, X } from 'lucide-react'
 
 import type { Metadata } from 'next'
+import { getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
   title: 'Pricing — Free and Pro Plans | HRLake',
@@ -43,7 +45,6 @@ const PRO_FEATURES = [
   'Double taxation treaty data',
   'Remote work tax rules',
   'Rate-change email alerts',
-  'Pro data badge on all pages',
 ]
 
 const COMPARISON = [
@@ -79,7 +80,7 @@ const FAQS = [
   },
   {
     q: 'Is there a discount for annual billing?',
-    a: 'Yes. The annual plan is £249 per year — equivalent to £20.75 per month, saving you over £99 compared to monthly billing.',
+    a: 'Yes. The annual plan is £249 per year — equivalent to £20.75 per month, saving you £99 compared to monthly billing.',
   },
   {
     q: 'Do you offer team or enterprise plans?',
@@ -92,7 +93,23 @@ const FAQS = [
 ]
 
 export default function PricingPage() {
+  const breadcrumb = getBreadcrumbStructuredData([
+    { name: 'Home', url: 'https://hrlake.com/' },
+    { name: 'Pricing', url: 'https://hrlake.com/pricing/' },
+  ])
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }} />
     <main className="bg-white flex-1">
 
       {/* HERO */}
@@ -175,22 +192,22 @@ export default function PricingPage() {
                   </p>
                 </div>
 
-                <div className="space-y-3 mb-8">
+                <div className="mb-8">
                   {/* Monthly button — links to Lemon Squeezy checkout */}
                   <a
-                    href="https://accounting-body.lemonsqueezy.com/checkout/buy/a1446dba-e950-40f5-a6f3-0b9672e5f98f"
+                    href="/pricing/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
-                    Get Pro — £29 / month
+                    Pro coming soon — notify me
                   </a>
                   {/* Annual button */}
                   <a
-                    href="https://accounting-body.lemonsqueezy.com/checkout/buy/ed60fede-a9ec-4bad-8e67-011367a456ca"
+                    href="/pricing/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
-                    Get Pro — £249 / year <span className="text-blue-300 font-normal">(save £99)</span>
+                    Pro annual plan — coming soon
                   </a>
                 </div>
 
@@ -296,16 +313,18 @@ export default function PricingPage() {
               Browse free data <ArrowRight size={15} />
             </Link>
             <a
-              href="https://accounting-body.lemonsqueezy.com/checkout/buy/a1446dba-e950-40f5-a6f3-0b9672e5f98f"
+              href="/pricing/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
-              Get Pro — £29/mo
+              Subscribe for Pro updates
             </a>
           </div>
         </div>
       </section>
 
     </main>
+    </main>
+    </>
   )
 }
