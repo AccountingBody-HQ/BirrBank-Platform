@@ -153,7 +153,7 @@ export default async function DashboardPage() {
                 savedCalculations.map((calc: any) => (
                   <div key={calc.id} className="px-7 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
                     <div>
-                      <div className="font-semibold text-slate-800 text-sm">{calc.label || calc.country_code?.toUpperCase()}</div>
+                      <div className="font-semibold text-slate-800 text-sm">{calc.name || calc.country_code?.toUpperCase()}</div>
                       <div className="text-slate-400 text-xs mt-0.5">
                         {new Date(calc.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </div>
@@ -178,7 +178,7 @@ export default async function DashboardPage() {
                 { href: '/countries/',      icon: User,          label: 'Country Payroll Data',  sub: 'Tax brackets, employer costs, SS rates' },
                 { href: '/payroll-tools/',  icon: Calculator,    label: 'Payroll Calculator',    sub: 'Full net pay and employer cost breakdown' },
                 { href: '/eor/',            icon: TrendingUp,    label: 'EOR Intelligence',      sub: 'Employer of Record cost modelling' },
-                { href: '/hr-compliance/', icon: Shield,         label: 'Employment Law',        sub: 'Leave, notice, probation, termination' },
+                { href: '/insights/',      icon: Shield,         label: 'HR Insights',           sub: 'Employment law, compliance, and HR guides' },
               ].map(item => (
                 <Link key={item.href} href={item.href}
                   className="px-7 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors group">
