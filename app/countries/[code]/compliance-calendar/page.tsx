@@ -150,7 +150,7 @@ export default async function ComplianceCalendarPage({ params }: PageProps) {
                 <div>
                   <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Filing Calendar by Month</h2>
                   <div className="space-y-4">
-                    {Object.entries(grouped).map(([month, items]: any) => (
+                    {Object.entries(grouped).sort((a, b) => parseInt(a[0]) - parseInt(b[0])).map(([month, items]: any) => (
                       <div key={month} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                         <h3 className="font-semibold text-slate-900 mb-4">{monthNames[parseInt(month) - 1] ?? `Month ${month}`}</h3>
                         <div className="space-y-2">
@@ -170,6 +170,12 @@ export default async function ComplianceCalendarPage({ params }: PageProps) {
                 </div>
               )}
 
+
+              {compliance.length === 0 && filingCalendar.length === 0 && !sanityArticle?.body && (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-800">
+                  <strong>Data coming soon.</strong> The compliance calendar for {country.name} is being prepared.
+                </div>
+              )}
 
               {sanityArticle?.body && (
                 <div className="prose max-w-none">
