@@ -175,12 +175,34 @@ export default function ContactPage() {
                       <div className="grid sm:grid-cols-2 gap-5">
                         <div>
                           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Country *</label>
-                          <input
+                          <select
                             name="country"
                             required
-                            placeholder="e.g. Germany"
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
-                          />
+                            defaultValue=""
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 text-sm"
+                          >
+                            <option value="" disabled>Select a country</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Canada">Canada</option>
+                            <option value="China">China</option>
+                            <option value="France">France</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Japan">Japan</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Poland">Poland</option>
+                            <option value="Portugal">Portugal</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="Spain">Spain</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="United States">United States</option>
+                          </select>
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Data field *</label>
