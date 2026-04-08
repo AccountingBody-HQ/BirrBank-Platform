@@ -133,7 +133,7 @@ export default function Navigation() {
               )}
             </div>
             <Link href="/insights/" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Insights</Link>
-            <Link href="/insights/?category=education" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Learning</Link>
+            <Link href="/insights/?topic=education" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Learning</Link>
           </nav>
 
           {/* SEARCH — desktop */}
@@ -222,7 +222,7 @@ export default function Navigation() {
             {[
               { label: 'HR Compliance', href: '/hr-compliance/' },
               { label: 'Insights', href: '/insights/' },
-              { label: 'Learning', href: '/insights/?category=education' },
+              { label: 'Learning', href: '/insights/?topic=education' },
             ].map((link) => (
               <Link
                 key={link.href}

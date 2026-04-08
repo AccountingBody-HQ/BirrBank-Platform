@@ -63,6 +63,7 @@ export const INSIGHT_TOPICS = [
   { label: 'HR',               slug: 'hr' },
   { label: 'Compliance',       slug: 'compliance' },
   { label: 'Country Report',   slug: 'country-report' },
+  { label: 'Learning',          slug: 'education' },
 ] as const
 
 // =============================================

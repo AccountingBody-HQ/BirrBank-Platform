@@ -6,7 +6,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useCallback, useEffect } from "react"
-import { Search, X, Globe, Calculator, Scale, Building2, Receipt, Users, ShieldCheck, FileText } from "lucide-react"
+import { Search, X, Globe, Calculator, Scale, Building2, Receipt, Users, ShieldCheck, FileText, GraduationCap } from "lucide-react"
 import { INSIGHT_TOPICS } from "@/lib/sanity"
 
 const TOPIC_ICONS: Record<string, any> = {
@@ -18,6 +18,7 @@ const TOPIC_ICONS: Record<string, any> = {
   hr:               Users,
   compliance:       ShieldCheck,
   "country-report": FileText,
+  "education":       GraduationCap,
 }
 
 export default function InsightsClient() {
