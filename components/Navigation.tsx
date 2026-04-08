@@ -6,15 +6,6 @@ import { Menu, X, Globe, User, LayoutDashboard, LogOut, ChevronDown, Crown } fro
 import SearchBar from '@/components/SearchBar'
 import { useUser, useClerk } from '@clerk/nextjs'
 
-const navLinks = [
-  { label: 'Countries', href: '/countries/' },
-  { label: 'EOR', href: '/eor/' },
-  { label: 'HR Compliance', href: '/hr-compliance/' },
-  { label: 'Payroll Tools', href: '/payroll-tools/' },
-  { label: 'Compare', href: '/compare/' },
-  { label: 'Insights', href: '/insights/' },
-]
-
 const countryDropdown = [
   { label: 'All Countries', href: '/countries/', sub: 'Browse all 20 countries' },
   { label: 'Compare Countries', href: '/compare/', sub: 'Side-by-side cost comparison' },
