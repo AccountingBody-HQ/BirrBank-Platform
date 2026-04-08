@@ -199,6 +199,34 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                     ))}
                   </ul>
                 </div>
+                {directPros.length > 0 && (
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6">
+                    <p className="font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                      <CheckCircle size={17} className="text-emerald-600" /> Direct employment advantages
+                    </p>
+                    <ul className="space-y-2.5">
+                      {directPros.map((p: string) => (
+                        <li key={p} className="flex gap-2.5 text-sm text-emerald-800">
+                          <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" />{p}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {directCons.length > 0 && (
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+                    <p className="font-bold text-slate-700 mb-4 flex items-center gap-2">
+                      <AlertCircle size={17} className="text-amber-500" /> Direct employment limitations
+                    </p>
+                    <ul className="space-y-2.5">
+                      {directCons.map((c: string) => (
+                        <li key={c} className="flex gap-2.5 text-sm text-slate-600">
+                          <XCircle size={15} className="text-slate-400 shrink-0 mt-0.5" />{c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -238,7 +266,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
           <h2 className="font-serif text-3xl font-bold text-slate-900 tracking-tight mb-8">
             Estimate your {countryData.name} EOR cost.
           </h2>
-          <EORCostEstimator />
+          <EORCostEstimator defaultCountryCode={countryData.iso2} />
         </div>
       </section>
 

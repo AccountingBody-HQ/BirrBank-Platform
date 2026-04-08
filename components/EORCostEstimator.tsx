@@ -23,10 +23,10 @@ function fmt(n: number, symbol: string) {
   return `${symbol}${Math.round(n).toLocaleString()}`
 }
 
-export default function EORCostEstimator() {
+export default function EORCostEstimator({ defaultCountryCode = "GB" }: { defaultCountryCode?: string }) {
   const [countries, setCountries]     = useState<Country[]>([])
   const [loading, setLoading]         = useState(true)
-  const [countryCode, setCountryCode] = useState('GB')
+  const [countryCode, setCountryCode] = useState(defaultCountryCode.toUpperCase())
   const [headcount, setHeadcount]     = useState(1)
   const [salary, setSalary]           = useState(60000)
 
