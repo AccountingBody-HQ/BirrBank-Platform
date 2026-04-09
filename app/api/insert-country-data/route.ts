@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     for (const table of HRLAKE_TABLES) {
       const rows = data[table]
       if (!rows || rows.length === 0) continue
-      const rowsWithCode = rows.map((r: any) => ({ ...r, country_code: countryCode.toUpperCase() }))
+      const rowsWithCode = rows.map((r: any) => ({ ...r, country_code: countryCode.toUpperCase(), ...(table === "tax_brackets" && !r.tax_year ? { tax_year: 2025 } : {}) }))
       const { error } = await sb.schema("hrlake").from(table).insert(rowsWithCode)
       if (error) errors.push(table + ": " + error.message)
     }
