@@ -1,12 +1,25 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+const TABLE_MAP: Record<string, string> = {
+  tax_brackets:      'hrlake.tax_brackets',
+  social_security:   'hrlake.social_security',
+  employment_rules:  'hrlake.employment_rules',
+  statutory_leave:   'hrlake.statutory_leave',
+  public_holidays:   'hrlake.public_holidays',
+  filing_calendar:   'hrlake.filing_calendar',
+  payroll_compliance:'hrlake.payroll_compliance',
+  working_hours:     'hrlake.working_hours',
+  termination_rules: 'hrlake.termination_rules',
+  pension_schemes:   'hrlake.pension_schemes',
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { countryCode, action, finding } = body
 
-    console.log('admin-update-country called:', JSON.stringify(body))
+    console.log('admin-update-country:', action, countryCode)
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,32 +31,19 @@ export async function POST(req: Request) {
         .from('countries')
         .update({ last_data_update: new Date().toISOString().split('T')[0] })
         .eq('iso2', countryCode)
-      if (error) {
-        console.error('approve_all error:', error)
-        return NextResponse.json({ error: error.message }, { status: 500 })
-      }
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
     }
 
     if (action === 'update_value') {
       const { table, field, new_value, record_id } = finding
-      console.log('Updating:', table, field, new_value, record_id)
 
-      if (!record_id) {
-        return NextResponse.json({ error: 'No record_id provided' }, { status: 400 })
-      }
+      if (!record_id) return NextResponse.json({ error: 'No record_id provided' }, { status: 400 })
 
-      // Use raw SQL via rpc to update hrlake schema tables
-      const tableMap: Record<string, string> = {
-        'tax_brackets': 'hrlake.tax_brackets',
-        'social_security': 'hrlake.social_security',
-        'employment_rules': 'hrlake.employment_rules',
-      }
+      const fullTable = TABLE_MAP[table]
+      if (!fullTable) return NextResponse.json({ error: 'Unknown table: ' + table }, { status: 400 })
 
-      const fullTable = tableMap[table]
-      if (!fullTable) {
-        return NextResponse.json({ error: 'Unknown table: ' + table }, { status: 400 })
-      }
+      console.log(`Updating ${fullTable}.${field} = ${new_value} for id=${record_id}`)
 
       const { error } = await supabase.rpc('admin_update_field', {
         p_table: fullTable,
