@@ -95,6 +95,18 @@ export default function CountryBuilderPage() {
     finally { setSaving(false) }
   }
 
+  async function handleActivate(iso2: string, activate: boolean) {
+    try {
+      const res = await fetch('/api/admin-add-country', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ iso2, is_active: activate })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Update failed')
+      await loadData()
+    } catch (e: any) { setError(e.message ?? 'Update failed') }
+  }
   async function handlePopulate() {
     setPopStatus('loading'); setPopMsg(''); setPopData(null); setInsertDone(false)
     try {
@@ -269,6 +281,18 @@ export default function CountryBuilderPage() {
                           }`}>
                             {!c.is_active ? 'Inactive' : score === 100 ? 'Complete' : 'Partial'}
                           </span>
+                          {!c.is_active && (
+                            <button
+                              onClick={() => handleActivate(c.iso2, true)}
+                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/40 transition-colors"
+                            >Activate</button>
+                          )}
+                          {c.is_active && (
+                            <button
+                              onClick={() => handleActivate(c.iso2, false)}
+                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40 transition-colors"
+                            >Deactivate</button>
+                          )}
                         </td>
                       </tr>
                     )

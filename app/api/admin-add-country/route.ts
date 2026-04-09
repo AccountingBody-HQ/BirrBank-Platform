@@ -34,3 +34,20 @@ export async function POST(req: NextRequest) {
   }
   return NextResponse.json({ success: true })
 }
+
+export async function PATCH(req: NextRequest) {
+  const body = await req.json()
+  const { iso2, is_active } = body
+  if (!iso2) {
+    return NextResponse.json({ error: 'iso2 is required' }, { status: 400 })
+  }
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  const { error } = await supabase.from('countries').update({ is_active }).eq('iso2', iso2.toUpperCase())
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+  return NextResponse.json({ success: true })
+}
