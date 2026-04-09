@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     phone_code: '',
     capital_city: '',
     tax_year_start_month: 1,
-    payroll_frequency: 'Monthly',
+    payroll_frequency: 'monthly',
     is_active: false,
     hrlake_coverage_level: 'none'
   })
