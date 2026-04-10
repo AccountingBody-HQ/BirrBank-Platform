@@ -103,7 +103,7 @@ export default async function VerifyCountryPage({
           href={`/admin/country-builder?tab=AI+Populate&iso2=${code.toUpperCase()}`}
           className="inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl transition-all"
           style={{ background: 'rgba(167,139,250,0.1)', color: '#a78bfa', border: '1px solid rgba(167,139,250,0.2)' }}>
-          &#9889; Populate Missing Tables
+          ⚡ Populate Missing Tables
         </a>
       </div>
 
