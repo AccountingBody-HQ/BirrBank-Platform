@@ -1,43 +1,48 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
-import { Globe, CheckCircle, AlertCircle, XCircle } from 'lucide-react'
+import { BarChart3, CheckCircle, AlertCircle, XCircle, ArrowRight } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
+
+const ALL_TABLES = [
+  { key: 'tax_brackets',       short: 'Tax'    },
+  { key: 'social_security',    short: 'SS'     },
+  { key: 'employment_rules',   short: 'Rules'  },
+  { key: 'statutory_leave',    short: 'Leave'  },
+  { key: 'public_holidays',    short: 'Hols'   },
+  { key: 'filing_calendar',    short: 'Filing' },
+  { key: 'payroll_compliance', short: 'Comp'   },
+  { key: 'working_hours',      short: 'Hours'  },
+  { key: 'termination_rules',  short: 'Term'   },
+  { key: 'pension_schemes',    short: 'Pension'},
+]
 
 async function getCoverageData() {
   try {
-    const supabase = createClient(
+    const sb = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    const { data: countries } = await supabase
+    const { data: countries } = await sb
       .from('countries')
       .select('iso2, name, hrlake_coverage_level, last_data_update')
       .eq('is_active', true)
       .order('name')
 
-    const { data: brackets } = await supabase
-      .schema('hrlake').from('tax_brackets')
-      .select('country_code').eq('is_current', true)
-
-    const { data: ss } = await supabase
-      .schema('hrlake').from('social_security')
-      .select('country_code').eq('is_current', true)
-
-    const { data: rules } = await supabase
-      .schema('hrlake').from('employment_rules')
-      .select('country_code').eq('is_current', true)
-
-    const bracketCodes = new Set((brackets ?? []).map((r: any) => r.country_code))
-    const ssCodes     = new Set((ss      ?? []).map((r: any) => r.country_code))
-    const rulesCodes  = new Set((rules   ?? []).map((r: any) => r.country_code))
+    const tableFetches = await Promise.all(
+      ALL_TABLES.map(async t => {
+        const { data } = await sb.schema('hrlake').from(t.key).select('country_code')
+        return { key: t.key, codes: new Set((data ?? []).map((r: any) => r.country_code)) }
+      })
+    )
+    const presenceMap = Object.fromEntries(tableFetches.map(t => [t.key, t.codes]))
 
     return (countries ?? []).map((c: any) => {
-      const has_tax   = bracketCodes.has(c.iso2)
-      const has_ss    = ssCodes.has(c.iso2)
-      const has_rules = rulesCodes.has(c.iso2)
-      const score     = [has_tax, has_ss, has_rules].filter(Boolean).length
-      const status    = score === 3 ? 'full' : score > 0 ? 'partial' : 'none'
-      return { ...c, has_tax, has_ss, has_rules, score, status }
+      const filled = ALL_TABLES.filter(t => presenceMap[t.key]?.has(c.iso2)).length
+      const pct    = Math.round((filled / ALL_TABLES.length) * 100)
+      const status = filled === ALL_TABLES.length ? 'full' : filled > 0 ? 'partial' : 'none'
+      return { ...c, filled, pct, status }
     })
   } catch (e) {
     console.error('getCoverageData error:', e)
@@ -47,107 +52,166 @@ async function getCoverageData() {
 
 export default async function CoverageMapPage() {
   const countries = await getCoverageData()
+  const total   = countries.length
   const full    = countries.filter((c: any) => c.status === 'full')
   const partial = countries.filter((c: any) => c.status === 'partial')
   const none    = countries.filter((c: any) => c.status === 'none')
-  const total   = countries.length
 
   const pct = (n: number) => total > 0 ? Math.round((n / total) * 100) : 0
+  const avgScore = total > 0
+    ? Math.round(countries.reduce((s: number, c: any) => s + c.pct, 0) / total)
+    : 0
+
+  const SUMMARY = [
+    { label: 'Total Countries',  value: total,          color: '#3b82f6', bg: 'rgba(59,130,246,0.08)',   border: 'rgba(59,130,246,0.2)'   },
+    { label: 'Full Coverage',    value: full.length,    color: '#10b981', bg: 'rgba(16,185,129,0.08)',   border: 'rgba(16,185,129,0.2)'   },
+    { label: 'Partial Coverage', value: partial.length, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.2)'   },
+    { label: 'No Data',          value: none.length,    color: '#ef4444', bg: 'rgba(239,68,68,0.08)',    border: 'rgba(239,68,68,0.2)'    },
+  ]
+
+  const SECTIONS = [
+    { title: 'Full Coverage',    icon: CheckCircle,  color: '#10b981', items: full,    empty: 'No countries with full coverage yet' },
+    { title: 'Partial Coverage', icon: AlertCircle,  color: '#f59e0b', items: partial, empty: 'No partial countries' },
+    { title: 'No Data',          icon: XCircle,      color: '#ef4444', items: none,    empty: 'All countries have some data' },
+  ]
 
   return (
     <div className="p-8">
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-1">Coverage Map</h1>
-        <p className="text-slate-400 text-sm">Data coverage status across all active countries</p>
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'rgba(167,139,250,0.12)' }}>
+          <BarChart3 size={20} style={{ color: '#a78bfa' }} />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Coverage Map</h1>
+          <p className="text-sm" style={{ color: '#475569' }}>
+            Data coverage across {total} active countries — all 10 tables · avg score {avgScore}%
+          </p>
+        </div>
       </div>
 
-      {/* Stat cards */}
+      {/* Summary cards */}
       <div className="grid grid-cols-4 gap-4 mb-8">
-        {[
-          { label: 'Total Countries',  value: total,          color: 'text-blue-400',    bg: 'bg-blue-600/10 border-blue-600/20' },
-          { label: 'Full Coverage',    value: full.length,    color: 'text-emerald-400', bg: 'bg-emerald-600/10 border-emerald-600/20' },
-          { label: 'Partial Coverage', value: partial.length, color: 'text-amber-400',   bg: 'bg-amber-600/10 border-amber-600/20' },
-          { label: 'No Data',          value: none.length,    color: 'text-red-400',     bg: 'bg-red-600/10 border-red-600/20' },
-        ].map(card => (
-          <div key={card.label} className={`border rounded-2xl p-5 ${card.bg}`}>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-3">{card.label}</p>
-            <p className={`text-3xl font-black ${card.color}`}>{card.value}</p>
+        {SUMMARY.map(s => (
+          <div key={s.label} className="rounded-2xl p-5 border"
+            style={{ background: s.bg, borderColor: s.border }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: s.color }}>{s.label}</p>
+            <p className="text-3xl font-black text-white">{s.value}</p>
           </div>
         ))}
       </div>
 
       {/* Progress bars */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8">
-        <h2 className="text-white font-bold mb-5">Coverage breakdown</h2>
+      <div className="rounded-2xl border p-6 mb-6"
+        style={{ background: '#0d1424', borderColor: '#1a2238' }}>
+        <h2 className="text-white font-bold text-sm mb-5">Coverage Breakdown — All 10 Tables</h2>
         <div className="space-y-4">
           {[
-            { label: 'Full coverage',    count: full.length,    pct: pct(full.length),    color: 'bg-emerald-500' },
-            { label: 'Partial coverage', count: partial.length, pct: pct(partial.length), color: 'bg-amber-500' },
-            { label: 'No data',          count: none.length,    pct: pct(none.length),    color: 'bg-red-500' },
+            { label: 'Full coverage (10/10)',   count: full.length,    pct: pct(full.length),    color: '#10b981' },
+            { label: 'Partial coverage (1–9)',  count: partial.length, pct: pct(partial.length), color: '#f59e0b' },
+            { label: 'No data (0/10)',          count: none.length,    pct: pct(none.length),    color: '#ef4444' },
           ].map(row => (
             <div key={row.label}>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-slate-300 text-sm">{row.label}</span>
-                <span className="text-slate-400 text-xs">{row.count} countries · {row.pct}%</span>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm" style={{ color: '#94a3b8' }}>{row.label}</span>
+                <span className="text-xs font-bold" style={{ color: '#475569' }}>
+                  {row.count} {row.count === 1 ? 'country' : 'countries'} · {row.pct}%
+                </span>
               </div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className={`h-full ${row.color} rounded-full transition-all`} style={{ width: `${row.pct}%` }} />
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1e293b' }}>
+                <div className="h-full rounded-full transition-all"
+                  style={{ width: `${row.pct}%`, background: row.color }} />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Country tables by status */}
-      {[
-        { title: 'Full Coverage', icon: CheckCircle, iconColor: 'text-emerald-400', items: full,    emptyMsg: 'No fully covered countries yet' },
-        { title: 'Partial Coverage', icon: AlertCircle, iconColor: 'text-amber-400', items: partial, emptyMsg: 'No partial countries' },
-        { title: 'No Data', icon: XCircle, iconColor: 'text-red-400', items: none, emptyMsg: 'All countries have some data' },
-      ].map(section => (
-        <div key={section.title} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden mb-6">
-          <div className="px-6 py-4 border-b border-slate-800 flex items-center gap-3">
-            <section.icon size={16} className={section.iconColor} />
-            <h2 className="text-white font-bold">{section.title}</h2>
-            <span className="text-slate-500 text-xs">({section.items.length})</span>
+      {/* Country sections */}
+      {SECTIONS.map(section => (
+        <div key={section.title} className="rounded-2xl border overflow-hidden mb-5"
+          style={{ background: '#0d1424', borderColor: '#1a2238' }}>
+          <div className="px-6 py-4 border-b flex items-center gap-3"
+            style={{ borderColor: '#1a2238' }}>
+            <section.icon size={15} style={{ color: section.color }} />
+            <h2 className="text-white font-bold text-sm">{section.title}</h2>
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+              style={{ background: `${section.color}15`, color: section.color, border: `1px solid ${section.color}30` }}>
+              {section.items.length}
+            </span>
           </div>
+
           {section.items.length === 0 ? (
-            <p className="px-6 py-4 text-slate-500 text-sm">{section.emptyMsg}</p>
+            <p className="px-6 py-5 text-sm" style={{ color: '#334155' }}>{section.empty}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-slate-800">
-                    <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Country</th>
-                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Tax</th>
-                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">SS</th>
-                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Rules</th>
-                    <th className="text-left px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Last Updated</th>
+                  <tr style={{ borderBottom: '1px solid #1a2238' }}>
+                    <th className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Country</th>
+                    {ALL_TABLES.map(t => (
+                      <th key={t.key} className="text-center px-2 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>{t.short}</th>
+                    ))}
+                    <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Score</th>
+                    <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Last Updated</th>
                     <th className="px-4 py-3" />
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
-                  {section.items.map((c: any) => (
-                    <tr key={c.iso2} className="hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-3">
+                <tbody>
+                  {section.items.map((c: any, i: number) => (
+                    <tr key={c.iso2}
+                      style={{ borderBottom: i < section.items.length - 1 ? '1px solid #111827' : 'none' }}>
+                      <td className="px-6 py-3.5">
                         <div className="flex items-center gap-3">
-                          <img src={`https://flagcdn.com/20x15/${c.iso2.toLowerCase()}.png`} alt={c.name} width={20} height={15} className="rounded-sm" />
-                          <span className="text-white text-sm font-semibold">{c.name}</span>
-                          <span className="text-slate-500 text-xs">{c.iso2}</span>
+                          <img src={`https://flagcdn.com/20x15/${c.iso2.toLowerCase()}.png`}
+                            alt={c.name} width={20} height={15} className="rounded-sm shrink-0" />
+                          <div>
+                            <p className="text-white font-semibold text-sm">{c.name}</p>
+                            <p className="text-xs" style={{ color: '#334155' }}>{c.iso2}</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-center">{c.has_tax   ? '✅' : '❌'}</td>
-                      <td className="px-4 py-3 text-center">{c.has_ss    ? '✅' : '❌'}</td>
-                      <td className="px-4 py-3 text-center">{c.has_rules ? '✅' : '❌'}</td>
-                      <td className="px-4 py-3 text-slate-400 text-xs">
-                        {c.last_data_update
-                          ? new Date(c.last_data_update).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-                          : '—'}
+                      {ALL_TABLES.map((t, idx) => {
+                        const has = c.filled > idx
+                        return (
+                          <td key={t.key} className="px-2 py-3.5 text-center">
+                            <div className={`w-5 h-5 rounded-md flex items-center justify-center mx-auto`}
+                              style={{ background: c.pct === 100 ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.1)' }}>
+                              <div className="w-1.5 h-1.5 rounded-full"
+                                style={{ background: c.pct === 100 ? '#10b981' : '#f59e0b' }} />
+                            </div>
+                          </td>
+                        )
+                      })}
+                      <td className="px-4 py-3.5">
+                        <div className="flex items-center gap-2 justify-center">
+                          <div className="w-14 rounded-full h-1.5" style={{ background: '#1e293b' }}>
+                            <div className="h-1.5 rounded-full"
+                              style={{
+                                width: `${c.pct}%`,
+                                background: c.pct === 100 ? '#10b981' : c.pct >= 70 ? '#f59e0b' : '#ef4444'
+                              }} />
+                          </div>
+                          <span className="text-xs font-bold tabular-nums"
+                            style={{ color: c.pct === 100 ? '#10b981' : c.pct >= 70 ? '#f59e0b' : '#ef4444' }}>
+                            {c.filled}/{ALL_TABLES.length}
+                          </span>
+                        </div>
                       </td>
-                      <td className="px-4 py-3">
-                        <Link href={`/admin/data-quality/${c.iso2.toLowerCase()}`} className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors">
-                          Verify
+                      <td className="px-4 py-3.5">
+                        <p className="text-xs" style={{ color: '#475569' }}>
+                          {c.last_data_update
+                            ? new Date(c.last_data_update).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                            : '—'}
+                        </p>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <Link href={`/admin/data-quality/${c.iso2.toLowerCase()}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
+                          style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.2)' }}>
+                          Verify <ArrowRight size={10} />
                         </Link>
                       </td>
                     </tr>
