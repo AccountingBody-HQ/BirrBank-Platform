@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const ADMIN_SECRET = 'Wolega@888'
+const ADMIN_SECRET = process.env.ADMIN_SECRET ?? 'Wolega@888'
 
 export async function POST(req: Request) {
   const { password } = await req.json()
@@ -8,9 +8,9 @@ export async function POST(req: Request) {
     const res = NextResponse.json({ ok: true })
     res.cookies.set('admin_token', ADMIN_SECRET, {
       httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/',
+      secure:   true,
+      maxAge:   60 * 60 * 24 * 7, // 7 days
+      path:     '/',
     })
     return res
   }
