@@ -13,6 +13,7 @@ const NAV = [
   { href: '/admin/data-quality',    exact: false, icon: ShieldCheck,     label: 'Data Quality',    sub: 'Verify country data'      },
   { href: '/admin/content-factory', exact: false, icon: Sparkles,        label: 'Content Factory', sub: 'AI article generation'    },
   { href: '/admin/coverage',        exact: false, icon: BarChart3,       label: 'Coverage Map',    sub: 'Platform coverage status' },
+  { href: '/admin/annual-update',    exact: false, icon: RefreshCw,       label: 'Annual Update',   sub: 'Bulk re-verification'     },
   { href: '/admin/settings',        exact: false, icon: Settings,        label: 'Settings',        sub: 'Config & environment'     },
 ]
 
