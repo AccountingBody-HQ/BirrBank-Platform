@@ -1,19 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const TABLE_MAP: Record<string, string> = {
-  tax_brackets:      'hrlake.tax_brackets',
-  social_security:   'hrlake.social_security',
-  employment_rules:  'hrlake.employment_rules',
-  statutory_leave:   'hrlake.statutory_leave',
-  public_holidays:   'hrlake.public_holidays',
-  filing_calendar:   'hrlake.filing_calendar',
-  payroll_compliance:'hrlake.payroll_compliance',
-  working_hours:     'hrlake.working_hours',
-  termination_rules: 'hrlake.termination_rules',
-  pension_schemes:   'hrlake.pension_schemes',
-}
-
 const NUMERIC_FIELDS = new Set([
   'lower_limit', 'upper_limit', 'rate', 'bracket_order',
   'employer_rate', 'employee_rate',
@@ -34,16 +21,21 @@ const BOOLEAN_FIELDS = new Set([
   'opt_out_allowed',
 ])
 
-function castValue(field: string, raw: unknown): unknown {
-  const str = String(raw)
-  if (BOOLEAN_FIELDS.has(field)) {
-    return str === 'true' || str === '1'
+// Cast every value in the update object to its correct DB type
+function castPayload(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [field, raw] of Object.entries(obj)) {
+    const str = String(raw)
+    if (BOOLEAN_FIELDS.has(field)) {
+      result[field] = str === 'true' || str === '1'
+    } else if (NUMERIC_FIELDS.has(field)) {
+      const n = Number(str)
+      result[field] = isNaN(n) ? raw : n
+    } else {
+      result[field] = raw
+    }
   }
-  if (NUMERIC_FIELDS.has(field)) {
-    const n = Number(str)
-    if (!isNaN(n)) return n
-  }
-  return raw
+  return result
 }
 
 export async function POST(req: Request) {
@@ -70,17 +62,22 @@ export async function POST(req: Request) {
     }
 
     if (action === 'update_value') {
-      const { table, field, new_value, record_id } = finding
+      const { table, raw_value, record_id } = finding
       if (!record_id) return NextResponse.json({ error: 'No record_id provided' }, { status: 400 })
-      if (!TABLE_MAP[table]) return NextResponse.json({ error: 'Unknown table: ' + table }, { status: 400 })
+      if (!table) return NextResponse.json({ error: 'No table provided' }, { status: 400 })
 
-      const typedValue = castValue(field, new_value)
-      console.log('Updating hrlake.' + table + '.' + field + ' = ' + typedValue + ' (' + typeof typedValue + ') for id=' + record_id)
+      // raw_value is always an object: { field: value, ... }
+      if (typeof raw_value !== 'object' || raw_value === null || Array.isArray(raw_value)) {
+        return NextResponse.json({ error: 'raw_value must be an object' }, { status: 400 })
+      }
+
+      const payload = castPayload(raw_value as Record<string, unknown>)
+      console.log('Updating hrlake.' + table + ' record ' + record_id + ' with', payload)
 
       const { error } = await supabase
         .schema('hrlake')
         .from(table)
-        .update({ [field]: typedValue })
+        .update(payload)
         .eq('id', record_id)
 
       if (error) {
