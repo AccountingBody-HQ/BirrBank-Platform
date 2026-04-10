@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import {
   Layers, RefreshCw, Plus, ExternalLink, AlertCircle, Loader2,
   Database, Check, Sparkles, ChevronDown, ChevronUp, ArrowRight,
-  CheckCircle, XCircle, Power, Trash2
+  CheckCircle, XCircle, Power, Trash2, AlertTriangle
 } from 'lucide-react'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -53,6 +53,8 @@ export default function CountryBuilderPage() {
   const [inserting, setInserting]   = useState(false)
   const [insertDone, setInsertDone] = useState(false)
   const [expanded, setExpanded]     = useState<Record<string,boolean>>({})
+  const [deleteTarget, setDeleteTarget] = useState<{ iso2: string; name: string } | null>(null)
+  const [deleting, setDeleting]         = useState(false)
 
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
@@ -122,18 +124,21 @@ export default function CountryBuilderPage() {
     } catch (e: any) { setError(e.message ?? 'Update failed') }
   }
 
-  async function handleDelete(iso2: string) {
-    if (!window.confirm('DELETE ' + iso2 + '? This removes the country and ALL its data. Cannot be undone.')) return
+  async function confirmDelete() {
+    if (!deleteTarget) return
+    setDeleting(true)
     try {
       const res = await fetch('/api/admin-add-country', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ iso2 })
+        body: JSON.stringify({ iso2: deleteTarget.iso2 })
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Delete failed')
+      setDeleteTarget(null)
       await loadData()
     } catch (e: any) { setError(e.message ?? 'Delete failed') }
+    finally { setDeleting(false) }
   }
 
   async function handlePopulate() {
@@ -162,6 +167,7 @@ export default function CountryBuilderPage() {
   }
 
   async function handleInsert() {
+    if (inserting) return
     setInserting(true); setPopMsg('')
     try {
       const res = await fetch('/api/insert-country-data', {
@@ -201,6 +207,53 @@ export default function CountryBuilderPage() {
   return (
     <div className="p-8">
 
+      {/* ── DELETE CONFIRMATION MODAL ── */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="rounded-2xl border p-8 w-full max-w-md mx-4 shadow-2xl"
+            style={{ background: '#0d1424', borderColor: '#1a2238' }}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(239,68,68,0.12)' }}>
+                <AlertTriangle size={20} style={{ color: '#ef4444' }} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-base">Delete country?</p>
+                <p className="text-xs mt-0.5" style={{ color: '#475569' }}>This action cannot be undone</p>
+              </div>
+            </div>
+            <div className="rounded-xl p-4 mb-6"
+              style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+              <p className="text-sm font-bold text-white mb-1">
+                {deleteTarget.name} ({deleteTarget.iso2})
+              </p>
+              <p className="text-xs" style={{ color: '#94a3b8' }}>
+                Permanently removes this country and all associated hrlake data from Supabase. Any published Sanity articles will remain but the country will no longer appear on the platform.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-40"
+                style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1a2238' }}>
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-40 flex items-center justify-center gap-2"
+                style={{ background: '#ef4444', color: '#ffffff' }}>
+                {deleting
+                  ? <><Loader2 size={14} className="animate-spin" /> Deleting…</>
+                  : <><Trash2 size={14} /> Delete {deleteTarget.iso2}</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -210,7 +263,7 @@ export default function CountryBuilderPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Country Manager</h1>
           <p className="text-sm" style={{ color: '#475569' }}>
-            Intelligence Engine — manage country data, sources and AI population
+            Intelligence Engine \u2014 manage country data, sources and AI population
           </p>
         </div>
       </div>
@@ -250,7 +303,7 @@ export default function CountryBuilderPage() {
               color: tab === t ? '#ffffff' : '#64748b',
               border: tab === t ? '1px solid #2563eb' : '1px solid transparent',
             }}>
-            {t === 'AI Populate' ? '✦ ' + t : t}
+            {t === 'AI Populate' ? '\u2736 ' + t : t}
           </button>
         ))}
       </div>
@@ -260,7 +313,7 @@ export default function CountryBuilderPage() {
         loading ? (
           <div className="flex items-center justify-center gap-3 py-16" style={{ color: '#334155' }}>
             <Loader2 size={18} className="animate-spin" />
-            <span className="text-sm">Loading countries…</span>
+            <span className="text-sm">Loading countries\u2026</span>
           </div>
         ) : (
           <div className="rounded-2xl border overflow-hidden" style={S.card}>
@@ -299,7 +352,7 @@ export default function CountryBuilderPage() {
                               alt={c.name} width={20} height={15} className="rounded-sm shrink-0" />
                             <div>
                               <p className="text-white font-semibold text-sm">{c.name}</p>
-                              <p className="text-xs" style={{ color: '#334155' }}>{c.iso2} · {c.currency_code}</p>
+                              <p className="text-xs" style={{ color: '#334155' }}>{c.iso2} \u00b7 {c.currency_code}</p>
                             </div>
                           </div>
                         </td>
@@ -307,7 +360,7 @@ export default function CountryBuilderPage() {
                           <td key={t.key} className="px-2 py-3.5 text-center">
                             {(cc[t.key] ?? 0) > 0
                               ? <span className="text-xs font-bold" style={{ color: '#10b981' }}>{cc[t.key]}</span>
-                              : <span style={{ color: '#1f2937' }}>—</span>}
+                              : <span style={{ color: '#1f2937' }}>\u2014</span>}
                           </td>
                         ))}
                         <td className="px-4 py-3.5 text-center">
@@ -346,7 +399,7 @@ export default function CountryBuilderPage() {
                               </button>
                             )}
                             {!c.is_active && (
-                              <button onClick={() => handleDelete(c.iso2)}
+                              <button onClick={() => setDeleteTarget({ iso2: c.iso2, name: c.name })}
                                 className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-all"
                                 style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
                                 <Trash2 size={11} />
@@ -427,7 +480,7 @@ export default function CountryBuilderPage() {
                         <td className="px-6 py-3 text-xs" style={{ color: '#475569' }}>
                           {s.last_checked
                             ? new Date(s.last_checked).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-                            : '—'}
+                            : '\u2014'}
                         </td>
                       </tr>
                     ))}
@@ -486,7 +539,7 @@ export default function CountryBuilderPage() {
                   <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Flag Emoji</label>
                   <input value={newC.flag_emoji}
                     onChange={e => setNewC(p => ({ ...p, flag_emoji: e.target.value }))}
-                    placeholder="e.g. 🇯🇵"
+                    placeholder="e.g. \ud83c\uddef\ud83c\uddf5"
                     className={S.input} style={inputStyle} />
                 </div>
               </div>
@@ -496,7 +549,7 @@ export default function CountryBuilderPage() {
                   onChange={e => setNewC(p => ({ ...p, region: e.target.value }))}
                   className="w-full rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
                   style={inputStyle}>
-                  <option value="">Select region…</option>
+                  <option value="">Select region\u2026</option>
                   {['Europe','Americas','Asia Pacific','Middle East','Africa','Asia'].map(r => (
                     <option key={r} value={r}>{r}</option>
                   ))}
@@ -508,7 +561,7 @@ export default function CountryBuilderPage() {
               <div className="mt-4 rounded-xl p-3 flex items-center gap-2"
                 style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
                 <CheckCircle size={14} style={{ color: '#10b981' }} />
-                <p className="text-sm font-semibold" style={{ color: '#10b981' }}>Country added — marked inactive until data is loaded.</p>
+                <p className="text-sm font-semibold" style={{ color: '#10b981' }}>Country added \u2014 marked inactive until data is loaded.</p>
               </div>
             )}
 
@@ -518,7 +571,7 @@ export default function CountryBuilderPage() {
                 className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
                 style={{ background: '#2563eb', color: '#ffffff' }}>
                 {saving
-                  ? <><Loader2 size={14} className="animate-spin" /> Adding…</>
+                  ? <><Loader2 size={14} className="animate-spin" /> Adding\u2026</>
                   : <><Plus size={14} /> Add Country</>}
               </button>
             </div>
@@ -531,7 +584,7 @@ export default function CountryBuilderPage() {
               <li>Run AI verification in Data Quality</li>
               <li>Generate all 8 Sanity articles in Content Factory</li>
               <li>Verify Payroll Calculator produces correct results</li>
-              <li>Activate country — it will go live immediately</li>
+              <li>Activate country \u2014 it will go live immediately</li>
             </ol>
           </div>
         </div>
@@ -576,7 +629,7 @@ export default function CountryBuilderPage() {
                 className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
                 style={{ background: '#2563eb', color: '#ffffff' }}>
                 {popStatus === 'loading'
-                  ? <><Loader2 size={14} className="animate-spin" /> Researching — up to 60s…</>
+                  ? <><Loader2 size={14} className="animate-spin" /> Researching \u2014 up to 60s\u2026</>
                   : <><Sparkles size={14} /> AI Populate</>}
               </button>
               {popStatus === 'done' && !insertDone && (
@@ -584,7 +637,7 @@ export default function CountryBuilderPage() {
                   className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
                   style={{ background: '#059669', color: '#ffffff' }}>
                   {inserting
-                    ? <><Loader2 size={14} className="animate-spin" /> Inserting…</>
+                    ? <><Loader2 size={14} className="animate-spin" /> Inserting\u2026</>
                     : <><Database size={14} /> Insert All Data</>}
                 </button>
               )}
@@ -592,8 +645,8 @@ export default function CountryBuilderPage() {
 
             {popStatus === 'loading' && (
               <div className="mt-5 rounded-xl p-4" style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.15)' }}>
-                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources…</p>
-                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 10 data categories. This takes 30–60 seconds.</p>
+                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources\u2026</p>
+                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 10 data categories. This takes 30\u201360 seconds.</p>
               </div>
             )}
             {popStatus === 'error' && (
@@ -626,7 +679,7 @@ export default function CountryBuilderPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-white font-bold">
-                  Proposed Data — {popForm.name} ({popForm.iso2.toUpperCase()})
+                  Proposed Data \u2014 {popForm.name} ({popForm.iso2.toUpperCase()})
                 </h3>
                 <div className="flex gap-2">
                   <button
@@ -714,7 +767,7 @@ export default function CountryBuilderPage() {
                     className="flex items-center gap-2 text-sm font-bold px-8 py-3 rounded-xl transition-all disabled:opacity-40"
                     style={{ background: '#059669', color: '#ffffff' }}>
                     {inserting
-                      ? <><Loader2 size={14} className="animate-spin" /> Inserting all data…</>
+                      ? <><Loader2 size={14} className="animate-spin" /> Inserting all data\u2026</>
                       : <><Database size={14} /> Insert All Data into Supabase</>}
                   </button>
                 </div>
