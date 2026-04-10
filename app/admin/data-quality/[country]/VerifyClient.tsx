@@ -26,7 +26,7 @@ interface Finding {
   field: string
   current_value: string
   found_value: string
-  raw_value: string | number | null
+  raw_value: Record<string, unknown>
   status: 'match' | 'mismatch' | 'unverified'
   source: string
   note: string
@@ -141,7 +141,7 @@ Respond ONLY with raw JSON (no markdown, start with {, end with }):
       "field": "exact_single_column_name",
       "current_value": "human readable current value",
       "found_value": "human readable value from official source",
-      "raw_value": 12.5,
+      "raw_value": {"rate": 12.5},
       "status": "match|mismatch|unverified",
       "source": "official URL used",
       "note": "brief explanation"
@@ -204,11 +204,6 @@ export default function VerifyClient({
       setDecisions(prev => ({ ...prev, [index]: 'approved' }))
       return
     }
-    // Guard: multi-field findings cannot be auto-updated — re-run verification to get per-field results
-    if (finding.field.includes(',')) {
-      setError('This finding covers multiple fields (' + finding.field + '). Re-run verification — the prompt now returns one finding per field.')
-      return
-    }
     setDecisions(prev => ({ ...prev, [index]: 'saving' }))
     try {
       const res = await fetch('/api/admin-update-country', {
@@ -217,7 +212,7 @@ export default function VerifyClient({
         body: JSON.stringify({
           countryCode,
           action: 'update_value',
-          finding: { table: finding.table, field: finding.field, new_value: finding.raw_value, record_id: finding.record_id },
+          finding: { table: finding.table, raw_value: finding.raw_value, record_id: finding.record_id },
         }),
       })
       const data = await res.json()
