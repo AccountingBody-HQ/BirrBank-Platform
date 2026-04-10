@@ -1,27 +1,39 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { Hammer, RefreshCw, Plus, ExternalLink, AlertCircle, Loader2, Database, Check, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
+import {
+  Layers, RefreshCw, Plus, ExternalLink, AlertCircle, Loader2,
+  Database, Check, Sparkles, ChevronDown, ChevronUp, ArrowRight,
+  CheckCircle, XCircle, Power, Trash2
+} from 'lucide-react'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
 const TABS = ['Countries', 'Source Registry', 'Add Country', 'AI Populate'] as const
 type Tab = typeof TABS[number]
+
 const CORE_TABLES = [
   { key: 'tax_brackets',       short: 'Tax',     label: 'Tax Brackets'       },
   { key: 'social_security',    short: 'SS',       label: 'Social Security'    },
   { key: 'employment_rules',   short: 'Rules',    label: 'Employment Rules'   },
-  { key: 'filing_calendar',    short: 'Cal',      label: 'Filing Calendar'    },
+  { key: 'filing_calendar',    short: 'Filing',   label: 'Filing Calendar'    },
   { key: 'public_holidays',    short: 'Hols',     label: 'Public Holidays'    },
   { key: 'statutory_leave',    short: 'Leave',    label: 'Statutory Leave'    },
   { key: 'working_hours',      short: 'Hours',    label: 'Working Hours'      },
-  { key: 'termination_rules',  short: 'End',      label: 'Termination Rules'  },
+  { key: 'termination_rules',  short: 'Term',     label: 'Termination Rules'  },
   { key: 'pension_schemes',    short: 'Pension',  label: 'Pension Schemes'    },
-  { key: 'payroll_compliance', short: 'Pay',      label: 'Payroll Compliance' },
+  { key: 'payroll_compliance', short: 'Comp',     label: 'Payroll Compliance' },
 ]
+
 type Country = { iso2: string; name: string; currency_code: string; is_active: boolean; last_data_update: string | null }
-type Counts = Record<string, Record<string, number>>
-type Source = { id: string; country_code: string; data_category: string; authority_name: string; source_url: string; last_checked: string | null }
+type Counts   = Record<string, Record<string, number>>
+type Source   = { id: string; country_code: string; data_category: string; authority_name: string; source_url: string; last_checked: string | null }
+
+const S = {
+  card:  { background: '#0d1424', border: '1px solid #1a2238', borderRadius: 16 },
+  input: 'w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-600 focus:outline-none transition-colors',
+}
 
 export default function CountryBuilderPage() {
   const [tab, setTab]               = useState<Tab>('Countries')
@@ -33,7 +45,7 @@ export default function CountryBuilderPage() {
   const [error, setError]           = useState('')
   const [saving, setSaving]         = useState(false)
   const [saved, setSaved]           = useState(false)
-  const [newC, setNewC]             = useState({ iso2: '', name: '', currency_code: '', flag_emoji: '', region: '' })
+  const [newC, setNewC]             = useState({ iso2: '', iso3: '', name: '', currency_code: '', flag_emoji: '', region: '' })
   const [popForm, setPopForm]       = useState({ iso2: '', name: '', currency_code: '' })
   const [popStatus, setPopStatus]   = useState<'idle'|'loading'|'done'|'error'>('idle')
   const [popData, setPopData]       = useState<any>(null)
@@ -41,6 +53,7 @@ export default function CountryBuilderPage() {
   const [inserting, setInserting]   = useState(false)
   const [insertDone, setInsertDone] = useState(false)
   const [expanded, setExpanded]     = useState<Record<string,boolean>>({})
+
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
   const loadData = useCallback(async () => {
@@ -87,8 +100,9 @@ export default function CountryBuilderPage() {
         body: JSON.stringify({ ...newC })
       })
       const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Add failed')
       setSaved(true)
-      setNewC({ iso2: '', name: '', currency_code: '', flag_emoji: '', region: '' })
+      setNewC({ iso2: '', iso3: '', name: '', currency_code: '', flag_emoji: '', region: '' })
       await loadData()
       setTimeout(() => setSaved(false), 4000)
     } catch (e: any) { setError(e.message ?? 'Add failed') }
@@ -107,8 +121,9 @@ export default function CountryBuilderPage() {
       await loadData()
     } catch (e: any) { setError(e.message ?? 'Update failed') }
   }
+
   async function handleDelete(iso2: string) {
-    if (!window.confirm('DELETE ' + iso2 + '? This will remove the country and ALL its data permanently. This cannot be undone.')) return
+    if (!window.confirm('DELETE ' + iso2 + '? This removes the country and ALL its data. Cannot be undone.')) return
     try {
       const res = await fetch('/api/admin-add-country', {
         method: 'DELETE',
@@ -120,6 +135,7 @@ export default function CountryBuilderPage() {
       await loadData()
     } catch (e: any) { setError(e.message ?? 'Delete failed') }
   }
+
   async function handlePopulate() {
     setPopStatus('loading'); setPopMsg(''); setPopData(null); setInsertDone(false)
     try {
@@ -170,152 +186,173 @@ export default function CountryBuilderPage() {
   function getScore(iso2: string) {
     const c = counts[iso2] ?? {}
     const filled = CORE_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
-    return Math.round((filled / CORE_TABLES.length) * 100)
+    return { filled, pct: Math.round((filled / CORE_TABLES.length) * 100) }
   }
-  function scoreColor(n: number) {
-    if (n === 100) return 'text-emerald-400'
-    if (n >= 70)   return 'text-amber-400'
-    return 'text-red-400'
-  }
-
-  const card     = 'bg-slate-900 border border-slate-800 rounded-2xl'
-  const inputCls = 'w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors'
-  const btnBlue  = 'bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold px-6 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm'
 
   const active   = countries.filter(c => c.is_active)
   const inactive = countries.filter(c => !c.is_active)
-  const full     = active.filter(c => getScore(c.iso2) === 100).length
+  const full     = active.filter(c => getScore(c.iso2).pct === 100).length
+
+  const inputStyle = {
+    background: '#111827',
+    border: '1px solid #1f2937',
+  }
 
   return (
     <div className="p-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
-            <Hammer size={20} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Country Builder</h1>
-            <p className="text-slate-400 text-sm">Intelligence Engine — manage country data, sources and coverage</p>
-          </div>
+
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'rgba(59,130,246,0.12)' }}>
+          <Layers size={20} style={{ color: '#3b82f6' }} />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Country Manager</h1>
+          <p className="text-sm" style={{ color: '#475569' }}>
+            Intelligence Engine — manage country data, sources and AI population
+          </p>
         </div>
       </div>
 
+      {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Active Countries', value: active.length,      color: 'text-blue-400',    bg: 'bg-blue-600/10 border-blue-600/20'      },
-          { label: 'Fully Loaded',     value: full,               color: 'text-emerald-400', bg: 'bg-emerald-600/10 border-emerald-600/20' },
-          { label: 'Inactive',         value: inactive.length,    color: 'text-slate-400',   bg: 'bg-slate-700/20 border-slate-700/30'     },
-          { label: 'Data Tables',      value: CORE_TABLES.length, color: 'text-amber-400',   bg: 'bg-amber-600/10 border-amber-600/20'     },
+          { label: 'Active Countries', value: active.length,      color: '#3b82f6', bg: 'rgba(59,130,246,0.08)',   border: 'rgba(59,130,246,0.2)'   },
+          { label: 'Fully Loaded',     value: full,               color: '#10b981', bg: 'rgba(16,185,129,0.08)',   border: 'rgba(16,185,129,0.2)'   },
+          { label: 'Inactive',         value: inactive.length,    color: '#475569', bg: 'rgba(71,85,105,0.08)',    border: 'rgba(71,85,105,0.2)'    },
+          { label: 'Data Tables',      value: CORE_TABLES.length, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.2)'   },
         ].map(s => (
-          <div key={s.label} className={`border rounded-2xl p-5 ${s.bg}`}>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-3">{s.label}</p>
-            <p className={`text-3xl font-black ${s.color}`}>{s.value}</p>
+          <div key={s.label} className="rounded-2xl p-5 border"
+            style={{ background: s.bg, borderColor: s.border }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: s.color }}>{s.label}</p>
+            <p className="text-3xl font-black text-white">{s.value}</p>
           </div>
         ))}
       </div>
 
+      {/* Error */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3">
-          <AlertCircle size={18} className="text-red-400 shrink-0" />
-          <p className="text-red-400 text-sm">{error}</p>
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <AlertCircle size={16} style={{ color: '#ef4444' }} className="shrink-0" />
+          <p className="text-sm" style={{ color: '#ef4444' }}>{error}</p>
         </div>
       )}
 
+      {/* Tabs */}
       <div className="flex gap-2 mb-6">
         {TABS.map(t => (
           <button key={t} onClick={() => setTab(t)}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              tab === t ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'
-            }`}>
-            {t === 'AI Populate' ? '✨ ' + t : t}
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
+            style={{
+              background: tab === t ? '#2563eb' : 'rgba(255,255,255,0.04)',
+              color: tab === t ? '#ffffff' : '#64748b',
+              border: tab === t ? '1px solid #2563eb' : '1px solid transparent',
+            }}>
+            {t === 'AI Populate' ? '✦ ' + t : t}
           </button>
         ))}
       </div>
 
+      {/* ── COUNTRIES TAB ── */}
       {tab === 'Countries' && (
         loading ? (
-          <div className="flex items-center gap-3 py-12 justify-center text-slate-500">
-            <Loader2 size={20} className="animate-spin" />
+          <div className="flex items-center justify-center gap-3 py-16" style={{ color: '#334155' }}>
+            <Loader2 size={18} className="animate-spin" />
             <span className="text-sm">Loading countries…</span>
           </div>
         ) : (
-          <div className={`${card} overflow-hidden`}>
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-              <h2 className="text-white font-bold">Country Data Coverage</h2>
+          <div className="rounded-2xl border overflow-hidden" style={S.card}>
+            <div className="px-6 py-4 border-b flex items-center justify-between"
+              style={{ borderColor: '#1a2238' }}>
+              <h2 className="text-white font-bold text-sm">Country Data Coverage</h2>
               <button onClick={loadData}
-                className="flex items-center gap-2 text-slate-400 hover:text-white text-xs font-semibold transition-colors">
-                <RefreshCw size={13} /> Refresh
+                className="flex items-center gap-1.5 text-xs font-semibold transition-colors"
+                style={{ color: '#334155' }}>
+                <RefreshCw size={12} /> Refresh
               </button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-800">
-                    <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Country</th>
+                  <tr style={{ borderBottom: '1px solid #1a2238' }}>
+                    <th className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Country</th>
                     {CORE_TABLES.map(t => (
-                      <th key={t.key} title={t.label}
-                        className="text-center px-2 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        {t.short}
-                      </th>
+                      <th key={t.key} title={t.label} className="text-center px-2 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>{t.short}</th>
                     ))}
-                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Score</th>
-                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                    <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Score</th>
+                    <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Status</th>
+                    <th className="px-4 py-3" />
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
-                  {countries.map(c => {
-                    const score = getScore(c.iso2)
-                    const cc    = counts[c.iso2] ?? {}
+                <tbody>
+                  {countries.map((c, i) => {
+                    const { filled, pct } = getScore(c.iso2)
+                    const cc = counts[c.iso2] ?? {}
+                    const scoreColor = pct === 100 ? '#10b981' : pct >= 70 ? '#f59e0b' : '#ef4444'
                     return (
-                      <tr key={c.iso2} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="px-6 py-3">
+                      <tr key={c.iso2} style={{ borderBottom: i < countries.length - 1 ? '1px solid #111827' : 'none' }}>
+                        <td className="px-6 py-3.5">
                           <div className="flex items-center gap-3">
                             <img src={`https://flagcdn.com/20x15/${c.iso2.toLowerCase()}.png`}
                               alt={c.name} width={20} height={15} className="rounded-sm shrink-0" />
                             <div>
                               <p className="text-white font-semibold text-sm">{c.name}</p>
-                              <p className="text-slate-500 text-xs">{c.iso2} · {c.currency_code}</p>
+                              <p className="text-xs" style={{ color: '#334155' }}>{c.iso2} · {c.currency_code}</p>
                             </div>
                           </div>
                         </td>
                         {CORE_TABLES.map(t => (
-                          <td key={t.key} className="px-2 py-3 text-center">
+                          <td key={t.key} className="px-2 py-3.5 text-center">
                             {(cc[t.key] ?? 0) > 0
-                              ? <span className="text-emerald-400 text-xs font-bold">{cc[t.key]}</span>
-                              : <span className="text-slate-700 text-xs">—</span>}
+                              ? <span className="text-xs font-bold" style={{ color: '#10b981' }}>{cc[t.key]}</span>
+                              : <span style={{ color: '#1f2937' }}>—</span>}
                           </td>
                         ))}
-                        <td className="px-4 py-3 text-center">
-                          <span className={`font-bold text-sm ${scoreColor(score)}`}>{score}%</span>
+                        <td className="px-4 py-3.5 text-center">
+                          <div className="flex items-center gap-2 justify-center">
+                            <div className="w-14 rounded-full h-1.5" style={{ background: '#1e293b' }}>
+                              <div className="h-1.5 rounded-full" style={{ width: `${pct}%`, background: scoreColor }} />
+                            </div>
+                            <span className="text-xs font-bold tabular-nums" style={{ color: scoreColor }}>{pct}%</span>
+                          </div>
                         </td>
-                        <td className="px-4 py-3 text-center">
-                          <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${
-                            !c.is_active
-                              ? 'bg-slate-700/30 text-slate-500 border-slate-700/50'
-                              : score === 100
-                                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                                : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                          }`}>
-                            {!c.is_active ? 'Inactive' : score === 100 ? 'Complete' : 'Partial'}
+                        <td className="px-4 py-3.5 text-center">
+                          <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                            style={!c.is_active
+                              ? { background: 'rgba(71,85,105,0.15)', color: '#64748b', border: '1px solid rgba(71,85,105,0.3)' }
+                              : pct === 100
+                                ? { background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.25)' }
+                                : { background: 'rgba(245,158,11,0.12)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.25)' }
+                            }>
+                            {!c.is_active ? 'Inactive' : pct === 100 ? 'Complete' : 'Partial'}
                           </span>
-                          {!c.is_active && (
-                            <button
-                              onClick={() => handleActivate(c.iso2, true)}
-                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/40 transition-colors"
-                            >Activate</button>
-                          )}
-                          {c.is_active && (
-                            <button
-                              onClick={() => handleActivate(c.iso2, false)}
-                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40 transition-colors"
-                            >Deactivate</button>
-                          )}
-                          {!c.is_active && (
-                            <button
-                              onClick={() => handleDelete(c.iso2)}
-                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-red-900/40 text-red-400 border border-red-700/50 hover:bg-red-900/70 transition-colors"
-                            >Delete</button>
-                          )}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <div className="flex items-center gap-2 justify-end">
+                            {!c.is_active && (
+                              <button onClick={() => handleActivate(c.iso2, true)}
+                                className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-all"
+                                style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }}>
+                                <Power size={11} /> Activate
+                              </button>
+                            )}
+                            {c.is_active && (
+                              <button onClick={() => handleActivate(c.iso2, false)}
+                                className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-all"
+                                style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)' }}>
+                                <Power size={11} /> Deactivate
+                              </button>
+                            )}
+                            {!c.is_active && (
+                              <button onClick={() => handleDelete(c.iso2)}
+                                className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-all"
+                                style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
+                                <Trash2 size={11} />
+                              </button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     )
@@ -327,47 +364,45 @@ export default function CountryBuilderPage() {
         )
       )}
 
+      {/* ── SOURCE REGISTRY TAB ── */}
       {tab === 'Source Registry' && (
-        <div className="space-y-6">
-          <div className={`${card} p-6`}>
-            <h2 className="text-white font-bold mb-1">Filter by Country</h2>
-            <p className="text-slate-500 text-xs mb-4">Select a country to view its official source registry</p>
+        <div className="space-y-5">
+          <div className="rounded-2xl border p-5" style={S.card}>
+            <p className="text-white font-semibold text-sm mb-3">Filter by Country</p>
             <select value={filterCode} onChange={e => setFilterCode(e.target.value)}
-              className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors w-72">
+              className="rounded-xl px-4 py-3 text-white text-sm focus:outline-none w-72"
+              style={{ ...inputStyle }}>
               <option value="">All Countries</option>
               {countries.map(c => (
                 <option key={c.iso2} value={c.iso2}>{c.name} ({c.iso2})</option>
               ))}
             </select>
           </div>
-          <div className={`${card} overflow-hidden`}>
-            <div className="px-6 py-4 border-b border-slate-800">
-              <h2 className="text-white font-bold">Official Sources</h2>
-              <p className="text-slate-500 text-xs mt-0.5">
+          <div className="rounded-2xl border overflow-hidden" style={S.card}>
+            <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#1a2238' }}>
+              <h2 className="text-white font-bold text-sm">Official Sources</h2>
+              <span className="text-xs" style={{ color: '#334155' }}>
                 {sources.length} source{sources.length !== 1 ? 's' : ''} {filterCode ? `for ${filterCode}` : 'across all countries'}
-              </p>
+              </span>
             </div>
             {sources.length === 0 ? (
               <div className="px-6 py-10 text-center">
-                <Database size={32} className="text-slate-700 mx-auto mb-3" />
-                <p className="text-slate-500 text-sm">No sources found</p>
-                <p className="text-slate-600 text-xs mt-1">The official_sources table may be empty for this selection</p>
+                <Database size={28} className="mx-auto mb-3" style={{ color: '#1f2937' }} />
+                <p className="text-sm" style={{ color: '#334155' }}>No sources found</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-slate-800">
-                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Country</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Category</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Authority</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Source URL</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Last Checked</th>
+                    <tr style={{ borderBottom: '1px solid #1a2238' }}>
+                      {['Country','Category','Authority','Source URL','Last Checked'].map(h => (
+                        <th key={h} className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>{h}</th>
+                      ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {sources.map(s => (
-                      <tr key={s.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tbody>
+                    {sources.map((s, i) => (
+                      <tr key={s.id} style={{ borderBottom: i < sources.length - 1 ? '1px solid #111827' : 'none' }}>
                         <td className="px-6 py-3">
                           <div className="flex items-center gap-2">
                             <img src={`https://flagcdn.com/20x15/${s.country_code.toLowerCase()}.png`}
@@ -376,20 +411,20 @@ export default function CountryBuilderPage() {
                           </div>
                         </td>
                         <td className="px-6 py-3">
-                          <span className="bg-slate-800 text-slate-300 text-xs font-semibold px-2.5 py-1 rounded-lg">
-                            {s.data_category}
-                          </span>
+                          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg"
+                            style={{ background: '#111827', color: '#64748b' }}>{s.data_category}</span>
                         </td>
-                        <td className="px-6 py-3 text-slate-300 text-xs">{s.authority_name}</td>
+                        <td className="px-6 py-3 text-xs" style={{ color: '#94a3b8' }}>{s.authority_name}</td>
                         <td className="px-6 py-3">
                           <a href={s.source_url.startsWith('http') ? s.source_url : `https://${s.source_url}`}
                             target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-blue-400 hover:text-blue-300 text-xs transition-colors">
-                            <ExternalLink size={11} className="shrink-0" />
+                            className="flex items-center gap-1.5 text-xs transition-colors"
+                            style={{ color: '#3b82f6' }}>
+                            <ExternalLink size={10} className="shrink-0" />
                             <span className="truncate max-w-xs">{s.source_url}</span>
                           </a>
                         </td>
-                        <td className="px-6 py-3 text-slate-500 text-xs">
+                        <td className="px-6 py-3 text-xs" style={{ color: '#475569' }}>
                           {s.last_checked
                             ? new Date(s.last_checked).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
                             : '—'}
@@ -404,241 +439,262 @@ export default function CountryBuilderPage() {
         </div>
       )}
 
+      {/* ── ADD COUNTRY TAB ── */}
       {tab === 'Add Country' && (
-        <div className="max-w-2xl space-y-6">
-          <div className={`${card} p-6`}>
+        <div className="max-w-2xl space-y-5">
+          <div className="rounded-2xl border p-6" style={S.card}>
             <div className="flex items-center gap-2 mb-1">
-              <Plus size={16} className="text-blue-400" />
-              <h2 className="text-white font-bold">Add New Country</h2>
+              <Plus size={15} style={{ color: '#3b82f6' }} />
+              <h2 className="text-white font-bold text-sm">Add New Country</h2>
             </div>
-            <p className="text-slate-500 text-xs mb-6">
-              Country is added as inactive. Load all Supabase data and publish all 8 articles before activating.
+            <p className="text-xs mb-6" style={{ color: '#334155' }}>
+              Country is added as inactive. Populate data and publish all 8 articles before activating.
             </p>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">ISO2 Code *</label>
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>ISO2 *</label>
                   <input value={newC.iso2}
                     onChange={e => setNewC(p => ({ ...p, iso2: e.target.value.toUpperCase().slice(0,2) }))}
-                    placeholder="e.g. JP" maxLength={2} className={inputCls} />
+                    placeholder="e.g. JP" maxLength={2}
+                    className={S.input} style={inputStyle} />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Country Name *</label>
-                  <input value={newC.name}
-                    onChange={e => setNewC(p => ({ ...p, name: e.target.value }))}
-                    placeholder="e.g. Japan" className={inputCls} />
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>ISO3</label>
+                  <input value={newC.iso3}
+                    onChange={e => setNewC(p => ({ ...p, iso3: e.target.value.toUpperCase().slice(0,3) }))}
+                    placeholder="e.g. JPN" maxLength={3}
+                    className={S.input} style={inputStyle} />
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Currency *</label>
+                  <input value={newC.currency_code}
+                    onChange={e => setNewC(p => ({ ...p, currency_code: e.target.value.toUpperCase().slice(0,3) }))}
+                    placeholder="e.g. JPY" maxLength={3}
+                    className={S.input} style={inputStyle} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Currency Code *</label>
-                  <input value={newC.currency_code}
-                    onChange={e => setNewC(p => ({ ...p, currency_code: e.target.value.toUpperCase().slice(0,3) }))}
-                    placeholder="e.g. JPY" maxLength={3} className={inputCls} />
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Country Name *</label>
+                  <input value={newC.name}
+                    onChange={e => setNewC(p => ({ ...p, name: e.target.value }))}
+                    placeholder="e.g. Japan"
+                    className={S.input} style={inputStyle} />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Flag Emoji</label>
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Flag Emoji</label>
                   <input value={newC.flag_emoji}
                     onChange={e => setNewC(p => ({ ...p, flag_emoji: e.target.value }))}
-                    placeholder="e.g. 🇯🇵" className={inputCls} />
+                    placeholder="e.g. 🇯🇵"
+                    className={S.input} style={inputStyle} />
                 </div>
               </div>
               <div>
-                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Region</label>
+                <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Region</label>
                 <select value={newC.region}
                   onChange={e => setNewC(p => ({ ...p, region: e.target.value }))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors">
+                  className="w-full rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
+                  style={inputStyle}>
                   <option value="">Select region…</option>
-                  {['Europe','Americas','Asia Pacific','Middle East','Africa'].map(r => (
+                  {['Europe','Americas','Asia Pacific','Middle East','Africa','Asia'].map(r => (
                     <option key={r} value={r}>{r}</option>
                   ))}
                 </select>
               </div>
             </div>
+
             {saved && (
-              <div className="mt-4 bg-emerald-600/10 border border-emerald-600/30 rounded-xl p-3 flex items-center gap-2">
-                <Check size={15} className="text-emerald-400" />
-                <p className="text-emerald-400 text-sm font-semibold">Country added — marked inactive until data is loaded.</p>
+              <div className="mt-4 rounded-xl p-3 flex items-center gap-2"
+                style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <CheckCircle size={14} style={{ color: '#10b981' }} />
+                <p className="text-sm font-semibold" style={{ color: '#10b981' }}>Country added — marked inactive until data is loaded.</p>
               </div>
             )}
+
             <div className="mt-6 flex justify-end">
               <button onClick={handleAdd}
                 disabled={saving || !newC.iso2 || !newC.name || !newC.currency_code}
-                className={btnBlue}>
+                className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                style={{ background: '#2563eb', color: '#ffffff' }}>
                 {saving
-                  ? <><Loader2 size={15} className="animate-spin" /> Adding…</>
-                  : <><Plus size={15} /> Add Country</>}
+                  ? <><Loader2 size={14} className="animate-spin" /> Adding…</>
+                  : <><Plus size={14} /> Add Country</>}
               </button>
             </div>
           </div>
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5">
-            <p className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">After adding — required steps before activating</p>
-            <ol className="text-slate-400 text-xs space-y-2 list-decimal list-inside">
-              <li>Populate hrlake.official_sources for all data categories</li>
-              <li>Load all 13 Supabase tables via the Intelligence Engine</li>
-              <li>Run Content Factory — generate all 8 article types</li>
-              <li>Verify the Payroll Calculator produces correct results</li>
-              <li>Set is_active = true in Supabase to make the country live</li>
+
+          <div className="rounded-2xl p-5" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#f59e0b' }}>Required steps before activating</p>
+            <ol className="text-xs space-y-1.5 list-decimal list-inside" style={{ color: '#64748b' }}>
+              <li>Populate all hrlake data tables via AI Populate tab</li>
+              <li>Run AI verification in Data Quality</li>
+              <li>Generate all 8 Sanity articles in Content Factory</li>
+              <li>Verify Payroll Calculator produces correct results</li>
+              <li>Activate country — it will go live immediately</li>
             </ol>
           </div>
         </div>
       )}
 
+      {/* ── AI POPULATE TAB ── */}
       {tab === 'AI Populate' && (
-        <div className="space-y-6 max-w-4xl">
-          <div className={`${card} p-6`}>
+        <div className="space-y-5 max-w-4xl">
+          <div className="rounded-2xl border p-6" style={S.card}>
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles size={16} className="text-blue-400" />
-              <h2 className="text-white font-bold">AI Population Engine</h2>
+              <Sparkles size={15} style={{ color: '#3b82f6' }} />
+              <h2 className="text-white font-bold text-sm">AI Population Engine</h2>
             </div>
-            <p className="text-slate-500 text-xs mb-6">
-              Enter a country and Claude will research all 10 data tables from official government sources in one click.
-              Review the proposed data, then insert directly into Supabase.
+            <p className="text-xs mb-6" style={{ color: '#334155' }}>
+              Enter a country and Claude will research all 10 data tables. Review the data, then insert directly into Supabase.
             </p>
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <div>
-                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">ISO2 Code *</label>
-                <input value={popForm.iso2}
-                  onChange={e => setPopForm(p => ({ ...p, iso2: e.target.value.toUpperCase().slice(0,2) }))}
-                  placeholder="e.g. SG" maxLength={2} className={inputCls}
-                  disabled={popStatus === 'loading'} />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Country Name *</label>
-                <input value={popForm.name}
-                  onChange={e => setPopForm(p => ({ ...p, name: e.target.value }))}
-                  placeholder="e.g. Singapore" className={inputCls}
-                  disabled={popStatus === 'loading'} />
-              </div>
-              <div>
-                <label className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-2">Currency Code *</label>
-                <input value={popForm.currency_code}
-                  onChange={e => setPopForm(p => ({ ...p, currency_code: e.target.value.toUpperCase().slice(0,3) }))}
-                  placeholder="e.g. SGD" maxLength={3} className={inputCls}
-                  disabled={popStatus === 'loading'} />
-              </div>
+              {[
+                { label: 'ISO2 Code *', key: 'iso2', placeholder: 'e.g. SG', max: 2 },
+                { label: 'Country Name *', key: 'name', placeholder: 'e.g. Singapore', max: undefined },
+                { label: 'Currency Code *', key: 'currency_code', placeholder: 'e.g. SGD', max: 3 },
+              ].map(field => (
+                <div key={field.key}>
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>{field.label}</label>
+                  <input
+                    value={(popForm as any)[field.key]}
+                    onChange={e => {
+                      const val = field.max ? e.target.value.toUpperCase().slice(0, field.max) : e.target.value
+                      setPopForm(p => ({ ...p, [field.key]: val }))
+                    }}
+                    placeholder={field.placeholder}
+                    maxLength={field.max}
+                    disabled={popStatus === 'loading'}
+                    className={S.input} style={inputStyle} />
+                </div>
+              ))}
             </div>
-            <div className="flex items-center gap-4 flex-wrap">
+
+            <div className="flex items-center gap-3 flex-wrap">
               <button onClick={handlePopulate}
                 disabled={popStatus === 'loading' || !popForm.iso2 || !popForm.name || !popForm.currency_code}
-                className={btnBlue}>
+                className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                style={{ background: '#2563eb', color: '#ffffff' }}>
                 {popStatus === 'loading'
-                  ? <><Loader2 size={15} className="animate-spin" /> Researching — up to 60 seconds…</>
-                  : <><Sparkles size={15} /> AI Populate</>}
+                  ? <><Loader2 size={14} className="animate-spin" /> Researching — up to 60s…</>
+                  : <><Sparkles size={14} /> AI Populate</>}
               </button>
               {popStatus === 'done' && !insertDone && (
                 <button onClick={handleInsert} disabled={inserting}
-                  className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold px-6 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm">
+                  className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                  style={{ background: '#059669', color: '#ffffff' }}>
                   {inserting
-                    ? <><Loader2 size={15} className="animate-spin" /> Inserting…</>
-                    : <><Database size={15} /> Insert All Data into Supabase</>}
+                    ? <><Loader2 size={14} className="animate-spin" /> Inserting…</>
+                    : <><Database size={14} /> Insert All Data</>}
                 </button>
               )}
             </div>
+
             {popStatus === 'loading' && (
-              <div className="mt-5 bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
-                <p className="text-blue-400 text-sm font-semibold">Claude is researching {popForm.name} from official government sources…</p>
-                <p className="text-slate-500 text-xs mt-1">Searching all 10 data categories. This takes 30–60 seconds.</p>
+              <div className="mt-5 rounded-xl p-4" style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.15)' }}>
+                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources…</p>
+                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 10 data categories. This takes 30–60 seconds.</p>
               </div>
             )}
             {popStatus === 'error' && (
-              <div className="mt-5 bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3">
-                <AlertCircle size={16} className="text-red-400 shrink-0" />
-                <p className="text-red-400 text-sm">{popMsg}</p>
+              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
+                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
+                <AlertCircle size={15} style={{ color: '#ef4444' }} className="shrink-0" />
+                <p className="text-sm" style={{ color: '#ef4444' }}>{popMsg}</p>
               </div>
             )}
             {insertDone && (
-              <div className="mt-5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-center gap-3">
-                <Check size={16} className="text-emerald-400 shrink-0" />
+              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
+                style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)' }}>
+                <CheckCircle size={15} style={{ color: '#10b981' }} className="shrink-0" />
                 <div>
-                  <p className="text-emerald-400 text-sm font-semibold">All data inserted into Supabase successfully!</p>
-                  <p className="text-slate-500 text-xs mt-0.5">Go to Data Quality to verify. Set is_active = true in Supabase when ready to go live.</p>
+                  <p className="text-sm font-semibold" style={{ color: '#10b981' }}>All data inserted successfully!</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#334155' }}>Go to Data Quality to verify. Activate the country when ready.</p>
                 </div>
               </div>
             )}
             {popMsg && !insertDone && popStatus !== 'error' && (
-              <div className="mt-5 bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3">
-                <AlertCircle size={16} className="text-red-400 shrink-0" />
-                <p className="text-red-400 text-sm">{popMsg}</p>
+              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
+                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
+                <AlertCircle size={15} style={{ color: '#ef4444' }} className="shrink-0" />
+                <p className="text-sm" style={{ color: '#ef4444' }}>{popMsg}</p>
               </div>
             )}
           </div>
 
           {popStatus === 'done' && popData && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-white font-bold text-lg">
+                <h3 className="text-white font-bold">
                   Proposed Data — {popForm.name} ({popForm.iso2.toUpperCase()})
                 </h3>
                 <div className="flex gap-2">
                   <button
                     onClick={() => { const e: Record<string,boolean> = {}; CORE_TABLES.forEach(t => { e[t.key] = true }); setExpanded(e) }}
-                    className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 transition-colors">
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+                    style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b' }}>
                     Expand All
                   </button>
                   <button onClick={() => setExpanded({})}
-                    className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 transition-colors">
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+                    style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b' }}>
                     Collapse All
                   </button>
                 </div>
               </div>
               {CORE_TABLES.map(t => {
-                const rows  = popData[t.key] ?? []
-                const src   = popData.sources?.[t.key]
+                const rows   = popData[t.key] ?? []
+                const src    = popData.sources?.[t.key]
                 const isOpen = expanded[t.key]
                 return (
-                  <div key={t.key} className={card}>
+                  <div key={t.key} className="rounded-2xl border overflow-hidden" style={S.card}>
                     <button
                       onClick={() => setExpanded(p => ({ ...p, [t.key]: !p[t.key] }))}
-                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-800/40 transition-colors rounded-2xl">
+                      className="w-full px-6 py-4 flex items-center justify-between text-left transition-colors"
+                      style={{ background: 'transparent' }}>
                       <div className="flex items-center gap-3 flex-wrap">
-                        <span className="text-white font-bold">{t.label}</span>
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${
-                          rows.length > 0
-                            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                            : 'bg-red-500/20 text-red-400 border-red-500/30'
-                        }`}>
+                        <span className="text-white font-bold text-sm">{t.label}</span>
+                        <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                          style={rows.length > 0
+                            ? { background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }
+                            : { background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
                           {rows.length} record{rows.length !== 1 ? 's' : ''}
                         </span>
                         {src && (
                           <a href={src.source_url} target="_blank" rel="noopener noreferrer"
                             onClick={e => e.stopPropagation()}
-                            className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors">
+                            className="flex items-center gap-1 text-xs transition-colors"
+                            style={{ color: '#3b82f6' }}>
                             <ExternalLink size={10} />
                             <span>{src.authority_name}</span>
                           </a>
                         )}
                       </div>
                       {isOpen
-                        ? <ChevronUp size={16} className="text-slate-500 shrink-0" />
-                        : <ChevronDown size={16} className="text-slate-500 shrink-0" />}
+                        ? <ChevronUp size={15} style={{ color: '#334155' }} className="shrink-0" />
+                        : <ChevronDown size={15} style={{ color: '#334155' }} className="shrink-0" />}
                     </button>
                     {isOpen && (
-                      <div className="px-6 pb-5 border-t border-slate-800">
+                      <div className="px-6 pb-5 border-t" style={{ borderColor: '#1a2238' }}>
                         {rows.length === 0 || !rows[0] ? (
-                          <p className="text-slate-600 text-xs pt-4">No data returned for this table.</p>
+                          <p className="text-xs pt-4" style={{ color: '#1f2937' }}>No data returned for this table.</p>
                         ) : (
                           <div className="overflow-x-auto mt-3">
                             <table className="w-full text-xs">
                               <thead>
-                                <tr className="border-b border-slate-800">
+                                <tr style={{ borderBottom: '1px solid #1a2238' }}>
                                   {Object.keys(rows[0]).filter((k: string) => k !== 'country_code').map((k: string) => (
-                                    <th key={k} className="text-left px-3 py-2 text-slate-500 font-bold uppercase tracking-wider whitespace-nowrap">{k}</th>
+                                    <th key={k} className="text-left px-3 py-2 font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: '#334155' }}>{k}</th>
                                   ))}
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-slate-800/50">
+                              <tbody>
                                 {rows.map((row: any, i: number) => (
-                                  <tr key={i} className="hover:bg-slate-800/30 transition-colors">
+                                  <tr key={i} style={{ borderBottom: i < rows.length - 1 ? '1px solid #0d1117' : 'none' }}>
                                     {Object.entries(row).filter(([k]: [string, any]) => k !== 'country_code').map(([k, v]: [string, any]) => (
-                                      <td key={k} className="px-3 py-2 text-slate-300 whitespace-nowrap">
-                                        {v === null
-                                          ? <span className="text-slate-600">null</span>
-                                          : v === true
-                                            ? <span className="text-emerald-400">true</span>
-                                            : v === false
-                                              ? <span className="text-red-400">false</span>
-                                              : String(v)}
+                                      <td key={k} className="px-3 py-2 whitespace-nowrap"
+                                        style={{ color: v === null ? '#1f2937' : v === true ? '#10b981' : v === false ? '#ef4444' : '#94a3b8' }}>
+                                        {v === null ? 'null' : v === true ? 'true' : v === false ? 'false' : String(v)}
                                       </td>
                                     ))}
                                   </tr>
@@ -655,10 +711,11 @@ export default function CountryBuilderPage() {
               {!insertDone && (
                 <div className="pt-2 flex justify-end">
                   <button onClick={handleInsert} disabled={inserting}
-                    className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold px-8 py-3 rounded-xl transition-all flex items-center gap-2 text-sm">
+                    className="flex items-center gap-2 text-sm font-bold px-8 py-3 rounded-xl transition-all disabled:opacity-40"
+                    style={{ background: '#059669', color: '#ffffff' }}>
                     {inserting
-                      ? <><Loader2 size={15} className="animate-spin" /> Inserting all data…</>
-                      : <><Database size={15} /> Insert All Data into Supabase</>}
+                      ? <><Loader2 size={14} className="animate-spin" /> Inserting all data…</>
+                      : <><Database size={14} /> Insert All Data into Supabase</>}
                   </button>
                 </div>
               )}
