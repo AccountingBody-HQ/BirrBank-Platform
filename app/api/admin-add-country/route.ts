@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+function validIso2(code: unknown): code is string {
+  return typeof code === 'string' && /^[A-Za-z]{2}$/.test(code)
+}
+
 export async function POST(req: NextRequest) {
+  try {
   const body = await req.json()
   const { iso2, iso3, name, currency_code, currency_symbol, currency_name, flag_emoji, region } = body
   if (!iso2 || !name || !currency_code) {
     return NextResponse.json({ error: 'iso2, name and currency_code are required' }, { status: 400 })
+  }
+  if (!validIso2(iso2)) {
+    return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,13 +41,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
   return NextResponse.json({ success: true })
+  } catch (e: any) { return NextResponse.json({ error: e.message }, { status: 500 }) }
 }
 
 export async function PATCH(req: NextRequest) {
+  try {
   const body = await req.json()
   const { iso2, is_active } = body
-  if (!iso2) {
-    return NextResponse.json({ error: 'iso2 is required' }, { status: 400 })
+  if (!validIso2(iso2)) {
+    return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,20 +65,21 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  try {
   const body = await req.json()
   const { iso2 } = body
-  if (!iso2) {
-    return NextResponse.json({ error: 'iso2 is required' }, { status: 400 })
+  if (!validIso2(iso2)) {
+    return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
-  // Delete all hrlake table data first
+  // Delete all hrlake table data in parallel
   const hrlakeTables = ['tax_brackets','social_security','employment_rules','statutory_leave','public_holidays','filing_calendar','payroll_compliance','working_hours','termination_rules','pension_schemes']
-  for (const table of hrlakeTables) {
-    await supabase.schema('hrlake').from(table).delete().eq('country_code', iso2.toUpperCase())
-  }
+  await Promise.all(hrlakeTables.map(table =>
+    supabase.schema('hrlake').from(table).delete().eq('country_code', iso2.toUpperCase())
+  ))
   // Delete official sources
   await supabase.schema('hrlake').from('official_sources').delete().eq('country_code', iso2.toUpperCase())
   // Delete the country row
