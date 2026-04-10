@@ -26,6 +26,15 @@ const C = {
   idle:   { background: 'rgba(255,255,255,0.03)', border: '1px solid #1f2937', color: '#64748b' },
 }
 
+function SelectCard({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick} className="rounded-xl p-4 text-left transition-all w-full"
+      style={active ? C.active : C.idle}>
+      {children}
+    </button>
+  )
+}
+
 export default function ContentFactoryPage() {
   const [step, setStep]               = useState(0)
   const [config, setConfig]           = useState<Config>(EMPTY)
@@ -52,7 +61,10 @@ export default function ContentFactoryPage() {
   async function handleGenerate() {
     setGenerating(true); setError('')
     try {
-      const res  = await fetch('/api/content-factory/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(config) })
+      const controller = new AbortController()
+      const tid = setTimeout(() => controller.abort(), 120000)
+      const res  = await fetch('/api/content-factory/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(config), signal: controller.signal })
+      clearTimeout(tid)
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Generation failed')
       setGenerated(data.content); setEdited(data.content)
@@ -76,15 +88,6 @@ export default function ContentFactoryPage() {
   }
 
   function reset() { setStep(0); setConfig(EMPTY); setGenerated(''); setEdited(''); setPublished(false); setError(''); setShowOnSites([]); setCanonical('') }
-
-  function SelectCard({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-    return (
-      <button onClick={onClick} className="rounded-xl p-4 text-left transition-all w-full"
-        style={active ? C.active : C.idle}>
-        {children}
-      </button>
-    )
-  }
 
   const seo = seoScore()
   const seoColor = seo >= 75 ? '#10b981' : seo >= 50 ? '#f59e0b' : '#ef4444'
