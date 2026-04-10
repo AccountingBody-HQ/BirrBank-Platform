@@ -5,19 +5,6 @@ export const maxDuration = 120
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!
 
-const TABLE_SCHEMAS: Record<string, string> = {
-  tax_brackets: "bracket_name, lower_limit (numeric), upper_limit (numeric or null), rate (numeric %), bracket_order (int), is_current (true)",
-  social_security: "contribution_type, employer_rate (numeric %), employee_rate (numeric %), applies_above (numeric or null), applies_below (numeric or null), is_current (true)",
-  employment_rules: "rule_type (minimum_wage/annual_leave/sick_leave/maternity_leave/paternity_leave/probation_period/notice_period/13th_month), value_numeric (numeric or null), value_text (text or null), value_unit (days/weeks/months/per_hour), is_current (true)",
-  statutory_leave: "leave_type, minimum_days (int), maximum_days (int or null), is_paid (bool), payment_rate (numeric %)",
-  public_holidays: "holiday_name, holiday_date (YYYY-MM-DD), is_mandatory (bool)",
-  filing_calendar: "filing_type, frequency (Monthly/Quarterly/Annual), due_day (int), due_month (int or null)",
-  payroll_compliance: "description, frequency, deadline_description",
-  working_hours: "standard_hours_per_week (numeric), maximum_hours_per_week (numeric), overtime_rate_multiplier (numeric e.g. 1.5)",
-  termination_rules: "notice_period_min_days (int), severance_mandatory (bool), probation_period_max_months (int)",
-  pension_schemes: "scheme_name, employer_rate (numeric %), employee_rate (numeric %), is_mandatory (bool)",
-}
-
 export async function POST(req: NextRequest) {
   try {
     const { countryCode, countryName, currencyCode } = await req.json()
@@ -25,19 +12,90 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing countryCode or countryName" }, { status: 400 })
     }
 
-    const tableList = Object.entries(TABLE_SCHEMAS)
-      .map(([k, v], i) => String(i + 1) + ". " + k + " — country_code: " + countryCode + ". Fields: " + v)
-      .join(String.fromCharCode(10))
+    const prompt = `You are the world's most accurate HR, payroll and employment law data specialist. Your task is to return a complete, precise JSON dataset for ${countryName} (${countryCode}, currency: ${currencyCode}).
 
-    const prompt = [
-      "You are an expert HR and payroll data researcher. Research and return ALL employment and payroll data for " + countryName + " (" + countryCode + ", currency: " + currencyCode + ").",
-      "Search official government websites for every data point. Use web_search for each category.",
-      "Return ONLY a valid JSON object with these top-level keys: tax_brackets, social_security, employment_rules, statutory_leave, public_holidays, filing_calendar, payroll_compliance, working_hours, termination_rules, pension_schemes, sources.",
-      "The sources key must be an object with one entry per table key, each having authority_name and source_url.",
-      "TABLE SCHEMAS (every record must include country_code: " + countryCode + "):",
-      tableList,
-      "RULES: numeric values are plain numbers only (no % no symbols). Dates: YYYY-MM-DD. List ALL public holidays. working_hours and termination_rules are single records. Return ONLY the JSON object with no markdown or code blocks.",
-    ].join(String.fromCharCode(10) + String.fromCharCode(10))
+CRITICAL RULES - NEVER VIOLATE THESE:
+1. Return ONLY a raw JSON object. No markdown. No code blocks. No explanation. No preamble. Start with { and end with }.
+2. EVERY single array must contain real data. An empty array [] is a CRITICAL FAILURE. If you are unsure, use your best knowledge - never leave an array empty.
+3. All numeric values must be plain numbers only. Never include %, currency symbols, or text in numeric fields.
+4. Dates must be YYYY-MM-DD format.
+5. Boolean fields must be true or false (not strings).
+
+RETURN THIS EXACT JSON STRUCTURE:
+
+{
+  "tax_brackets": [
+    // ALL income tax brackets for ${countryName} for the current tax year
+    // MUST have at least 3-7 records covering the full income range
+    // Fields: bracket_name (string), lower_limit (number), upper_limit (number or null for top bracket), rate (number, e.g. 20 for 20%), bracket_order (integer starting at 1)
+  ],
+  "social_security": [
+    // ALL social security / national insurance contribution types
+    // MUST include at minimum: employer contributions and employee contributions
+    // Fields: contribution_type (string e.g. "Employer National Insurance"), employer_rate (number), employee_rate (number), applies_above (number or null), applies_below (number or null)
+  ],
+  "employment_rules": [
+    // MUST include ALL of these rule_type values - one record each:
+    // minimum_wage, annual_leave, sick_leave, maternity_leave, paternity_leave, probation_period_max, notice_period_min, overtime_rate
+    // Fields: rule_type (string), value_numeric (number or null), value_text (string or null), value_unit (string: days/weeks/months/per_hour/multiplier)
+  ],
+  "statutory_leave": [
+    // MUST include ALL of these leave types - one record each:
+    // annual_leave, sick_leave, maternity_leave, paternity_leave, parental_leave
+    // Fields: leave_type (string), minimum_days (integer), maximum_days (integer or null), is_paid (boolean), payment_rate (number, e.g. 100 for full pay, 0 for unpaid)
+  ],
+  "public_holidays": [
+    // ALL official public holidays in ${countryName} for 2025
+    // MUST list every single public holiday - typically 8-15 holidays
+    // Fields: holiday_name (string), holiday_date (YYYY-MM-DD), is_mandatory (boolean)
+  ],
+  "filing_calendar": [
+    // ALL payroll and tax filing obligations for employers
+    // MUST include at minimum: payroll tax filing, income tax filing, social security filing, annual employer return
+    // Fields: filing_type (string), frequency (string: Monthly/Quarterly/Annual/Weekly), due_day (integer 1-31), due_month (integer 1-12 or null for monthly recurring)
+  ],
+  "payroll_compliance": [
+    // ALL key employer payroll compliance obligations
+    // MUST include at minimum: payslip requirements, payroll registration, year-end reporting, record keeping
+    // Fields: description (string - full clear description), frequency (string), deadline_description (string)
+  ],
+  "working_hours": [
+    // EXACTLY ONE record with standard working hours rules for ${countryName}
+    // Fields: standard_hours_per_week (number), maximum_hours_per_week (number), overtime_rate_multiplier (number e.g. 1.5)
+  ],
+  "termination_rules": [
+    // EXACTLY ONE record with termination rules for ${countryName}
+    // Fields: notice_period_min_days (integer), severance_mandatory (boolean), probation_period_max_months (integer)
+  ],
+  "pension_schemes": [
+    // ALL mandatory and major pension/retirement schemes in ${countryName}
+    // MUST include at minimum 1 record for the main mandatory scheme
+    // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
+  ],
+  "sources": {
+    "tax_brackets": { "authority_name": "Official tax authority name", "source_url": "https://..." },
+    "social_security": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "employment_rules": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "statutory_leave": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "public_holidays": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "filing_calendar": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "payroll_compliance": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "working_hours": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "termination_rules": { "authority_name": "Official authority name", "source_url": "https://..." },
+    "pension_schemes": { "authority_name": "Official authority name", "source_url": "https://..." }
+  }
+}
+
+ACCURACY REQUIREMENTS:
+- Tax brackets: Use the exact current official rates from the tax authority of ${countryName}
+- Social security: Use exact current official employer and employee contribution rates
+- Minimum wage: Use the current official national minimum wage
+- Leave entitlements: Use the statutory minimums from employment law
+- Public holidays: List every official public holiday with exact 2025 dates
+- Working hours: Use the legal maximum from the labour law
+- Pension: Use the mandatory occupational/state pension contribution rates
+
+Return the JSON now. Start immediately with {`
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -49,7 +107,6 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 16000,
-
         messages: [{ role: "user", content: prompt }],
       }),
     })
@@ -79,6 +136,13 @@ export async function POST(req: NextRequest) {
       parsed = JSON.parse(clean)
     } catch {
       return NextResponse.json({ error: "Failed to parse AI JSON", raw: textContent.slice(0, 800) }, { status: 500 })
+    }
+
+    // Validate all required keys are present and non-empty
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes"]
+    const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
+    if (empty.length > 0) {
+      return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, data: parsed })
