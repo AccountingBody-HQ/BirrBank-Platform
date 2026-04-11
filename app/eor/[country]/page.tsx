@@ -8,7 +8,7 @@ import { ArrowRight, ArrowLeft, CheckCircle, XCircle, AlertCircle, Building2, Ch
 import EORCostEstimator from '@/components/EORCostEstimator'
 import CountrySubNav from '@/components/CountrySubNav'
 
-// FIXED ROUTE: Remove guide conditionals hiding sections - 1775949637
+// EMERGENCY FIX: Restore route and fix hidden sections - 1775949637
 export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
