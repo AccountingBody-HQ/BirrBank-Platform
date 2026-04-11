@@ -214,7 +214,7 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                         <p className="font-semibold text-slate-900">Calculate the real cost of employment in {country.name}.</p>
                         <p className="text-sm text-slate-500 mt-1">Net salary, income tax, employer social security, and total cost of hire.</p>
                       </div>
-                      <Link href={`/countries/${code.toLowerCase()}/payrollcalculator/`} className="shrink-0 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors">Open Calculator <ArrowRight size={14} /></Link>
+                      <Link href={`/countries/${code.toLowerCase()}/payroll-calculator/`} className="shrink-0 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors">Open Calculator <ArrowRight size={14} /></Link>
                     </div>
                     <p className="text-xs text-slate-400">Employment law data is sourced from official government publications and updated monthly. This information is for guidance only and does not constitute legal advice. Always consult a qualified employment lawyer for {country.name}-specific obligations.</p>
                   </>
@@ -234,13 +234,13 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                   <ul className="space-y-1">
                     {[
                       { label: 'Country Overview', href: `/countries/${code.toLowerCase()}/` },
-                      { label: 'Payroll Calculator', href: `/countries/${code.toLowerCase()}/payrollcalculator/` },
-                      { label: 'Tax Guide', href: `/countries/${code.toLowerCase()}/taxguide/` },
-                      { label: 'Payroll Guide', href: `/countries/${code.toLowerCase()}/payrollguide/` },
-                      { label: 'Hiring Guide', href: `/countries/${code.toLowerCase()}/hiringguide/` },
-                      { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hrcompliance/` },
-                      { label: 'Leave & Benefits', href: `/countries/${code.toLowerCase()}/leavebenefits/` },
-                      { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliancecalendar/` },
+                      { label: 'Payroll Calculator', href: `/countries/${code.toLowerCase()}/payroll-calculator/` },
+                      { label: 'Tax Guide', href: `/countries/${code.toLowerCase()}/tax-guide/` },
+                      { label: 'Payroll Guide', href: `/countries/${code.toLowerCase()}/payroll-guide/` },
+                      { label: 'Hiring Guide', href: `/countries/${code.toLowerCase()}/hiring-guide/` },
+                      { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hr-compliance/` },
+                      { label: 'Leave & Benefits', href: `/countries/${code.toLowerCase()}/leave-benefits/` },
+                      { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliance-calendar/` },
                       { label: 'EOR Guide', href: `/eor/${code.toLowerCase()}/` },
                     ].map((link) => (
                       <li key={link.href}>
