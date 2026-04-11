@@ -55,10 +55,13 @@ export default async function HRCompliancePage({ params }: PageProps) {
   if (!country) notFound()
 
   const { data: workingHours } = await supabase
+    .schema('hrlake')
     .from('working_hours')
     .select('*')
     .eq('country_code', upperCode)
-    .single()
+    .eq('is_current', true)
+    .limit(1)
+    .then(r => ({ data: r.data?.[0] ?? null }))
 
   const [sanityArticle, employmentRules, compliance] = await Promise.all([
     getCountryArticle(upperCode, 'hr-compliance-guide'),
