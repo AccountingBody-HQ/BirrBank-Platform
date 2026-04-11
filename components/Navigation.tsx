@@ -89,7 +89,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
               onMouseLeave={() => setCountriesOpen(false)}
             >
               <Link href="/countries/"
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
+                className={`flex items-center gap-1 ${navLink('/countries/')}`}
               >
                 Countries <ChevronDown size={12} />
               </Link>
@@ -116,7 +116,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
               onMouseLeave={() => setToolsOpen(false)}
             >
               <Link href="/payroll-tools/"
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
+                className={`flex items-center gap-1 ${navLink('/payroll-tools/')}`}
               >
                 Tools <ChevronDown size={12} />
               </Link>
