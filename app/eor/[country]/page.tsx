@@ -8,6 +8,7 @@ import { ArrowRight, ArrowLeft, CheckCircle, XCircle, AlertCircle, Building2, Ch
 import EORCostEstimator from '@/components/EORCostEstimator'
 import CountrySubNav from '@/components/CountrySubNav'
 
+// Updated for uniform template
 export const dynamic = 'force-dynamic'
 
 const supabase = createClient(
