@@ -41,7 +41,7 @@ export default function CountrySubNav({ code, countryName }: Props) {
     <nav className="bg-white border-b border-slate-200 sticky top-16 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2.5 shrink-0 border-r border-slate-200 pr-4 py-3">
+          <div className="flex items-center gap-2 shrink-0 border-r border-slate-200 pr-3 py-3">
             <img
               src={`https://flagcdn.com/20x15/${code.toLowerCase()}.png`}
               alt={countryName}
@@ -49,12 +49,15 @@ export default function CountrySubNav({ code, countryName }: Props) {
               height={15}
               className="rounded-sm shadow-sm"
             />
-            <span className="text-xs font-bold text-slate-700 whitespace-nowrap">{countryName}</span>
+            <span className="hidden sm:block text-xs font-bold text-slate-700 whitespace-nowrap">{countryName}</span>
           </div>
-          <div
-            ref={scrollRef}
-            className="flex items-center justify-center gap-1 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex-1"
-          >
+          <div className="relative flex-1 min-w-0">
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent z-10" />
+            <div
+              ref={scrollRef}
+              className="flex items-center justify-start gap-1 overflow-x-auto py-2.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-1"
+            >
             {tabs.map(tab => {
               const href = tab.label === 'EOR Guide'
                 ? `/eor/${code.toLowerCase()}/`
@@ -75,6 +78,7 @@ export default function CountrySubNav({ code, countryName }: Props) {
                 </Link>
               )
             })}
+            </div>
           </div>
         </div>
       </div>
