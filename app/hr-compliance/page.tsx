@@ -2,14 +2,17 @@ import { createClient } from '@supabase/supabase-js'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import Link from 'next/link'
 import { ArrowRight, Shield, Globe, FileText, Clock, Users, Baby } from 'lucide-react'
+import { getFlag } from '@/lib/flag'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'HR Compliance & Employment Law by Country | HRLake',
-  description: 'Global employment law guides covering minimum wage, annual leave, notice periods, maternity leave, and probation periods across 195 countries.',
+  description: 'Global employment law guides covering minimum wage, annual leave, notice periods, maternity leave, and probation periods — sourced from official government publications and updated monthly.',
   alternates: { canonical: 'https://hrlake.com/hr-compliance/' },
   openGraph: {
     title: 'HR Compliance & Employment Law by Country | HRLake',
-    description: 'Global employment law guides covering minimum wage, annual leave, notice periods, maternity leave, and probation periods across 195 countries.',
+    description: 'Global employment law guides covering minimum wage, annual leave, notice periods, maternity leave, and probation periods — sourced from official government publications and updated monthly.',
     url: 'https://hrlake.com/hr-compliance/',
     siteName: 'HRLake',
     type: 'website',
@@ -191,7 +194,7 @@ export default async function HRCompliancePage() {
               <span className="text-slate-500 text-xs font-bold uppercase tracking-widest shrink-0">Data available for:</span>
               {sampleCountries.map(c => (
                 <div key={c.iso2} className="flex items-center gap-2 shrink-0">
-                  <img src={`https://flagcdn.com/20x15/${c.iso2.toLowerCase()}.png`} alt={c.name} width={20} height={15} className="rounded-sm" />
+                  <span className="text-base leading-none">{getFlag(c.iso2)}</span>
                   <span className="text-slate-400 text-xs font-medium">{c.name}</span>
                 </div>
               ))}
