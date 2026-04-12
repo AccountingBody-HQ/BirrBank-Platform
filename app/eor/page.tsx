@@ -92,12 +92,12 @@ export default async function EORHubPage() {
         <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-teal-600/10 border border-teal-500/20 rounded-full px-4 py-1.5 mb-8">
-              <Building2 size={13} className="text-teal-400" />
-              <span className="text-teal-300 text-xs font-semibold tracking-wide">EOR Intelligence &middot; {countries.length} countries covered</span>
+            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
+              <Building2 size={13} className="text-blue-400" />
+              <span className="text-blue-300 text-xs font-semibold tracking-wide">EOR Intelligence &middot; {countries.length} countries covered</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              The deep source for<br /><span className="text-teal-400">EOR intelligence</span><br />worldwide.
+              The deep source for<br /><span className="text-blue-400">EOR intelligence</span><br />worldwide.
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
               The most comprehensive Employer of Record intelligence platform on the web. Cost modelling, compliance risk ratings, hiring guides, and country-by-country EOR data — everything EOR firms and global employers need in one place.
