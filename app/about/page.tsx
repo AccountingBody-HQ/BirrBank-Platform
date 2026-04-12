@@ -1,8 +1,11 @@
 import Link from 'next/link'
+import { createClient } from '@supabase/supabase-js'
 import { ArrowRight, Globe, Shield, Users, BookOpen, ExternalLink } from 'lucide-react'
 
 import type { Metadata } from 'next'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'About HRLake — Methodology, Data Standards & Mission',
@@ -41,7 +44,15 @@ const COVERAGE = [
   { tier: 'Tier 3', label: '135+ Remaining Countries',desc: 'Full global coverage — every UN-recognised jurisdiction. Core data fields populated for all.', status: 'Planned',     color: 'bg-slate-400'   },
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+  const { count } = await supabase
+    .from('countries')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_active', true)
+  const liveCount = count ?? 22
   const breadcrumb = getBreadcrumbStructuredData([
     { name: 'Home', href: 'https://hrlake.com' },
     { name: 'About', href: 'https://hrlake.com/about/' },
@@ -92,7 +103,7 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-2 gap-5">
               {[
-                { value: '23+',     label: 'Countries Live',  sub: 'Growing monthly' },
+                { value: `${liveCount}+`, label: 'Countries Live', sub: 'Growing monthly' },
                 { value: '37+',     label: 'Data Tables',    sub: 'Per country coverage' },
                 { value: 'Monthly', label: 'Update Cycle',   sub: 'Tier 1 countries' },
                 { value: '100%',    label: 'Source Verified',sub: 'Government sources only' },
