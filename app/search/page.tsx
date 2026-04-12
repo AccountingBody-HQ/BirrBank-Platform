@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Globe, FileText, Wrench, ArrowRight, Loader2, X, ChevronRight } from 'lucide-react'
+import { getFlag } from '@/lib/flag'
 
 interface Country {
   iso2: string
@@ -59,7 +60,7 @@ function CountryCard({ country }: { country: Country }) {
       href={'/countries/' + country.iso2.toLowerCase() + '/'}
       className="group flex items-center gap-4 bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-2xl px-5 py-4 transition-all duration-200"
     >
-      <img src={'https://flagcdn.com/28x21/' + country.iso2.toLowerCase() + '.png'} alt={country.name} width={28} height={21} className="rounded-sm shadow-sm shrink-0" />
+      <span className="text-2xl leading-none shrink-0">{getFlag(country.iso2)}</span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{country.name}</span>
