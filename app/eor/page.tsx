@@ -41,9 +41,11 @@ const speedColour: Record<string, string> = {
   Slow:   'text-red-600',
 }
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'EOR Intelligence — Employer of Record Guides | HRLake',
-  description: 'Employer of Record guides, cost estimators, compliance risk ratings, and hiring intelligence for 20 countries. The deepest EOR intelligence resource on the web.',
+  description: 'Employer of Record guides, cost estimators, compliance risk ratings, and hiring intelligence across all active countries. Deep EOR intelligence for global employers and HR teams.',
   alternates: { canonical: 'https://hrlake.com/eor/' },
 }
 
@@ -90,12 +92,12 @@ export default async function EORHubPage() {
         <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
-              <Building2 size={13} className="text-blue-400" />
-              <span className="text-blue-300 text-xs font-semibold tracking-wide">The world's most comprehensive EOR intelligence</span>
+            <div className="inline-flex items-center gap-2 bg-teal-600/10 border border-teal-500/20 rounded-full px-4 py-1.5 mb-8">
+              <Building2 size={13} className="text-teal-400" />
+              <span className="text-teal-300 text-xs font-semibold tracking-wide">EOR Intelligence &middot; {countries.length} countries covered</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              The deep source for<br /><span className="text-blue-400">EOR intelligence</span><br />worldwide.
+              The deep source for<br /><span className="text-teal-400">EOR intelligence</span><br />worldwide.
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
               The most comprehensive Employer of Record intelligence platform on the web. Cost modelling, compliance risk ratings, hiring guides, and country-by-country EOR data — everything EOR firms and global employers need in one place.
@@ -111,7 +113,7 @@ export default async function EORHubPage() {
           </div>
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: '20',    label: 'Countries',      sub: 'Full EOR guides live' },
+              { value: String(countries.length), label: 'Countries', sub: 'EOR guides live or in prep' },
               { value: '8–20%', label: 'Typical markup', sub: 'On employer cost' },
               { value: 'Days',  label: 'To hire via EOR', sub: 'vs months direct' },
               { value: 'Free',  label: 'EOR intelligence', sub: 'No account needed' },
@@ -131,7 +133,7 @@ export default async function EORHubPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Explained</p>
+              <p className="text-teal-600 text-xs font-bold uppercase tracking-widest mb-4">Explained</p>
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight mb-6">
                 What is an Employer of Record?
               </h2>
@@ -146,11 +148,11 @@ export default async function EORHubPage() {
               </div>
             </div>
             <div>
-              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">When to use EOR</p>
+              <p className="text-teal-600 text-xs font-bold uppercase tracking-widest mb-4">When to use EOR</p>
               <div className="grid gap-4">
                 {WHEN_TO_USE.map(item => (
                   <div key={item.title} className="flex gap-4 p-5 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50/30 transition-all">
-                    <div className="bg-blue-600 text-white w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="bg-teal-600 text-white w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
                       <item.icon size={17} />
                     </div>
                     <div>
@@ -169,7 +171,7 @@ export default async function EORHubPage() {
       <section className="bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-12">
-            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Comparison</p>
+            <p className="text-teal-600 text-xs font-bold uppercase tracking-widest mb-3">Comparison</p>
             <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">EOR vs Direct Employment vs PEO.</h2>
             <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Three models for employing people internationally. Each has its place — the right choice depends on headcount, timeline, and how long you plan to operate in the market.</p>
           </div>
@@ -197,7 +199,7 @@ export default async function EORHubPage() {
       <section id="estimator" className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-12">
-            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Cost Estimator</p>
+            <p className="text-teal-600 text-xs font-bold uppercase tracking-widest mb-3">Cost Estimator</p>
             <div className="flex items-end justify-between gap-6">
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Estimate your EOR cost<br />before you commit.</h2>
               <p className="hidden lg:block text-slate-500 max-w-md leading-relaxed">Select a country, enter your headcount and average salary. We calculate the estimated total employer cost including social security, taxes, and the EOR provider markup.</p>
@@ -211,12 +213,12 @@ export default async function EORHubPage() {
       <section id="countries" className="bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-12">
-            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">By Country</p>
+            <p className="text-teal-600 text-xs font-bold uppercase tracking-widest mb-3">By Country</p>
             <div className="flex items-end justify-between">
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Browse EOR guides by country.</h2>
               <Link href="/countries/" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">All countries <ArrowRight size={15} /></Link>
             </div>
-            <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Compliance risk levels, typical hire speed, and EOR recommendations for all 20 active countries.</p>
+            <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Compliance risk levels, typical hire speed, and EOR recommendations for all {countries.length} active countries.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {countries.map((c: any) => (
@@ -254,7 +256,7 @@ export default async function EORHubPage() {
       <section className="relative overflow-hidden" style={{backgroundColor: '#0d1f3c'}}>
         <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 text-center">
-          <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Go deeper</p>
+          <p className="text-teal-400 text-xs font-bold uppercase tracking-widest mb-4">Go deeper</p>
           <h2 className="font-serif text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">Need the full payroll picture?</h2>
           <p className="text-slate-400 text-lg max-w-xl mx-auto mb-10">Every country page includes full income tax brackets, social security rates, employment law, and a detailed payroll calculator.</p>
           <div className="flex flex-wrap gap-4 justify-center">
