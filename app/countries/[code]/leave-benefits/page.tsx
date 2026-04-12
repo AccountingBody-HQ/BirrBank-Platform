@@ -59,7 +59,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
     supabase.from('statutory_leave').select('*').eq('country_code', upperCode),
-    supabase.from('public_holidays').select('*').eq('country_code', upperCode).order('date', { ascending: true }),
+    supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', 2025).order('holiday_date', { ascending: true }),
   ])
 
   const statutoryLeave = statutoryLeaveRows.data ?? []
