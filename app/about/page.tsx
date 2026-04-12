@@ -66,7 +66,7 @@ export default function AboutPage() {
               <span className="text-blue-300 text-xs font-semibold tracking-wide">About HRLake</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              The world&apos;s most<br /><span className="text-blue-400">trusted HR, EOR</span><br />and payroll platform.
+              Authoritative HR, EOR<br />and <span className="text-blue-400">payroll intelligence</span><br />for global employers.
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
               HRLake exists to give HR directors, EOR professionals, lawyers, and global employers authoritative, verified, and current HR intelligence, EOR data, and payroll compliance information for every country in the world.
