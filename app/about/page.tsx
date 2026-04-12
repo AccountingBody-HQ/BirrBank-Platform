@@ -36,7 +36,7 @@ const METHODOLOGY = [
 ]
 
 const COVERAGE = [
-  { tier: 'Tier 1', label: '20 Major Economies',      desc: 'UK, US, Germany, France, Australia, Canada, Singapore, UAE, Japan, Netherlands, and more. Full data depth — all tables populated and verified.', status: 'Live',        color: 'bg-emerald-500' },
+  { tier: 'Tier 1', label: '23 Active Countries',      desc: 'UK, US, Germany, France, Australia, Canada, Singapore, UAE, Japan, Netherlands, and more. Full data depth — all tables populated and verified.', status: 'Live',        color: 'bg-emerald-500' },
   { tier: 'Tier 2', label: '40 Additional Countries', desc: 'Broader coverage of significant economies across Europe, Asia Pacific, Americas, and Middle East.', status: 'In progress', color: 'bg-blue-500'    },
   { tier: 'Tier 3', label: '135+ Remaining Countries',desc: 'Full global coverage — every UN-recognised jurisdiction. Core data fields populated for all.', status: 'Planned',     color: 'bg-slate-400'   },
 ]
@@ -92,7 +92,7 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-2 gap-5">
               {[
-                { value: '195',     label: 'Countries',      sub: 'Full global scope' },
+                { value: '23+',     label: 'Countries Live',  sub: 'Growing monthly' },
                 { value: '37+',     label: 'Data Tables',    sub: 'Per country coverage' },
                 { value: 'Monthly', label: 'Update Cycle',   sub: 'Tier 1 countries' },
                 { value: '100%',    label: 'Source Verified',sub: 'Government sources only' },
@@ -211,9 +211,7 @@ export default function AboutPage() {
             <Link href="/countries/" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
               Browse all countries <ArrowRight size={15} />
             </Link>
-            <Link href="/pricing/" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
-              View Pro plan
-            </Link>
+
           </div>
         </div>
       </section>
