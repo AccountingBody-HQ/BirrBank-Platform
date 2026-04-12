@@ -770,7 +770,8 @@ export default async function CountryPage(
                   currency={c.currency_code}
                   region={c.region}
                   hrlake_coverage_level={c.hrlake_coverage_level}
-
+                  topTaxRate={(c as any).topTaxRate ?? null}
+                  employerRate={(c as any).employerRate ?? null}
                 />
               ))}
             </div>
