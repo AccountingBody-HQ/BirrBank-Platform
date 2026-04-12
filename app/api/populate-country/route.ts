@@ -45,8 +45,9 @@ RETURN THIS EXACT JSON STRUCTURE:
   ],
   "employment_rules": [
     // MUST include ALL of these rule_type values - one record each:
-    // minimum_wage, annual_leave, sick_leave, maternity_leave, paternity_leave, probation_period_max, notice_period_min, overtime_rate
+    // minimum_wage, annual_leave, sick_leave, maternity_leave, paternity_leave, probation_period_max, notice_period_min, overtime_rate, payroll_frequency
     // Fields: rule_type (string), value_numeric (number or null), value_text (string or null), value_unit (string: days/weeks/months/per_hour/multiplier)
+    // For payroll_frequency: value_text = frequency (e.g. monthly, bi-weekly, weekly), value_numeric = null, value_unit = null
   ],
   "statutory_leave": [
     // MUST include ALL of these leave types - one record each:
