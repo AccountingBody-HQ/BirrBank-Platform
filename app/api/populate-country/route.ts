@@ -82,6 +82,19 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "payslip_requirements": {
+    // EXACTLY ONE object (not an array) with payslip rules for ${countryName}
+    // Fields:
+    //   required_items (array of strings): list of all mandatory payslip line items under ${countryName} law
+    //   format_requirements (string): MUST be one of exactly: paper | electronic | both
+    //   delivery_deadline_days (integer): days after pay day employer must deliver payslip (0 = same day)
+    //   retention_period_years (integer): years employer must retain payroll records
+    //   employee_right_to_copy (boolean): true if employee has legal right to request a copy
+    //   language_requirement (string): required language(s) for the payslip
+    //   digital_signature_valid (boolean): true if electronic/digital payslips are legally valid
+    //   official_url (string): official government or authority URL
+    //   notes (string): clear explanation of key payslip obligations and any notable requirements
+  },
   "health_insurance": [
     // ALL health insurance schemes in ${countryName} relevant to employers
     // MUST include the primary public health scheme AND any mandatory private schemes
@@ -182,7 +195,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
