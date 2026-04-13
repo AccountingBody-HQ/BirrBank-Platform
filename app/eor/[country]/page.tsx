@@ -52,6 +52,16 @@ async function getCountry(countryCode: string) {
   return data ?? null
 }
 
+async function getEntitySetup(countryCode: string) {
+  const { data } = await supabase.schema('hrlake')
+    .from('entity_setup')
+    .select('*')
+    .eq('country_code', countryCode.toUpperCase())
+    .eq('is_current', true)
+    .order('setup_cost_usd_approx', { ascending: true })
+  return data ?? []
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }) {
   const { country } = await params
   const countryData = await getCountry(country)
@@ -72,9 +82,10 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
 
 export default async function EORCountryPage({ params }: { params: Promise<{ country: string }> }) {
   const { country } = await params
-  const [guide, countryData] = await Promise.all([
+  const [guide, countryData, entitySetups] = await Promise.all([
     getEORGuide(country),
     getCountry(country),
+    getEntitySetup(country),
   ])
 
   const sanityArticle = guide && countryData
@@ -318,6 +329,112 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
             </div>
           </div>
         </section>
+
+
+        {/* ══════ ENTITY SETUP ══════ */}
+        {entitySetups.length > 0 && (
+          <section className="bg-white border-b border-slate-200">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Local Entity Options</p>
+              <h2 className="font-serif text-3xl font-bold text-slate-900 tracking-tight mb-2">
+                Setting up a legal entity in {countryData.name}.
+              </h2>
+              <p className="text-slate-500 mb-10 max-w-2xl">
+                If you outgrow EOR or prefer direct employment, these are the main legal structures available in {countryData.name} for foreign companies.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(entitySetups as any[]).map((e) => (
+                  <div key={e.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
+                    <div>
+                      <p className="font-bold text-slate-900 text-base mb-2">{e.entity_type}</p>
+                      {e.notes && <p className="text-slate-500 text-sm leading-relaxed">{e.notes}</p>}
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {(e.setup_timeline_days_min != null || e.setup_timeline_days_max != null) && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Setup time</p>
+                          <p className="text-slate-900 font-bold text-sm">
+                            {e.setup_timeline_days_min != null && e.setup_timeline_days_max != null
+                              ? `${e.setup_timeline_days_min}–${e.setup_timeline_days_max} days`
+                              : e.setup_timeline_days_min != null
+                              ? `From ${e.setup_timeline_days_min} days`
+                              : `Up to ${e.setup_timeline_days_max} days`}
+                          </p>
+                        </div>
+                      )}
+                      {e.setup_cost_usd_approx != null && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Est. cost</p>
+                          <p className="text-slate-900 font-bold text-sm">${Number(e.setup_cost_usd_approx).toLocaleString()} USD</p>
+                        </div>
+                      )}
+                      {e.minimum_capital_usd != null && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Min. capital</p>
+                          <p className="text-slate-900 font-bold text-sm">${Number(e.minimum_capital_usd).toLocaleString()} USD</p>
+                        </div>
+                      )}
+                      {e.corporate_tax_rate != null && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Corp. tax</p>
+                          <p className="text-slate-900 font-bold text-sm">{e.corporate_tax_rate}%</p>
+                        </div>
+                      )}
+                      {e.withholding_tax_rate != null && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Dividend WHT</p>
+                          <p className="text-slate-900 font-bold text-sm">{e.withholding_tax_rate}%</p>
+                        </div>
+                      )}
+                      {e.vat_rate != null && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-3">
+                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">VAT rate</p>
+                          <p className="text-slate-900 font-bold text-sm">{e.vat_rate}%</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {e.local_director_required && (
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Local director required</span>
+                      )}
+                      {e.local_shareholder_required && (
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Local shareholder required</span>
+                      )}
+                      {e.registered_address_required && (
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">Registered address required</span>
+                      )}
+                      {!e.local_director_required && !e.local_shareholder_required && (
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">100% foreign ownership permitted</span>
+                      )}
+                    </div>
+                    {e.annual_filing_requirements && Array.isArray(e.annual_filing_requirements) && e.annual_filing_requirements.length > 0 && (
+                      <div>
+                        <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Annual obligations</p>
+                        <ul className="space-y-1.5">
+                          {(e.annual_filing_requirements as string[]).map((req: string) => (
+                            <li key={req} className="flex gap-2 text-sm text-slate-600">
+                              <CheckCircle size={13} className="text-emerald-500 shrink-0 mt-0.5" />{req}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {e.official_registry_url && (
+                      <a
+                        href={e.official_registry_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-500 text-xs font-semibold mt-auto"
+                      >
+                        Official company registry <ArrowRight size={12} />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ══════ COMPLIANCE RISKS ══════ */}
         <section className="bg-slate-50 border-b border-slate-200">
