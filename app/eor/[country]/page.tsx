@@ -347,51 +347,51 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                   <div key={e.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col gap-5">
                     <div>
                       <p className="font-bold text-slate-900 text-base mb-2">{e.entity_type}</p>
-                      {e.notes && <p className="text-slate-500 text-sm leading-relaxed">{e.notes}</p>}
+                      {e.notes && <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{e.notes}</p>}
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {(e.setup_timeline_days_min != null || e.setup_timeline_days_max != null) && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Setup time</p>
-                          <p className="text-slate-900 font-bold text-sm">
-                            {e.setup_timeline_days_min != null && e.setup_timeline_days_max != null
-                              ? `${e.setup_timeline_days_min}–${e.setup_timeline_days_max} days`
-                              : e.setup_timeline_days_min != null
-                              ? `From ${e.setup_timeline_days_min} days`
-                              : `Up to ${e.setup_timeline_days_max} days`}
-                          </p>
-                        </div>
-                      )}
-                      {e.setup_cost_usd_approx != null && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Est. cost</p>
-                          <p className="text-slate-900 font-bold text-sm">${Number(e.setup_cost_usd_approx).toLocaleString()} USD</p>
-                        </div>
-                      )}
-                      {e.minimum_capital_usd != null && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Min. capital</p>
-                          <p className="text-slate-900 font-bold text-sm">${Number(e.minimum_capital_usd).toLocaleString()} USD</p>
-                        </div>
-                      )}
-                      {e.corporate_tax_rate != null && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Corp. tax</p>
-                          <p className="text-slate-900 font-bold text-sm">{e.corporate_tax_rate}%</p>
-                        </div>
-                      )}
-                      {e.withholding_tax_rate != null && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Dividend WHT</p>
-                          <p className="text-slate-900 font-bold text-sm">{e.withholding_tax_rate}%</p>
-                        </div>
-                      )}
-                      {e.vat_rate != null && (
-                        <div className="bg-white border border-slate-200 rounded-xl p-3">
-                          <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">VAT rate</p>
-                          <p className="text-slate-900 font-bold text-sm">{e.vat_rate}%</p>
-                        </div>
-                      )}
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Setup time</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.setup_timeline_days_min != null && e.setup_timeline_days_max != null
+                            ? `${e.setup_timeline_days_min}–${e.setup_timeline_days_max}d`
+                            : e.setup_timeline_days_min != null
+                            ? `${e.setup_timeline_days_min}d+`
+                            : e.setup_timeline_days_max != null
+                            ? `≤${e.setup_timeline_days_max}d`
+                            : '—'}
+                        </p>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Est. cost</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.setup_cost_usd_approx != null ? `$${Number(e.setup_cost_usd_approx).toLocaleString()}` : '—'}
+                        </p>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Min. capital</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.minimum_capital_usd != null ? `$${Number(e.minimum_capital_usd).toLocaleString()}` : 'None'}
+                        </p>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Corp. tax</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.corporate_tax_rate != null ? `${e.corporate_tax_rate}%` : '—'}
+                        </p>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Div. WHT</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.withholding_tax_rate != null ? `${e.withholding_tax_rate}%` : '—'}
+                        </p>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-xl p-3">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">VAT rate</p>
+                        <p className="text-slate-900 font-bold text-xs">
+                          {e.vat_rate != null ? `${e.vat_rate}%` : '—'}
+                        </p>
+                      </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {e.local_director_required && (
