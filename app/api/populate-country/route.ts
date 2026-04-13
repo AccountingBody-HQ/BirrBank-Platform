@@ -202,6 +202,24 @@ RETURN THIS EXACT JSON STRUCTURE:
     //   notes (string): brief explanation including rate details and any conditions
     //   source_url (string): official government or authority URL
   ],
+  "regional_tax_rates": [
+    // Regional, state, provincial, cantonal, or municipal tax rates for ${countryName}
+    // Only include if ${countryName} has meaningful sub-national tax variation relevant to employers
+    // Examples: US state income tax, Canadian provincial tax, Swiss cantonal tax, Australian state payroll tax, German trade tax by city
+    // If ${countryName} has no significant regional tax variation (e.g. UK, Ireland, Singapore), return an empty array []
+    // Fields:
+    //   region_code (string): ISO-style code e.g. "US-CA", "CA-ON", "CH-ZG", "AU-NSW"
+    //   region_name (string): full region name e.g. "California", "Ontario", "Zug", "New South Wales"
+    //   tax_type (string): category e.g. "state_income_tax", "provincial_income_tax", "canton_tax", "state_payroll_tax", "municipal_trade_tax", "regional_income_tax", "municipal_additional_tax"
+    //   rate (number): tax rate as a percentage e.g. 13.3 for 13.3%
+    //   applies_above (number or null): income threshold above which this rate applies - null if flat rate
+    //   applies_below (number or null): income ceiling - null if no upper limit
+    //   currency_code (string or null): currency for the threshold amounts
+    //   tax_year (integer): use 2025
+    //   tier (string): MUST be exactly "free"
+    //   notes (string): explanation including how this interacts with national tax and key employer implications
+    //   source_url (string): official regional/state/cantonal tax authority URL
+  ],
   "tax_credits": [
     // ALL main tax credits, allowances, and deductions available to employees and employers in ${countryName}
     // MUST include at minimum: personal allowance/basic exemption, employment credit/deduction, and any family or child credits
@@ -307,7 +325,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
