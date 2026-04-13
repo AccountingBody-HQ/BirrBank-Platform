@@ -82,6 +82,20 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "remote_work_rules": {
+    // EXACTLY ONE object with remote work and digital nomad rules for ${countryName}
+    // Fields:
+    //   pe_risk_threshold_days (integer or null): days after which permanent establishment risk arises for foreign employer - null if no income tax
+    //   tax_liability_threshold_days (integer or null): days after which remote worker becomes tax liable in ${countryName} - null if no income tax
+    //   social_security_implications (string): description of social security obligations for remote workers
+    //   work_permit_required_after_days (integer or null): days after which a work permit is required - null if no threshold
+    //   bilateral_agreements (array of strings): list of countries with bilateral social security or tax agreements relevant to remote work
+    //   digital_nomad_visa_available (boolean): true if ${countryName} offers a dedicated digital nomad visa
+    //   digital_nomad_visa_duration_months (integer or null): duration of digital nomad visa in months - null if not available
+    //   digital_nomad_visa_requirements (string or null): key requirements for the digital nomad visa - null if not available
+    //   notes (string): comprehensive explanation of remote work rules, special tax regimes, and key considerations for employers
+    //   source_url (string): official government or authority URL
+  },
   "record_retention": [
     // ALL mandatory record retention requirements for employers in ${countryName}
     // MUST include at minimum: payroll records, employment contracts, and tax records
@@ -210,7 +224,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
