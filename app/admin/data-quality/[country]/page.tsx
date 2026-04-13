@@ -316,6 +316,157 @@ export default async function VerifyCountryPage({
           ))}
         </DataCard>
 
+
+        {/* Mandatory Benefits */}
+        <DataCard title="Mandatory Benefits" count={mandatoryBenefits.length}>
+          {mandatoryBenefits.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <p className="text-white text-xs font-semibold">{r.benefit_name}</p>
+              <span className="text-emerald-400 font-bold text-xs">{r.employer_cost_percentage ? `${r.employer_cost_percentage}%` : r.employer_cost_amount ?? '—'}</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Health Insurance */}
+        <DataCard title="Health Insurance" count={healthInsurance.length}>
+          {healthInsurance.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3">
+              <p className="text-white text-xs font-semibold">{r.scheme_name}</p>
+              <div className="flex gap-4 mt-0.5">
+                <span className="text-slate-400 text-xs capitalize">{r.scheme_type?.replace(/_/g,' ')}</span>
+                {r.employer_rate_percentage && <span className="text-emerald-400 text-xs font-bold">ER: {r.employer_rate_percentage}%</span>}
+              </div>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Payslip Requirements */}
+        <DataCard title="Payslip Requirements" count={payslipRequirements.length}>
+          {payslipRequirements.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3">
+              <div className="flex justify-between"><span className="text-slate-400 text-xs">Format</span><span className="text-white text-xs font-bold">{r.format_requirements}</span></div>
+              <div className="flex justify-between mt-1"><span className="text-slate-400 text-xs">Delivery</span><span className="text-white text-xs font-bold">{r.delivery_deadline_days}d</span></div>
+              <div className="flex justify-between mt-1"><span className="text-slate-400 text-xs">Language</span><span className="text-white text-xs font-bold">{r.language_requirement}</span></div>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Record Retention */}
+        <DataCard title="Record Retention" count={recordRetention.length}>
+          {recordRetention.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <p className="text-white text-xs font-semibold">{r.record_type}</p>
+              <span className="text-blue-400 font-bold text-xs">{r.retention_years}yr</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Remote Work Rules */}
+        <DataCard title="Remote Work Rules" count={remoteWorkRules.length}>
+          {remoteWorkRules.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3">
+              <div className="flex justify-between"><span className="text-slate-400 text-xs">PE risk</span><span className="text-white text-xs font-bold">{r.pe_risk_threshold_days ?? '—'}d</span></div>
+              <div className="flex justify-between mt-1"><span className="text-slate-400 text-xs">Tax liability</span><span className="text-white text-xs font-bold">{r.tax_liability_threshold_days ?? '—'}d</span></div>
+              <div className="flex justify-between mt-1"><span className="text-slate-400 text-xs">Nomad visa</span><span className={`text-xs font-bold ${r.digital_nomad_visa_available ? 'text-emerald-400' : 'text-red-400'}`}>{r.digital_nomad_visa_available ? 'Yes' : 'No'}</span></div>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Expense Rules */}
+        <DataCard title="Expense Rules" count={expenseRules.length}>
+          {expenseRules.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <p className="text-white text-xs font-semibold">{r.expense_type}</p>
+              <span className="text-slate-400 text-xs capitalize">{r.tax_treatment?.replace(/_/g,' ')}</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Contractor Rules */}
+        <DataCard title="Contractor Rules" count={contractorRules.length}>
+          {contractorRules.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3">
+              <p className="text-white text-xs font-semibold mb-1">{r.classification_test?.slice(0,80)}{r.classification_test?.length > 80 ? '…' : ''}</p>
+              {r.ir35_equivalent && <p className="text-amber-400 text-xs">IR35: {r.ir35_equivalent?.slice(0,60)}…</p>}
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Work Permits */}
+        <DataCard title="Work Permits" count={workPermits.length}>
+          {workPermits.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="text-white text-xs font-semibold">{r.permit_type}</p>
+                <p className="text-slate-500 text-xs">{r.processing_days_min}–{r.processing_days_max}d · {r.validity_months ? `${r.validity_months}mo` : 'Perm'}</p>
+              </div>
+              {r.requires_employer_sponsor && <span className="text-blue-400 text-xs font-bold">Sponsored</span>}
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Entity Setup */}
+        <DataCard title="Entity Setup" count={entitySetup.length}>
+          {entitySetup.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="text-white text-xs font-semibold">{r.entity_type}</p>
+                <p className="text-slate-500 text-xs">{r.setup_timeline_days_min}–{r.setup_timeline_days_max}d</p>
+              </div>
+              <span className="text-amber-400 font-bold text-xs">{r.corporate_tax_rate}%</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Tax Credits */}
+        <DataCard title="Tax Credits" count={taxCredits.length}>
+          {taxCredits.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <p className="text-white text-xs font-semibold">{r.credit_name}</p>
+              <span className="text-emerald-400 font-bold text-xs">{r.amount ? `${r.currency_code} ${Number(r.amount).toLocaleString()}` : r.rate_percentage ? `${r.rate_percentage}%` : '—'}</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Regional Tax Rates */}
+        <DataCard title="Regional Tax Rates" count={regionalTaxRates.length}>
+          {regionalTaxRates.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="text-white text-xs font-semibold">{r.region_name}</p>
+                <p className="text-slate-500 text-xs capitalize">{r.tax_type?.replace(/_/g,' ')}</p>
+              </div>
+              <span className="text-amber-400 font-bold text-xs">{r.rate}%</span>
+            </div>
+          ))}
+        </DataCard>
+
+        {/* Salary Benchmarks */}
+        <DataCard title="Salary Benchmarks" count={salaryBenchmarks.length}>
+          {[...new Set(salaryBenchmarks.map((r: any) => r.job_family))].slice(0,4).map((jf: any) => {
+            const mid = salaryBenchmarks.find((r: any) => r.job_family === jf && r.job_level === 'mid')
+            return (
+              <div key={jf} className="px-5 py-3 flex items-center justify-between">
+                <p className="text-white text-xs font-semibold capitalize">{jf?.replace(/_/g,' ')}</p>
+                <span className="text-blue-400 font-bold text-xs">{mid ? `${mid.currency_code} ${Number(mid.percentile_50).toLocaleString()}` : '—'}</span>
+              </div>
+            )
+          })}
+        </DataCard>
+
+        {/* Government Benefit Payments */}
+        <DataCard title="Gov. Benefit Payments" count={govBenefits.length}>
+          {govBenefits.map((r: any, i: number) => (
+            <div key={i} className="px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="text-white text-xs font-semibold capitalize">{r.benefit_type}</p>
+                <p className="text-slate-500 text-xs capitalize">{r.paid_by}</p>
+              </div>
+              {r.government_rate_percentage && <span className="text-sky-400 font-bold text-xs">{r.government_rate_percentage}%</span>}
+            </div>
+          ))}
+        </DataCard>
+
       </div>
     </div>
   )
