@@ -399,7 +399,7 @@ export default function VerifyClient({
       {loading && (
         <div className="px-6 py-12 text-center">
           <Loader2 size={32} className="animate-spin text-blue-400 mx-auto mb-4" />
-          <p className="text-white font-semibold mb-1">Verifying all 10 data tables for {countryName}...</p>
+          <p className="text-white font-semibold mb-1">Verifying all 23 data tables for {countryName}...</p>
           <p className="text-slate-400 text-sm">Claude is browsing official government sources — this takes 30–60 seconds</p>
         </div>
       )}
@@ -561,7 +561,7 @@ export default function VerifyClient({
       {!result && !loading && !error && (
         <div className="px-6 py-12 text-center">
           <Sparkles size={32} className="text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-400 text-sm">Click Run AI Verification to check all 10 data tables for {countryName} against live official government sources</p>
+          <p className="text-slate-400 text-sm">Click Run AI Verification to check all 23 data tables for {countryName} against live official government sources</p>
           {sourcesWithUrls > 0 && (
             <p className="text-slate-500 text-xs mt-2">{sourcesWithUrls} official source URLs pre-loaded for this country</p>
           )}
