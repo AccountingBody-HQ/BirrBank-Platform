@@ -171,6 +171,7 @@ export default function VerifyClient(props: Props) {
   const [allSaved,        setAllSaved]       = useState(false)
   const [saving,          setSaving]         = useState(false)
   const [activeFilter,    setActiveFilter]   = useState<string>('all')
+  const [statusFilter,    setStatusFilter]   = useState<string>('all')
   const [globalError,     setGlobalError]    = useState('')
 
   // ── Derived ──────────────────────────────────────────────────────────────────
@@ -189,7 +190,8 @@ export default function VerifyClient(props: Props) {
   )
   const sourcesWithUrls = Object.keys(props.sourceMap).length
   const countByTable    = allFindings.reduce((acc, f) => { acc[f.table] = (acc[f.table] ?? 0) + 1; return acc }, {} as Record<string,number>)
-  const visibleFindings = activeFilter === 'all' ? allFindings : allFindings.filter(f => f.table === activeFilter)
+  const statusFiltered  = statusFilter === 'all' ? allFindings : allFindings.filter(f => f.status === statusFilter)
+  const visibleFindings = activeFilter === 'all' ? statusFiltered : statusFiltered.filter(f => f.table === activeFilter)
 
   // ── Group toggle ──────────────────────────────────────────────────────────────
   function toggleGroup(key: string) {
@@ -249,7 +251,7 @@ export default function VerifyClient(props: Props) {
   async function runVerification() {
     if (selectedGroups.size === 0) return
     setIsRunning(true); setDecisions({})
-    setAllSaved(false); setGlobalError(''); setActiveFilter('all')
+    setAllSaved(false); setGlobalError(''); setActiveFilter('all'); setStatusFilter('all')
     // Only clear groups being re-run — preserve completed groups
     setGroupResults(prev => {
       const next = { ...prev }
@@ -299,11 +301,25 @@ export default function VerifyClient(props: Props) {
               {sourcesWithUrls} official source URLs loaded · Each group runs a separate focused AI call for complete coverage
             </p>
           </div>
-          <button onClick={runVerification} disabled={isRunning || selectedGroups.size === 0}
-            className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: '#2563eb' }}>
-            {isRunning ? <><Loader2 size={15} className="animate-spin" /> Verifying...</> : <><Sparkles size={15} /> Run Verification</>}
-          </button>
+          <div className="flex items-center gap-3 shrink-0">
+            {!allSaved && hasResults && (
+              <button onClick={markVerified} disabled={saving}
+                className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ background: '#10b981' }}>
+                {saving ? <><Loader2 size={15} className="animate-spin" /> Saving...</> : <><Check size={15} /> Mark {countryName} Verified</>}
+              </button>
+            )}
+            {allSaved && (
+              <span className="text-xs font-bold px-4 py-2.5 rounded-xl" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}>
+                ✓ Verified & Saved
+              </span>
+            )}
+            <button onClick={runVerification} disabled={isRunning || selectedGroups.size === 0}
+              className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: '#2563eb' }}>
+              {isRunning ? <><Loader2 size={15} className="animate-spin" /> Verifying...</> : <><Sparkles size={15} /> Run Verification</>}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -362,15 +378,18 @@ export default function VerifyClient(props: Props) {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 mb-5">
             {[
-              { label: 'Total Checked', value: allFindings.length, color: '#ffffff',  bg: '#111827',                       border: '#1a2238'                       },
-              { label: 'Confirmed ✓',   value: matches,            color: '#10b981',  bg: 'rgba(16,185,129,0.08)',          border: 'rgba(16,185,129,0.2)'          },
-              { label: 'Issues Found',  value: mismatches,         color: '#ef4444',  bg: 'rgba(239,68,68,0.08)',           border: 'rgba(239,68,68,0.2)'           },
-              { label: 'Unverified',    value: unverified,         color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)',          border: 'rgba(245,158,11,0.2)'          },
+              { label: 'Total Checked', value: allFindings.length, color: '#ffffff',  bg: '#111827',               border: '#1a2238',               filter: 'all'        },
+              { label: 'Confirmed ✓',   value: matches,            color: '#10b981',  bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', filter: 'match'      },
+              { label: 'Issues Found',  value: mismatches,         color: '#ef4444',  bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.2)',   filter: 'mismatch'   },
+              { label: 'Unverified',    value: unverified,         color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)',  filter: 'unverified' },
             ].map(s => (
-              <div key={s.label} className="rounded-xl p-3 text-center border" style={{ background: s.bg, borderColor: s.border }}>
+              <button key={s.label} onClick={() => setStatusFilter(s.filter)}
+                className="rounded-xl p-3 text-center border transition-all cursor-pointer hover:opacity-90"
+                style={{ background: s.bg, borderColor: statusFilter === s.filter ? s.color : s.border,
+                  outline: statusFilter === s.filter ? `2px solid ${s.color}` : 'none', outlineOffset: '2px' }}>
                 <p className="text-2xl font-black" style={{ color: s.color }}>{s.value}</p>
                 <p className="text-xs font-bold mt-1" style={{ color: s.color === '#ffffff' ? '#475569' : s.color }}>{s.label}</p>
-              </div>
+              </button>
             ))}
           </div>
 
@@ -513,21 +532,7 @@ export default function VerifyClient(props: Props) {
             })}
           </div>
 
-          {/* Mark Verified */}
-          {!allSaved && hasResults && (
-            <button onClick={markVerified} disabled={saving}
-              className="w-full flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-xl transition-colors disabled:opacity-60"
-              style={{ background: '#10b981' }}>
-              {saving ? <><Loader2 size={15} className="animate-spin" /> Saving...</> : <><Check size={15} /> Mark {countryName} as Fully Verified Today</>}
-            </button>
-          )}
-
-          {allSaved && (
-            <div className="rounded-xl p-4 text-center border" style={{ background: 'rgba(16,185,129,0.08)', borderColor: 'rgba(16,185,129,0.2)' }}>
-              <CheckCircle size={20} className="mx-auto mb-2" style={{ color: '#10b981' }} />
-              <p className="font-bold text-sm" style={{ color: '#10b981' }}>{countryName} fully verified and saved</p>
-            </div>
-          )}
+          {/* Mark Verified moved to header */}
 
         </div>
       )}
