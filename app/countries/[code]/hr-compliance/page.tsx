@@ -64,14 +64,16 @@ export default async function HRCompliancePage({ params }: PageProps) {
     .limit(1)
     .then(r => ({ data: r.data?.[0] ?? null }))
 
-  const [sanityArticle, employmentRules, compliance, healthInsuranceRows] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance, healthInsuranceRows, recordRetentionRows] = await Promise.all([
     getCountryArticle(upperCode, 'hr-compliance-guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
     supabase.schema('hrlake').from('health_insurance').select('*').eq('country_code', upperCode).eq('is_current', true).order('is_mandatory', { ascending: false }),
+    supabase.schema('hrlake').from('record_retention').select('*').eq('country_code', upperCode).eq('is_current', true).order('retention_years', { ascending: false }),
   ])
 
   const healthInsurance = healthInsuranceRows.data ?? []
+  const recordRetention = recordRetentionRows.data ?? []
 
   const complianceAreas = [
     {
@@ -285,6 +287,61 @@ export default async function HRCompliancePage({ params }: PageProps) {
                         </div>
                       )
                     })}
+                  </div>
+                </div>
+              )}
+
+              {recordRetention.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Record Retention Requirements — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Mandatory record keeping periods for employers in {country.name}.</p>
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                          <th className="px-6 py-3">Record Type</th>
+                          <th className="px-6 py-3">Retention</th>
+                          <th className="px-6 py-3">Basis</th>
+                          <th className="px-6 py-3">Digital OK</th>
+                          <th className="px-6 py-3">Regulator</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {recordRetention.map((r: any, i: number) => {
+                          const basisLabel: Record<string, string> = {
+                            from_date_of_document: 'From document date',
+                            from_end_of_tax_year: 'From end of tax year',
+                            from_termination: 'From termination',
+                          }
+                          return (
+                            <tr key={i} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4">
+                                <p className="text-sm font-medium text-slate-900">{r.record_type}</p>
+                                {r.penalty_for_non_compliance && (
+                                  <p className="text-xs text-red-500 mt-0.5">{r.penalty_for_non_compliance}</p>
+                                )}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-700">
+                                  {r.retention_years} years
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-xs text-slate-500">{basisLabel[r.retention_basis] ?? r.retention_basis}</td>
+                              <td className="px-6 py-4">
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${r.digital_records_accepted ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                  {r.digital_records_accepted ? 'Yes' : 'No'}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-xs text-slate-500">
+                                {r.official_url ? (
+                                  <a href={r.official_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{r.regulator ?? 'Official source'} ↗</a>
+                                ) : (r.regulator ?? '—')}
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}
