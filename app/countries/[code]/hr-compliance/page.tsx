@@ -84,6 +84,15 @@ export default async function HRCompliancePage({ params }: PageProps) {
     .limit(1)
   const remoteWork = remoteWorkData?.[0] ?? null
 
+  const { data: expenseRulesData } = await supabase
+    .schema('hrlake')
+    .from('expense_rules')
+    .select('*')
+    .eq('country_code', upperCode)
+    .eq('is_current', true)
+    .order('expense_type', { ascending: true })
+  const expenseRules = expenseRulesData ?? []
+
   const complianceAreas = [
     {
       step: '01',
@@ -405,6 +414,63 @@ export default async function HRCompliancePage({ params }: PageProps) {
                         <a href={remoteWork.source_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">Official source ↗</a>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {expenseRules.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Expense Reimbursement Rules — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Tax treatment of common employer expense reimbursements in {country.name}.</p>
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                          <th className="px-6 py-3">Expense Type</th>
+                          <th className="px-6 py-3">Tax Treatment</th>
+                          <th className="px-6 py-3">Exempt Amount / Rate</th>
+                          <th className="px-6 py-3">Receipts</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {expenseRules.map((e: any, i: number) => {
+                          const treatmentColour: Record<string, string> = {
+                            fully_exempt: 'bg-green-50 text-green-700',
+                            partially_exempt: 'bg-amber-50 text-amber-700',
+                            fully_taxable: 'bg-red-50 text-red-700',
+                          }
+                          const treatmentLabel: Record<string, string> = {
+                            fully_exempt: 'Fully Exempt',
+                            partially_exempt: 'Partially Exempt',
+                            fully_taxable: 'Fully Taxable',
+                          }
+                          const exemptDisplay = e.mileage_rate_per_km
+                            ? `${e.exempt_currency ?? ''} ${e.mileage_rate_per_km}/km`.trim()
+                            : e.exempt_amount
+                            ? `${e.exempt_currency ?? ''} ${e.exempt_amount}`.trim()
+                            : '—'
+                          return (
+                            <tr key={i} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4">
+                                <p className="text-sm font-medium text-slate-900">{e.expense_type}</p>
+                                {e.notes && <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{e.notes}</p>}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${treatmentColour[e.tax_treatment] ?? 'bg-slate-100 text-slate-600'}`}>
+                                  {treatmentLabel[e.tax_treatment] ?? e.tax_treatment}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm font-semibold text-slate-900">{exemptDisplay}</td>
+                              <td className="px-6 py-4">
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${e.receipts_required ? 'bg-slate-100 text-slate-600' : 'bg-green-50 text-green-700'}`}>
+                                  {e.receipts_required ? 'Required' : 'Not required'}
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}
