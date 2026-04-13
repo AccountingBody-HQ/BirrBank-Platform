@@ -16,6 +16,19 @@ interface Props {
   hours: any[]
   termination: any[]
   pension: any[]
+  mandatoryBenefits: any[]
+  healthInsurance: any[]
+  payslipRequirements: any[]
+  recordRetention: any[]
+  remoteWorkRules: any[]
+  expenseRules: any[]
+  contractorRules: any[]
+  workPermits: any[]
+  entitySetup: any[]
+  taxCredits: any[]
+  regionalTaxRates: any[]
+  salaryBenchmarks: any[]
+  govBenefits: any[]
   sourceMap: Record<string, any>
   currencyCode: string | null
 }
@@ -48,6 +61,19 @@ const TABLE_LABELS: Record<string, string> = {
   working_hours: 'Working Hours',
   termination_rules: 'Termination Rules',
   pension_schemes: 'Pension Schemes',
+  mandatory_benefits: 'Mandatory Benefits',
+  health_insurance: 'Health Insurance',
+  payslip_requirements: 'Payslip Requirements',
+  record_retention: 'Record Retention',
+  remote_work_rules: 'Remote Work Rules',
+  expense_rules: 'Expense Rules',
+  contractor_rules: 'Contractor Rules',
+  work_permits: 'Work Permits',
+  entity_setup: 'Entity Setup',
+  tax_credits: 'Tax Credits',
+  regional_tax_rates: 'Regional Tax Rates',
+  salary_benchmarks: 'Salary Benchmarks',
+  government_benefit_payments: 'Gov. Benefit Payments',
 }
 
 const ALL_TABLES = Object.keys(TABLE_LABELS)
@@ -70,6 +96,11 @@ function buildPrompt(
   brackets: any[], ss: any[], rules: any[], leave: any[],
   holidays: any[], filing: any[], compliance: any[],
   hours: any[], termination: any[], pension: any[],
+  mandatoryBenefits: any[], healthInsurance: any[], payslipRequirements: any[],
+  recordRetention: any[], remoteWorkRules: any[], expenseRules: any[],
+  contractorRules: any[], workPermits: any[], entitySetup: any[],
+  taxCredits: any[], regionalTaxRates: any[], salaryBenchmarks: any[],
+  govBenefits: any[],
   sourceMap: Record<string, any>
 ) {
   const src = (cat: string) => {
@@ -131,6 +162,58 @@ ${fmtRows(termination, ['notice_period_min_days','severance_mandatory','probatio
 ${src('pension_schemes')}
 ${fmtRows(pension, ['scheme_name','employer_rate','employee_rate','is_mandatory'])}
 
+=== MANDATORY BENEFITS ===
+\${src('mandatory_benefits')}
+\${fmtRows(mandatoryBenefits, ['benefit_name','benefit_type','employer_cost_percentage','frequency'])}
+
+=== HEALTH INSURANCE ===
+\${src('health_insurance')}
+\${fmtRows(healthInsurance, ['scheme_name','scheme_type','employer_rate_percentage','is_mandatory'])}
+
+=== PAYSLIP REQUIREMENTS ===
+\${src('payslip_requirements')}
+\${fmtRows(payslipRequirements, ['format_requirements','delivery_deadline_days','retention_period_years'])}
+
+=== RECORD RETENTION ===
+\${src('record_retention')}
+\${fmtRows(recordRetention, ['record_type','retention_years','retention_basis'])}
+
+=== REMOTE WORK RULES ===
+\${src('remote_work_rules')}
+\${fmtRows(remoteWorkRules, ['pe_risk_threshold_days','tax_liability_threshold_days','digital_nomad_visa_available'])}
+
+=== EXPENSE RULES ===
+\${src('expense_rules')}
+\${fmtRows(expenseRules, ['expense_type','tax_treatment','exempt_amount','mileage_rate_per_km'])}
+
+=== CONTRACTOR RULES ===
+\${src('contractor_rules')}
+\${fmtRows(contractorRules, ['classification_test','misclassification_penalty'])}
+
+=== WORK PERMITS ===
+\${src('work_permits')}
+\${fmtRows(workPermits, ['permit_type','processing_days_min','processing_days_max','validity_months'])}
+
+=== ENTITY SETUP ===
+\${src('entity_setup')}
+\${fmtRows(entitySetup, ['entity_type','corporate_tax_rate','withholding_tax_rate','vat_rate'])}
+
+=== TAX CREDITS ===
+\${src('tax_credits')}
+\${fmtRows(taxCredits, ['credit_name','credit_type','amount','rate_percentage'])}
+
+=== REGIONAL TAX RATES ===
+\${src('regional_tax_rates')}
+\${fmtRows(regionalTaxRates, ['region_name','tax_type','rate','applies_above'])}
+
+=== SALARY BENCHMARKS ===
+\${src('salary_benchmarks')}
+\${fmtRows(salaryBenchmarks, ['job_family','job_level','percentile_50','currency_code'])}
+
+=== GOVERNMENT BENEFIT PAYMENTS ===
+\${src('government_benefit_payments')}
+\${fmtRows(govBenefits, ['benefit_type','paid_by','government_rate_percentage','maximum_duration_weeks'])}
+
 Respond ONLY with raw JSON (no markdown, start with {, end with }):
 {
   "summary": "What you searched and key findings",
@@ -153,6 +236,11 @@ Respond ONLY with raw JSON (no markdown, start with {, end with }):
 export default function VerifyClient({
   countryCode, countryName, brackets, ss, rules, leave,
   holidays, filing, compliance, hours, termination, pension,
+  mandatoryBenefits, healthInsurance, payslipRequirements,
+  recordRetention, remoteWorkRules, expenseRules,
+  contractorRules, workPermits, entitySetup,
+  taxCredits, regionalTaxRates, salaryBenchmarks,
+  govBenefits,
   sourceMap, currencyCode
 }: Props) {
   const [loading, setLoading] = useState(false)
@@ -175,6 +263,11 @@ export default function VerifyClient({
       brackets, ss, rules, leave,
       holidays, filing, compliance,
       hours, termination, pension,
+      mandatoryBenefits, healthInsurance, payslipRequirements,
+      recordRetention, remoteWorkRules, expenseRules,
+      contractorRules, workPermits, entitySetup,
+      taxCredits, regionalTaxRates, salaryBenchmarks,
+      govBenefits,
       sourceMap
     )
 
@@ -280,7 +373,7 @@ export default function VerifyClient({
       {/* Header */}
       <div className="px-6 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid #1a2238' }}>
         <div>
-          <h2 className="text-white font-bold">AI Verification — All 10 Tables</h2>
+          <h2 className="text-white font-bold">AI Verification — All 23 Tables</h2>
           <p className="text-slate-400 text-xs mt-0.5">
             {sourcesWithUrls} official source URLs loaded · Claude searches each against live government data
           </p>
