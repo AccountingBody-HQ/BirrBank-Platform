@@ -55,11 +55,13 @@ export default async function PayrollGuidePage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [sanityArticle, employmentRules, compliance] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance, payslipRow] = await Promise.all([
     getCountryArticle(upperCode, 'guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
+    supabase.schema('hrlake').from('payslip_requirements').select('*').eq('country_code', upperCode).eq('is_current', true).limit(1).then(r => ({ data: r.data?.[0] ?? null })),
   ])
+  const payslip = payslipRow.data
 
   const payrollSteps = [
     {
@@ -187,6 +189,57 @@ export default async function PayrollGuidePage({ params }: PageProps) {
                 </div>
               )}
 
+
+              {payslip && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Payslip Requirements — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Statutory payslip obligations for employers in {country.name}.</p>
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-slate-100 border-b border-slate-100">
+                      {[
+                        { label: 'Format', value: payslip.format_requirements === 'both' ? 'Paper or Electronic' : payslip.format_requirements === 'electronic' ? 'Electronic' : 'Paper' },
+                        { label: 'Delivery', value: payslip.delivery_deadline_days === 0 ? 'Same day as pay' : `Within ${payslip.delivery_deadline_days} days` },
+                        { label: 'Retention', value: payslip.retention_period_years ? `${payslip.retention_period_years} years` : '—' },
+                        { label: 'Digital Valid', value: payslip.digital_signature_valid ? 'Yes' : 'No' },
+                      ].map((stat) => (
+                        <div key={stat.label} className="px-5 py-4">
+                          <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">{stat.label}</p>
+                          <p className="text-sm font-bold text-slate-900">{stat.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                    {payslip.language_requirement && (
+                      <div className="px-6 py-3 border-b border-slate-100 flex items-center gap-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Language:</span>
+                        <span className="text-sm text-slate-700">{payslip.language_requirement}</span>
+                      </div>
+                    )}
+                    {payslip.required_items && payslip.required_items.length > 0 && (
+                      <div className="px-6 py-5">
+                        <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Required Payslip Items</p>
+                        <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
+                          {payslip.required_items.map((item: string, i: number) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                              <span className="text-blue-400 mt-0.5 shrink-0">✓</span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {payslip.notes && (
+                      <div className="px-6 py-4 bg-slate-50 border-t border-slate-100">
+                        <p className="text-xs text-slate-500 leading-relaxed">{payslip.notes}</p>
+                      </div>
+                    )}
+                    {payslip.official_url && (
+                      <div className="px-6 py-3 border-t border-slate-100">
+                        <a href={payslip.official_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">Official source ↗</a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {sanityArticle?.body && (
                 <div className="prose max-w-none">
