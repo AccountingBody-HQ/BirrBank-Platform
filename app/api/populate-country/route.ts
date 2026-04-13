@@ -82,6 +82,23 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "work_permits": [
+    // ALL main work permit types available for foreign employees in ${countryName}
+    // MUST include at minimum: the primary skilled worker permit, EU Blue Card (if EU member), and ICT/intra-company transfer permit
+    // Include any notable fast-track or points-based routes
+    // Fields:
+    //   permit_type (string): official name of the permit e.g. "Skilled Worker Visa", "EU Blue Card", "H-1B Visa"
+    //   processing_days_min (integer): minimum processing time in calendar days
+    //   processing_days_max (integer): maximum processing time in calendar days
+    //   cost_local_currency (number or null): application fee in local currency - null if no standard fee
+    //   currency_code (string or null): currency code for the cost - null if no fee
+    //   validity_months (integer or null): validity period in months - null if permanent/indefinite
+    //   renewable (boolean): true if the permit can be renewed
+    //   requires_employer_sponsor (boolean): true if an employer must sponsor the application
+    //   quota_system (boolean): true if a quota or cap limits the number of permits issued
+    //   official_url (string): official government immigration authority URL
+    //   notes (string): comprehensive description including salary thresholds, eligibility criteria, labour market test requirements, and pathway to permanent residence
+  ],
   "contractor_rules": {
     // EXACTLY ONE object with contractor classification rules for ${countryName}
     // Fields:
@@ -252,7 +269,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
