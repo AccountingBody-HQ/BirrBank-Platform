@@ -199,8 +199,10 @@ export default function CountryBuilderPage() {
 
   function getScore(iso2: string) {
     const c = counts[iso2] ?? {}
-    const filled = CORE_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
-    return { filled, pct: Math.round((filled / CORE_TABLES.length) * 100) }
+    const coreCount    = CORE_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
+    const premiumCount = PREMIUM_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
+    const filled = coreCount + premiumCount
+    return { filled, coreCount, premiumCount, pct: Math.round((filled / TOTAL_COUNT) * 100) }
   }
 
   const active   = countries.filter(c => c.is_active)
