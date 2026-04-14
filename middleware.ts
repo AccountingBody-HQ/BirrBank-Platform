@@ -38,11 +38,16 @@ export default clerkMiddleware(async (auth, request) => {
 
   // Admin API routes — return 401 if no valid token
   // excludes /api/admin-auth and /api/admin-logout (must stay public)
-  if (
-    path.startsWith('/api/admin-') &&
-    !path.startsWith('/api/admin-auth') &&
-    !path.startsWith('/api/admin-logout')
-  ) {
+  const isAdminApi = (
+    (path.startsWith('/api/admin-') &&
+      !path.startsWith('/api/admin-auth') &&
+      !path.startsWith('/api/admin-logout')) ||
+    path.startsWith('/api/verify-country') ||
+    path.startsWith('/api/populate-country') ||
+    path.startsWith('/api/insert-country-data') ||
+    path.startsWith('/api/content-factory/')
+  )
+  if (isAdminApi) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
