@@ -28,6 +28,27 @@ const CORE_TABLES = [
   { key: 'payroll_compliance', short: 'Comp',     label: 'Payroll Compliance' },
 ]
 
+const PREMIUM_TABLES = [
+  { key: 'mandatory_benefits',          label: 'Mandatory Benefits'        },
+  { key: 'health_insurance',            label: 'Health Insurance'          },
+  { key: 'payslip_requirements',        label: 'Payslip Requirements'      },
+  { key: 'record_retention',            label: 'Record Retention'          },
+  { key: 'remote_work_rules',           label: 'Remote Work Rules'         },
+  { key: 'expense_rules',               label: 'Expense Rules'             },
+  { key: 'contractor_rules',            label: 'Contractor Rules'          },
+  { key: 'work_permits',                label: 'Work Permits'              },
+  { key: 'entity_setup',               label: 'Entity Setup'              },
+  { key: 'tax_credits',                 label: 'Tax Credits'               },
+  { key: 'regional_tax_rates',          label: 'Regional Tax Rates'        },
+  { key: 'salary_benchmarks',           label: 'Salary Benchmarks'         },
+  { key: 'government_benefit_payments', label: 'Gov. Benefit Payments'     },
+]
+
+const ALL_TABLES    = [...CORE_TABLES, ...PREMIUM_TABLES]
+const CORE_COUNT    = CORE_TABLES.length
+const PREMIUM_COUNT = PREMIUM_TABLES.length
+const TOTAL_COUNT   = ALL_TABLES.length
+
 type Country = { iso2: string; name: string; currency_code: string; is_active: boolean; last_data_update: string | null }
 type Counts   = Record<string, Record<string, number>>
 type Source   = { id: string; country_code: string; data_category: string; authority_name: string; source_url: string; last_checked: string | null }
