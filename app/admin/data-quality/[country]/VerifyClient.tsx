@@ -124,8 +124,11 @@ function buildGroupPrompt(
     const s = p.sourceMap[cat]
     return s ? `OFFICIAL SOURCE: ${s.source_url} (${s.authority_name})` : 'Search official government website'
   }
+  const FIELD_CONSTRAINTS: Record<string, string> = {
+    record_retention: 'CONSTRAINT: retention_basis must be exactly one of: from_date_of_document | from_end_of_tax_year | from_termination — no other values are valid',
+  }
   const sections = group.tables.map(t =>
-    `=== ${(TABLE_LABELS[t] ?? t).toUpperCase()} ===\n${src(t)}\n${fmtRows(getTableData(t, p), TABLE_FIELDS[t] ?? [])}`
+    `=== ${(TABLE_LABELS[t] ?? t).toUpperCase()} ===\n${src(t)}\n${fmtRows(getTableData(t, p), TABLE_FIELDS[t] ?? [])}${FIELD_CONSTRAINTS[t] ? '\n' + FIELD_CONSTRAINTS[t] : ''}`
   ).join('\n\n')
   const tableEnum = group.tables.join('|')
   return `You are a payroll data verification expert. Verify the following ${group.label} data for ${countryName} (${countryCode}) for tax year 2025.
