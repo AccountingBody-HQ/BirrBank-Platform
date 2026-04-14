@@ -34,7 +34,7 @@ const FREQUENCY_MAP: Record<string, string> = {
   Weekly: "monthly", weekly: "monthly",
 }
 
-function applyDefaults(table: string, row: any, countryCode: string) {
+function applyDefaults(table: string, row: any, countryCode: string, currencyCode: string = "USD") {
   const base = {
     tax_year: 2025,
     valid_from: "2025-01-01",
@@ -43,8 +43,8 @@ function applyDefaults(table: string, row: any, countryCode: string) {
     ...row,
     country_code: countryCode.toUpperCase(),
   }
-  if (table === "tax_brackets") return { currency_code: "USD", ...base }
-  if (table === "social_security") return { currency_code: "USD", ...base }
+  if (table === "tax_brackets") return { currency_code: currencyCode, ...base }
+  if (table === "social_security") return { currency_code: currencyCode, ...base }
   if (table === "statutory_leave") return { ...base, leave_type: LEAVE_TYPE_MAP[row.leave_type] ?? row.leave_type }
   if (table === "filing_calendar") return { ...base, frequency: FREQUENCY_MAP[row.frequency] ?? row.frequency.toLowerCase() }
   if (table === "payroll_compliance") return { compliance_type: "payroll", ...base }
@@ -64,7 +64,7 @@ function applyDefaults(table: string, row: any, countryCode: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { data, countryCode } = await req.json()
+    const { data, countryCode, currencyCode = "USD" } = await req.json()
     if (!data || !countryCode) {
       return NextResponse.json({ error: "Missing data or countryCode" }, { status: 400 })
     }
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
       // Delete existing rows for this country first
       const { error: delError } = await sb.schema("hrlake").from(table).delete().eq("country_code", countryCode.toUpperCase())
       if (delError) errors.push(table + " (delete): " + delError.message)
-      const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode))
+      const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode, currencyCode))
       const { error } = await sb.schema("hrlake").from(table).insert(rowsWithDefaults)
       if (error) errors.push(table + ": " + error.message)
     }
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
       const rows = Array.isArray(raw) ? raw : [raw]
       const { error: delError } = await sb.schema("hrlake").from(table).delete().eq("country_code", countryCode.toUpperCase())
       if (delError) errors.push(table + " (delete): " + delError.message)
-      const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode))
+      const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode, currencyCode))
       const { error } = await sb.schema("hrlake").from(table).insert(rowsWithDefaults)
       if (error) errors.push(table + ": " + error.message)
     }
