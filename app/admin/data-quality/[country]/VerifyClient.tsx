@@ -257,6 +257,12 @@ export default function VerifyClient(props: Props) {
 
   // ── Mark verified ──────────────────────────────────────────────────────────────
   async function markVerified() {
+    // Block if any mismatch has not been approved or rejected
+    const unreviewedMismatches = allFindings.filter((f, i) => f.status === 'mismatch' && !decisions[i]).length
+    if (unreviewedMismatches > 0) {
+      setGlobalError(`Cannot mark verified — ${unreviewedMismatches} mismatch${unreviewedMismatches > 1 ? 'es' : ''} still need a decision (approve or reject each one first).`)
+      return
+    }
     setSaving(true)
     try {
       await fetch('/api/admin-update-country', {
@@ -304,7 +310,9 @@ export default function VerifyClient(props: Props) {
         setGroupResults(p => ({ ...p, [group.key]: { status: 'error', findings: [], error: e.message } }))
       }
       // 65s pause between groups — Anthropic TPM rate limit window is 60s
-      await new Promise(r => setTimeout(r, 65000))
+      // Skip pause after the last group — no next group to protect
+      const isLastGroup = group.key === groupsToRun[groupsToRun.length - 1].key
+      if (!isLastGroup) await new Promise(r => setTimeout(r, 65000))
     }
     setCurrentGroupKey(null); setIsRunning(false)
   }
