@@ -174,7 +174,7 @@ export default function ContentFactoryPage() {
 
           <div className="rounded-2xl border p-6" style={C.card}>
             <h2 className="text-white font-bold text-sm mb-1">Country <span className="font-normal text-xs" style={{ color: '#334155' }}>(optional)</span></h2>
-            <p className="text-xs mb-4" style={{ color: '#334155' }}>Required for Country Reports, Tax Guides and EOR Guides</p>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>Required for Country Reports, Tax Guides and EOR Guides. Use ISO2 code (e.g. GB, DE, US) for country tagging to work correctly.</p>
             <input type="text" value={config.country}
               onChange={e => setConfig(c => ({ ...c, country: e.target.value }))}
               placeholder="e.g. United Kingdom, Germany…"

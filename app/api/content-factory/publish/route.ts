@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 
+export const runtime = 'nodejs'
+export const maxDuration = 60
+
 const SITE_MAP: Record<string, string> = {
   HRLake: 'hrlake',
   AccountingBody: 'accountingbody',
@@ -118,8 +121,6 @@ export async function POST(req: NextRequest) {
     const token     = process.env.SANITY_WRITE_TOKEN?.trim()
     const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '4rllejq1'
     const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET    ?? 'production'
-
-    console.log('TOKEN DEBUG:', token ? `starts:${token.charCodeAt(0)} ends:${token.charCodeAt(token.length-1)} length:${token.length}` : 'NOT SET')
 
     if (!token) {
       return NextResponse.json({ error: 'SANITY_WRITE_TOKEN is not set' }, { status: 500 })
