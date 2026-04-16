@@ -792,7 +792,7 @@ export default function CountryBuilderPage() {
                 </h3>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => { const e: Record<string,boolean> = {}; CORE_TABLES.forEach(t => { e[t.key] = true }); setExpanded(e) }}
+                    onClick={() => { const e: Record<string,boolean> = {}; ALL_TABLES.forEach(t => { e[t.key] = true }); setExpanded(e) }}
                     className="text-xs font-semibold px-3 py-1.5 rounded-lg"
                     style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b' }}>
                     Expand All
