@@ -1,4 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
+
+export const runtime = 'nodejs'
+export const maxDuration = 30
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import { createHash } from 'crypto'
@@ -71,7 +74,6 @@ export async function POST(req: Request) {
     // Profile not found — user signed up before webhook was live
     if (error.code === '23503') {
       // Create profile on the fly as fallback
-      const { createClient: createAdminClient } = await import('@supabase/supabase-js')
       const { currentUser } = await import('@clerk/nextjs/server')
       const user = await currentUser()
       const email = user?.emailAddresses?.[0]?.emailAddress || ''
