@@ -210,7 +210,7 @@ export default function CountryBuilderPage() {
       const res = await fetch('/api/insert-country-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: popData, countryCode: popForm.iso2.toUpperCase() }),
+        body: JSON.stringify({ data: popData, countryCode: popForm.iso2.toUpperCase(), currencyCode: popForm.currency_code.toUpperCase() }),
       })
       const json = await res.json()
       if (!res.ok) {

@@ -110,20 +110,7 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
       {/* Controls */}
       <div className="rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Calendar size={15} style={{ color: '#64748b' }} />
-            <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Tax Year:</span>
-            <select
-              value={selectedYear}
-              onChange={e => setSelectedYear(Number(e.target.value))}
-              className="text-sm font-bold text-white rounded-lg px-3 py-1.5 outline-none"
-              style={{ background: '#111827', border: '1px solid #1f2937' }}
-            >
-              {[CURRENT_YEAR, CURRENT_YEAR - 1, CURRENT_YEAR - 2].map(y => (
-                <option key={y} value={y}>{y}</option>
-              ))}
-            </select>
-          </div>
+
           <div className="flex items-center gap-1">
             {(['all', 'overdue', 'done'] as const).map(f => (
               <button key={f} onClick={() => setFilter(f)}
@@ -187,7 +174,7 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
                 <tr key={country.iso2} style={{ background: i % 2 === 0 ? '#080d1a' : '#0a0f1e', borderBottom: '1px solid #1a2238' }}>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">{country.flag_emoji}</span>
+                      <img src={`https://flagcdn.com/20x15/${country.iso2.toLowerCase()}.png`} alt={country.name} width={20} height={15} className="rounded-sm shrink-0" />
                       <div>
                         <p className="text-sm font-semibold text-white">{country.name}</p>
                         <p className="text-xs text-slate-500">{country.iso2} · {country.currency_code}</p>
