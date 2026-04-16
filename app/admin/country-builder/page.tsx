@@ -961,9 +961,9 @@ export default function CountryBuilderPage() {
                     className="w-full rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
                     style={{ background: '#111827', border: '1px solid #1f2937' }}>
                     <option value="">Select a country…</option>
-                    {countries.filter(c => c.is_active).map(c => (
+                    {countries.map(c => (
                       <option key={c.iso2} value={c.iso2}>
-                        {c.name} ({c.iso2}){eorGuides.find(g => g.country_code === c.iso2) ? ' — has guide' : ' — no guide'}
+                        {c.name} ({c.iso2}){!c.is_active ? ' — inactive' : ''}{eorGuides.find(g => g.country_code === c.iso2) ? ' — has guide' : ' — no guide'}
                       </option>
                     ))}
                   </select>
