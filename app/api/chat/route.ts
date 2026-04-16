@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs"
+export const maxDuration = 60
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
 
@@ -52,7 +55,6 @@ const COUNTRY_MAP: Record<string, string> = {
   "italy": "IT", "italian": "IT",
   "portugal": "PT", "portuguese": "PT",
   "poland": "PL", "polish": "PL",
-  "india": "IN", "indian": "IN",
 };
 
 function detectCountry(message: string): string | null {
@@ -70,11 +72,11 @@ async function fetchCountryData(countryCode: string) {
       .eq("country_code", countryCode).eq("is_current", true)
       .order("bracket_order"),
     supabase.schema("hrlake").from("social_security")
-      .select("contribution_type,rate_percent,cap_amount,notes")
+      .select("contribution_type,employer_rate,employee_rate,employer_cap_annual,employee_cap_annual,applies_above,applies_below")
       .eq("country_code", countryCode).eq("is_current", true),
     supabase.schema("hrlake").from("employment_rules")
-      .select("minimum_wage,annual_leave_days,notice_period_days,probation_period_days,payroll_frequency")
-      .eq("country_code", countryCode).eq("is_current", true).single(),
+      .select("rule_type,value_text,value_numeric,value_unit")
+      .eq("country_code", countryCode).eq("is_current", true),
   ]);
   return {
     taxBrackets: taxRes.data || [],
@@ -99,15 +101,18 @@ function buildCountryContext(countryCode: string, countryName: string, data: any
   if (ss.length > 0) {
     ctx += "Social Security Contributions:\n";
     ss.forEach((s: any) => {
-      ctx += `  ${s.contribution_type}: ${s.rate_percent}%${s.cap_amount ? " (annual cap: " + s.cap_amount + ")" : ""}${s.notes ? " — " + s.notes : ""}\n`;
+      const erCap = s.employer_cap_annual ? ` (employer annual cap: ${s.employer_cap_annual})` : "";
+      const eeCap = s.employee_cap_annual ? ` (employee annual cap: ${s.employee_cap_annual})` : "";
+      const threshold = s.applies_above ? ` above ${s.applies_above}` : "";
+      ctx += `  ${s.contribution_type}: employer ${s.employer_rate}%${erCap}, employee ${s.employee_rate}%${eeCap}${threshold}\n`;
     });
   }
-  if (rules) {
+  if (rules && rules.length > 0) {
     ctx += "Employment Rules:\n";
-    if (rules.minimum_wage) ctx += `  Minimum wage: ${rules.minimum_wage}\n`;
-    if (rules.annual_leave_days) ctx += `  Annual leave: ${rules.annual_leave_days} days\n`;
-    if (rules.notice_period_days) ctx += `  Notice period: ${rules.notice_period_days} days\n`;
-    if (rules.payroll_frequency) ctx += `  Payroll frequency: ${rules.payroll_frequency}\n`;
+    rules.forEach((r: any) => {
+      const val = r.value_text ?? (r.value_numeric != null ? `${r.value_numeric} ${r.value_unit ?? ''}`.trim() : null);
+      if (val) ctx += `  ${r.rule_type}: ${val}\n`;
+    });
   }
   return ctx;
 }
