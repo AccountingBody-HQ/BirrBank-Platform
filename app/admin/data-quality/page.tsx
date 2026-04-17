@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import Link from 'next/link'
 import { ShieldCheck, ArrowRight, CheckCircle, AlertCircle, XCircle } from 'lucide-react'
 
@@ -41,10 +41,7 @@ async function getDataQualitySummary() {
 
 async function fetchDataQualitySummary() {
   try {
-    const sb = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const sb = createSupabaseAdminClient()
 
     const { data: countries } = await sb
       .from('countries')
