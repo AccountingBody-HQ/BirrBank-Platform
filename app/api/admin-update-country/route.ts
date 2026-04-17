@@ -121,6 +121,7 @@ export async function POST(req: Request) {
         .from(table)
         .update(payload)
         .eq('id', record_id)
+        .eq('country_code', countryCode.toUpperCase())
 
       if (error) {
         console.error('update_value error:', error)
