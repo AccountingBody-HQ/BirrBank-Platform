@@ -2,6 +2,24 @@
   "functions": {
     "app/api/chat/route.ts": {
       "maxDuration": 60
+    },
+    "app/api/populate-country/route.ts": {
+      "maxDuration": 120
+    },
+    "app/api/verify-country/route.ts": {
+      "maxDuration": 120
+    },
+    "app/api/admin-eor-guide/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/content-factory/generate/route.ts": {
+      "maxDuration": 120
+    },
+    "app/api/content-factory/publish/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/insert-country-data/route.ts": {
+      "maxDuration": 60
     }
   }
 }
