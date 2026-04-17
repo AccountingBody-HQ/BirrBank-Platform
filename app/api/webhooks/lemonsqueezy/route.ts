@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       await supabase.from('subscriptions').upsert({
         user_id: userId,
         lemon_squeezy_id: String(event.data?.id),
+        platform: 'hrlake',
         plan: 'pro',
         status: data.status,
         current_period_end: data.renews_at,
@@ -51,6 +52,7 @@ export async function POST(req: NextRequest) {
       await supabase.from('subscriptions').upsert({
         user_id: userId,
         lemon_squeezy_id: String(event.data?.id),
+        platform: 'hrlake',
         plan: data.status === 'active' ? 'pro' : 'free',
         status: data.status,
         current_period_end: data.renews_at,
@@ -62,6 +64,7 @@ export async function POST(req: NextRequest) {
       await supabase.from('subscriptions').upsert({
         user_id: userId,
         lemon_squeezy_id: String(event.data?.id),
+        platform: 'hrlake',
         plan: 'free',
         status: 'cancelled',
         current_period_end: data.ends_at,
