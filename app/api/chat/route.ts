@@ -3,12 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs"
 export const maxDuration = 60
 import OpenAI from "openai";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createSupabaseAdminClient } from "@/lib/supabase";
 
 const SYSTEM_PROMPT = `You are HRLake AI — a specialist global HR, EOR, and payroll intelligence assistant. You ONLY answer questions within the following domains:
 
@@ -69,11 +64,11 @@ async function fetchCountryData(countryCode: string) {
   const [taxRes, ssRes, rulesRes] = await Promise.all([
     supabase.schema("hrlake").from("tax_brackets")
       .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
-      .eq("country_code", countryCode).eq("is_current", true)
+      .eq("country_code", countryCode).eq("tax_year", 2025)
       .order("bracket_order"),
     supabase.schema("hrlake").from("social_security")
       .select("contribution_type,employer_rate,employee_rate,employer_cap_annual,employee_cap_annual,applies_above,applies_below")
-      .eq("country_code", countryCode).eq("is_current", true),
+      .eq("country_code", countryCode).eq("tax_year", 2025),
     supabase.schema("hrlake").from("employment_rules")
       .select("rule_type,value_text,value_numeric,value_unit")
       .eq("country_code", countryCode).eq("is_current", true),
@@ -120,6 +115,7 @@ function buildCountryContext(countryCode: string, countryName: string, data: any
 export async function POST(req: NextRequest) {
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const supabase = createSupabaseAdminClient();
     const { message, countryCode: passedCode, countryName: passedName, history = [] } = await req.json();
 
     if (!message) {
