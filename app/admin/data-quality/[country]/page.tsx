@@ -51,8 +51,8 @@ async function fetchCountryData(iso2: string) {
     { data: rawSalaryBenchmarks },
     { data: rawGovBenefits },
   ] = await Promise.all([
-    supabase.schema('hrlake').from('tax_brackets').select('*').eq('country_code', code).eq('is_current', true).order('bracket_order'),
-    supabase.schema('hrlake').from('social_security').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('tax_brackets').select('*').eq('country_code', code).eq('tax_year', 2025).order('bracket_order'),
+    supabase.schema('hrlake').from('social_security').select('*').eq('country_code', code).eq('tax_year', 2025),
     supabase.schema('hrlake').from('employment_rules').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', code).eq('year', 2025).order('holiday_date'),
