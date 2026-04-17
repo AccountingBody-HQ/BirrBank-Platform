@@ -60,7 +60,7 @@ function detectCountry(message: string): string | null {
   return null;
 }
 
-async function fetchCountryData(countryCode: string) {
+async function fetchCountryData(countryCode: string, supabase: ReturnType<typeof createSupabaseAdminClient>) {
   const [taxRes, ssRes, rulesRes] = await Promise.all([
     supabase.schema("hrlake").from("tax_brackets")
       .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
 
     let countryContext = "";
     if (countryCode) {
-      const data = await fetchCountryData(countryCode);
+      const data = await fetchCountryData(countryCode, supabase);
       countryContext = buildCountryContext(countryCode, countryName, data);
     }
 
