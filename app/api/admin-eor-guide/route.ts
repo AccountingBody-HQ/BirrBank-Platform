@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 
-const sb = createSupabaseAdminClient()
-
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!
 
 function buildPrompt(countryName: string, countryCode: string, currencyCode: string): string {
@@ -175,6 +173,7 @@ export async function POST(req: NextRequest) {
       if (!countryCode || !guideData) {
         return NextResponse.json({ error: 'countryCode and guideData required' }, { status: 400 })
       }
+      const sb = createSupabaseAdminClient()
 
       // Delete existing guide for this country
       await sb.schema('hrlake').from('eor_guides').delete().eq('country_code', countryCode.toUpperCase())
