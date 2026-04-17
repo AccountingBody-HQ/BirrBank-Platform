@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 
 const NUMERIC_FIELDS = new Set([
   'lower_limit', 'upper_limit', 'rate', 'bracket_order',
@@ -64,10 +64,7 @@ export async function POST(req: Request) {
     const { countryCode, action, finding } = body
     console.log('admin-update-country:', action, countryCode)
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = createSupabaseAdminClient()
 
     if (action === 'approve_all') {
       const { error } = await supabase
@@ -98,7 +95,7 @@ export async function POST(req: Request) {
       if (!ALLOWED_TABLES.has(table)) {
         return NextResponse.json({ error: 'Invalid table: ' + table }, { status: 400 })
       }
-      if (!countryCode || typeof countryCode !== 'string' || countryCode.length > 3) {
+      if (!countryCode || typeof countryCode !== 'string' || countryCode.length !== 2) {
         return NextResponse.json({ error: 'Invalid countryCode' }, { status: 400 })
       }
 
