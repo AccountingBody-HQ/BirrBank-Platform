@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import Link from 'next/link'
 import {
   Globe, ShieldCheck, Sparkles, BarChart3,
@@ -27,10 +27,7 @@ async function getDashboardData() {
 
 async function fetchDashboardData() {
   try {
-    const sb = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const sb = createSupabaseAdminClient()
 
     const { data: countries } = await sb
       .from('countries')

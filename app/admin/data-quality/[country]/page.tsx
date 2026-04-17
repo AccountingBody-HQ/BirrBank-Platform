@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
@@ -10,10 +10,7 @@ async function getCountryData(iso2: string) {
 }
 
 async function fetchCountryData(iso2: string) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const supabase = createSupabaseAdminClient()
 
   const { data: country } = await supabase
     .from('countries')
