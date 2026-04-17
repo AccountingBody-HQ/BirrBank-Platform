@@ -70,7 +70,7 @@ const TABLE_FIELDS: Record<string, string[]> = {
   filing_calendar:             ['filing_type','frequency','due_day','due_month'],
   payroll_compliance:          ['description','frequency','deadline_description'],
   working_hours:               ['standard_hours_per_week','maximum_hours_per_week','overtime_rate_multiplier'],
-  termination_rules:           ['notice_period_min_days','severance_mandatory','probation_period_max_months'],
+  termination_rules:           ['notice_period_min_days','severance_mandatory','probation_period_max_months','severance_cap_months'],
   pension_schemes:             ['scheme_name','employer_rate','employee_rate','is_mandatory'],
   mandatory_benefits:          ['benefit_name','benefit_type','employer_cost_percentage','frequency'],
   health_insurance:            ['scheme_name','scheme_type','employer_rate_percentage','is_mandatory'],
