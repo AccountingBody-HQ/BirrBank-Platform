@@ -75,7 +75,7 @@ RETURN THIS EXACT JSON STRUCTURE:
   ],
   "termination_rules": [
     // EXACTLY ONE record with termination rules for ${countryName}
-    // Fields: notice_period_min_days (integer), severance_mandatory (boolean), probation_period_max_months (integer)
+    // Fields: notice_period_min_days (integer), severance_mandatory (boolean), probation_period_max_months (integer), severance_cap_months (number or null): maximum months of severance pay capped by law - null if no statutory cap
   ],
   "pension_schemes": [
     // ALL mandatory and major pension/retirement schemes in ${countryName}
