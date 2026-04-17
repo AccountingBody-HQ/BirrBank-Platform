@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 
 function validIso2(code: unknown): code is string {
   return typeof code === 'string' && /^[A-Za-z]{2}$/.test(code)
@@ -15,10 +15,7 @@ export async function POST(req: NextRequest) {
   if (!validIso2(iso2)) {
     return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const supabase = createSupabaseAdminClient()
   const { error } = await supabase.from('countries').insert({
     iso2: iso2.toUpperCase(),
     iso3: iso3 ? iso3.toUpperCase() : iso2.toUpperCase() + 'X',
@@ -51,10 +48,7 @@ export async function PATCH(req: NextRequest) {
   if (!validIso2(iso2)) {
     return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const supabase = createSupabaseAdminClient()
   const updateData: any = { is_active }
   if (is_active) {
     // Only set to partial if currently none — never downgrade from full
@@ -82,10 +76,7 @@ export async function DELETE(req: NextRequest) {
   if (!validIso2(iso2)) {
     return NextResponse.json({ error: 'iso2 must be exactly 2 letters' }, { status: 400 })
   }
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const supabase = createSupabaseAdminClient()
   // Delete all hrlake table data in parallel
   const hrlakeTables = [
     'tax_brackets','social_security','employment_rules','statutory_leave',
@@ -104,11 +95,18 @@ export async function DELETE(req: NextRequest) {
   if (deleteErrors.length > 0) {
     return NextResponse.json({ error: 'Delete failed for: ' + deleteErrors.join(', ') }, { status: 500 })
   }
-  // Delete eor_guides, embeddings (foreign key constraint on countries table)
-  await supabase.schema('hrlake').from('eor_guides').delete().eq('country_code', iso2.toUpperCase())
-  await supabase.schema('hrlake').from('embeddings').delete().eq('country_code', iso2.toUpperCase())
-  // Delete official sources
-  await supabase.schema('hrlake').from('official_sources').delete().eq('country_code', iso2.toUpperCase())
+  // Delete eor_guides, embeddings, official_sources — capture errors
+  const secondaryDeletes = await Promise.all([
+    supabase.schema('hrlake').from('eor_guides').delete().eq('country_code', iso2.toUpperCase()),
+    supabase.schema('hrlake').from('embeddings').delete().eq('country_code', iso2.toUpperCase()),
+    supabase.schema('hrlake').from('official_sources').delete().eq('country_code', iso2.toUpperCase()),
+  ])
+  const secondaryErrors = secondaryDeletes
+    .map((r, i) => r.error ? ['eor_guides','embeddings','official_sources'][i] + ': ' + r.error.message : null)
+    .filter(Boolean)
+  if (secondaryErrors.length > 0) {
+    return NextResponse.json({ error: 'Secondary delete failed for: ' + secondaryErrors.join(', ') }, { status: 500 })
+  }
   // Delete the country row
   const { error } = await supabase.from('countries').delete().eq('iso2', iso2.toUpperCase())
   if (error) {
