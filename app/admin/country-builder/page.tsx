@@ -93,6 +93,17 @@ export default function CountryBuilderPage() {
   const [eorGuides, setEorGuides]       = useState<any[]>([])
   const [eorGuidesLoaded, setEorGuidesLoaded] = useState(false)
 
+  // Sequential AI Populate state
+  const [seqStatuses,  setSeqStatuses]  = useState<Record<string, string>>({})
+  const [seqData,      setSeqData]      = useState<Record<string, any>>({})
+  const [seqSources,   setSeqSources]   = useState<Record<string, any>>({})
+  const [seqErrors,    setSeqErrors]    = useState<Record<string, string>>({})
+  const [seqCountdown, setSeqCountdown] = useState<number | null>(null)
+  const [seqRunning,   setSeqRunning]   = useState(false)
+  const [seqInserting, setSeqInserting] = useState(false)
+  const [seqInserted,  setSeqInserted]  = useState(false)
+  const [seqExpanded,  setSeqExpanded]  = useState<Record<string,boolean>>({})
+
   const loadData = useCallback(async () => {
     setLoading(true); setError('')
     try {
@@ -296,7 +307,101 @@ export default function CountryBuilderPage() {
     }
   }
 
-  function getScore(iso2: string) {
+  // ─── Sequential AI Populate ─────────────────────────────────────────────
+
+  async function seqWaitWithCountdown(ms: number) {
+    const steps = Math.ceil(ms / 1000)
+    for (let i = steps; i > 0; i--) {
+      setSeqCountdown(i)
+      await new Promise(r => setTimeout(r, 1000))
+    }
+    setSeqCountdown(null)
+  }
+
+  async function populateSingleTable(tableKey: string, iso2: string, name: string, currency: string): Promise<boolean> {
+    const MAX_ATTEMPTS = 3
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      setSeqStatuses(p => ({ ...p, [tableKey]: 'running' }))
+      setSeqErrors(p => { const n = { ...p }; delete n[tableKey]; return n })
+      try {
+        const controller = new AbortController()
+        const tid = setTimeout(() => controller.abort(), 58000)
+        const res = await fetch('/api/populate-table', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ countryCode: iso2.toUpperCase(), countryName: name, currencyCode: currency.toUpperCase(), tableKey }),
+          signal: controller.signal,
+        })
+        clearTimeout(tid)
+        const json = await res.json()
+        if (!res.ok || !json.success) throw new Error(json.error ?? 'AI returned no data')
+        setSeqData(p => ({ ...p, [tableKey]: json.data }))
+        if (json.source) setSeqSources(p => ({ ...p, [tableKey]: json.source }))
+        setSeqStatuses(p => ({ ...p, [tableKey]: 'done' }))
+        return true
+      } catch (e: any) {
+        if (attempt === MAX_ATTEMPTS) {
+          setSeqStatuses(p => ({ ...p, [tableKey]: 'error' }))
+          setSeqErrors(p => ({ ...p, [tableKey]: e.message ?? 'Failed after 3 attempts' }))
+          return false
+        }
+        setSeqErrors(p => ({ ...p, [tableKey]: `Attempt ${attempt} failed — waiting before retry…` }))
+        await seqWaitWithCountdown(90000)
+      }
+    }
+    return false
+  }
+
+  async function runSequentialPopulate() {
+    if (!popForm.iso2 || !popForm.name || !popForm.currency_code) return
+    setSeqRunning(true)
+    setSeqStatuses({}); setSeqData({}); setSeqSources({})
+    setSeqErrors({}); setSeqCountdown(null)
+    setSeqInserted(false); setSeqExpanded({})
+    const tables = ALL_TABLES.map(t => t.key)
+    for (let i = 0; i < tables.length; i++) {
+      await populateSingleTable(tables[i], popForm.iso2, popForm.name, popForm.currency_code)
+      if (i < tables.length - 1) await seqWaitWithCountdown(30000)
+    }
+    setSeqRunning(false)
+  }
+
+  async function retryTable(tableKey: string) {
+    if (!popForm.iso2 || !popForm.name || !popForm.currency_code) return
+    setSeqRunning(true)
+    await populateSingleTable(tableKey, popForm.iso2, popForm.name, popForm.currency_code)
+    setSeqRunning(false)
+  }
+
+  async function insertSequentialData() {
+    if (seqInserting) return
+    const doneKeys = ALL_TABLES.filter(t => seqStatuses[t.key] === 'done').map(t => t.key)
+    if (doneKeys.length === 0) return
+    setSeqInserting(true)
+    setSeqErrors(p => { const n = { ...p }; delete n.__insert; return n })
+    try {
+      const dataToInsert: Record<string, any> = {}
+      doneKeys.forEach(k => { dataToInsert[k] = seqData[k] })
+      const sourcesToInsert: Record<string, any> = {}
+      Object.keys(seqSources).forEach(k => { sourcesToInsert[k] = seqSources[k] })
+      dataToInsert.sources = sourcesToInsert
+      const res = await fetch('/api/insert-country-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: dataToInsert, countryCode: popForm.iso2.toUpperCase(), currencyCode: popForm.currency_code.toUpperCase() }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.details ? json.details.join(' | ') : (json.error ?? 'Insert failed'))
+      setSeqInserted(true)
+      await loadData()
+    } catch (e: any) {
+      setSeqErrors(p => ({ ...p, __insert: e.message ?? 'Insert failed' }))
+    } finally {
+      setSeqInserting(false)
+    }
+  }
+
+    function getScore(iso2: string) {
     const c = counts[iso2] ?? {}
     const coreCount    = CORE_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
     const premiumCount = PREMIUM_TABLES.filter(t => (c[t.key] ?? 0) > 0).length
@@ -743,19 +848,22 @@ export default function CountryBuilderPage() {
       {/* ── AI POPULATE TAB ── */}
       {tab === 'AI Populate' && (
         <div className="space-y-5 max-w-4xl">
+
+          {/* Form card */}
           <div className="rounded-2xl border p-6" style={S.card}>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles size={15} style={{ color: '#3b82f6' }} />
               <h2 className="text-white font-bold text-sm">AI Population Engine</h2>
             </div>
             <p className="text-xs mb-6" style={{ color: '#334155' }}>
-              Enter a country and Claude will research all 23 data tables. Review the data, then insert directly into Supabase.
+              Claude populates all 23 tables one by one — each as a focused AI call with a 30s pause between tables.
+              More accurate and reliable than a single bulk request. Automatic retry on failure.
             </p>
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { label: 'ISO2 Code *', key: 'iso2', placeholder: 'e.g. SG', max: 2 },
-                { label: 'Country Name *', key: 'name', placeholder: 'e.g. Singapore', max: undefined },
-                { label: 'Currency Code *', key: 'currency_code', placeholder: 'e.g. SGD', max: 3 },
+                { label: 'ISO2 Code *',     key: 'iso2',          placeholder: 'e.g. SG',        max: 2         as number | undefined },
+                { label: 'Country Name *',  key: 'name',          placeholder: 'e.g. Singapore', max: undefined as number | undefined },
+                { label: 'Currency Code *', key: 'currency_code', placeholder: 'e.g. SGD',       max: 3         as number | undefined },
               ].map(field => (
                 <div key={field.key}>
                   <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>{field.label}</label>
@@ -767,163 +875,212 @@ export default function CountryBuilderPage() {
                     }}
                     placeholder={field.placeholder}
                     maxLength={field.max}
-                    disabled={popStatus === 'loading'}
+                    disabled={seqRunning}
                     className={S.input} style={inputStyle} />
                 </div>
               ))}
             </div>
-
-            <div className="flex items-center gap-3 flex-wrap">
-              <button onClick={handlePopulate}
-                disabled={popStatus === 'loading' || !popForm.iso2 || !popForm.name || !popForm.currency_code}
-                className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
-                style={{ background: '#2563eb', color: '#ffffff' }}>
-                {popStatus === 'loading'
-                  ? <><Loader2 size={14} className="animate-spin" /> Researching — up to 60s…</>
-                  : <><Sparkles size={14} /> AI Populate</>}
-              </button>
-              {popStatus === 'done' && !insertDone && (
-                <button onClick={handleInsert} disabled={inserting}
-                  className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
-                  style={{ background: '#059669', color: '#ffffff' }}>
-                  {inserting
-                    ? <><Loader2 size={14} className="animate-spin" /> Inserting\u2026</>
-                    : <><Database size={14} /> Insert All Data</>}
-                </button>
-              )}
-            </div>
-
-            {popStatus === 'loading' && (
-              <div className="mt-5 rounded-xl p-4" style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.15)' }}>
-                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources…</p>
-                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 23 data categories. This takes 30–60 seconds.</p>
-              </div>
-            )}
-            {popStatus === 'error' && (
-              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
-                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
-                <AlertCircle size={15} style={{ color: '#ef4444' }} className="shrink-0" />
-                <p className="text-sm" style={{ color: '#ef4444' }}>{popMsg}</p>
-              </div>
-            )}
-            {insertDone && (
-              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
-                style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)' }}>
-                <CheckCircle size={15} style={{ color: '#10b981' }} className="shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: '#10b981' }}>All data inserted successfully!</p>
-                  <p className="text-xs mt-0.5" style={{ color: '#334155' }}>Go to Data Quality to verify. Activate the country when ready.</p>
-                </div>
-              </div>
-            )}
-            {popMsg && !insertDone && popStatus !== 'error' && (
-              <div className="mt-5 rounded-xl p-4 flex items-center gap-3"
-                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
-                <AlertCircle size={15} style={{ color: '#ef4444' }} className="shrink-0" />
-                <p className="text-sm" style={{ color: '#ef4444' }}>{popMsg}</p>
-              </div>
-            )}
+            <button
+              onClick={runSequentialPopulate}
+              disabled={seqRunning || !popForm.iso2 || !popForm.name || !popForm.currency_code}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+              style={{ background: '#2563eb', color: '#ffffff' }}>
+              {seqRunning
+                ? <><Loader2 size={14} className="animate-spin" /> Populating — do not close this page…</>
+                : <><Sparkles size={14} /> Populate All 23 Tables</>}
+            </button>
           </div>
 
-          {popStatus === 'done' && popData && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-white font-bold">
-                  Proposed Data \u2014 {popForm.name} ({popForm.iso2.toUpperCase()})
-                </h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => { const e: Record<string,boolean> = {}; ALL_TABLES.forEach(t => { e[t.key] = true }); setExpanded(e) }}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
-                    style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b' }}>
-                    Expand All
-                  </button>
-                  <button onClick={() => setExpanded({})}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
-                    style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b' }}>
-                    Collapse All
-                  </button>
+          {/* Progress section */}
+          {Object.keys(seqStatuses).length > 0 && (() => {
+            const doneCount  = ALL_TABLES.filter(t => seqStatuses[t.key] === 'done').length
+            const errorCount = ALL_TABLES.filter(t => seqStatuses[t.key] === 'error').length
+            const pct        = Math.round((doneCount / ALL_TABLES.length) * 100)
+            return (
+              <div className="rounded-2xl border overflow-hidden" style={S.card}>
+
+                {/* Header */}
+                <div className="px-6 py-4 border-b" style={{ borderColor: '#1a2238' }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-white font-bold text-sm">
+                      {seqRunning
+                        ? 'Populating…'
+                        : seqInserted
+                          ? 'Complete — data inserted into Supabase'
+                          : 'Population complete — review and insert'}
+                    </p>
+                    <span className="text-xs font-bold tabular-nums"
+                      style={{ color: doneCount === ALL_TABLES.length ? '#10b981' : '#f59e0b' }}>
+                      {doneCount}/{ALL_TABLES.length} tables done
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full" style={{ background: '#1a2238' }}>
+                    <div className="h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${pct}%`, background: errorCount > 0 ? '#f59e0b' : '#10b981' }} />
+                  </div>
+                  {errorCount > 0 && (
+                    <p className="text-xs mt-1.5 font-bold" style={{ color: '#ef4444' }}>
+                      {errorCount} table{errorCount > 1 ? 's' : ''} failed — use the Retry button below
+                    </p>
+                  )}
                 </div>
-              </div>
-              {ALL_TABLES.map(t => {
-                const rows   = popData[t.key] ?? []
-                const src    = popData.sources?.[t.key]
-                const isOpen = expanded[t.key]
-                return (
-                  <div key={t.key} className="rounded-2xl border overflow-hidden" style={S.card}>
-                    <button
-                      onClick={() => setExpanded(p => ({ ...p, [t.key]: !p[t.key] }))}
-                      className="w-full px-6 py-4 flex items-center justify-between text-left transition-colors"
-                      style={{ background: 'transparent' }}>
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <span className="text-white font-bold text-sm">{t.label}</span>
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-full"
-                          style={rows.length > 0
-                            ? { background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }
-                            : { background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
-                          {rows.length} record{rows.length !== 1 ? 's' : ''}
-                        </span>
-                        {src && (
-                          <a href={src.source_url} target="_blank" rel="noopener noreferrer"
-                            onClick={e => e.stopPropagation()}
-                            className="flex items-center gap-1 text-xs transition-colors"
-                            style={{ color: '#3b82f6' }}>
-                            <ExternalLink size={10} />
-                            <span>{src.authority_name}</span>
-                          </a>
-                        )}
-                      </div>
-                      {isOpen
-                        ? <ChevronUp size={15} style={{ color: '#334155' }} className="shrink-0" />
-                        : <ChevronDown size={15} style={{ color: '#334155' }} className="shrink-0" />}
-                    </button>
-                    {isOpen && (
-                      <div className="px-6 pb-5 border-t" style={{ borderColor: '#1a2238' }}>
-                        {rows.length === 0 || !rows[0] ? (
-                          <p className="text-xs pt-4" style={{ color: '#1f2937' }}>No data returned for this table.</p>
-                        ) : (
-                          <div className="overflow-x-auto mt-3">
-                            <table className="w-full text-xs">
-                              <thead>
-                                <tr style={{ borderBottom: '1px solid #1a2238' }}>
-                                  {Object.keys(rows[0]).filter((k: string) => k !== 'country_code').map((k: string) => (
-                                    <th key={k} className="text-left px-3 py-2 font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: '#334155' }}>{k}</th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {rows.map((row: any, i: number) => (
-                                  <tr key={i} style={{ borderBottom: i < rows.length - 1 ? '1px solid #0d1117' : 'none' }}>
-                                    {Object.entries(row).filter(([k]: [string, any]) => k !== 'country_code').map(([k, v]: [string, any]) => (
-                                      <td key={k} className="px-3 py-2 whitespace-nowrap"
-                                        style={{ color: v === null ? '#1f2937' : v === true ? '#10b981' : v === false ? '#ef4444' : '#94a3b8' }}>
-                                        {v === null ? 'null' : v === true ? 'true' : v === false ? 'false' : String(v)}
-                                      </td>
-                                    ))}
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
+
+                {/* Countdown banner */}
+                {seqRunning && seqCountdown !== null && (
+                  <div className="px-6 py-3 border-b flex items-center gap-3"
+                    style={{ background: 'rgba(245,158,11,0.08)', borderColor: '#1a2238' }}>
+                    <Loader2 size={13} className="animate-spin" style={{ color: '#f59e0b' }} />
+                    <p className="text-sm" style={{ color: '#f59e0b' }}>
+                      Waiting <span className="font-black tabular-nums">{seqCountdown}s</span>
+                      <span className="ml-2 text-xs" style={{ color: '#64748b' }}>— rate limit pause before next table</span>
+                    </p>
+                  </div>
+                )}
+
+                {/* Insert error */}
+                {seqErrors.__insert && (
+                  <div className="px-6 py-3 border-b flex items-center gap-3"
+                    style={{ background: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.2)' }}>
+                    <AlertCircle size={13} style={{ color: '#ef4444' }} />
+                    <p className="text-sm" style={{ color: '#ef4444' }}>{seqErrors.__insert}</p>
+                  </div>
+                )}
+
+                {/* Table list */}
+                <div className="divide-y" style={{ borderColor: '#111827' }}>
+                  {ALL_TABLES.map(t => {
+                    const status    = seqStatuses[t.key] || 'idle'
+                    const rows      = seqData[t.key]
+                    const rowCount  = Array.isArray(rows) ? rows.length : rows ? 1 : 0
+                    const err       = seqErrors[t.key]
+                    const isOpen    = seqExpanded[t.key]
+                    const textColor = status === 'done' ? '#ffffff' : status === 'error' ? '#ef4444' : status === 'running' ? '#3b82f6' : '#334155'
+                    return (
+                      <div key={t.key}>
+                        <div className="px-6 py-3 flex items-center gap-3">
+                          <div className="w-5 shrink-0 flex items-center justify-center">
+                            {status === 'running' && <Loader2 size={13} className="animate-spin" style={{ color: '#3b82f6' }} />}
+                            {status === 'done'    && <CheckCircle size={13} style={{ color: '#10b981' }} />}
+                            {status === 'error'   && <XCircle size={13} style={{ color: '#ef4444' }} />}
+                            {status === 'idle'    && <div className="w-2 h-2 rounded-full" style={{ background: '#1e293b' }} />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-sm font-semibold" style={{ color: textColor }}>{t.label}</span>
+                              {status === 'done' && (
+                                <span className="text-xs px-2 py-0.5 rounded-full font-bold"
+                                  style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}>
+                                  {rowCount} record{rowCount !== 1 ? 's' : ''}
+                                </span>
+                              )}
+                            </div>
+                            {err && (
+                              <p className="text-xs mt-0.5 font-semibold"
+                                style={{ color: status === 'error' ? '#ef4444' : '#f59e0b' }}>{err}</p>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {status === 'done' && rows !== undefined && (
+                              <button
+                                onClick={() => setSeqExpanded(p => ({ ...p, [t.key]: !p[t.key] }))}
+                                className="text-xs font-bold px-2.5 py-1 rounded-lg border transition-all"
+                                style={{ background: 'transparent', borderColor: '#1a2238', color: '#475569' }}>
+                                {isOpen ? 'Hide' : 'View'}
+                              </button>
+                            )}
+                            {status === 'error' && !seqRunning && (
+                              <button
+                                onClick={() => retryTable(t.key)}
+                                className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg border transition-all"
+                                style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' }}>
+                                <RefreshCw size={10} /> Retry
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        {isOpen && rows !== undefined && (
+                          <div className="px-6 pb-4 border-t" style={{ borderColor: '#111827' }}>
+                            <div className="overflow-x-auto mt-3">
+                              {Array.isArray(rows) ? (
+                                rows.length > 0 ? (
+                                  <table className="w-full text-xs">
+                                    <thead>
+                                      <tr style={{ borderBottom: '1px solid #1a2238' }}>
+                                        {Object.keys(rows[0]).filter((k: string) => k !== 'country_code').map((k: string) => (
+                                          <th key={k} className="text-left px-3 py-2 font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: '#334155' }}>{k}</th>
+                                        ))}
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {rows.map((row: any, ri: number) => (
+                                        <tr key={ri} style={{ borderBottom: ri < rows.length - 1 ? '1px solid #0d1117' : 'none' }}>
+                                          {Object.entries(row).filter(([k]: [string, any]) => k !== 'country_code').map(([k, v]: [string, any]) => (
+                                            <td key={k} className="px-3 py-2 whitespace-nowrap"
+                                              style={{ color: v === null ? '#1f2937' : v === true ? '#10b981' : v === false ? '#ef4444' : '#94a3b8' }}>
+                                              {v === null ? 'null' : v === true ? 'true' : v === false ? 'false' : String(v)}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                ) : (
+                                  <p className="text-xs py-2" style={{ color: '#334155' }}>
+                                    Empty array — correct for tables with no sub-national variation (e.g. regional_tax_rates).
+                                  </p>
+                                )
+                              ) : (
+                                <pre className="text-xs overflow-x-auto rounded-lg p-3" style={{ background: '#080d1a', color: '#94a3b8' }}>
+                                  {JSON.stringify(rows, null, 2)}
+                                </pre>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
+                    )
+                  })}
+                </div>
+
+                {/* Insert section */}
+                {!seqRunning && (
+                  <div className="px-6 py-5 border-t" style={{ borderColor: '#1a2238' }}>
+                    {seqInserted ? (
+                      <div className="flex items-center gap-3 rounded-xl p-4"
+                        style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                        <CheckCircle size={15} style={{ color: '#10b981' }} />
+                        <div>
+                          <p className="text-sm font-bold" style={{ color: '#10b981' }}>All data inserted successfully into Supabase</p>
+                          <p className="text-xs mt-0.5" style={{ color: '#334155' }}>Go to Data Quality to verify. Activate the country when ready.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-sm font-bold text-white">Ready to insert</p>
+                          <p className="text-xs mt-0.5" style={{ color: '#475569' }}>
+                            {doneCount} of {ALL_TABLES.length} tables populated.
+                            {errorCount > 0 ? ' Retry failed tables above first if needed.' : ' All populated tables ready.'}
+                          </p>
+                        </div>
+                        <button
+                          onClick={insertSequentialData}
+                          disabled={seqInserting || doneCount === 0}
+                          className="flex items-center gap-2 text-sm font-bold px-8 py-3 rounded-xl transition-all disabled:opacity-40 shrink-0"
+                          style={{ background: '#059669', color: '#ffffff' }}>
+                          {seqInserting
+                            ? <><Loader2 size={14} className="animate-spin" /> Inserting…</>
+                            : <><Database size={14} /> Insert All Data into Supabase</>}
+                        </button>
+                      </div>
                     )}
                   </div>
-                )
-              })}
-              {!insertDone && (
-                <div className="pt-2 flex justify-end">
-                  <button onClick={handleInsert} disabled={inserting}
-                    className="flex items-center gap-2 text-sm font-bold px-8 py-3 rounded-xl transition-all disabled:opacity-40"
-                    style={{ background: '#059669', color: '#ffffff' }}>
-                    {inserting
-                      ? <><Loader2 size={14} className="animate-spin" /> Inserting all data\u2026</>
-                      : <><Database size={14} /> Insert All Data into Supabase</>}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+
+              </div>
+            )
+          })()}
+
         </div>
       )}
 
