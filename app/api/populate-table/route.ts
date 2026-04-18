@@ -176,7 +176,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true, key: tableKey, data: tableData, source: sourceData })
+    // Strip tax_year from tables that do not have that column in the database
+    const NO_TAX_YEAR = new Set([
+      'record_retention','work_permits','payslip_requirements',
+      'remote_work_rules','contractor_rules',
+    ])
+    const cleanedData = NO_TAX_YEAR.has(tableKey)
+      ? Array.isArray(tableData)
+        ? tableData.map((row: any) => { const r = { ...row }; delete r.tax_year; delete r.is_current; return r })
+        : (() => { const r = { ...tableData }; delete r.tax_year; delete r.is_current; return r })()
+      : tableData
+
+    return NextResponse.json({ success: true, key: tableKey, data: cleanedData, source: sourceData })
   } catch (e: any) {
     return NextResponse.json({ error: e.message ?? "Unknown error" }, { status: 500 })
   }
