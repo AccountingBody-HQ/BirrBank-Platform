@@ -13,6 +13,12 @@ const HRLAKE_TABLES = [
 // Premium tables where AI returns a single object — wrap in array before insert
 const PREMIUM_OBJECT_TABLES = new Set(["payslip_requirements", "remote_work_rules", "contractor_rules"])
 
+// Tables that do NOT have a tax_year column in the database
+const NO_TAX_YEAR_TABLES = new Set([
+  "record_retention", "work_permits", "payslip_requirements",
+  "remote_work_rules", "contractor_rules", "entity_setup",
+])
+
 const LEAVE_TYPE_MAP: Record<string, string> = {
   annual_leave: "annual", annual: "annual",
   sick_leave: "sick", sick: "sick",
@@ -49,7 +55,8 @@ function applyDefaults(table: string, row: any, countryCode: string, currencyCod
     delete (r as any).tax_year
     return r
   }
-  if (table === "entity_setup") {
+  // Strip tax_year from all tables that do not have that column
+  if (NO_TAX_YEAR_TABLES.has(table)) {
     const r = { ...base }
     delete (r as any).tax_year
     return r
