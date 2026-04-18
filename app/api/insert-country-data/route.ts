@@ -10,14 +10,18 @@ const HRLAKE_TABLES = [
   "regional_tax_rates", "salary_benchmarks", "government_benefit_payments",
   "entity_setup",
 ]
-// Premium tables where AI returns a single object — wrap in array before insert
+
 const PREMIUM_OBJECT_TABLES = new Set(["payslip_requirements", "remote_work_rules", "contractor_rules"])
 
-// Tables that do NOT have a tax_year column in the database
-const NO_TAX_YEAR_TABLES = new Set([
-  "record_retention", "work_permits", "payslip_requirements",
-  "remote_work_rules", "contractor_rules", "entity_setup",
+// Tables confirmed to have NO tax_year column in the database
+const NO_TAX_YEAR = new Set([
+  "public_holidays", "payslip_requirements", "record_retention",
+  "remote_work_rules", "contractor_rules", "work_permits",
+  "entity_setup", "salary_benchmarks",
 ])
+
+// Tables confirmed to have NO valid_from column in the database
+const NO_VALID_FROM = new Set(["work_permits"])
 
 const LEAVE_TYPE_MAP: Record<string, string> = {
   annual_leave: "annual", annual: "annual",
@@ -36,7 +40,8 @@ const FREQUENCY_MAP: Record<string, string> = {
 }
 
 function applyDefaults(table: string, row: any, countryCode: string, currencyCode: string = "USD") {
-  const base = {
+  // Build base with all standard defaults
+  const base: any = {
     tax_year: 2025,
     valid_from: "2025-01-01",
     is_current: true,
@@ -44,24 +49,46 @@ function applyDefaults(table: string, row: any, countryCode: string, currencyCod
     ...row,
     country_code: countryCode.toUpperCase(),
   }
-  if (table === "tax_brackets") return { currency_code: currencyCode, ...base }
-  if (table === "social_security") return { currency_code: currencyCode, ...base }
-  if (table === "statutory_leave") return { ...base, leave_type: LEAVE_TYPE_MAP[row.leave_type] ?? row.leave_type }
-  if (table === "filing_calendar") return { ...base, frequency: FREQUENCY_MAP[row.frequency] ?? row.frequency.toLowerCase() }
-  if (table === "payroll_compliance") return { compliance_type: "payroll", ...base }
-  if (table === "public_holidays") return { year: 2025, tier: "free", is_mandatory: true, ...row, country_code: countryCode.toUpperCase() }
+
+  // Strip columns that do not exist on this table
+  if (NO_TAX_YEAR.has(table))  delete base.tax_year
+  if (NO_VALID_FROM.has(table)) delete base.valid_from
+
+  // Table-specific overrides
+  if (table === "tax_brackets") {
+    return { currency_code: currencyCode, ...base }
+  }
+  if (table === "social_security") {
+    return { currency_code: currencyCode, ...base }
+  }
+  if (table === "statutory_leave") {
+    return { ...base, leave_type: LEAVE_TYPE_MAP[row.leave_type] ?? row.leave_type }
+  }
+  if (table === "filing_calendar") {
+    return { ...base, frequency: FREQUENCY_MAP[row.frequency] ?? row.frequency.toLowerCase() }
+  }
+  if (table === "payroll_compliance") {
+    return { compliance_type: "payroll", ...base }
+  }
+  if (table === "public_holidays") {
+    // public_holidays uses year not tax_year, and has no valid_from
+    const r: any = {
+      year: 2025,
+      tier: "free",
+      is_mandatory: true,
+      ...row,
+      country_code: countryCode.toUpperCase(),
+    }
+    delete r.tax_year
+    delete r.valid_from
+    return r
+  }
   if (table === "salary_benchmarks") {
-    const r = { ...base, benchmark_year: 2025 }
-    delete (r as any).tax_year
-    return r
+    // salary_benchmarks uses benchmark_year not tax_year
+    base.benchmark_year = 2025
+    return base
   }
-  // Strip default fields that do not exist on these tables
-  if (NO_TAX_YEAR_TABLES.has(table)) {
-    const r = { ...base }
-    delete (r as any).tax_year
-    delete (r as any).valid_from
-    return r
-  }
+
   return base
 }
 
@@ -73,17 +100,17 @@ export async function POST(req: NextRequest) {
     }
     const sb = createSupabaseAdminClient()
     const errors: string[] = []
+
     for (const table of HRLAKE_TABLES) {
       const rows = data[table]
       if (!rows || rows.length === 0) continue
-      // Delete existing rows for this country first
       const { error: delError } = await sb.schema("hrlake").from(table).delete().eq("country_code", countryCode.toUpperCase())
       if (delError) errors.push(table + " (delete): " + delError.message)
       const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode, currencyCode))
       const { error } = await sb.schema("hrlake").from(table).insert(rowsWithDefaults)
       if (error) errors.push(table + ": " + error.message)
     }
-    // Premium object tables — AI returns a single object, wrap in array before insert
+
     for (const table of PREMIUM_OBJECT_TABLES) {
       const raw = data[table]
       if (!raw) continue
@@ -106,6 +133,7 @@ export async function POST(req: NextRequest) {
       const { error } = await sb.schema("hrlake").from("official_sources").upsert(sourceRows, { onConflict: "country_code,data_category" })
       if (error) errors.push("official_sources: " + error.message)
     }
+
     if (errors.length > 0) {
       return NextResponse.json({ error: "Some inserts failed", details: errors }, { status: 500 })
     }
