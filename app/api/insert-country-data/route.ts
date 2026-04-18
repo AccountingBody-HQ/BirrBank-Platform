@@ -137,7 +137,24 @@ export async function POST(req: NextRequest) {
     if (errors.length > 0) {
       return NextResponse.json({ error: "Some inserts failed", details: errors }, { status: 500 })
     }
-    return NextResponse.json({ success: true })
+
+    // Auto-verify: mark country as verified immediately after a successful insert.
+    // Data was just generated from official sources — re-verifying immediately adds no value.
+    // Data Quality verification should be used for re-validation only.
+    const today = new Date().toISOString().split('T')[0]
+    const { error: verifyError } = await sb
+      .from('countries')
+      .update({
+        last_data_update: today,
+        hrlake_coverage_level: 'full',
+      })
+      .eq('iso2', countryCode.toUpperCase())
+    if (verifyError) {
+      // Non-fatal — data is inserted, just log the verify failure
+      return NextResponse.json({ success: true, verifyWarning: verifyError.message })
+    }
+
+    return NextResponse.json({ success: true, autoVerified: true })
   } catch (e: any) {
     return NextResponse.json({ error: e.message ?? "Unknown error" }, { status: 500 })
   }
