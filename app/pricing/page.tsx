@@ -3,6 +3,9 @@ import { getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 import { ArrowRight, Check } from "lucide-react"
 import type { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
+
 export const metadata: Metadata = {
   title: "Everything is Free | HRLake",
   description: "HRLake is completely free. All country payroll data, tax guides, employment law, EOR intelligence, payroll calculators, and AI assistant — no account required for most features.",

@@ -7,6 +7,9 @@ import { getInsightBySlug, getRelatedArticles, urlFor } from "@/lib/sanity"
 import { getFlag } from "@/lib/flag"
 import { getArticleStructuredData, getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 
+export const dynamic = "force-dynamic"
+
+
 export async function generateMetadata({
   params,
 }: {

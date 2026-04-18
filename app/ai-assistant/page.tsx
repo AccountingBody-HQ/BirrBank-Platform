@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import AiChatClient from "./AiChatClient";
 
+export const dynamic = "force-dynamic"
+
+
 export const metadata: Metadata = {
   title: 'AI Payroll & HR Assistant — Ask Anything | HRLake',
   description: 'Get instant answers on global payroll, tax rates, employment law, and EOR costs. Powered by live verified data across all active countries.',

@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { User, Calculator, ArrowRight, BookmarkCheck, TrendingUp, Shield, Crown } from 'lucide-react'
 
+export const dynamic = "force-dynamic"
+
+
 export const metadata = {
   title: 'Dashboard | HRLake',
   description: 'Your HRLake account dashboard.',

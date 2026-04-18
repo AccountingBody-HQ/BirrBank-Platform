@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import ComplianceComparisonTable, { ComplianceRow } from '@/components/ComplianceComparisonTable'
 
+export const dynamic = "force-dynamic"
+
+
 const TOPICS: Record<string, {
   title: string
   description: string
