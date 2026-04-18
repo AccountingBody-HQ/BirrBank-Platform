@@ -21,6 +21,7 @@ async function fetchCountryData(iso2: string) {
   if (!country) return null
 
   const code = iso2.toUpperCase()
+  const currentYear = new Date().getFullYear()
 
   const [
     { data: brackets },
@@ -48,13 +49,13 @@ async function fetchCountryData(iso2: string) {
     { data: rawSalaryBenchmarks },
     { data: rawGovBenefits },
   ] = await Promise.all([
-    supabase.schema('hrlake').from('tax_brackets').select('*').eq('country_code', code).eq('tax_year', 2025).order('bracket_order'),
-    supabase.schema('hrlake').from('social_security').select('*').eq('country_code', code).eq('tax_year', 2025),
+    supabase.schema('hrlake').from('tax_brackets').select('*').eq('country_code', code).eq('tax_year', currentYear).order('bracket_order'),
+    supabase.schema('hrlake').from('social_security').select('*').eq('country_code', code).eq('tax_year', currentYear),
     supabase.schema('hrlake').from('employment_rules').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', code).eq('is_current', true),
-    supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', code).eq('year', 2025).order('holiday_date'),
-    supabase.schema('hrlake').from('filing_calendar').select('*').eq('country_code', code).eq('tax_year', 2025),
-    supabase.schema('hrlake').from('payroll_compliance').select('*').eq('country_code', code).eq('tax_year', 2025),
+    supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', code).eq('year', currentYear).order('holiday_date'),
+    supabase.schema('hrlake').from('filing_calendar').select('*').eq('country_code', code).eq('tax_year', currentYear),
+    supabase.schema('hrlake').from('payroll_compliance').select('*').eq('country_code', code).eq('tax_year', currentYear),
     supabase.schema('hrlake').from('working_hours').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('termination_rules').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('pension_schemes').select('*').eq('country_code', code).eq('is_current', true),
@@ -68,10 +69,10 @@ async function fetchCountryData(iso2: string) {
     supabase.schema('hrlake').from('contractor_rules').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('work_permits').select('*').eq('country_code', code).eq('is_current', true),
     supabase.schema('hrlake').from('entity_setup').select('*').eq('country_code', code).eq('is_current', true),
-    supabase.schema('hrlake').from('tax_credits').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
-    supabase.schema('hrlake').from('regional_tax_rates').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
-    supabase.schema('hrlake').from('salary_benchmarks').select('*').eq('country_code', code).eq('is_current', true).eq('benchmark_year', 2025),
-    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
+    supabase.schema('hrlake').from('tax_credits').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', currentYear),
+    supabase.schema('hrlake').from('regional_tax_rates').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', currentYear),
+    supabase.schema('hrlake').from('salary_benchmarks').select('*').eq('country_code', code).eq('is_current', true).eq('benchmark_year', currentYear),
+    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', currentYear),
   ])
 
   return {
@@ -146,7 +147,7 @@ export default async function VerifyCountryPage({
           href={`/admin/country-builder?tab=AI+Populate&iso2=${code.toUpperCase()}`}
           className="inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl transition-all"
           style={{ background: 'rgba(167,139,250,0.1)', color: '#a78bfa', border: '1px solid rgba(167,139,250,0.2)' }}>
-          ⚡ Populate Missing Tables
+          ⚩ Populate Missing Tables
         </a>
       </div>
 
@@ -229,7 +230,7 @@ export default async function VerifyCountryPage({
             <div key={i} className="px-5 py-3 flex items-center justify-between">
               <div>
                 <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">{r.leave_type?.replace(/_/g, ' ')}</p>
-                <p className="text-white text-xs font-semibold mt-0.5">{r.minimum_days}{r.maximum_days && r.maximum_days !== r.minimum_days ? `‑${r.maximum_days}` : ''} days {r.is_paid ? '· Paid' : '· Unpaid'}</p>
+                <p className="text-white text-xs font-semibold mt-0.5">{r.minimum_days}{r.maximum_days && r.maximum_days !== r.minimum_days ? `\u2011${r.maximum_days}` : ''} days {r.is_paid ? '\u00b7 Paid' : '\u00b7 Unpaid'}</p>
               </div>
             </div>
           ))}
@@ -311,7 +312,7 @@ export default async function VerifyCountryPage({
           {filing.map((r: any, i: number) => (
             <div key={i} className="px-5 py-3">
               <p className="text-white text-xs font-semibold">{r.filing_type?.replace(/_/g, ' ')}</p>
-              <p className="text-slate-400 text-xs mt-0.5">{r.frequency} · Due: day {r.due_day}{r.due_month ? ` of month ${r.due_month}` : ''}</p>
+              <p className="text-slate-400 text-xs mt-0.5">{r.frequency} \u00b7 Due: day {r.due_day}{r.due_month ? ` of month ${r.due_month}` : ''}</p>
             </div>
           ))}
         </DataCard>
@@ -396,7 +397,7 @@ export default async function VerifyCountryPage({
         <DataCard title="Contractor Rules" count={contractorRules.length}>
           {contractorRules.map((r: any, i: number) => (
             <div key={i} className="px-5 py-3">
-              <p className="text-white text-xs font-semibold mb-1">{r.classification_test?.slice(0,80)}{r.classification_test?.length > 80 ? '…' : ''}</p>
+              <p classNama="text-white text-xs font-semibold mb-1">{r.classification_test?.slice(0,80)}{r.classification_test?.length > 80 ? '…' : ''}</p>
               {r.ir35_equivalent && <p className="text-amber-400 text-xs">IR35: {r.ir35_equivalent?.slice(0,60)}…</p>}
             </div>
           ))}
