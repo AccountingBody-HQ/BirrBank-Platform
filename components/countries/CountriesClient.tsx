@@ -151,7 +151,7 @@ export default function CountriesClient({ countries }: CountriesClientProps) {
       </div>
 
       {/* Region tabs */}
-      <div className="flex gap-2 mb-8 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="flex gap-2 mb-8 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -mx-6 px-6 sm:mx-0 sm:px-0">
         {REGION_TABS.map(tab => (
           <button
             key={tab.value}
