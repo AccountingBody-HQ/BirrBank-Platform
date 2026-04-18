@@ -31,166 +31,167 @@ WHEN ANSWERING:
 
 const COUNTRY_MAP: Record<string, string> = {
   "uk": "GB", "united kingdom": "GB", "britain": "GB", "england": "GB",
-  "us": "US", "usa": "US", "united states": "US", "america": "US",
-  "germany": "DE", "german": "DE",
-  "france": "FR", "french": "FR",
-  "netherlands": "NL", "dutch": "NL", "holland": "NL",
-  "ireland": "IE", "irish": "IE",
-  "australia": "AU", "australian": "AU",
-  "canada": "CA", "canadian": "CA",
-  "singapore": "SG",
-  "uae": "AE", "united arab emirates": "AE", "dubai": "AE",
-  "japan": "JP", "japanese": "JP",
-  "sweden": "SE", "swedish": "SE",
-  "denmark": "DK", "danish": "DK",
-  "norway": "NO", "norwegian": "NO",
-  "switzerland": "CH", "swiss": "CH",
-  "belgium": "BE", "belgian": "BE",
-  "spain": "ES", "spanish": "ES",
-  "italy": "IT", "italian": "IT",
-  "portugal": "PT", "portuguese": "PT",
-  "poland": "PL", "polish": "PL",
-};
+    "us": "US", "usa": "US", "united states": "US", "america": "US",
+      "germany": "DE", "german": "DE",
+        "france": "FR", "french": "FR",
+          "netherlands": "NL", "dutch": "NL", "holland": "NL",
+            "ireland": "IE", "irish": "IE",
+              "australia": "AU", "australian": "AU",
+                "canada": "CA", "canadian": "CA",
+                  "singapore": "SG",
+                    "uae": "AE", "united arab emirates": "AE", "dubai": "AE",
+                      "japan": "JP", "japanese": "JP",
+                        "sweden": "SE", "swedish": "SE",
+                          "denmark": "DK", "danish": "DK",
+                            "norway": "NO", "norwegian": "NO",
+                              "switzerland": "CH", "swiss": "CH",
+                                "belgium": "BE", "belgian": "BE",
+                                  "spain": "ES", "spanish": "ES",
+                                    "italy": "IT", "italian": "IT",
+                                      "portugal": "PT", "portuguese": "PT",
+                                        "poland": "PL", "polish": "PL",
+                                        };
 
-function detectCountry(message: string): string | null {
-  const lower = message.toLowerCase();
-  for (const [keyword, code] of Object.entries(COUNTRY_MAP)) {
-    if (lower.includes(keyword)) return code;
-  }
-  return null;
-}
+                                        function detectCountry(message: string): string | null {
+                                          const lower = message.toLowerCase();
+                                            for (const [keyword, code] of Object.entries(COUNTRY_MAP)) {
+                                                if (lower.includes(keyword)) return code;
+                                                  }
+                                                    return null;
+                                                    }
 
-async function fetchCountryData(countryCode: string, supabase: ReturnType<typeof createSupabaseAdminClient>) {
-  const [taxRes, ssRes, rulesRes] = await Promise.all([
-    supabase.schema("hrlake").from("tax_brackets")
-      .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
-      .eq("country_code", countryCode).eq("tax_year", 2025)
-      .order("bracket_order"),
-    supabase.schema("hrlake").from("social_security")
-      .select("contribution_type,employer_rate,employee_rate,employer_cap_annual,employee_cap_annual,applies_above,applies_below")
-      .eq("country_code", countryCode).eq("tax_year", 2025),
-    supabase.schema("hrlake").from("employment_rules")
-      .select("rule_type,value_text,value_numeric,value_unit")
-      .eq("country_code", countryCode).eq("is_current", true),
-  ]);
-  return {
-    taxBrackets: taxRes.data || [],
-    ss: ssRes.data || [],
-    rules: rulesRes.data,
-  };
-}
+                                                    async function fetchCountryData(countryCode: string, supabase: ReturnType<typeof createSupabaseAdminClient>) {
+                                                      const [taxRes, ssRes, rulesRes] = await Promise.all([
+                                                          supabase.schema("hrlake").from("tax_brackets")
+                                                                .select("bracket_order,lower_limit,upper_limit,rate,bracket_name")
+                                                                      .eq("country_code", countryCode).eq("tax_year", new Date().getFullYear())
+                                                                            .order("bracket_order"),
+                                                                                supabase.schema("hrlake").from("social_security")
+                                                                                      .select("contribution_type,employer_rate,employee_rate,employer_cap_annual,employee_cap_annual,applies_above,applies_below")
+                                                                                            .eq("country_code", countryCode).eq("tax_year", new Date().getFullYear()),
+                                                                                                supabase.schema("hrlake").from("employment_rules")
+                                                                                                      .select("rule_type,value_text,value_numeric,value_unit")
+                                                                                                            .eq("country_code", countryCode).eq("is_current", true),
+                                                                                                              ]);
+                                                                                                                return {
+                                                                                                                    taxBrackets: taxRes.data || [],
+                                                                                                                        ss: ssRes.data || [],
+                                                                                                                            rules: rulesRes.data,
+                                                                                                                              };
+                                                                                                                              }
 
-function buildCountryContext(countryCode: string, countryName: string, data: any): string {
-  const { taxBrackets, ss, rules } = data;
-  if (!taxBrackets.length && !ss.length && !rules) return "";
+                                                                                                                              function buildCountryContext(countryCode: string, countryName: string, data: any): string {
+                                                                                                                                const { taxBrackets, ss, rules } = data;
+                                                                                                                                  if (!taxBrackets.length && !ss.length && !rules) return "";
 
-  let ctx = `\n\nVERIFIED LIVE DATABASE DATA FOR ${countryName || countryCode} (use this data — it is current and verified):\n`;
+                                                                                                                                    let ctx = `\n\nVERIFIED LIVE DATABASE DATA FOR ${countryName || countryCode} (use this data — it is current and verified):\n`;
 
-  if (taxBrackets.length > 0) {
-    ctx += "Income Tax Brackets:\n";
-    taxBrackets.forEach((b: any) => {
-      const upper = b.upper_limit ? `to ${b.upper_limit}` : "and above";
-      ctx += `  ${b.bracket_name || ""}: ${b.lower_limit} ${upper} @ ${b.rate}%\n`;
-    });
-  }
-  if (ss.length > 0) {
-    ctx += "Social Security Contributions:\n";
-    ss.forEach((s: any) => {
-      const erCap = s.employer_cap_annual ? ` (employer annual cap: ${s.employer_cap_annual})` : "";
-      const eeCap = s.employee_cap_annual ? ` (employee annual cap: ${s.employee_cap_annual})` : "";
-      const threshold = s.applies_above ? ` above ${s.applies_above}` : "";
-      ctx += `  ${s.contribution_type}: employer ${s.employer_rate}%${erCap}, employee ${s.employee_rate}%${eeCap}${threshold}\n`;
-    });
-  }
-  if (rules && rules.length > 0) {
-    ctx += "Employment Rules:\n";
-    rules.forEach((r: any) => {
-      const val = r.value_text ?? (r.value_numeric != null ? `${r.value_numeric} ${r.value_unit ?? ''}`.trim() : null);
-      if (val) ctx += `  ${r.rule_type}: ${val}\n`;
-    });
-  }
-  return ctx;
-}
+                                                                                                                                      if (taxBrackets.length > 0) {
+                                                                                                                                          ctx += "Income Tax Brackets:\n";
+                                                                                                                                              taxBrackets.forEach((b: any) => {
+                                                                                                                                                    const upper = b.upper_limit ? `to ${b.upper_limit}` : "and above";
+                                                                                                                                                          ctx += `  ${b.bracket_name || ""}: ${b.lower_limit} ${upper} @ ${b.rate}%\n`;
+                                                                                                                                                              });
+                                                                                                                                                                }
+                                                                                                                                                                  if (ss.length > 0) {
+                                                                                                                                                                      ctx += "Social Security Contributions:\n";
+                                                                                                                                                                          ss.forEach((s: any) => {
+                                                                                                                                                                                const erCap = s.employer_cap_annual ? ` (employer annual cap: ${s.employer_cap_annual})` : "";
+                                                                                                                                                                                      const eeCap = s.employee_cap_annual ? ` (employee annual cap: ${s.employee_cap_annual})` : "";
+                                                                                                                                                                                            const threshold = s.applies_above ? ` above ${s.applies_above}` : "";
+                                                                                                                                                                                                  ctx += `  ${s.contribution_type}: employer ${s.employer_rate}%${erCap}, employee ${s.employee_rate}%${eeCap}${threshold}\n`;
+                                                                                                                                                                                                      });
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                          if (rules && rules.length > 0) {
+                                                                                                                                                                                                              ctx += "Employment Rules:\n";
+                                                                                                                                                                                                                  rules.forEach((r: any) => {
+                                                                                                                                                                                                                        const val = r.value_text ?? (r.value_numeric != null ? `${r.value_numeric} ${r.value_unit ?? ''}`.trim() : null);
+                                                                                                                                                                                                                              if (val) ctx += `  ${r.rule_type}: ${val}\n`;
+                                                                                                                                                                                                                                  });
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                      return ctx;
+                                                                                                                                                                                                                                      }
 
-export async function POST(req: NextRequest) {
-  try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const supabase = createSupabaseAdminClient();
-    const { message, countryCode: passedCode, countryName: passedName, history = [] } = await req.json();
+                                                                                                                                                                                                                                      export async function POST(req: NextRequest) {
+                                                                                                                                                                                                                                        try {
+                                                                                                                                                                                                                                            const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+                                                                                                                                                                                                                                                const supabase = createSupabaseAdminClient();
+                                                                                                                                                                                                                                                    const { message, countryCode: passedCode, countryName: passedName, history = [] } = await req.json();
 
-    if (!message) {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 });
-    }
+                                                                                                                                                                                                                                                        if (!message) {
+                                                                                                                                                                                                                                                              return NextResponse.json({ error: "Message is required" }, { status: 400 });
+                                                                                                                                                                                                                                                                  }
 
-    const detectedCode = passedCode || detectCountry(message);
-    const countryCode = detectedCode;
-    const countryName = passedName || countryCode || "";
+                                                                                                                                                                                                                                                                      const detectedCode = passedCode || detectCountry(message);
+                                                                                                                                                                                                                                                                          const countryCode = detectedCode;
+                                                                                                                                                                                                                                                                              const countryName = passedName || countryCode || "";
 
-    const embeddingResponse = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: message,
-    });
-    const queryEmbedding = embeddingResponse.data[0].embedding;
+                                                                                                                                                                                                                                                                                  const embeddingResponse = await openai.embeddings.create({
+                                                                                                                                                                                                                                                                                        model: "text-embedding-3-small",
+                                                                                                                                                                                                                                                                                              input: message,
+                                                                                                                                                                                                                                                                                                  });
+                                                                                                                                                                                                                                                                                                      const queryEmbedding = embeddingResponse.data[0].embedding;
 
-    const { data: chunks } = await supabase.rpc("match_hrlake_embeddings", {
-      query_embedding: queryEmbedding,
-      match_count: 5,
-      filter_country: countryCode || null,
-    });
+                                                                                                                                                                                                                                                                                                          const { data: chunks } = await supabase.rpc("match_hrlake_embeddings", {
+                                                                                                                                                                                                                                                                                                                query_embedding: queryEmbedding,
+                                                                                                                                                                                                                                                                                                                      match_count: 5,
+                                                                                                                                                                                                                                                                                                                            filter_country: countryCode || null,
+                                                                                                                                                                                                                                                                                                                                });
 
-    let countryContext = "";
-    if (countryCode) {
-      const data = await fetchCountryData(countryCode, supabase);
-      countryContext = buildCountryContext(countryCode, countryName, data);
-    }
+                                                                                                                                                                                                                                                                                                                                    let countryContext = "";
+                                                                                                                                                                                                                                                                                                                                        if (countryCode) {
+                                                                                                                                                                                                                                                                                                                                              const data = await fetchCountryData(countryCode, supabase);
+                                                                                                                                                                                                                                                                                                                                                    countryContext = buildCountryContext(countryCode, countryName, data);
+                                                                                                                                                                                                                                                                                                                                                        }
 
-    let vectorContext = "";
-    if (chunks && chunks.length > 0) {
-      vectorContext = "\n\nRELEVANT KNOWLEDGE BASE CONTENT:\n";
-      chunks.forEach((c: any, i: number) => {
-        vectorContext += `[${i + 1}] ${c.title}: ${c.content_chunk}\n`;
-      });
-    }
+                                                                                                                                                                                                                                                                                                                                                            let vectorContext = "";
+                                                                                                                                                                                                                                                                                                                                                                if (chunks && chunks.length > 0) {
+                                                                                                                                                                                                                                                                                                                                                                      vectorContext = "\n\nRELEVANT KNOWLEDGE BASE CONTENT:\n";
+                                                                                                                                                                                                                                                                                                                                                                            chunks.forEach((c: any, i: number) => {
+                                                                                                                                                                                                                                                                                                                                                                                    vectorContext += `[${i + 1}] ${c.title}: ${c.content_chunk}\n`;
+                                                                                                                                                                                                                                                                                                                                                                                          });
+                                                                                                                                                                                                                                                                                                                                                                                              }
 
-    const messages: any[] = [
-      { role: "system", content: SYSTEM_PROMPT + countryContext + vectorContext },
-      ...history.slice(-10),
-      { role: "user", content: message },
-    ];
+                                                                                                                                                                                                                                                                                                                                                                                                  const messages: any[] = [
+                                                                                                                                                                                                                                                                                                                                                                                                        { role: "system", content: SYSTEM_PROMPT + countryContext + vectorContext },
+                                                                                                                                                                                                                                                                                                                                                                                                              ...history.slice(-10),
+                                                                                                                                                                                                                                                                                                                                                                                                                    { role: "user", content: message },
+                                                                                                                                                                                                                                                                                                                                                                                                                        ];
 
-    const stream = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages,
-      stream: true,
-      max_tokens: 1500,
-      temperature: 0.2,
-    });
+                                                                                                                                                                                                                                                                                                                                                                                                                            const stream = await openai.chat.completions.create({
+                                                                                                                                                                                                                                                                                                                                                                                                                                  model: "gpt-4o-mini",
+                                                                                                                                                                                                                                                                                                                                                                                                                                        messages,
+                                                                                                                                                                                                                                                                                                                                                                                                                                              stream: true,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    max_tokens: 1500,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          temperature: 0.2,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              });
 
-    const encoder = new TextEncoder();
-    const readable = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content || "";
-          if (text) controller.enqueue(encoder.encode(text));
-        }
-        controller.close();
-      },
-    });
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  const encoder = new TextEncoder();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      const readable = new ReadableStream({
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            async start(controller) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    for await (const chunk of stream) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              const text = chunk.choices[0]?.delta?.content || "";
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        if (text) controller.enqueue(encoder.encode(text));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        controller.close();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  });
 
 
 
-    return new Response(readable, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "X-Content-Type-Options": "nosniff",
-      },
-    });
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      return new Response(readable, {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "Content-Type": "text/plain; charset=utf-8",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "X-Content-Type-Options": "nosniff",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      });
 
-  } catch (error: any) {
-    console.error("Chat API error:", error);
-    return NextResponse.json(
-      { error: "Chat failed. Please try again." },
-      { status: 500 }
-    );
-  }
-}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } catch (error: any) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            console.error("Chat API error:", error);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                return NextResponse.json(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      { error: "Chat failed. Please try again." },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            { status: 500 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                );
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
