@@ -47,7 +47,7 @@ function MobileSection({ label, links, onClose }: {
               className="flex flex-col px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
             >
               <span className="text-sm font-medium text-slate-300 group-hover:text-white">{link.label}</span>
-              {link.sub && <span className="text-xs text-slate-500 group-hover:text-slate-400">{link.sub}</span>}
+              {link.sub && <span className="text-xs text-slate-500 group-hover:text-slate-400">{link.sub === 'COUNTRY_COUNT_PLACEHOLDER' ? `Browse all ${countryCount} countries` : link.sub}</span>}
             </Link>
           ))}
         </div>
@@ -141,7 +141,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
                       onClick={() => setToolsOpen(false)}
                     >
                       <p className="text-sm font-semibold text-white">{item.label}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{item.sub}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{item.sub === 'COUNTRY_COUNT_PLACEHOLDER' ? `Browse all ${countryCount} countries` : item.sub}</p>
                     </Link>
                   ))}
                   </div>
