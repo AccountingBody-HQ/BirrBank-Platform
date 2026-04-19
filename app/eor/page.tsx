@@ -103,10 +103,10 @@ export default async function EORHubPage() {
               The most comprehensive Employer of Record intelligence platform on the web. Cost modelling, compliance risk ratings, hiring guides, and country-by-country EOR data — everything EOR firms and global employers need in one place.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a href="#estimator" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3.5 rounded-xl transition-colors text-sm">
+              <a href="#estimator" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
                 Open cost estimator <ArrowRight size={15} />
               </a>
-              <a href="#countries" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-6 py-3.5 rounded-xl transition-colors text-sm">
+              <a href="#countries" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-7 py-4 rounded-xl transition-colors text-sm">
                 Browse countries
               </a>
             </div>
