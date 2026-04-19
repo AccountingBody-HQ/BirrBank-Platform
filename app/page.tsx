@@ -37,17 +37,19 @@ const REGION_MAP: Record<string, string> = {
   it: 'europe', nl: 'europe', no: 'europe', pl: 'europe', pt: 'europe',
   es: 'europe', se: 'europe', ch: 'europe', gb: 'europe',
   br: 'americas', ca: 'americas', co: 'americas', us: 'americas',
-  au: 'asia-pacific', jp: 'asia-pacific', sg: 'asia-pacific',
+  jp: 'asia', sg: 'asia',
+  au: 'oceania',
   ae: 'middle-east',
-  et: 'africa',
+  et: 'africa', ng: 'africa',
 }
 
 const REGION_LABELS = [
   { name: 'Europe',       slug: 'europe' },
   { name: 'Americas',     slug: 'americas' },
-  { name: 'Asia Pacific', slug: 'asia-pacific' },
+  { name: 'Asia',         slug: 'asia' },
   { name: 'Middle East',  slug: 'middle-east' },
   { name: 'Africa',       slug: 'africa' },
+  { name: 'Oceania',      slug: 'oceania' },
 ]
 
 const CAPABILITIES = [
