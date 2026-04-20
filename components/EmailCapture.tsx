@@ -84,6 +84,9 @@ export default function EmailCapture({
           {status === 'loading' ? <Loader2 size={15} className="animate-spin" /> : <>Subscribe <ArrowRight size={14} /></>}
         </button>
       </form>
+      <p className="text-xs mt-2 text-slate-400">
+        By subscribing you agree to receive monthly updates from HRLake. No spam. Unsubscribe any time. See our <a href="/privacy-policy/" className="underline hover:text-slate-600">Privacy Policy</a>.
+      </p>
     )
   }
 
@@ -127,7 +130,8 @@ export default function EmailCapture({
         <p className="text-red-500 text-sm mt-3">{errorMsg}</p>
       )}
       <p className={`text-xs mt-4 ${variant === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>
-        No spam · Unsubscribe any time
+        By subscribing you agree to receive monthly updates from HRLake. No spam. Unsubscribe any time. See our{' '}
+        <a href="/privacy-policy/" className={`underline ${variant === 'dark' ? 'hover:text-slate-400' : 'hover:text-slate-600'}`}>Privacy Policy</a>.
       </p>
     </div>
   )

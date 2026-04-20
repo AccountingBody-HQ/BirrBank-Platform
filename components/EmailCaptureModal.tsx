@@ -168,7 +168,7 @@ export default function EmailCaptureModal({
               )}
 
               <p className="text-slate-400 text-xs mt-4 text-center">
-                No spam · Unsubscribe any time
+                By subscribing you agree to receive monthly updates from HRLake. No spam. Unsubscribe any time. See our <a href="/privacy-policy/" className="underline hover:text-slate-300">Privacy Policy</a>.
               </p>
 
               {/* Dismiss link */}
