@@ -8,8 +8,8 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
+import Navigation from '@/components/BirrBankNav'
+import Footer from '@/components/BirrBankFooter'
 import { createClient } from '@supabase/supabase-js'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent'
@@ -31,10 +31,10 @@ const playfair = Playfair_Display({
 // --- DEFAULT METADATA ---
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://hrlake.com'
+    process.env.BIRRBANK_SITE_URL || 'https://birrbank.com'
   ),
   title: {
-    default: 'HRLake — The Deep Source for Global HR Intelligence',
+    default: "BirrBank — Ethiopia's Financial Intelligence Platform",
     template: '%s | HRLake',
   },
   description:
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     'international payroll',
     'employer costs',
   ],
-  authors: [{ name: 'HRLake' }],
-  creator: 'HRLake',
-  publisher: 'HRLake',
+  authors: [{ name: 'BirrBank' }],
+  creator: 'BirrBank',
+  publisher: 'BirrBank',
   robots: {
     index: true,
     follow: true,
@@ -66,9 +66,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://hrlake.com',
-    siteName: 'HRLake',
-    title: 'HRLake — The Deep Source for Global HR Intelligence',
+    url: 'https://birrbank.com',
+    siteName: 'BirrBank',
+    title: "BirrBank — Ethiopia's Financial Intelligence Platform",
     description:
       'Employer costs, tax brackets, employment law, and compliance data for every country.',
     images: [
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HRLake — The Deep Source for Global HR Intelligence',
+    title: "BirrBank — Ethiopia's Financial Intelligence Platform",
     description:
       'Employer costs, tax brackets, employment law, and compliance data for every country.',
     images: ['/og-default.png'],
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     google: "Ke1xcsC2rYKaBT_PbROsCHNgOJ8s3IjRNyzQuI6JBt4",
   },
   alternates: {
-    canonical: 'https://hrlake.com',
+    canonical: 'https://birrbank.com',
   },
   icons: {
     icon: [
@@ -162,21 +162,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Fetch active country count once — passed to Nav and Footer
-  let countryCount = 23
-  try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    const { count } = await supabase
-      .from('countries')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-    if (count !== null) countryCount = count
-  } catch {
-    // fallback to default
-  }
+
 
   return (
     <ClerkProvider>
@@ -186,9 +172,9 @@ export default async function RootLayout({
         </head>
         <body className="bg-white font-sans antialiased">
           <GoogleTagManagerBody />
-          <Navigation countryCount={countryCount} />
+          <Navigation />
           {children}
-          <Footer countryCount={countryCount} />
+          <Footer />
           <Analytics />
           <SpeedInsights />
           <CookieConsent />
