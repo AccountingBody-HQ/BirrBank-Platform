@@ -1,26 +1,23 @@
-# HRLake Platform
+# BirrBank Platform
 
-HRLake is where global HR knowledge dives deep.
-
-A world-class global HR and payroll intelligence platform covering every country in the world — built for EOR firms, lawyers, accountants, payroll professionals, HR directors, founders, and finance teams.
+BirrBank is Ethiopia's financial operating system — free, mobile-first, bilingual (English + Amharic), covering every dimension of Ethiopia's financial market.
 
 ## Tech Stack
-
-- **Frontend:** Next.js 15 — App Router, TypeScript, Tailwind CSS
-- **Database:** Supabase (PostgreSQL + pgvector)
+- **Frontend:** Next.js 16 — App Router, TypeScript, Tailwind CSS
+- **Database:** Supabase (PostgreSQL)
 - **CMS:** Sanity (shared project)
 - **Hosting:** Vercel
 - **Auth:** Clerk
-- **Payments:** Lemon Squeezy
+- **AI:** Anthropic (claude-sonnet-4-20250514)
 - **Email:** Resend
-- **Analytics:** Vercel Analytics + GA4
+- **Analytics:** GA4 + GTM
 - **Error Monitoring:** Sentry
 
-## Development
-```bash
-npm run dev
-```
+## Platform
+- 214 NBE-regulated institutions
+- 5 pillars: Banking, Insurance, Markets, Commodities, Intelligence
+- 30 database tables
+- 44 public pages
 
-## Deployment
-
-All deployments are triggered automatically via git push to main.
+## Classification
+CONFIDENTIAL — Internal Use Only
