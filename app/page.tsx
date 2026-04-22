@@ -111,8 +111,7 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {CATEGORIES.map(cat => (
               <Link key={cat.title} href={cat.href} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 14, padding: 24, textDecoration: 'none', display: 'block', transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#1A5C38'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(26,92,56,0.1)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none' }}>
+>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>{cat.icon}</div>
                 <h3 style={{ fontWeight: 700, fontSize: 17, color: '#111827', margin: '0 0 8px' }}>{cat.title}</h3>
                 <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 16px', lineHeight: 1.5 }}>{cat.desc}</p>
