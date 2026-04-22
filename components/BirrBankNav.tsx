@@ -46,16 +46,16 @@ export default function Navigation() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   return (
-    <nav style={{background:'#163300'}} className="sticky top-0 z-50">
+    <nav style={{background:'#9ef07a'}} className="sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-8 flex items-center justify-between h-16">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 no-underline">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="6" fill="rgba(255,255,255,0.1)"/>
-            <path d="M6 8h16M6 14h16M6 20h10" stroke="#9ef07a" strokeWidth="2.2" strokeLinecap="round"/>
+            <rect width="28" height="28" rx="6" fill="rgba(0,0,0,0.08)"/>
+            <path d="M6 8h16M6 14h16M6 20h10" stroke="#163300" strokeWidth="2.2" strokeLinecap="round"/>
           </svg>
-          <span style={{color:'#9ef07a'}} className="font-black text-lg tracking-tight">BirrBank</span>
+          <span style={{color:'#163300'}} className="font-black text-lg tracking-tight">BirrBank</span>
         </Link>
 
         {/* Desktop links */}
@@ -66,18 +66,18 @@ export default function Navigation() {
               onMouseLeave={() => setOpenDropdown(null)}>
               <Link href={item.href}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
-                style={{color: pathname.startsWith(item.href) ? '#9ef07a' : '#7ec86a', opacity: pathname.startsWith(item.href) ? 1 : 0.85}}>
+                style={{color: pathname.startsWith(item.href) ? '#163300' : '#163300', fontWeight: pathname.startsWith(item.href) ? '700' : '500', opacity: pathname.startsWith(item.href) ? 1 : 0.75}}>
                 {item.label}
                 <ChevronDown size={12} className={"transition-transform " + (openDropdown === item.label ? 'rotate-180' : '')} />
               </Link>
               {openDropdown === item.label && (
                 <div className="absolute top-full left-0 mt-1 w-52 rounded-xl overflow-hidden py-1 z-50"
-                  style={{background:'#1f4700', border:'1px solid rgba(158,240,122,0.15)', boxShadow:'0 16px 40px rgba(0,0,0,0.3)'}}>
+                  style={{background:'#9ef07a', border:'1px solid rgba(0,0,0,0.1)', boxShadow:'0 16px 40px rgba(0,0,0,0.15)'}}>
                   {item.sub.map(s => (
                     <Link key={s.href} href={s.href}
                       className="block px-4 py-2.5 text-sm font-medium transition-colors"
-                      style={{color:'#9ef07a'}}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(158,240,122,0.08)')}
+                      style={{color:'#163300'}}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.06)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                       {s.label}
                     </Link>
@@ -92,39 +92,39 @@ export default function Navigation() {
         <div className="hidden md:flex items-center gap-3">
           <Link href="/sign-in"
             className="text-sm font-semibold px-3 py-2 transition-colors"
-            style={{color:'#7ec86a'}}>
+            style={{color:'#163300', opacity:0.75}}>
             Log in
           </Link>
           <Link href="/sign-up"
             className="text-sm font-bold px-5 py-2.5 rounded-full transition-colors"
-            style={{background:'transparent', border:'1.5px solid #9ef07a', color:'#9ef07a'}}>
+            style={{background:'#163300', border:'none', color:'#9ef07a'}}>
             Get started
           </Link>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden p-2" style={{color:'#9ef07a'}} onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden p-2" style={{color:'#163300'}} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#1f4700', borderTop:'1px solid rgba(158,240,122,0.1)'}}>
+        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#9ef07a', borderTop:'1px solid rgba(0,0,0,0.08)'}}>
           {NAV.map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileOpen(false)}
               className="block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors"
-              style={{color:'#9ef07a'}}>
+              style={{color:'#163300'}}>
               {item.label}
             </Link>
           ))}
           <div className="pt-3 flex gap-3" style={{borderTop:'1px solid rgba(158,240,122,0.1)'}}>
             <Link href="/sign-in" onClick={() => setMobileOpen(false)}
               className="flex-1 text-center text-sm py-2 font-semibold"
-              style={{color:'#9ef07a'}}>Log in</Link>
+              style={{color:'#163300'}}>Log in</Link>
             <Link href="/sign-up" onClick={() => setMobileOpen(false)}
               className="flex-1 text-center text-sm font-bold py-2 rounded-full"
-              style={{border:'1.5px solid #9ef07a', color:'#9ef07a'}}>Get started</Link>
+              style={{background:'#163300', color:'#9ef07a', border:'none'}}>Get started</Link>
           </div>
         </div>
       )}
