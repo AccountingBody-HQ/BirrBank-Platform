@@ -46,38 +46,39 @@ export default function Navigation() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   return (
-    <nav style={{background:'#9ef07a'}} className="sticky top-0 z-50">
+    <nav style={{background:'#f5f5f5', borderBottom:'1px solid #e8e8e8'}} className="sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-8 flex items-center justify-between h-16">
 
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 no-underline">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="6" fill="rgba(0,0,0,0.08)"/>
-            <path d="M6 8h16M6 14h16M6 20h10" stroke="#163300" strokeWidth="2.2" strokeLinecap="round"/>
-          </svg>
-          <span style={{color:'#163300'}} className="font-black text-lg tracking-tight">BirrBank</span>
+          <div style={{background:'#1A5C38', borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center'}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="14" y2="18"/></svg>
+          </div>
+          <span style={{color:'#1A5C38', fontWeight:800, fontSize:18, letterSpacing:'-0.5px'}}>BirrBank</span>
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
           {NAV.map(item => (
             <div key={item.label} className="relative"
               onMouseEnter={() => setOpenDropdown(item.label)}
               onMouseLeave={() => setOpenDropdown(null)}>
               <Link href={item.href}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
-                style={{color: pathname.startsWith(item.href) ? '#163300' : '#163300', fontWeight: pathname.startsWith(item.href) ? '700' : '500', opacity: pathname.startsWith(item.href) ? 1 : 0.75}}>
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-colors"
+                style={{
+                  color: pathname.startsWith(item.href) ? '#1A5C38' : '#2d6a4f',
+                  fontWeight: pathname.startsWith(item.href) ? 700 : 500,
+                  background: pathname.startsWith(item.href) ? 'rgba(26,92,56,0.08)' : 'transparent'
+                }}>
                 {item.label}
                 <ChevronDown size={12} className={"transition-transform " + (openDropdown === item.label ? 'rotate-180' : '')} />
               </Link>
               {openDropdown === item.label && (
                 <div className="absolute top-full left-0 mt-1 w-52 rounded-xl overflow-hidden py-1 z-50"
-                  style={{background:'#9ef07a', border:'1px solid rgba(0,0,0,0.1)', boxShadow:'0 16px 40px rgba(0,0,0,0.15)'}}>
+                  style={{background:'#fff', border:'1px solid #e8e8e8', boxShadow:'0 16px 40px rgba(0,0,0,0.1)'}}>
                   {item.sub.map(s => (
                     <Link key={s.href} href={s.href}
-                      className="block px-4 py-2.5 text-sm font-medium transition-colors"
-                      style={{color:'#163300'}}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.06)')}
+                      className="block px-4 py-2.5 text-sm transition-colors"
+                      style={{color:'#1A5C38', fontWeight:500}}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,92,56,0.05)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                       {s.label}
                     </Link>
@@ -88,43 +89,36 @@ export default function Navigation() {
           ))}
         </div>
 
-        {/* Right side */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/sign-in"
-            className="text-sm font-semibold px-3 py-2 transition-colors"
-            style={{color:'#163300', opacity:0.75}}>
+          <Link href="/sign-in" className="text-sm font-medium px-3 py-2 transition-colors" style={{color:'#2d6a4f'}}>
             Log in
           </Link>
-          <Link href="/sign-up"
-            className="text-sm font-bold px-5 py-2.5 rounded-full transition-colors"
-            style={{background:'#163300', border:'none', color:'#9ef07a'}}>
+          <Link href="/sign-up" className="text-sm font-bold px-5 py-2.5 rounded-full transition-colors"
+            style={{background:'#1A5C38', color:'#fff'}}>
             Get started
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="md:hidden p-2" style={{color:'#163300'}} onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden p-2" style={{color:'#1A5C38'}} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#9ef07a', borderTop:'1px solid rgba(0,0,0,0.08)'}}>
+        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#f5f5f5', borderTop:'1px solid #e8e8e8'}}>
           {NAV.map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileOpen(false)}
-              className="block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors"
-              style={{color:'#163300'}}>
+              className="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors"
+              style={{color:'#1A5C38'}}>
               {item.label}
             </Link>
           ))}
-          <div className="pt-3 flex gap-3" style={{borderTop:'1px solid rgba(158,240,122,0.1)'}}>
+          <div className="pt-3 flex gap-3" style={{borderTop:'1px solid #e8e8e8'}}>
             <Link href="/sign-in" onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center text-sm py-2 font-semibold"
-              style={{color:'#163300'}}>Log in</Link>
+              className="flex-1 text-center text-sm py-2 font-medium" style={{color:'#2d6a4f'}}>Log in</Link>
             <Link href="/sign-up" onClick={() => setMobileOpen(false)}
               className="flex-1 text-center text-sm font-bold py-2 rounded-full"
-              style={{background:'#163300', color:'#9ef07a', border:'none'}}>Get started</Link>
+              style={{background:'#1A5C38', color:'#fff'}}>Get started</Link>
           </div>
         </div>
       )}

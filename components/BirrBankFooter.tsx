@@ -2,18 +2,17 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer style={{background:'#9ef07a'}}>
+    <footer style={{background:'#f5f5f5', borderTop:'1px solid #e8e8e8'}}>
       <div className="max-w-6xl mx-auto px-8 py-14">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <rect width="28" height="28" rx="6" fill="rgba(0,0,0,0.08)"/>
-                <path d="M6 8h16M6 14h16M6 20h10" stroke="#163300" strokeWidth="2.2" strokeLinecap="round"/>
-              </svg>
-              <span style={{color:'#163300'}} className="font-black text-lg tracking-tight">BirrBank</span>
+              <div style={{background:'#1A5C38', borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="14" y2="18"/></svg>
+              </div>
+              <span style={{color:'#1A5C38', fontWeight:800, fontSize:17, letterSpacing:'-0.4px'}}>BirrBank</span>
             </div>
-            <p style={{color:'rgba(0,0,0,0.55)'}} className="text-sm leading-relaxed">
+            <p style={{color:'#555', fontSize:13, lineHeight:1.7}}>
               Ethiopia's financial operating system. Free. Mobile-first. Bilingual.
             </p>
           </div>
@@ -25,13 +24,13 @@ export default function Footer() {
             { title: 'Intelligence', links: [['Guides', '/guides'], ['Regulations', '/regulations'], ['AI Assistant', '/ai-assistant'], ['Diaspora Hub', '/diaspora']] },
           ].map(col => (
             <div key={col.title}>
-              <p style={{color:'rgba(0,0,0,0.45)'}} className="text-xs font-bold uppercase tracking-widest mb-3">{col.title}</p>
-              <ul className="space-y-2">
+              <p style={{color:'#999', fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'1.5px', marginBottom:12}}>{col.title}</p>
+              <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:8}}>
                 {col.links.map(([label, href]) => (
                   <li key={href}>
-                    <Link href={href}
-                      style={{color:'#163300'}}
-                      className="text-sm font-medium hover:opacity-70 transition-opacity">
+                    <Link href={href} style={{color:'#1A5C38', fontSize:13, fontWeight:500, textDecoration:'none'}}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
                       {label}
                     </Link>
                   </li>
@@ -41,15 +40,14 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
-          style={{borderTop:'1px solid rgba(0,0,0,0.12)'}}>
-          <p style={{color:'rgba(0,0,0,0.45)'}} className="text-xs">© 2026 BirrBank. All rights reserved.</p>
-          <p style={{color:'rgba(0,0,0,0.45)'}} className="text-xs text-center max-w-xl leading-relaxed">
-            BirrBank provides financial information for comparison purposes only. Not a bank, insurer, broker or financial adviser. Always verify rates directly with the institution.
+        <div style={{borderTop:'1px solid #e0e0e0', paddingTop:28, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16}}>
+          <p style={{color:'#999', fontSize:11}}>© 2026 BirrBank. All rights reserved.</p>
+          <p style={{color:'#999', fontSize:11, textAlign:'center', maxWidth:480, lineHeight:1.6}}>
+            Financial information for comparison only. Not a bank, insurer, broker or financial adviser. Always verify rates directly with the institution.
           </p>
-          <div className="flex gap-5">
-            <Link href="/about" style={{color:'rgba(0,0,0,0.55)'}} className="text-xs hover:opacity-100 transition-opacity">About</Link>
-            <Link href="/legal" style={{color:'rgba(0,0,0,0.55)'}} className="text-xs hover:opacity-100 transition-opacity">Legal</Link>
+          <div style={{display:'flex', gap:20}}>
+            <Link href="/about" style={{color:'#1A5C38', fontSize:12, fontWeight:500, textDecoration:'none'}}>About</Link>
+            <Link href="/legal" style={{color:'#1A5C38', fontSize:12, fontWeight:500, textDecoration:'none'}}>Legal</Link>
           </div>
         </div>
       </div>
