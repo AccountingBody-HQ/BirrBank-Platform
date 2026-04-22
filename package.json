@@ -1,6 +1,6 @@
 {
-  "name": "hrlake-platform",
-  "version": "0.1.0",
+  "name": "birrbank-platform",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -46,5 +46,6 @@
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "Ethiopia's Financial Operating System"
 }
