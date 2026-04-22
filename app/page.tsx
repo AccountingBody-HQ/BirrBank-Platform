@@ -69,8 +69,8 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-16">
           <div className="grid grid-cols-2 gap-16 items-start">
             <div>
-              <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 text-xs text-green-800 font-bold mb-8 tracking-wide">
-                <span className="w-2 h-2 bg-green-600 rounded-full" style={{boxShadow:'0 0 0 3px rgba(22,101,52,0.2)'}}></span>
+              <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-xs text-slate-600 font-semibold mb-8 tracking-wide">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 214 NBE-regulated institutions · Free forever
               </div>
               <h1 className="font-serif text-6xl font-bold text-slate-950 leading-none mb-6" style={{letterSpacing:'-2px'}}>
@@ -130,7 +130,7 @@ export default function HomePage() {
                         <p className={`font-bold text-sm truncate ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}>{r.bank}</p>
                         <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'text-green-600 font-bold uppercase tracking-wide' : 'text-slate-400'}`}>{r.badge || r.product}</p>
                       </div>
-                      <div className={`font-mono font-black text-right ${r.rank === 1 ? 'text-green-700 text-2xl' : 'text-green-600 text-xl'}`} style={{letterSpacing:'-1px'}}>{r.rate}%</div>
+                      <div className={`font-mono font-black text-right ${r.rank === 1 ? 'text-green-700 text-2xl' : 'text-slate-900 text-xl'}`} style={{letterSpacing:'-1px'}}>{r.rate}%</div>
                     </div>
                   ))}
                 </div>
@@ -146,7 +146,7 @@ export default function HomePage() {
           <div className="grid grid-cols-4 gap-4 mt-14 pt-10 border-t border-slate-100">
             {METRICS.map((m) => (
               <div key={m.label} className="bg-white rounded-2xl border border-slate-200 p-5 text-center" style={{boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <p className="font-mono text-3xl font-black text-green-700 leading-none mb-2" style={{letterSpacing:'-1.5px'}}>{m.value}</p>
+                <p className="font-mono text-3xl font-black text-slate-900 leading-none mb-2" style={{letterSpacing:'-1.5px'}}>{m.value}</p>
                 <p className="text-xs text-slate-500 font-semibold uppercase tracking-widest">{m.label}</p>
               </div>
             ))}
@@ -158,20 +158,20 @@ export default function HomePage() {
       <section className="bg-slate-50 border-b border-slate-100 py-20 px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-black text-green-700 uppercase tracking-widest mb-3">Full market coverage</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
             <h2 className="font-serif text-4xl font-bold text-slate-950 tracking-tight" style={{letterSpacing:'-1px'}}>Everything in Ethiopia's financial market</h2>
           </div>
           <div className="grid grid-cols-5 gap-4">
             {PILLARS.map((p) => (
               <Link key={p.label} href={p.href} className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-green-300 hover:shadow-lg hover:shadow-green-900/5 transition-all duration-200 flex flex-col" style={{boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <div className="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-green-100 transition-colors shrink-0">
+                <div className="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-green-50 transition-colors shrink-0">
                   {PILLAR_ICONS[p.label]}
                 </div>
                 <p className="font-bold text-slate-900 text-sm mb-2 tracking-tight">{p.label}</p>
                 <p className="text-xs text-slate-500 leading-relaxed mb-5 flex-1">{p.desc}</p>
-                <div className="flex items-center gap-1.5 text-xs text-green-700 font-bold mt-auto">
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold mt-auto group-hover:text-slate-900 transition-colors">
                   <span>{p.stat}</span>
-                  <svg className="group-hover:translate-x-0.5 transition-transform" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <svg className="group-hover:translate-x-0.5 transition-transform text-green-600" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </div>
               </Link>
             ))}
@@ -188,8 +188,8 @@ export default function HomePage() {
             { title: 'Free forever', desc: 'BirrBank is permanently free for consumers. No paywalls, no premium tiers, no subscription ever required.', path: 'M12 1v22 M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
           ].map(item => (
             <div key={item.title}>
-              <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{boxShadow:'0 2px 12px rgba(26,92,56,0.08)'}}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{boxShadow:'0 2px 12px rgba(26,92,56,0.08)'}}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d={item.path}/>
                 </svg>
               </div>
