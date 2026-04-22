@@ -48,14 +48,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
 
       {/* Live ticker */}
-      <div className="bg-green-950 border-b border-green-900 overflow-hidden">
+      <div className="bg-white border-b border-slate-100 overflow-hidden">
         <div className="flex items-center gap-8 px-6 py-2">
-          <span className="text-green-400 text-xs font-black uppercase tracking-widest shrink-0">Live</span>
+          <span className="inline-flex items-center gap-1.5 text-slate-800 text-xs font-black uppercase tracking-widest shrink-0"><span className="w-2 h-2 bg-green-500 rounded-full"></span>Live</span>
           <div className="flex gap-10 overflow-x-hidden">
             {TICKER.map((t, i) => (
               <span key={i} className="flex items-center gap-2 shrink-0">
-                <span className="text-green-500/60 text-xs font-medium">{t.label}</span>
-                <span className="text-white text-xs font-mono font-bold">{t.value}</span>
+                <span className="text-slate-400 text-xs font-medium">{t.label}</span>
+                <span className="text-slate-900 text-xs font-mono font-bold">{t.value}</span>
                 <span className={`text-xs font-semibold ${t.up ? 'text-emerald-400' : 'text-red-400'}`}>{t.change}</span>
               </span>
             ))}
@@ -108,14 +108,14 @@ export default function HomePage() {
             <div className="relative">
               <div className="absolute -inset-4 rounded-3xl" style={{background:'radial-gradient(ellipse at center,rgba(26,92,56,0.08) 0%,transparent 70%)'}} />
               <div className="relative bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{boxShadow:'0 24px 64px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04)'}}>
-                <div className="bg-green-800 px-5 py-4 flex justify-between items-center">
+                <div className="bg-white border-b border-slate-100 px-5 py-4 flex justify-between items-center">
                   <div>
-                    <p className="text-xs font-black text-green-300 uppercase tracking-widest mb-0.5">Live data</p>
-                    <p className="text-white font-bold text-base">Top savings rates today</p>
+                    <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Live data</p>
+                    <p className="text-slate-900 font-bold text-base">Top savings rates today</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-green-700/50 rounded-full px-3 py-1.5">
+                  <div className="flex items-center gap-2 bg-green-50 rounded-full px-3 py-1.5">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full" style={{boxShadow:'0 0 0 3px rgba(52,211,153,0.3)'}}></span>
-                    <span className="text-green-200 text-xs font-bold">Live</span>
+                    <span className="text-green-700 text-xs font-bold">Live</span>
                   </div>
                 </div>
                 <div className="divide-y divide-slate-50">
