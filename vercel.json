@@ -9,9 +9,6 @@
     "app/api/verify-country/route.ts": {
       "maxDuration": 120
     },
-    "app/api/admin-eor-guide/route.ts": {
-      "maxDuration": 60
-    },
     "app/api/content-factory/generate/route.ts": {
       "maxDuration": 120
     },
@@ -20,9 +17,6 @@
     },
     "app/api/insert-country-data/route.ts": {
       "maxDuration": 60
-    },
-    "app/api/admin-backfill-holidays/route.ts": {
-      "maxDuration": 300
     }
   },
   "headers": [
