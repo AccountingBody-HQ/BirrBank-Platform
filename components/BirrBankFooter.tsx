@@ -28,9 +28,7 @@ export default function Footer() {
               <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:8}}>
                 {col.links.map(([label, href]) => (
                   <li key={href}>
-                    <Link href={href} style={{color:'#1A5C38', fontSize:13, fontWeight:500, textDecoration:'none'}}
-                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
-                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
+                    <Link href={href} style={{color:'#1A5C38', fontSize:13, fontWeight:500, textDecoration:'none', opacity:1}}>
                       {label}
                     </Link>
                   </li>
