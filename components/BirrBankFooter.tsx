@@ -2,16 +2,22 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-8 py-14">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
+    <footer style={{background:'#163300'}}>
+      <div className="max-w-6xl mx-auto px-8 py-14">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center text-sm font-black text-white">B</div>
-              <span className="font-bold text-slate-900 text-lg">BirrBank</span>
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect width="28" height="28" rx="6" fill="rgba(255,255,255,0.1)"/>
+                <path d="M6 8h16M6 14h16M6 20h10" stroke="#9ef07a" strokeWidth="2.2" strokeLinecap="round"/>
+              </svg>
+              <span style={{color:'#9ef07a'}} className="font-black text-lg tracking-tight">BirrBank</span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed">Ethiopia's financial operating system. Free. Mobile-first. Bilingual.</p>
+            <p style={{color:'rgba(158,240,122,0.6)'}} className="text-sm leading-relaxed">
+              Ethiopia's financial operating system. Free. Mobile-first. Bilingual.
+            </p>
           </div>
+
           {[
             { title: 'Banking', links: [['Savings Rates', '/banking/savings-rates'], ['Loan Comparison', '/banking/loans'], ['FX Rates', '/banking/fx-rates'], ['Mobile Money', '/banking/mobile-money']] },
             { title: 'Markets', links: [['Listed Equities', '/markets/equities'], ['IPO Pipeline', '/markets/ipo-pipeline'], ['Bonds & T-Bills', '/markets/bonds'], ['How to Invest', '/markets/how-to-invest']] },
@@ -19,23 +25,31 @@ export default function Footer() {
             { title: 'Intelligence', links: [['Guides', '/guides'], ['Regulations', '/regulations'], ['AI Assistant', '/ai-assistant'], ['Diaspora Hub', '/diaspora']] },
           ].map(col => (
             <div key={col.title}>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">{col.title}</p>
+              <p style={{color:'rgba(158,240,122,0.5)'}} className="text-xs font-bold uppercase tracking-widest mb-3">{col.title}</p>
               <ul className="space-y-2">
                 {col.links.map(([label, href]) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-slate-500 hover:text-slate-900 transition-colors">{label}</Link>
+                    <Link href={href}
+                      style={{color:'#9ef07a'}}
+                      className="text-sm font-medium hover:opacity-70 transition-opacity">
+                      {label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-slate-400">© 2026 BirrBank. All rights reserved.</p>
-          <p className="text-xs text-slate-400 text-center max-w-xl">BirrBank provides financial information for comparison purposes only. We are not a bank, insurer, broker, or financial adviser. Always verify rates directly with the institution before making any financial decision.</p>
-          <div className="flex gap-4">
-            <Link href="/about" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">About</Link>
-            <Link href="/legal" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">Legal</Link>
+
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+          style={{borderTop:'1px solid rgba(158,240,122,0.15)'}}>
+          <p style={{color:'rgba(158,240,122,0.4)'}} className="text-xs">© 2026 BirrBank. All rights reserved.</p>
+          <p style={{color:'rgba(158,240,122,0.4)'}} className="text-xs text-center max-w-xl leading-relaxed">
+            BirrBank provides financial information for comparison purposes only. Not a bank, insurer, broker or financial adviser. Always verify rates directly with the institution.
+          </p>
+          <div className="flex gap-5">
+            <Link href="/about" style={{color:'rgba(158,240,122,0.5)'}} className="text-xs hover:opacity-100 transition-opacity">About</Link>
+            <Link href="/legal" style={{color:'rgba(158,240,122,0.5)'}} className="text-xs hover:opacity-100 transition-opacity">Legal</Link>
           </div>
         </div>
       </div>
