@@ -9,16 +9,6 @@ const RATES = [
   { rank: 5, bank: 'Oromia International', product: 'Savings account', rate: '8.50', badge: null },
 ]
 
-const TICKER = [
-  { label: 'USD/ETB', value: '156.40', up: true, change: '+0.3%' },
-  { label: 'Coffee Grade A', value: 'ETB 43,200', up: true, change: '+1.8%' },
-  { label: 'Sesame White', value: 'ETB 28,500', up: true, change: '+0.6%' },
-  { label: 'Best savings rate', value: '9.50%', up: true, change: 'Awash Bank' },
-  { label: 'White Wheat', value: 'ETB 7,100', up: false, change: '-0.4%' },
-  { label: 'GBP/ETB', value: '198.20', up: true, change: '+0.2%' },
-  { label: 'WGAGN (Wegagen)', value: 'ETB 42.50', up: true, change: '+3.2%' },
-  { label: 'SAR/ETB', value: '41.70', up: false, change: '-0.1%' },
-]
 
 const PILLARS = [
   { label: 'Banking', stat: 'Up to 9.50% p.a.', href: '/banking', desc: '32 banks · 55 MFIs · 27 payment operators · 62 transfer agencies' },
@@ -46,25 +36,6 @@ const PILLAR_ICONS: Record<string, React.ReactNode> = {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
-
-      {/* Live ticker */}
-      <div className="overflow-hidden" style={{background:'#0a1f0f', borderBottom:'1px solid rgba(26,92,56,0.4)'}}>
-        <div className="flex items-center" style={{height:36}}>
-          <div className="flex items-center gap-2 px-5 shrink-0" style={{background:'#1A5C38', height:'100%'}}>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{boxShadow:'0 0 0 3px rgba(52,211,153,0.3)'}}></span>
-            <span className="text-xs font-black uppercase tracking-widest" style={{color:'#fff', letterSpacing:'2px'}}>Live</span>
-          </div>
-          <div className="flex items-center gap-10 px-6 overflow-x-auto" style={{scrollbarWidth:'none'}}>
-            {TICKER.map((t, i) => (
-              <span key={i} className="flex items-center gap-2 shrink-0">
-                <span className="text-xs font-medium" style={{color:'rgba(255,255,255,0.45)'}}>{t.label}</span>
-                <span className="text-xs font-mono font-bold" style={{color:'#fff'}}>{t.value}</span>
-                <span className={`text-xs font-bold ${t.up ? 'text-emerald-400' : 'text-red-400'}`}>{t.change}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Hero */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
