@@ -21,7 +21,7 @@ const CATEGORIES = [
   { title: 'FX & Transfers', desc: 'Best rates to send money home or exchange foreign currency.', href: '/banking/fx-rates', icon: '💱', stat: '62 money transfer agencies' },
   { title: 'ESX Markets', desc: 'Track listed equities, IPO pipeline and T-bill yields on the Ethiopian Securities Exchange.', href: '/markets', icon: '📈', stat: '45+ IPOs in pipeline' },
   { title: 'Insurance', desc: 'Compare motor, life, health and property insurance from 18 providers.', href: '/insurance', icon: '🛡️', stat: 'First comparison in Ethiopia' },
-  { title: 'Commodity Prices', desc: 'Live ECX prices for coffee, sesame, grains and beans. Updated daily.', href: '/commodities', icon: '☕', stat: 'Ethiopia: world's 5th coffee producer' },
+  { title: 'Commodity Prices', desc: 'Live ECX prices for coffee, sesame, grains and beans. Updated daily.', href: '/commodities', icon: '☕', stat: 'Ethiopia: world\'s 5th coffee producer' },
   { title: 'Diaspora Hub', desc: 'Invest in Ethiopian stocks from abroad. Send money home cheaply. Open diaspora accounts.', href: '/diaspora', icon: '🌍', stat: '$5bn+ annual remittances' },
 ]
 
