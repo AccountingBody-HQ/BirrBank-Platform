@@ -48,14 +48,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
 
       {/* Live ticker */}
-      <div className="bg-white border-b border-slate-100 overflow-hidden">
+      <div className="overflow-hidden" style={{background:'#163300', borderBottom:'1px solid rgba(158,240,122,0.15)'}}>
         <div className="flex items-center gap-8 px-6 py-2">
-          <span className="inline-flex items-center gap-1.5 text-slate-800 text-xs font-black uppercase tracking-widest shrink-0"><span className="w-2 h-2 bg-green-500 rounded-full"></span>Live</span>
+          <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest shrink-0" style={{color:'#9ef07a'}}><span className="w-2 h-2 rounded-full" style={{background:'#9ef07a'}}></span>Live</span>
           <div className="flex gap-10 overflow-x-hidden">
             {TICKER.map((t, i) => (
               <span key={i} className="flex items-center gap-2 shrink-0">
-                <span className="text-slate-400 text-xs font-medium">{t.label}</span>
-                <span className="text-slate-900 text-xs font-mono font-bold">{t.value}</span>
+                <span className="text-xs font-medium" style={{color:'rgba(158,240,122,0.5)'}}>{t.label}</span>
+                <span className="text-xs font-mono font-bold" style={{color:'#9ef07a'}}>{t.value}</span>
                 <span className={`text-xs font-semibold ${t.up ? 'text-emerald-400' : 'text-red-400'}`}>{t.change}</span>
               </span>
             ))}
@@ -66,24 +66,24 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="absolute inset-0 pointer-events-none" style={{background:'radial-gradient(ellipse 800px 400px at 50% -80px,rgba(26,92,56,0.07) 0%,transparent 70%)'}} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-16">
+        <div className="relative max-w-6xl mx-auto px-8 pt-24 pb-24">
           <div className="grid grid-cols-2 gap-16 items-start">
             <div>
               <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-xs text-slate-600 font-semibold mb-8 tracking-wide">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 214 NBE-regulated institutions · Free forever
               </div>
-              <h1 className="font-serif text-6xl font-bold text-slate-950 leading-none mb-6" style={{letterSpacing:'-2px'}}>
+              <h1 className="font-serif font-bold text-slate-950 leading-none mb-8" style={{fontSize:'64px', letterSpacing:'-2.5px', lineHeight:'1.02'}}>
                 The smartest<br/>way to manage<br/>money in<br/><span className="text-green-700">Ethiopia</span>
               </h1>
               <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-sm">
                 Compare every bank, insurer and investment. Live commodity and ESX market data. All free, always.
               </p>
               <div className="flex gap-3 mb-12">
-                <Link href="/banking/savings-rates" className="bg-green-800 hover:bg-green-700 text-white font-bold text-base px-8 py-4 rounded-full transition-colors" style={{boxShadow:'0 4px 20px rgba(26,92,56,0.3)'}}>
+                <Link href="/banking/savings-rates" className="bg-green-800 hover:bg-green-700 text-white font-bold rounded-full transition-colors" style={{fontSize:'16px', padding:'16px 34px', boxShadow:'0 4px 20px rgba(26,92,56,0.3)'}}>
                   Compare savings rates
                 </Link>
-                <Link href="/markets" className="border-2 border-green-200 text-green-800 hover:border-green-400 font-semibold text-base px-7 py-4 rounded-full transition-colors">
+                <Link href="/markets" className="border-2 border-green-200 text-green-800 hover:border-green-400 font-semibold rounded-full transition-colors" style={{fontSize:'16px', padding:'16px 30px'}}>
                   ESX markets
                 </Link>
               </div>
@@ -120,7 +120,7 @@ export default function HomePage() {
                 </div>
                 <div className="divide-y divide-slate-50">
                   {RATES.map((r) => (
-                    <div key={r.rank} className={`flex items-center gap-4 px-5 py-4 ${r.rank === 1 ? 'bg-green-50' : 'bg-white'}`}>
+                    <div key={r.rank} className={`flex items-center gap-4 ${r.rank === 1 ? 'bg-green-50' : 'bg-white'}`} style={{padding:'18px 24px'}}>
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${r.rank === 1 ? 'bg-green-800 text-white' : 'bg-slate-100 text-slate-500'}`}>
                         {r.rank === 1 ? (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -145,9 +145,9 @@ export default function HomePage() {
           {/* Metric pills */}
           <div className="grid grid-cols-4 gap-4 mt-14 pt-10 border-t border-slate-100">
             {METRICS.map((m) => (
-              <div key={m.label} className="bg-white rounded-2xl border border-slate-200 p-5 text-center" style={{boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <p className="font-mono text-3xl font-black text-slate-900 leading-none mb-2" style={{letterSpacing:'-1.5px'}}>{m.value}</p>
-                <p className="text-xs text-slate-500 font-semibold uppercase tracking-widest">{m.label}</p>
+              <div key={m.label} className="bg-white rounded-2xl border border-slate-200 text-center" style={{padding:'24px 20px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
+                <p className="font-mono font-black text-slate-900 leading-none mb-2" style={{fontSize:'36px', letterSpacing:'-2px'}}>{m.value}</p>
+                <p className="font-semibold uppercase tracking-widest" style={{fontSize:'11px', color:'#94a3b8'}}>{m.label}</p>
               </div>
             ))}
           </div>
@@ -155,20 +155,20 @@ export default function HomePage() {
       </section>
 
       {/* Five identical pillars */}
-      <section className="bg-slate-50 border-b border-slate-100 py-20 px-8">
+      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'80px 32px'}}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
-            <h2 className="font-serif text-4xl font-bold text-slate-950 tracking-tight" style={{letterSpacing:'-1px'}}>Everything in Ethiopia's financial market</h2>
+            <h2 className="font-serif font-bold text-slate-950" style={{fontSize:'40px', letterSpacing:'-1.5px'}}>Everything in Ethiopia's financial market</h2>
           </div>
           <div className="grid grid-cols-5 gap-4">
             {PILLARS.map((p) => (
-              <Link key={p.label} href={p.href} className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-green-300 hover:shadow-lg hover:shadow-green-900/5 transition-all duration-200 flex flex-col" style={{boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <div className="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-green-50 transition-colors shrink-0">
+              <Link key={p.label} href={p.href} className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-xl transition-all duration-200 flex flex-col" style={{padding:'28px 24px', boxShadow:'0 2px 20px rgba(0,0,0,0.05)'}}>
+                <div className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors shrink-0" style={{width:'48px', height:'48px', marginBottom:'20px'}}>
                   {PILLAR_ICONS[p.label]}
                 </div>
-                <p className="font-bold text-slate-900 text-sm mb-2 tracking-tight">{p.label}</p>
-                <p className="text-xs text-slate-500 leading-relaxed mb-5 flex-1">{p.desc}</p>
+                <p className="font-bold text-slate-900 mb-2 tracking-tight" style={{fontSize:'15px'}}>{p.label}</p>
+                <p className="text-slate-500 leading-relaxed flex-1" style={{fontSize:'12px', lineHeight:'1.7', marginBottom:'20px'}}>{p.desc}</p>
                 <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold mt-auto group-hover:text-slate-900 transition-colors">
                   <span>{p.stat}</span>
                   <svg className="group-hover:translate-x-0.5 transition-transform text-green-600" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -180,7 +180,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust signals */}
-      <section className="bg-white py-16 px-8 border-b border-slate-100">
+      <section className="bg-white border-b border-slate-100" style={{padding:'72px 32px'}}>
         <div className="max-w-6xl mx-auto grid grid-cols-3 gap-12 text-center">
           {[
             { title: 'NBE verified data', desc: 'All institution data sourced directly from the National Bank of Ethiopia registry and official bank websites.', path: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4' },
@@ -193,8 +193,8 @@ export default function HomePage() {
                   <path d={item.path}/>
                 </svg>
               </div>
-              <h3 className="font-bold text-slate-900 text-base mb-3 tracking-tight">{item.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+              <h3 className="font-bold text-slate-900 mb-3 tracking-tight" style={{fontSize:'17px'}}>{item.title}</h3>
+              <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>{item.desc}</p>
             </div>
           ))}
         </div>
