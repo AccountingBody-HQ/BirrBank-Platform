@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer style={{background:'#f5f5f5', borderTop:'1px solid #e8e8e8'}}>
+    <footer style={{background:'#f0fdf4', borderTop:'1px solid #bbf7d0'}}>
       <div className="max-w-6xl mx-auto px-8 py-14">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
@@ -38,7 +38,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <div style={{borderTop:'1px solid #e0e0e0', paddingTop:28, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16}}>
+        <div style={{borderTop:'1px solid #bbf7d0', paddingTop:28, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16}}>
           <p style={{color:'#999', fontSize:11}}>© 2026 BirrBank. All rights reserved.</p>
           <p style={{color:'#999', fontSize:11, textAlign:'center', maxWidth:480, lineHeight:1.6}}>
             Financial information for comparison only. Not a bank, insurer, broker or financial adviser. Always verify rates directly with the institution.
