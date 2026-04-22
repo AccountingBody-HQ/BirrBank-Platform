@@ -50,7 +50,7 @@ export default function HomePage() {
       {/* Live ticker */}
       <div className="bg-white border-b border-slate-100 overflow-hidden">
         <div className="flex items-center gap-8 px-6 py-2">
-          <span className="inline-flex items-center gap-1.5 text-slate-800 text-xs font-black uppercase tracking-widest shrink-0"><span className="w-2 h-2 bg-green-500 rounded-full"></span>Live</span>
+          <span className="inline-flex items-center gap-1.5 text-slate-800 text-xs font-black uppercase tracking-widest shrink-0"><span className="w-2 h-2 bg-green-400 rounded-full"></span>Live</span>
           <div className="flex gap-10 overflow-x-hidden">
             {TICKER.map((t, i) => (
               <span key={i} className="flex items-center gap-2 shrink-0">
@@ -63,27 +63,27 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{background:'radial-gradient(ellipse 800px 400px at 50% -80px,rgba(26,92,56,0.07) 0%,transparent 70%)'}} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-16">
+      {/* Hero — full bleed deep green like Wise */}
+      <section className="relative overflow-hidden" style={{background:'#163300'}}>
+        <div className="absolute inset-0 pointer-events-none" style={{background:'radial-gradient(ellipse 900px 500px at 30% 50%, rgba(34,197,94,0.08) 0%, transparent 70%)'}} />
+        <div className="relative max-w-6xl mx-auto px-8 pt-28 pb-20">
           <div className="grid grid-cols-2 gap-16 items-start">
             <div>
-              <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-xs text-slate-600 font-semibold mb-8 tracking-wide">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-xs text-white/80 font-semibold mb-8 tracking-wide">
+                <span className="w-2 h-2 bg-green-400 rounded-full"></span>
                 214 NBE-regulated institutions · Free forever
               </div>
-              <h1 className="font-serif text-6xl font-bold text-slate-950 leading-none mb-6" style={{letterSpacing:'-2px'}}>
-                The smartest<br/>way to manage<br/>money in<br/><span className="text-green-700">Ethiopia</span>
+              <h1 className="font-serif text-6xl font-bold text-white leading-none mb-6" style={{letterSpacing:'-2px'}}>
+                The smartest<br/>way to manage<br/>money in<br/><span className="text-green-400">Ethiopia</span>
               </h1>
-              <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-sm">
+              <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-sm">
                 Compare every bank, insurer and investment. Live commodity and ESX market data. All free, always.
               </p>
               <div className="flex gap-3 mb-12">
-                <Link href="/banking/savings-rates" className="bg-green-800 hover:bg-green-700 text-white font-bold text-base px-8 py-4 rounded-full transition-colors" style={{boxShadow:'0 4px 20px rgba(26,92,56,0.3)'}}>
+                <Link href="/banking/savings-rates" className="bg-white hover:bg-green-50 text-green-900 font-bold text-base px-8 py-4 rounded-full transition-colors" style={{boxShadow:'0 4px 20px rgba(0,0,0,0.2)'}}>
                   Compare savings rates
                 </Link>
-                <Link href="/markets" className="border-2 border-green-200 text-green-800 hover:border-green-400 font-semibold text-base px-7 py-4 rounded-full transition-colors">
+                <Link href="/markets" className="border-2 border-white/30 text-white hover:border-white/60 font-semibold text-base px-7 py-4 rounded-full transition-colors">
                   ESX markets
                 </Link>
               </div>
@@ -94,12 +94,12 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-800">Trusted by thousands</p>
-                  <p className="text-xs text-slate-500">across Ethiopia and the diaspora</p>
+                  <p className="text-sm font-bold text-white">Trusted by thousands</p>
+                  <p className="text-xs text-white/60">across Ethiopia and the diaspora</p>
                 </div>
-                <div className="ml-2 pl-4 border-l border-slate-200">
-                  <p className="text-xs text-slate-500 font-medium">Data sourced from</p>
-                  <p className="text-sm font-black text-slate-800 tracking-tight">NBE · ESX · ECX</p>
+                <div className="ml-2 pl-4 border-l border-white/20">
+                  <p className="text-xs text-white/50 font-medium">Data sourced from</p>
+                  <p className="text-sm font-black text-white tracking-tight">NBE · ESX · ECX</p>
                 </div>
               </div>
             </div>
@@ -143,11 +143,11 @@ export default function HomePage() {
           </div>
 
           {/* Metric pills */}
-          <div className="grid grid-cols-4 gap-4 mt-14 pt-10 border-t border-slate-100">
+          <div className="grid grid-cols-4 gap-4 mt-14 pt-10 border-t border-white/10">
             {METRICS.map((m) => (
-              <div key={m.label} className="bg-white rounded-2xl border border-slate-200 p-5 text-center" style={{boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <p className="font-mono text-3xl font-black text-slate-900 leading-none mb-2" style={{letterSpacing:'-1.5px'}}>{m.value}</p>
-                <p className="text-xs text-slate-500 font-semibold uppercase tracking-widest">{m.label}</p>
+              <div key={m.label} className="bg-white/10 backdrop-blur rounded-2xl border border-white/20 p-5 text-center">
+                <p className="font-mono text-3xl font-black text-white leading-none mb-2" style={{letterSpacing:'-1.5px'}}>{m.value}</p>
+                <p className="text-xs text-white/60 font-semibold uppercase tracking-widest">{m.label}</p>
               </div>
             ))}
           </div>
