@@ -48,15 +48,18 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
 
       {/* Live ticker */}
-      <div className="overflow-hidden" style={{background:'#163300', borderBottom:'1px solid rgba(158,240,122,0.15)'}}>
-        <div className="flex items-center gap-8 px-6 py-2">
-          <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest shrink-0" style={{color:'#9ef07a'}}><span className="w-2 h-2 rounded-full" style={{background:'#9ef07a'}}></span>Live</span>
-          <div className="flex gap-10 overflow-x-hidden">
+      <div className="overflow-hidden" style={{background:'#0a1f0f', borderBottom:'1px solid rgba(26,92,56,0.4)'}}>
+        <div className="flex items-center" style={{height:36}}>
+          <div className="flex items-center gap-2 px-5 shrink-0" style={{background:'#1A5C38', height:'100%'}}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{boxShadow:'0 0 0 3px rgba(52,211,153,0.3)'}}></span>
+            <span className="text-xs font-black uppercase tracking-widest" style={{color:'#fff', letterSpacing:'2px'}}>Live</span>
+          </div>
+          <div className="flex items-center gap-10 px-6 overflow-x-auto" style={{scrollbarWidth:'none'}}>
             {TICKER.map((t, i) => (
               <span key={i} className="flex items-center gap-2 shrink-0">
-                <span className="text-xs font-medium" style={{color:'rgba(158,240,122,0.5)'}}>{t.label}</span>
-                <span className="text-xs font-mono font-bold" style={{color:'#9ef07a'}}>{t.value}</span>
-                <span className={`text-xs font-semibold ${t.up ? 'text-emerald-400' : 'text-red-400'}`}>{t.change}</span>
+                <span className="text-xs font-medium" style={{color:'rgba(255,255,255,0.45)'}}>{t.label}</span>
+                <span className="text-xs font-mono font-bold" style={{color:'#fff'}}>{t.value}</span>
+                <span className={`text-xs font-bold ${t.up ? 'text-emerald-400' : 'text-red-400'}`}>{t.change}</span>
               </span>
             ))}
           </div>
@@ -136,7 +139,7 @@ export default function HomePage() {
                 </div>
                 <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                   <p className="text-xs text-slate-400">Verified from official bank websites</p>
-                  <Link href="/banking/savings-rates" className="text-xs text-green-700 font-bold hover:text-green-600">See all 32 banks →</Link>
+                  <Link href="/banking/savings-rates" className="text-xs font-bold transition-colors" style={{color:'#1A5C38'}}>See all 32 banks →</Link>
                 </div>
               </div>
             </div>
