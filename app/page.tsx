@@ -42,7 +42,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="absolute inset-0 pointer-events-none" style={{background:'radial-gradient(ellipse 800px 400px at 50% -80px,rgba(26,92,56,0.07) 0%,transparent 70%)'}} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-16 pb-16">
+        <div className="relative max-w-6xl mx-auto px-8 pt-24 pb-24">
           <div className="grid grid-cols-2 gap-16 items-start">
             <div>
               <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 text-xs text-green-800 font-semibold mb-8 tracking-wide">
@@ -131,15 +131,15 @@ export default function HomePage() {
       </section>
 
       {/* Five pillars */}
-      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'72px 32px'}}>
+      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'96px 32px'}}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
             <h2 className="font-serif font-bold text-slate-950" style={{fontSize:'38px', letterSpacing:'-1.5px'}}>Everything in Ethiopia's financial market</h2>
           </div>
           <div className="grid grid-cols-5 gap-4">
             {PILLARS.map((p) => (
-              <Link key={p.label} href={p.href} className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all duration-200 flex flex-col" style={{padding:'24px 20px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
+              <Link key={p.label} href={p.href} className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all duration-200 flex flex-col" style={{padding:'32px 24px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
                 <div className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors shrink-0" style={{width:'44px', height:'44px', marginBottom:'16px'}}>
                   {PILLAR_ICONS[p.label]}
                 </div>
@@ -156,7 +156,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust signals */}
-      <section className="bg-white border-b border-slate-100" style={{padding:'72px 32px'}}>
+      <section className="bg-white border-b border-slate-100" style={{padding:'96px 32px'}}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Why trust BirrBank</p>
@@ -170,7 +170,7 @@ export default function HomePage() {
                   <polyline points="9 12 11 14 15 10"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-slate-900 mb-3" style={{fontSize:'16px'}}>NBE verified data</h3>
+              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>NBE verified data</h3>
               <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>All institution data sourced directly from the National Bank of Ethiopia registry and official bank websites.</p>
             </div>
             <div>
@@ -180,7 +180,7 @@ export default function HomePage() {
                   <polyline points="12 6 12 12 16 14"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-slate-900 mb-3" style={{fontSize:'16px'}}>Updated every day</h3>
+              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>Updated every day</h3>
               <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>Every rate shows a last-verified date. Stale data is automatically flagged. Rates older than 7 days shown with a warning.</p>
             </div>
             <div>
@@ -190,7 +190,7 @@ export default function HomePage() {
                   <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
               </div>
-              <h3 className="font-bold text-slate-900 mb-3" style={{fontSize:'16px'}}>Free forever</h3>
+              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>Free forever</h3>
               <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>BirrBank is permanently free for consumers. No paywalls, no premium tiers, no subscription ever required.</p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
       </section>
 
       {/* Email capture */}
-      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'72px 32px'}}>
+      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'96px 32px'}}>
         <div className="max-w-6xl mx-auto grid grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Stay informed</p>
