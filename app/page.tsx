@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import EmailCapture from '@/components/EmailCapture'
 export const dynamic = 'force-dynamic'
 
 const RATES = [
@@ -208,21 +209,7 @@ export default function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="bg-white rounded-2xl border border-slate-200 p-8" style={{boxShadow:'0 4px 24px rgba(0,0,0,0.06)'}}>
-            <h3 className="font-bold text-slate-900 mb-2" style={{fontSize:'20px'}}>Get weekly updates</h3>
-            <p className="text-slate-500 text-sm mb-6">Trusted by financial professionals across Ethiopia and the diaspora.</p>
-            <div className="space-y-3">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100"
-              />
-              <button className="w-full font-bold rounded-xl py-3 text-white transition-colors" style={{background:'#1A5C38', fontSize:'15px'}}>
-                Subscribe free →
-              </button>
-            </div>
-            <p className="text-xs text-slate-400 mt-4 text-center">No spam. Unsubscribe anytime. See our Privacy Policy.</p>
-          </div>
+          <EmailCapture />
         </div>
       </section>
 

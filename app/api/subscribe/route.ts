@@ -1,108 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createSupabaseAdminClient } from '@/lib/supabase'
-import { Resend } from 'resend'
+import { createClient } from '@supabase/supabase-js'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json()
-    const { email, source = 'unknown', calculation_summary } = body
+    const { email } = await req.json()
 
-    // --- VALIDATE EMAIL ---
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+    if (!email || !email.includes('@')) {
+      return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
     }
 
-    // --- SAVE TO SUPABASE ---
-    const supabase = createSupabaseAdminClient()
-    const { error: dbError } = await supabase
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    const { error } = await supabase
+      .schema('birrbank')
       .from('email_subscribers')
       .upsert(
-        {
-          email: email.toLowerCase().trim(),
-          platform: 'hrlake',
-          status: 'subscribed',
-          source,
-          subscribed_at: new Date().toISOString(),
-        },
-        {
-          onConflict: 'email,platform',
-          ignoreDuplicates: false,
-        }
+        { email: email.toLowerCase().trim(), is_active: true },
+        { onConflict: 'email' }
       )
 
-    if (dbError) {
-      console.error('Supabase error:', dbError)
-      return NextResponse.json({ error: 'Failed to save subscription' }, { status: 500 })
+    if (error) {
+      console.error('Subscribe error:', error)
+      return NextResponse.json({ error: 'Could not save subscription.' }, { status: 500 })
     }
 
-    // --- SEND WELCOME EMAIL ---
-    if (calculation_summary) {
-      // Calculation results email
-      const { data: resendData1, error: resendError1 } = await resend.emails.send({
-        from: 'HRLake <noreply@accountingbody.com>',
-        to: email,
-        subject: 'Your payroll calculation — HRLake',
-        html: `
-          <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b;">
-            <div style="background: #0f172a; padding: 32px; border-radius: 8px 8px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 20px;">HRLake</h1>
-              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global HR, EOR and Payroll Intelligence</p>
-            </div>
-            <div style="background: #f8fafc; padding: 32px; border: 1px solid #e2e8f0; border-top: none;">
-              <h2 style="color: #1e293b; margin: 0 0 16px;">Your payroll calculation</h2>
-              <p style="color: #475569; line-height: 1.6;">Here is a summary of your calculation:</p>
-              <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin: 24px 0; font-family: monospace; font-size: 14px; color: #1e293b; white-space: pre-wrap;">${calculation_summary}</div>
-              <p style="color: #475569; font-size: 14px; line-height: 1.6;">You are now subscribed to our monthly global payroll updates — rate changes, new country data, and compliance alerts, once a month.</p>
-              <a href="https://hrlake.com/countries/" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 16px;">Browse all countries</a>
-            </div>
-            <div style="padding: 24px; text-align: center;">
-              <p style="color: #94a3b8; font-size: 12px; margin: 0;">HRLake.com · <a href="https://hrlake.com/unsubscribe/?email=${email}" style="color: #94a3b8;">Unsubscribe</a></p>
-            </div>
-          </div>
-        `,
-      })
-    } else {
-      // Standard welcome email
-      await resend.emails.send({
-        from: 'HRLake <noreply@accountingbody.com>',
-        to: email,
-        subject: 'Welcome to HRLake updates',
-        html: `
-          <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b;">
-            <div style="background: #0f172a; padding: 32px; border-radius: 8px 8px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 20px;">HRLake</h1>
-              <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">Global HR, EOR and Payroll Intelligence</p>
-            </div>
-            <div style="background: #f8fafc; padding: 32px; border: 1px solid #e2e8f0; border-top: none;">
-              <h2 style="color: #1e293b; margin: 0 0 16px;">You are subscribed.</h2>
-              <p style="color: #475569; line-height: 1.6;">Thank you for subscribing to HRLake monthly updates.</p>
-              <p style="color: #475569; line-height: 1.6;">Once a month you will receive:</p>
-              <ul style="color: #475569; line-height: 1.8; padding-left: 20px;">
-                <li>Employment rate changes across key jurisdictions</li>
-                <li>New country HR and payroll data additions</li>
-                <li>Employment law and EOR intelligence updates</li>
-                <li>HR compliance and payroll deadline alerts</li>
-              </ul>
-              <a href="https://hrlake.com/countries/" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 16px;">Explore country data</a>
-            </div>
-            <div style="padding: 24px; text-align: center;">
-              <p style="color: #94a3b8; font-size: 12px; margin: 0;">HRLake.com · <a href="https://hrlake.com/unsubscribe/?email=${email}" style="color: #94a3b8;">Unsubscribe</a></p>
-            </div>
-          </div>
-        `,
-      })
-    }
-
-    return NextResponse.json({ success: true, message: 'Subscribed successfully' })
-
-  } catch (error) {
-    console.error('Subscribe error:', error)
-    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error('Subscribe route error:', err)
+    return NextResponse.json({ error: 'Server error.' }, { status: 500 })
   }
 }
