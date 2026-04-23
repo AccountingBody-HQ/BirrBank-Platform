@@ -141,9 +141,10 @@ export default function HomePage() {
             {/* Right: rates card */}
             <div className="relative hidden lg:block pb-16">
               <div
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden"
-                style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)' }}
+                className="bg-white rounded-2xl overflow-hidden"
+                style={{ border: '1px solid #e2e8f0', boxShadow: '0 24px 64px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)' }}
               >
+                <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Verified today</p>
@@ -155,12 +156,12 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="divide-y divide-slate-50">
+                <div className="divide-y divide-slate-100">
                   {TOP_RATES.map((r) => (
                     <div
                       key={r.rank}
                       className={`flex items-center gap-4 transition-colors ${r.rank === 1 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
-                      style={{ padding: '13px 20px' }}
+                      style={{ padding: r.rank === 1 ? '16px 20px' : '12px 20px' }}
                     >
                       <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
@@ -175,7 +176,8 @@ export default function HomePage() {
                         ) : r.rank}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-bold text-sm truncate ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}>
+                        <p className={`font-bold truncate ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}
+                          style={{ fontSize: r.rank === 1 ? '15px' : '13px' }}>
                           {r.bank}
                         </p>
                         <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'text-green-600 font-bold uppercase tracking-wide' : 'text-slate-400'}`}>
@@ -183,8 +185,8 @@ export default function HomePage() {
                         </p>
                       </div>
                       <div
-                        className={`font-mono font-black ${r.rank === 1 ? 'text-green-700' : 'text-slate-900'}`}
-                        style={{ fontSize: r.rank === 1 ? '21px' : '17px', letterSpacing: '-0.5px' }}
+                        className={`font-mono font-black ${r.rank === 1 ? 'text-green-700' : 'text-slate-700'}`}
+                        style={{ fontSize: r.rank === 1 ? '26px' : '16px', letterSpacing: '-1px' }}
                       >
                         {r.rate}%
                       </div>
