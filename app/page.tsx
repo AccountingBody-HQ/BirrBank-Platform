@@ -236,7 +236,7 @@ export default function HomePage() {
       </section>
 
       {/* ═════════════════════════════ PRODUCT CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '80px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-10">
@@ -279,7 +279,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════ FEATURED: FX RATES ═════════════════════════ */}
-      <section className="bg-white border-b border-slate-100" style={{ padding: '80px 32px' }}>
+      <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -343,7 +343,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════ TRUST ════════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '80px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="text-center mb-12">
@@ -409,7 +409,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════ EMAIL CAPTURE ═══════════════════════════════ */}
-      <section className="bg-white border-b border-slate-100" style={{ padding: '80px 32px' }}>
+      <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Weekly rate alerts</p>
@@ -438,13 +438,8 @@ export default function HomePage() {
               ))}
             </ul>
             <div className="flex items-center gap-3 pt-5 border-t border-slate-100">
-              <div className="flex -space-x-2">
-                {['#1A5C38', '#2d6a4f', '#4ade80', '#bbf7d0'].map((c, i) => (
-                  <div key={i} className="w-7 h-7 rounded-full border-2 border-white" style={{ background: c }} />
-                ))}
-              </div>
               <p className="text-xs text-slate-500 font-medium">
-                Join <strong className="text-slate-900">2,400+</strong> Ethiopians and diaspora members
+                Join <strong className="text-slate-900">2,400+</strong> Ethiopians and diaspora members already subscribed
               </p>
             </div>
           </div>
