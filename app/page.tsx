@@ -49,7 +49,7 @@ export default function HomePage() {
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 214 NBE-regulated institutions · Free forever
               </div>
-              <h1 className="font-serif font-bold text-slate-950 leading-none mb-6" style={{fontSize:'60px', letterSpacing:'-2.5px', lineHeight:'1.05'}}>
+              <h1 className="font-serif font-bold text-slate-950 mb-6 text-4xl md:text-5xl lg:text-6xl" style={{letterSpacing:'-1.5px', lineHeight:'1.05'}}>
                 The smartest<br/>way to manage<br/>money in<br/><span className="text-green-700">Ethiopia</span>
               </h1>
               <p className="text-slate-500 leading-relaxed mb-8 max-w-sm" style={{fontSize:'17px', lineHeight:'1.7'}}>
