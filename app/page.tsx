@@ -124,14 +124,14 @@ export default function HomePage() {
                 <Link
                   href="/banking/savings-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ ...BTN_SZ, minWidth: 210, textAlign: 'center', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Compare savings rates
                 </Link>
                 <Link
                   href="/banking/fx-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
+                  style={{ ...BTN_SZ, minWidth: 210, textAlign: 'center', border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>
@@ -141,12 +141,8 @@ export default function HomePage() {
             {/* Right: rates card */}
             <div className="relative hidden lg:block pb-16">
               <div
-                className="absolute rounded-2xl pointer-events-none"
-                style={{ top: 10, left: 10, right: -6, bottom: -6, background: 'rgba(26,92,56,0.06)', borderRadius: 18, zIndex: 0 }}
-              />
-              <div
-                className="relative bg-white rounded-2xl border border-slate-200 overflow-hidden"
-                style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.09), 0 4px 16px rgba(0,0,0,0.05)', zIndex: 1 }}
+                className="bg-white rounded-2xl border border-slate-200 overflow-hidden"
+                style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)' }}
               >
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
