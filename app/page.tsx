@@ -233,7 +233,7 @@ export default function HomePage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What would you like to do?</p>
             <h2
               className="font-serif font-bold text-slate-950"
-              style={{ fontSize: 'clamp(28px, 3.5vw, 38px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
+              style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               Ethiopia's financial market, fully covered.
             </h2>
@@ -277,7 +277,7 @@ export default function HomePage() {
               <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Updated daily</p>
               <h2
                 className="font-serif font-bold text-slate-950"
-                style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
+                style={{ fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
               >
                 Today's FX rates — NBE official
               </h2>
@@ -405,7 +405,7 @@ export default function HomePage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Weekly rate alerts</p>
             <h2
               className="font-serif font-bold text-slate-950 mb-5"
-              style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', letterSpacing: '-1.2px', lineHeight: 1.1 }}
+              style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               The best rates,<br />
               <span style={{ color: '#1A5C38' }}>direct to your inbox.</span>
