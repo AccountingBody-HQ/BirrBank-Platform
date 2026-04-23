@@ -39,13 +39,13 @@ const ArrowRight = () => (
   </svg>
 )
 
-const ChevronUp = () => (
+const TrendUp = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="18 15 12 9 6 15"/>
   </svg>
 )
 
-const ChevronDown = () => (
+const TrendDown = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="6 9 12 15 18 9"/>
   </svg>
@@ -58,37 +58,62 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ════════════════════════════════════ HERO ════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════ HERO ══════════════════════════════════════ */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 1000px 600px at 55% -120px,rgba(26,92,56,0.05) 0%,transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 600px at 40% -80px,rgba(26,92,56,0.05) 0%,transparent 68%)' }}
         />
 
-        <div className="relative max-w-6xl mx-auto px-8 pt-24 pb-16">
-          <div className="grid grid-cols-2 gap-20 items-start">
+        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-16">
+          <div className="grid grid-cols-2 gap-20 items-center">
 
-            {/* ── Left: the statement ── */}
-            <div className="pt-4">
+            {/* ── Left: data-led statement ── */}
+            <div>
 
-              {/* 2-line commanding headline — the fix */}
-              <h1
-                className="font-serif font-bold mb-8"
-                style={{ fontSize: '88px', letterSpacing: '-3.5px', lineHeight: '0.97' }}
+              {/* Eyebrow — platform identity */}
+              <div className="flex items-center gap-2.5 mb-7">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Ethiopia's financial operating system · Live data
+                </span>
+              </div>
+
+              {/* THE HEADLINE IS THE DATA */}
+              <div className="mb-5 leading-none">
+                <span
+                  className="font-mono font-black text-slate-950"
+                  style={{ fontSize: '100px', letterSpacing: '-5px', lineHeight: 1 }}
+                >
+                  9.50
+                </span>
+                <span
+                  className="font-mono font-black"
+                  style={{ fontSize: '52px', letterSpacing: '-2px', color: '#1A5C38', lineHeight: 1 }}
+                >
+                  %
+                </span>
+              </div>
+
+              {/* What that number means */}
+              <p
+                className="font-serif font-bold text-slate-900 mb-1"
+                style={{ fontSize: '22px', letterSpacing: '-0.5px', lineHeight: 1.3 }}
               >
-                <span className="text-slate-950">Ethiopia's<br />financial</span>
-                <br />
-                <span style={{ color: '#1A5C38' }}>operating</span>
-                <br />
-                <span style={{ color: '#1A5C38' }}>system.</span>
-              </h1>
+                The best savings rate in Ethiopia.
+              </p>
+              <p className="text-slate-400 text-sm font-medium mb-8">
+                Awash Bank · 12-month fixed deposit · Verified today
+              </p>
 
+              {/* Value prop — tight, specific */}
               <p
                 className="text-slate-500 mb-10"
-                style={{ fontSize: '17px', lineHeight: '1.75', maxWidth: '380px' }}
+                style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '360px' }}
               >
-                Compare savings rates across 32 banks. Track ESX markets live.
-                Monitor commodity prices. Access insurance data. All free, always.
+                Compare all 32 banks. Track ESX markets live.
+                Monitor ECX commodity prices. 214 NBE-regulated
+                institutions — all free, always.
               </p>
 
               <div className="flex gap-3">
@@ -110,24 +135,24 @@ export default function HomePage() {
             </div>
 
             {/* ── Right: rates card ── */}
-            <div className="relative pt-2">
+            <div>
               <div
                 className="bg-white rounded-2xl border border-slate-200 overflow-hidden"
                 style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.09),0 4px 16px rgba(0,0,0,0.04)' }}
               >
                 {/* Card header */}
-                <div className="bg-white border-b border-slate-100 px-5 py-4 flex justify-between items-center">
+                <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
                   <div>
                     <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Verified today</p>
-                    <p className="text-slate-900 font-bold text-base">Top savings rates</p>
+                    <p className="font-bold text-slate-900 text-base">Top savings rates</p>
                   </div>
                   <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-green-700 text-xs font-bold">Live</span>
+                    <span className="text-xs font-bold text-green-700">Live</span>
                   </div>
                 </div>
 
-                {/* Rate rows */}
+                {/* Rows */}
                 <div className="divide-y divide-slate-50">
                   {RATES.map((r) => (
                     <div
@@ -143,7 +168,7 @@ export default function HomePage() {
                       >
                         {r.rank === 1 ? (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
+                            <polyline points="20 6 9 17 4 12"/>
                           </svg>
                         ) : r.rank}
                       </div>
@@ -197,8 +222,8 @@ export default function HomePage() {
                   >
                     {d.value}
                   </p>
-                  {d.trend === 'up'   && <ChevronUp />}
-                  {d.trend === 'down' && <ChevronDown />}
+                  {d.trend === 'up'   && <TrendUp />}
+                  {d.trend === 'down' && <TrendDown />}
                 </div>
                 <p className="text-xs text-slate-400 font-medium">{d.sub}</p>
               </div>
@@ -207,11 +232,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════ PILLARS ════════════════════════════════════════ */}
+      {/* ═════════════════════════════════ PILLARS ═════════════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
-          {/* Section header */}
           <div className="flex items-end justify-between mb-12">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
@@ -225,7 +249,7 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm font-medium pb-1">214 institutions · 5 pillars</p>
           </div>
 
-          {/* ── Featured: Banking — full-width split card ── */}
+          {/* Featured: Banking */}
           <Link
             href="/banking"
             className="group block bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-2xl transition-all duration-300 mb-4 overflow-hidden"
@@ -233,7 +257,7 @@ export default function HomePage() {
           >
             <div className="grid grid-cols-2">
 
-              {/* Left: copy panel */}
+              {/* Left: copy */}
               <div style={{ padding: '48px 52px' }}>
                 <div className="flex items-center gap-3 mb-7">
                   <div
@@ -244,7 +268,7 @@ export default function HomePage() {
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-slate-400">Banking</span>
                   <span className="flex items-center gap-1.5 text-xs font-bold" style={{ color: '#1A5C38' }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     Updated today
                   </span>
                 </div>
@@ -275,26 +299,33 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right: live rate panel */}
+              {/* Right: live rate */}
               <div
                 className="border-l border-slate-100 flex flex-col justify-center relative overflow-hidden"
                 style={{ padding: '48px 52px', background: '#f8faf8' }}
               >
-                {/* Subtle radial accent behind the number */}
                 <div
                   className="absolute inset-0 pointer-events-none"
-                  style={{ background: 'radial-gradient(ellipse 280px 280px at 50% 45%,rgba(26,92,56,0.05) 0%,transparent 70%)' }}
+                  style={{ background: 'radial-gradient(ellipse 300px 300px at 50% 50%,rgba(26,92,56,0.05) 0%,transparent 70%)' }}
                 />
                 <div className="relative">
                   <p className="text-xs font-black uppercase tracking-widest text-green-600 mb-5">
                     Top savings rate · Today
                   </p>
-                  <p
-                    className="font-mono font-black text-slate-950 leading-none mb-3"
-                    style={{ fontSize: '80px', letterSpacing: '-4px' }}
-                  >
-                    9.50<span style={{ fontSize: '40px', color: '#1A5C38' }}>%</span>
-                  </p>
+                  <div className="leading-none mb-3">
+                    <span
+                      className="font-mono font-black text-slate-950"
+                      style={{ fontSize: '80px', letterSpacing: '-4px' }}
+                    >
+                      9.50
+                    </span>
+                    <span
+                      className="font-mono font-black"
+                      style={{ fontSize: '40px', letterSpacing: '-2px', color: '#1A5C38' }}
+                    >
+                      %
+                    </span>
+                  </div>
                   <p className="text-slate-600 font-semibold mb-1" style={{ fontSize: '14px' }}>
                     Awash Bank · 12-month fixed deposit
                   </p>
@@ -311,7 +342,7 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* ── 4 smaller pillar cards ── */}
+          {/* 4 smaller pillars */}
           <div className="grid grid-cols-4 gap-4">
             {PILLAR_CARDS.map((p) => (
               <Link
@@ -343,7 +374,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════ TRUST ══════════════════════════════════════════ */}
+      {/* ══════════════════════════════════ TRUST ══════════════════════════════════════ */}
       <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
@@ -417,7 +448,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════ EMAIL ══════════════════════════════════════════ */}
+      {/* ══════════════════════════════════ EMAIL ══════════════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-2 gap-20 items-center">
           <div>
