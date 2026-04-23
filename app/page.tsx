@@ -265,20 +265,9 @@ export default function HomePage() {
                 </div>
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
                 <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', minHeight: '72px' }}>{cat.desc}</p>
-                <div
-                  className="rounded-xl mb-5 flex items-center gap-3"
-                  style={{ background: cat.iconBg, padding: '12px 16px' }}
-                >
-                  <div>
-                    <p className="font-mono font-black leading-none" style={{ fontSize: '22px', color: cat.iconColor, letterSpacing: '-1px' }}>
-                      {cat.statNum}
-                      {cat.statNum === 'Live' && (
-                        <span className="inline-block w-2 h-2 rounded-full ml-2 align-middle animate-pulse" style={{ background: cat.iconColor }} />
-                      )}
-                    </p>
-                    <p className="text-xs font-medium mt-1" style={{ color: cat.iconColor, opacity: 0.75 }}>{cat.statLabel}</p>
-                  </div>
-                </div>
+                <p className="font-mono font-black mb-5" style={{ fontSize: '13px', color: cat.iconColor }}>
+                  {cat.statNum} {cat.statLabel}
+                </p>
                 <div
                   className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
                   style={{ color: cat.iconColor }}
