@@ -106,16 +106,18 @@ export default function HomePage() {
             <div className="pb-16">
               <h1
                 className="font-serif font-bold mb-6"
-                style={{ fontSize: 'clamp(44px, 5.5vw, 72px)', letterSpacing: '-2.5px', lineHeight: 1.0 }}
+                style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
               >
-                <span className="text-slate-950">Find Ethiopia's<br />best financial</span>
+                <span className="text-slate-950">Ethiopia's best</span>
                 <br />
-                <span style={{ color: '#1A5C38' }}>rates and products.</span>
+                <span className="text-slate-950">financial rates,</span>
+                <br />
+                <span style={{ color: '#1A5C38' }}>compared.</span>
               </h1>
 
-              <p className="text-slate-500 mb-10" style={{ fontSize: '17px', lineHeight: '1.8', maxWidth: '420px' }}>
-                Compare savings accounts, insurance, investment products
-                and more — all verified, all free, always.
+              <p className="text-slate-500 mb-10" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '400px' }}>
+                Savings rates, FX, insurance, ESX markets and commodity prices —
+                all verified from official sources, completely free.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -435,6 +437,17 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ═══════════════════════════════ DISCLAIMER ══════════════════════════════════ */}
+      <div className="bg-white border-t border-slate-100" style={{ padding: '24px 32px' }}>
+        <div className="max-w-6xl mx-auto">
+          <p className="text-xs text-slate-400" style={{ maxWidth: '700px', lineHeight: '1.8' }}>
+            BirrBank provides financial information for comparison purposes only. We are not a bank,
+            insurer, broker, or financial adviser. Always verify rates directly with the institution
+            before making any financial decision. All data sourced from official institution websites
+            and the National Bank of Ethiopia registry.
+          </p>
+        </div>
+      </div>
 
     </div>
   )
