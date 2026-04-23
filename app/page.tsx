@@ -266,8 +266,8 @@ export default function HomePage() {
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
                 <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8' }}>{cat.desc}</p>
                 <div
-                  className="flex items-center justify-center rounded-lg py-2 mb-5 font-mono font-black"
-                  style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '22px', letterSpacing: '-1px' }}
+                  className="flex items-center justify-center rounded-lg mb-5 font-mono font-black"
+                  style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '20px', letterSpacing: '-0.5px', height: '48px' }}
                 >
                   {cat.stat}
                 </div>
@@ -415,7 +415,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════ EMAIL CAPTURE ═══════════════════════════════ */}
-      <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
+      <section className="bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Weekly rate alerts</p>
