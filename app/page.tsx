@@ -333,18 +333,18 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════ TRUST ════════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '80px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '80px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="text-center mb-12">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Why use BirrBank</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#4ade80' }}>Why use BirrBank</p>
             <h2
-              className="font-serif font-bold text-slate-950 mb-4"
-              style={{ fontSize: 'clamp(26px, 3.5vw, 38px)', letterSpacing: '-1.2px' }}
+              className="font-serif font-bold mb-4"
+              style={{ fontSize: 'clamp(26px, 3.5vw, 38px)', letterSpacing: '-1.2px', color: '#ffffff' }}
             >
               Unbiased. Verified. Free.
             </h2>
-            <p className="text-slate-500 mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
+            <p className="mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px', color: '#6b9e7e' }}>
               We never take fees from the institutions we rank. The best rate is always #1 — regardless of who offers it.
             </p>
           </div>
@@ -353,7 +353,7 @@ export default function HomePage() {
             {[
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     <polyline points="9 12 11 14 15 10"/>
                   </svg>
@@ -364,7 +364,7 @@ export default function HomePage() {
               },
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>
                   </svg>
@@ -375,7 +375,7 @@ export default function HomePage() {
               },
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="1" x2="12" y2="23"/>
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                   </svg>
@@ -385,13 +385,13 @@ export default function HomePage() {
                 body: "BirrBank makes no money from rankings or placements. We're funded by advertising and data services — never by the banks or insurers you're comparing.",
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="bg-white border border-slate-200 rounded-2xl" style={{ padding: '36px 32px' }}>
-                <div className="w-11 h-11 bg-green-50 border border-green-100 rounded-xl flex items-center justify-center mb-6">
+              <div key={tag} className="rounded-2xl" style={{ padding: '36px 32px', background: '#0f2d1a', border: '1px solid #1a3a24' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#1a3a24', border: '1px solid #2d6a4f' }}>
                   {icon}
                 </div>
-                <p className="text-xs font-black uppercase tracking-widest text-green-600 mb-3">{tag}</p>
-                <h3 className="font-bold text-slate-900 mb-3" style={{ fontSize: '16px', lineHeight: 1.4 }}>{headline}</h3>
-                <p className="text-slate-500 text-sm" style={{ lineHeight: '1.85' }}>{body}</p>
+                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#4ade80' }}>{tag}</p>
+                <h3 className="font-bold mb-3" style={{ fontSize: '16px', lineHeight: 1.4, color: '#ffffff' }}>{headline}</h3>
+                <p className="text-sm" style={{ lineHeight: '1.85', color: '#6b9e7e' }}>{body}</p>
               </div>
             ))}
           </div>
