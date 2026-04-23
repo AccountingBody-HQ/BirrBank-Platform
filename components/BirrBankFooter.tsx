@@ -30,12 +30,8 @@ export default function Footer() {
                 { href:'https://t.me/birrbank', label:'Telegram', icon:'M21 5L2 12.5l7 1M21 5l-2.5 14L9 13.5M21 5L9 13.5m0 0v5.5l3.5-3' },
               ].map(s => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                  style={{width:36, height:36, background:'#fff', border:'1px solid #bbf7d0', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', textDecoration:'none', transition:'all 0.2s'}}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background='#1A5C38'; (e.currentTarget as HTMLElement).style.borderColor='#1A5C38' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background='#fff'; (e.currentTarget as HTMLElement).style.borderColor='#bbf7d0' }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                    onMouseEnter={e => (e.currentTarget.style.stroke='#fff')}
-                    onMouseLeave={e => (e.currentTarget.style.stroke='#1A5C38')}>
+                  style={{width:36, height:36, background:'#fff', border:'1px solid #bbf7d0', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', textDecoration:'none', transition:'all 0.2s'}}}}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d={s.icon}/>
                   </svg>
                 </a>
@@ -55,9 +51,7 @@ export default function Footer() {
               <ul style={{listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10}}>
                 {col.links.map(([label, href]) => (
                   <li key={href}>
-                    <Link href={href} style={{color:'#2d6a4f', fontSize:13, fontWeight:500, textDecoration:'none', display:'block', transition:'color 0.15s'}}
-                      onMouseEnter={e => (e.currentTarget.style.color='#1A5C38')}
-                      onMouseLeave={e => (e.currentTarget.style.color='#2d6a4f')}>
+                    <Link href={href} style={{color:'#2d6a4f', fontSize:13, fontWeight:500, textDecoration:'none', display:'block', transition:'color 0.15s'}}>
                       {label}
                     </Link>
                   </li>
