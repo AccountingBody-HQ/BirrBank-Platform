@@ -3,7 +3,7 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer style={{ background: '#0a1f14', borderTop: '1px solid #1a3a24' }}>
-      <div className="max-w-6xl mx-auto px-8 py-16">
+      <div className="max-w-6xl mx-auto px-8 py-20">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10">
 
           {/* Brand column */}
@@ -115,7 +115,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div style={{ borderTop: '1px solid #1a3a24' }}>
-        <div className="max-w-6xl mx-auto px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="max-w-6xl mx-auto px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p style={{ color: '#4a7a5a', fontSize: 12 }}>© 2026 BirrBank. All rights reserved.</p>
           <p style={{ color: '#4a7a5a', fontSize: 11, textAlign: 'center', maxWidth: 520, lineHeight: 1.6 }}>
             BirrBank provides financial information for comparison purposes only.
