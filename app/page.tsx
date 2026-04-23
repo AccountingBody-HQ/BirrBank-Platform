@@ -264,7 +264,7 @@ export default function HomePage() {
                   {cat.icon}
                 </div>
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', minHeight: '60px' }}>{cat.desc}</p>
+                <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', height: '72px', overflow: 'hidden' }}>{cat.desc}</p>
                 <div
                   className="flex items-center justify-center rounded-lg mb-5 font-mono font-black"
                   style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '20px', letterSpacing: '-0.5px', height: '48px' }}
@@ -272,7 +272,7 @@ export default function HomePage() {
                   {cat.stat}
                 </div>
                 <div
-                  className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all mt-auto"
+                  className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
                   style={{ color: cat.iconColor }}
                 >
                   <span>{cat.action}</span>
