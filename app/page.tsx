@@ -281,6 +281,20 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+
+          {/* Bottom context bar */}
+          <div className="mt-10 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-sm text-slate-500">
+              Covering all <strong className="text-slate-800">214 NBE-regulated institutions</strong> across 8 categories — banks, insurers, MFIs, payment operators and more.
+            </p>
+            <Link
+              href="/institutions"
+              className="inline-flex items-center gap-2 text-sm font-bold shrink-0"
+              style={{ color: '#1A5C38' }}
+            >
+              View all institutions <ArrowRight />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -344,6 +358,19 @@ export default function HomePage() {
                 <p className="text-xs text-slate-400 mt-4 pt-3 border-t border-slate-100">NBE official · Today</p>
               </div>
             ))}
+          </div>
+          {/* Bottom context bar */}
+          <div className="mt-10 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-sm text-slate-500">
+              Official rates published daily by the <strong className="text-slate-800">National Bank of Ethiopia</strong> · Updated 09:30 EAT every business day.
+            </p>
+            <Link
+              href="/banking/fx-rates"
+              className="inline-flex items-center gap-2 text-sm font-bold shrink-0"
+              style={{ color: '#1A5C38' }}
+            >
+              Full FX dashboard <ArrowRight />
+            </Link>
           </div>
         </div>
       </section>
