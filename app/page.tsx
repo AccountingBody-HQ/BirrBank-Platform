@@ -19,8 +19,10 @@ const CATEGORIES = [
     action: 'Compare savings rates',
     desc: 'Find the best savings, FX and loan rates across all 32 banks.',
     stat: '32 banks',
+    iconBg: '#e6f4ed',
+    iconColor: '#1A5C38',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/>
       </svg>
     ),
@@ -31,8 +33,10 @@ const CATEGORIES = [
     action: 'Compare insurance',
     desc: 'Motor, life, health and property insurance from all 18 providers.',
     stat: '18 providers',
+    iconBg: '#eff6ff',
+    iconColor: '#1d4ed8',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
     ),
@@ -43,8 +47,10 @@ const CATEGORIES = [
     action: 'Explore ESX markets',
     desc: 'Track live ESX equities, T-bill yields and the IPO pipeline.',
     stat: '45+ IPOs',
+    iconBg: '#f5f3ff',
+    iconColor: '#7c3aed',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
@@ -55,8 +61,10 @@ const CATEGORIES = [
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
     stat: 'Live ECX',
+    iconBg: '#fffbeb',
+    iconColor: '#d97706',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22V12M12 12C12 6 7 4 7 4s5 2 5 8z"/>
         <path d="M12 12C12 6 17 4 17 4s-5 2-5 8z"/>
         <line x1="8" y1="22" x2="16" y2="22"/>
@@ -69,8 +77,10 @@ const CATEGORIES = [
     action: 'Read the guides',
     desc: '500+ guides on banking, investing, insurance and the diaspora.',
     stat: '500+ guides',
+    iconBg: '#ecfeff',
+    iconColor: '#0891b2',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0891b2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
       </svg>
@@ -244,12 +254,12 @@ export default function HomePage() {
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all duration-200 flex flex-col"
+                className="group bg-white rounded-2xl border border-slate-200 hover:shadow-lg transition-all duration-200 flex flex-col"
                 style={{ padding: '28px 24px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
               >
                 <div
-                  className="bg-white group-hover:bg-green-50 transition-colors rounded-xl flex items-center justify-center shrink-0 mb-5"
-                  style={{ width: 48, height: 48, border: '1px solid #e2e8f0' }}
+                  className="rounded-xl flex items-center justify-center shrink-0 mb-5"
+                  style={{ width: 52, height: 52, background: cat.iconBg }}
                 >
                   {cat.icon}
                 </div>
@@ -257,7 +267,7 @@ export default function HomePage() {
                 <p className="text-slate-400 flex-1 mb-5 text-xs" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                 <div
                   className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
-                  style={{ color: '#1A5C38' }}
+                  style={{ color: cat.iconColor }}
                 >
                   <span>{cat.action}</span>
                   <ArrowRight size={11} />
