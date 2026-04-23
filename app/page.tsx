@@ -1,146 +1,410 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+
 export const dynamic = 'force-dynamic'
 
+// ─── STATIC DATA (replace with Supabase queries once schema is live) ──────────
+const FX = [
+  { pair: 'USD / ETB', rate: '156.42', change: '+0.18', up: true },
+  { pair: 'EUR / ETB', rate: '169.85', change: '+0.31', up: true },
+  { pair: 'GBP / ETB', rate: '198.20', change: '-0.12', up: false },
+  { pair: 'SAR / ETB', rate: '41.71', change: '+0.05', up: true },
+  { pair: 'AED / ETB', rate: '42.60', change: '+0.04', up: true },
+  { pair: 'CNY / ETB', rate: '21.54', change: '-0.09', up: false },
+]
+
 const RATES = [
-  { rank: 1, bank: 'Awash Bank', product: '12-month fixed', rate: '9.50', badge: 'Highest rate' },
-  { rank: 2, bank: 'Zemen Bank', product: '12-month fixed', rate: '9.25', badge: null },
-  { rank: 3, bank: 'Bank of Abyssinia', product: '12-month fixed', rate: '9.00', badge: null },
-  { rank: 4, bank: 'Dashen Bank', product: 'Savings account', rate: '8.75', badge: null },
-  { rank: 5, bank: 'Oromia International', product: 'Savings account', rate: '8.50', badge: null },
+  { bank: 'Awash Bank', product: '12-month fixed deposit', rate: '9.50', best: true },
+  { bank: 'Bank of Abyssinia', product: '12-month fixed deposit', rate: '9.00', best: false },
+  { bank: 'Zemen Bank', product: '12-month fixed deposit', rate: '9.25', best: false },
+  { bank: 'Dashen Bank', product: '6-month fixed deposit', rate: '8.75', best: false },
+  { bank: 'Oromia International Bank', product: 'Savings account', rate: '8.50', best: false },
+  { bank: 'Commercial Bank of Ethiopia', product: 'Savings account', rate: '7.00', best: false },
+]
+
+const MARKET = [
+  { ticker: 'WEGB', name: 'Wegagen Bank', price: '142.50', change: '+2.3%', up: true },
+  { ticker: 'GDAB', name: 'Gadaa Bank', price: '98.00', change: '+0.8%', up: true },
+  { ticker: 'ETHM', name: 'Ethio Telecom', price: '215.00', change: '-0.4%', up: false },
+]
+
+const COMMODITIES = [
+  { code: 'Coffee (Grade A)', region: 'Yirgacheffe', price: '18,000', unit: 'ETB/qt', change: '+131', up: true },
+  { code: 'Sesame (White)', region: 'Humera', price: '14,400', unit: 'ETB/qt', change: '+14,400', up: true },
+  { code: 'Wheat', region: 'LWBP2', price: '18,131', unit: 'ETB/qt', change: '+931', up: true },
 ]
 
 const PILLARS = [
-  { label: 'Banking', stat: 'Up to 9.50% p.a.', href: '/banking', desc: '32 banks · 55 MFIs · 27 payment operators · 62 transfer agencies' },
-  { label: 'Insurance', stat: 'First in Ethiopia', href: '/insurance', desc: '18 providers · Motor · Life · Health · Property · Agricultural' },
-  { label: 'Markets', stat: '45+ IPOs in pipeline', href: '/markets', desc: 'ESX equities · IPO pipeline · T-bill yields · Investment banks' },
-  { label: 'Commodities', stat: 'Live ECX data', href: '/commodities', desc: 'ECX daily prices · Coffee · Sesame · Grains · Beans · History' },
-  { label: 'Intelligence', stat: '500+ guides', href: '/guides', desc: 'Guides · Regulations · AI assistant · Diaspora hub · News' },
+  {
+    label: 'Banking',
+    amharic: 'ባንኪንግ',
+    count: '214',
+    unit: 'institutions',
+    stat: 'Best rate: 9.50% p.a.',
+    href: '/banking',
+    desc: '32 banks · 55 MFIs · 27 payment operators · 62 money transfer agencies',
+  },
+  {
+    label: 'Insurance',
+    amharic: 'ኢንሹራንስ',
+    count: '18',
+    unit: 'insurers',
+    stat: 'First in Ethiopia',
+    href: '/insurance',
+    desc: 'Motor · Life · Health · Property · Agricultural · Micro-insurance',
+  },
+  {
+    label: 'Markets',
+    amharic: 'ገበያ',
+    count: '45+',
+    unit: 'IPOs in pipeline',
+    stat: 'ESX live',
+    href: '/markets',
+    desc: 'ESX equities · IPO pipeline · T-bills · Corporate bonds · Brokers',
+  },
+  {
+    label: 'Commodities',
+    amharic: 'ሸቀጦች',
+    count: '11',
+    unit: 'ECX products',
+    stat: 'Live ECX prices',
+    href: '/commodities',
+    desc: 'Coffee · Sesame · Wheat · Beans · Chickpeas · Soybean · Maize',
+  },
+  {
+    label: 'Intelligence',
+    amharic: 'መረጃ',
+    count: '500+',
+    unit: 'guides',
+    stat: 'NBE · ECMA · ECX',
+    href: '/guides',
+    desc: 'Guides · Regulations tracker · AI assistant · Diaspora hub · News',
+  },
 ]
-
-const METRICS = [
-  { value: '9.50%', label: 'Best savings rate' },
-  { value: '156.4', label: 'USD / ETB today' },
-  { value: '214', label: 'Institutions tracked' },
-  { value: '45+', label: 'IPOs in pipeline' },
-]
-
-const PILLAR_ICONS: Record<string, React.ReactNode> = {
-  Banking: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
-  Insurance: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-  Markets: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
-  Commodities: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V12M12 12C12 6 7 4 7 4s5 2 5 8z"/><path d="M12 12C12 6 17 4 17 4s-5 2-5 8z"/><line x1="8" y1="22" x2="16" y2="22"/></svg>,
-  Intelligence: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-}
-
-const BTN = 'font-bold rounded-full transition-all'
-const BTN_STYLE = {fontSize:16, padding:'15px 34px'}
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: '#F8F9FA', fontFamily: 'var(--font-inter)' }}>
 
-      {/* Hero */}
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{background:'radial-gradient(ellipse 800px 400px at 50% -80px,rgba(26,92,56,0.07) 0%,transparent 70%)'}} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-24 pb-24">
-          <div className="grid grid-cols-2 gap-16 items-start">
+      {/* ── FX TICKER STRIP ─────────────────────────────────────────────────── */}
+      <div style={{ background: '#0A1628', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar">
+            {FX.map(f => (
+              <div key={f.pair} className="flex items-center gap-2 shrink-0">
+                <span style={{ color: '#64748B', fontSize: 11, fontWeight: 600, letterSpacing: '0.05em' }}>{f.pair}</span>
+                <span style={{ color: '#F1F5F9', fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-mono, monospace)' }}>{f.rate}</span>
+                <span style={{ color: f.up ? '#10B981' : '#EF4444', fontSize: 11, fontWeight: 600 }}>
+                  {f.up ? '▲' : '▼'} {f.change}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="hidden md:flex items-center gap-2 shrink-0 ml-6">
+            <span style={{ width: 6, height: 6, background: '#10B981', borderRadius: '50%', display: 'inline-block' }}></span>
+            <span style={{ color: '#475569', fontSize: 11, fontWeight: 500 }}>NBE rates · Updated daily</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      <section style={{
+        background: 'linear-gradient(160deg, #0F2D52 0%, #0A1628 50%, #0D1F3C 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Grid texture */}
+        <div style={{
+          position: 'absolute', inset: 0, opacity: 0.03,
+          backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+        }} />
+        {/* Glow */}
+        <div style={{
+          position: 'absolute', top: -200, left: '50%', transform: 'translateX(-50%)',
+          width: 800, height: 400,
+          background: 'radial-gradient(ellipse, rgba(26,92,56,0.25) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+            {/* ── LEFT: HEADLINE + META ──────────────────────────────────────── */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 text-xs text-green-800 font-semibold mb-8 tracking-wide">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                214 NBE-regulated institutions · Free forever
+              {/* Label */}
+              <div className="flex items-center gap-3 mb-8">
+                <div style={{ width: 28, height: 2, background: '#1A5C38' }} />
+                <span style={{ color: '#6EE7B7', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                  Ethiopia&apos;s Financial Operating System
+                </span>
               </div>
-              <h1 className="font-serif font-bold text-slate-950 mb-6 text-4xl md:text-5xl lg:text-6xl" style={{letterSpacing:'-1.5px', lineHeight:'1.05'}}>
-                The smartest<br/>way to manage<br/>money in<br/><span className="text-green-700">Ethiopia</span>
-              </h1>
-              <p className="text-slate-500 leading-relaxed mb-8 max-w-sm" style={{fontSize:'17px', lineHeight:'1.7'}}>
-                Compare every bank, insurer and investment. ESX market data. Commodity prices. All free, always.
+
+              {/* Amharic + English headline */}
+              <div className="mb-3">
+                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 15, fontWeight: 400, letterSpacing: '0.05em', marginBottom: 6 }}>
+                  ብርባንክ
+                </p>
+                <h1 style={{
+                  fontFamily: 'var(--font-playfair)',
+                  fontSize: 'clamp(36px, 5vw, 62px)',
+                  fontWeight: 800,
+                  color: '#FFFFFF',
+                  lineHeight: 1.05,
+                  letterSpacing: '-1.5px',
+                  marginBottom: 0,
+                }}>
+                  Every rate.<br />
+                  Every bank.<br />
+                  <span style={{ color: '#4ADE80' }}>One platform.</span>
+                </h1>
+              </div>
+
+              <p style={{ color: '#94A3B8', fontSize: 16, lineHeight: 1.75, maxWidth: 420, marginBottom: 36, marginTop: 20 }}>
+                Compare savings rates, track ESX markets, monitor ECX commodity prices and access insurance data across 214 NBE-regulated institutions — free, always.
               </p>
-              <div className="flex gap-3 mb-10">
-                <Link href="/banking/savings-rates" className={BTN} style={{...BTN_STYLE, background:'#1A5C38', color:'#fff', boxShadow:'0 4px 24px rgba(26,92,56,0.3)'}}>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3 mb-12">
+                <Link href="/banking/savings-rates" style={{
+                  background: '#1A5C38', color: '#fff', fontWeight: 700,
+                  padding: '14px 28px', borderRadius: 8, fontSize: 14,
+                  textDecoration: 'none', letterSpacing: '0.01em',
+                  boxShadow: '0 0 32px rgba(26,92,56,0.4)',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                }}>
                   Compare savings rates
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </Link>
-                <Link href="/markets" className={BTN} style={{...BTN_STYLE, border:'2px solid #1A5C38', color:'#1A5C38', background:'transparent'}}>
-                  Explore markets
+                <Link href="/markets" style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  color: '#E2E8F0', fontWeight: 600,
+                  padding: '14px 28px', borderRadius: 8, fontSize: 14,
+                  textDecoration: 'none',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                }}>
+                  ESX markets
                 </Link>
               </div>
-              <div className="flex items-center gap-4 pt-6 border-t border-slate-100">
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  <span className="text-xs font-semibold text-slate-600">Data sourced from</span>
-                  <span className="text-xs font-black text-slate-800 tracking-tight">NBE · ESX · ECX</span>
-                </div>
+
+              {/* Trust row */}
+              <div className="flex flex-wrap items-center gap-6">
+                {[
+                  { label: 'Data from', value: 'NBE · ESX · ECX' },
+                  { label: 'Institutions', value: '214 regulated' },
+                  { label: 'Cost', value: 'Free forever' },
+                ].map(t => (
+                  <div key={t.label} className="flex items-center gap-2">
+                    <div style={{ width: 3, height: 3, background: '#1A5C38', borderRadius: '50%' }} />
+                    <span style={{ color: '#64748B', fontSize: 12 }}>{t.label}: </span>
+                    <span style={{ color: '#CBD5E1', fontSize: 12, fontWeight: 600 }}>{t.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Live rates card */}
-            <div className="relative">
-              <div className="absolute -inset-4 rounded-3xl" style={{background:'radial-gradient(ellipse at center,rgba(26,92,56,0.07) 0%,transparent 70%)'}} />
-              <div className="relative bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{boxShadow:'0 24px 64px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04)'}}>
-                <div className="bg-white border-b border-slate-100 px-5 py-4 flex justify-between items-center">
+            {/* ── RIGHT: LIVE RATES CARD ────────────────────────────────────── */}
+            <div>
+              <div style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: 16,
+                overflow: 'hidden',
+                backdropFilter: 'blur(20px)',
+              }}>
+                {/* Card header */}
+                <div style={{
+                  padding: '16px 20px',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
                   <div>
-                    <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Verified today</p>
-                    <p className="text-slate-900 font-bold text-base">Top savings rates</p>
+                    <p style={{ color: '#6EE7B7', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 2 }}>
+                      Live data
+                    </p>
+                    <p style={{ color: '#F1F5F9', fontSize: 14, fontWeight: 700 }}>Best savings rates today</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                    <span className="text-green-700 text-xs font-bold">NBE verified</span>
+                  <div style={{
+                    background: 'rgba(26,92,56,0.2)',
+                    border: '1px solid rgba(26,92,56,0.3)',
+                    borderRadius: 20,
+                    padding: '4px 10px',
+                    display: 'flex', alignItems: 'center', gap: 5,
+                  }}>
+                    <span style={{ width: 5, height: 5, background: '#10B981', borderRadius: '50%', display: 'inline-block' }} />
+                    <span style={{ color: '#6EE7B7', fontSize: 10, fontWeight: 700 }}>NBE verified</span>
                   </div>
                 </div>
-                <div className="divide-y divide-slate-50">
-                  {RATES.map((r) => (
-                    <div key={r.rank} className={`flex items-center gap-4 ${r.rank === 1 ? 'bg-green-50' : 'bg-white'}`} style={{padding:'16px 20px'}}>
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${r.rank === 1 ? 'bg-green-800 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                        {r.rank === 1 ? (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        ) : r.rank}
+
+                {/* Rates rows */}
+                <div>
+                  {RATES.map((r, i) => (
+                    <div key={r.bank} style={{
+                      padding: '14px 20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 14,
+                      borderBottom: i < RATES.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                      background: r.best ? 'rgba(26,92,56,0.15)' : 'transparent',
+                    }}>
+                      <div style={{
+                        width: 28, height: 28, borderRadius: 6, shrink: 0,
+                        background: r.best ? '#1A5C38' : 'rgba(255,255,255,0.06)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 10, fontWeight: 800, color: r.best ? '#fff' : '#475569',
+                        flexShrink: 0,
+                      }}>
+                        {r.best ? (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        ) : (i + 1)}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-bold text-sm truncate ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}>{r.bank}</p>
-                        <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'text-green-600 font-bold uppercase tracking-wide' : 'text-slate-400'}`}>{r.badge || r.product}</p>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ color: r.best ? '#F1F5F9' : '#94A3B8', fontSize: 13, fontWeight: 700, marginBottom: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.bank}</p>
+                        <p style={{ color: r.best ? '#6EE7B7' : '#475569', fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{r.product}</p>
                       </div>
-                      <div className={`font-mono font-black text-right ${r.rank === 1 ? 'text-green-700 text-2xl' : 'text-slate-900 text-xl'}`} style={{letterSpacing:'-1px'}}>{r.rate}%</div>
+                      <div style={{
+                        fontFamily: 'var(--font-mono, monospace)',
+                        fontSize: r.best ? 22 : 18,
+                        fontWeight: 900,
+                        color: r.best ? '#4ADE80' : '#CBD5E1',
+                        letterSpacing: '-0.5px',
+                        flexShrink: 0,
+                      }}>
+                        {r.rate}%
+                      </div>
                     </div>
                   ))}
                 </div>
-                <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                  <p className="text-xs text-slate-400">Sourced from official bank websites</p>
-                  <Link href="/banking/savings-rates" className="text-xs font-bold" style={{color:'#1A5C38'}}>See all 32 banks →</Link>
+
+                {/* Card footer */}
+                <div style={{
+                  padding: '12px 20px',
+                  borderTop: '1px solid rgba(255,255,255,0.06)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  background: 'rgba(0,0,0,0.1)',
+                }}>
+                  <p style={{ color: '#475569', fontSize: 11 }}>Sourced from official bank websites</p>
+                  <Link href="/banking/savings-rates" style={{ color: '#4ADE80', fontSize: 11, fontWeight: 700, textDecoration: 'none' }}>
+                    All 32 banks →
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Metric pills */}
-          <div className="grid grid-cols-4 gap-4 mt-12 pt-10 border-t border-slate-100">
-            {METRICS.map((m) => (
-              <div key={m.label} className="bg-white rounded-2xl border border-slate-200 text-center" style={{padding:'20px 16px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <p className="font-mono font-black text-slate-900 leading-none mb-2" style={{fontSize:'32px', letterSpacing:'-2px'}}>{m.value}</p>
-                <p className="font-semibold uppercase tracking-widest" style={{fontSize:'10px', color:'#94a3b8'}}>{m.label}</p>
+        {/* ── STAT BAR ────────────────────────────────────────────────────── */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.15)' }}>
+          <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            {[
+              { value: '214', label: 'Regulated institutions' },
+              { value: '9.50%', label: 'Best savings rate' },
+              { value: '45+', label: 'IPOs in ESX pipeline' },
+              { value: '11', label: 'ECX commodity prices' },
+            ].map(s => (
+              <div key={s.label} style={{ padding: '16px 24px', background: '#0A1628' }}>
+                <p style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 24, fontWeight: 900, color: '#F1F5F9', letterSpacing: '-1px', marginBottom: 2 }}>
+                  {s.value}
+                </p>
+                <p style={{ color: '#475569', fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Five pillars */}
-      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'96px 32px'}}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
-            <h2 className="font-serif font-bold text-slate-950" style={{fontSize:'38px', letterSpacing:'-1.5px'}}>Everything in Ethiopia's financial market</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {PILLARS.map((p) => (
-              <Link key={p.label} href={p.href} className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all duration-200 flex flex-col" style={{padding:'32px 24px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
-                <div className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors shrink-0" style={{width:'44px', height:'44px', marginBottom:'16px'}}>
-                  {PILLAR_ICONS[p.label]}
+      {/* ── MARKETS + COMMODITIES STRIP ─────────────────────────────────────── */}
+      <section style={{ background: '#0F172A', borderBottom: '1px solid #1E293B' }}>
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-wrap items-center gap-8">
+
+          {/* ESX */}
+          <div>
+            <p style={{ color: '#475569', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+              ESX — Ethiopian Securities Exchange
+            </p>
+            <div className="flex items-center gap-6">
+              {MARKET.map(m => (
+                <div key={m.ticker} className="flex items-center gap-2">
+                  <span style={{ color: '#64748B', fontSize: 11, fontWeight: 700 }}>{m.ticker}</span>
+                  <span style={{ color: '#E2E8F0', fontSize: 12, fontWeight: 700, fontFamily: 'monospace' }}>{m.price}</span>
+                  <span style={{ color: m.up ? '#10B981' : '#EF4444', fontSize: 11 }}>{m.change}</span>
                 </div>
-                <p className="font-bold text-slate-900 mb-2 tracking-tight" style={{fontSize:'14px'}}>{p.label}</p>
-                <p className="text-slate-500 leading-relaxed flex-1" style={{fontSize:'11px', lineHeight:'1.7', marginBottom:'16px'}}>{p.desc}</p>
-                <div className="flex items-center gap-1 text-xs text-slate-500 font-semibold mt-auto group-hover:text-green-700 transition-colors">
-                  <span>{p.stat}</span>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              ))}
+              <Link href="/markets" style={{ color: '#3B82F6', fontSize: 11, fontWeight: 600, textDecoration: 'none' }}>IPO pipeline →</Link>
+            </div>
+          </div>
+
+          <div style={{ width: 1, height: 36, background: '#1E293B' }} />
+
+          {/* ECX */}
+          <div>
+            <p style={{ color: '#475569', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+              ECX — Ethiopian Commodity Exchange
+            </p>
+            <div className="flex items-center gap-6">
+              {COMMODITIES.map(c => (
+                <div key={c.code} className="flex items-center gap-2">
+                  <span style={{ color: '#64748B', fontSize: 11, fontWeight: 700 }}>{c.code}</span>
+                  <span style={{ color: '#E2E8F0', fontSize: 12, fontWeight: 700, fontFamily: 'monospace' }}>{c.price} {c.unit}</span>
+                  <span style={{ color: c.up ? '#10B981' : '#EF4444', fontSize: 11 }}>▲ {c.change}</span>
+                </div>
+              ))}
+              <Link href="/commodities" style={{ color: '#3B82F6', fontSize: 11, fontWeight: 600, textDecoration: 'none' }}>All prices →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FIVE PILLARS ─────────────────────────────────────────────────────── */}
+      <section style={{ background: '#F8F9FA', padding: '80px 0' }}>
+        <div className="max-w-7xl mx-auto px-6">
+
+          <div className="mb-12">
+            <p style={{ color: '#1A5C38', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 12 }}>
+              Full market coverage
+            </p>
+            <h2 style={{ fontFamily: 'var(--font-playfair)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 800, color: '#0F172A', letterSpacing: '-1px', lineHeight: 1.1 }}>
+              Ethiopia&apos;s complete<br />financial universe
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-px" style={{ background: '#E2E8F0', border: '1px solid #E2E8F0', borderRadius: 12, overflow: 'hidden' }}>
+            {PILLARS.map((pillar, i) => (
+              <Link key={pillar.label} href={pillar.href} style={{ textDecoration: 'none', display: 'block' }}>
+                <div style={{
+                  background: '#FFFFFF',
+                  padding: '28px 24px',
+                  height: '100%',
+                  transition: 'background 0.15s',
+                  cursor: 'pointer',
+                }}
+                  className="hover:bg-green-50 group"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <span style={{ color: '#94A3B8', fontSize: 11, fontWeight: 600, letterSpacing: '0.05em' }}>{String(i + 1).padStart(2, '0')}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:stroke-green-600" style={{ transition: 'stroke 0.15s' }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </div>
+
+                  <p style={{ color: '#94A3B8', fontSize: 11, fontWeight: 500, letterSpacing: '0.08em', marginBottom: 4 }}>{pillar.amharic}</p>
+                  <p style={{ color: '#0F172A', fontSize: 16, fontWeight: 800, marginBottom: 4, letterSpacing: '-0.3px' }}>{pillar.label}</p>
+
+                  <div style={{ marginBottom: 12 }}>
+                    <span style={{ fontFamily: 'monospace', fontSize: 22, fontWeight: 900, color: '#1A5C38', letterSpacing: '-0.5px' }}>{pillar.count}</span>
+                    <span style={{ color: '#94A3B8', fontSize: 11, fontWeight: 500, marginLeft: 4 }}>{pillar.unit}</span>
+                  </div>
+
+                  <p style={{ color: '#64748B', fontSize: 11, lineHeight: 1.7 }}>{pillar.desc}</p>
+
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #F1F5F9' }}>
+                    <span style={{ color: '#1A5C38', fontSize: 11, fontWeight: 700 }}>{pillar.stat}</span>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -148,70 +412,104 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust signals */}
-      <section className="bg-white border-b border-slate-100" style={{padding:'96px 32px'}}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Why trust BirrBank</p>
-            <h2 className="font-serif font-bold text-slate-950" style={{fontSize:'38px', letterSpacing:'-1.5px'}}>Built on verified data</h2>
-          </div>
-          <div className="grid grid-cols-3 gap-10 text-center">
+      {/* ── WHY TRUST BIRRBANK ───────────────────────────────────────────────── */}
+      <section style={{ background: '#0F2D52', padding: '80px 0' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  <polyline points="9 12 11 14 15 10"/>
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>NBE verified data</h3>
-              <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>All institution data sourced directly from the National Bank of Ethiopia registry and official bank websites.</p>
+              <p style={{ color: '#6EE7B7', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 12 }}>
+                Data integrity
+              </p>
+              <h2 style={{ fontFamily: 'var(--font-playfair)', fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 800, color: '#F1F5F9', letterSpacing: '-1px', lineHeight: 1.15, marginBottom: 20 }}>
+                Every figure has a source.<br />Every rate has a date.
+              </h2>
+              <p style={{ color: '#64748B', fontSize: 15, lineHeight: 1.8, maxWidth: 420 }}>
+                BirrBank sources all institution data directly from the National Bank of Ethiopia registry and official bank websites. Every rate displayed carries a last-verified timestamp. Stale data is flagged automatically.
+              </p>
             </div>
-            <div>
-              <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>Updated every day</h3>
-              <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>Every rate shows a last-verified date. Stale data is automatically flagged. Rates older than 7 days shown with a warning.</p>
-            </div>
-            <div>
-              <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="1" x2="12" y2="23"/>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-900 mb-4" style={{fontSize:'17px'}}>Free forever</h3>
-              <p className="text-slate-500 leading-relaxed" style={{fontSize:'14px', lineHeight:'1.75'}}>BirrBank is permanently free for consumers. No paywalls, no premium tiers, no subscription ever required.</p>
+
+            <div className="grid grid-cols-1 gap-px" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
+              {[
+                { label: 'Official source', detail: 'All institution data from the NBE registry', icon: '🏛' },
+                { label: 'Daily verification', detail: 'FX rates updated every business day at 09:00 EAT', icon: '📅' },
+                { label: 'Rate timestamps', detail: 'Every rate shows its last-verified date — always', icon: '🕐' },
+                { label: 'Free forever', detail: 'No paywalls, no premium tiers, no subscriptions', icon: '∞' },
+              ].map(item => (
+                <div key={item.label} style={{ padding: '20px 24px', background: 'rgba(255,255,255,0.02)', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
+                  <div>
+                    <p style={{ color: '#E2E8F0', fontSize: 13, fontWeight: 700, marginBottom: 3 }}>{item.label}</p>
+                    <p style={{ color: '#475569', fontSize: 12, lineHeight: 1.6 }}>{item.detail}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Email capture */}
-      <section className="border-b border-slate-100" style={{background:'#f8faf8', padding:'96px 32px'}}>
-        <div className="max-w-6xl mx-auto grid grid-cols-2 gap-16 items-center">
+      {/* ── DIASPORA BAND ────────────────────────────────────────────────────── */}
+      <section style={{ background: '#1A5C38', padding: '56px 0' }}>
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Stay informed</p>
-            <h2 className="font-serif font-bold text-slate-950 mb-4" style={{fontSize:'38px', letterSpacing:'-1.5px', lineHeight:'1.15'}}>
-              Weekly rate alerts.<br/>
-              <span className="text-green-700">Free. No noise.</span>
+            <p style={{ color: '#6EE7B7', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 8 }}>
+              Ethiopian diaspora
+            </p>
+            <h3 style={{ fontFamily: 'var(--font-playfair)', fontSize: 28, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
+              Sending money home?<br />Investing in Ethiopian stocks?
+            </h3>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <Link href="/diaspora/remittance" style={{ background: '#fff', color: '#1A5C38', fontWeight: 700, padding: '12px 24px', borderRadius: 8, fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              Remittance comparison
+            </Link>
+            <Link href="/diaspora" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 600, padding: '12px 24px', borderRadius: 8, fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              Diaspora hub →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── EMAIL CAPTURE ────────────────────────────────────────────────────── */}
+      <section style={{ background: '#F8F9FA', padding: '80px 0', borderTop: '1px solid #E2E8F0' }}>
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p style={{ color: '#1A5C38', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 12 }}>
+              Weekly intelligence
+            </p>
+            <h2 style={{ fontFamily: 'var(--font-playfair)', fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 800, color: '#0F172A', letterSpacing: '-1px', lineHeight: 1.15, marginBottom: 16 }}>
+              The Ethiopian financial<br />week, summarised.
             </h2>
-            <p className="text-slate-500 mb-6" style={{fontSize:'16px', lineHeight:'1.7'}}>Once a week — the best savings rates, FX movements, ESX updates and commodity prices direct to your inbox.</p>
-            <ul className="space-y-3">
-              {['Best savings rate changes across all 32 banks','FX rate movements — USD, GBP, SAR, AED vs ETB','ESX market updates and new IPO announcements','ECX commodity price movements for coffee and sesame'].map(item => (
-                <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+            <p style={{ color: '#64748B', fontSize: 15, lineHeight: 1.8, maxWidth: 420, marginBottom: 24 }}>
+              Once a week — the most important rate changes, ESX movements, NBE directives and commodity price shifts, delivered to your inbox.
+            </p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[
+                'Best savings rate changes across all 32 banks',
+                'FX movements — USD, EUR, GBP, SAR, AED vs ETB',
+                'ESX market updates and new IPO announcements',
+                'ECX commodity price movements and export data',
+                'New NBE and ECMA directives',
+              ].map(item => (
+                <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: '#475569', fontSize: 13 }}>
+                  <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 14, marginTop: 1, flexShrink: 0 }}>→</span>
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-          <EmailCapture />
+          <div>
+            <EmailCapture />
+          </div>
         </div>
       </section>
+
+      {/* ── DISCLAIMER ───────────────────────────────────────────────────────── */}
+      <div style={{ background: '#F1F5F9', borderTop: '1px solid #E2E8F0', padding: '16px 24px', textAlign: 'center' }}>
+        <p style={{ color: '#94A3B8', fontSize: 11, lineHeight: 1.6, maxWidth: 640, margin: '0 auto' }}>
+          BirrBank provides financial information for comparison purposes only. We are not a bank, insurer, broker or financial adviser. Always verify rates directly with the institution before making any financial decision.
+        </p>
+      </div>
 
     </div>
   )
