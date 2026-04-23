@@ -251,7 +251,7 @@ export default function HomePage() {
                       background: r.best ? 'rgba(26,92,56,0.15)' : 'transparent',
                     }}>
                       <div style={{
-                        width: 28, height: 28, borderRadius: 6, shrink: 0,
+                        width: 28, height: 28, borderRadius: 6, flexShrink: 0,
                         background: r.best ? '#1A5C38' : 'rgba(255,255,255,0.06)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: 10, fontWeight: 800, color: r.best ? '#fff' : '#475569',
