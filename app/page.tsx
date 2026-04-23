@@ -435,17 +435,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════ DISCLAIMER ══════════════════════════════════ */}
-      <div className="bg-white border-t border-slate-100" style={{ padding: '24px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-          <p className="text-xs text-slate-400" style={{ maxWidth: '700px', lineHeight: '1.8' }}>
-            BirrBank provides financial information for comparison purposes only. We are not a bank,
-            insurer, broker, or financial adviser. Always verify rates directly with the institution
-            before making any financial decision. All data sourced from official institution websites
-            and the National Bank of Ethiopia registry.
-          </p>
-        </div>
-      </div>
 
     </div>
   )
