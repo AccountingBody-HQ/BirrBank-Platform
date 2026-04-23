@@ -36,7 +36,7 @@ export default function Footer() {
               </span>
             </div>
 
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 28 }}>
               {[
                 { href: 'https://linkedin.com',  icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b9e7e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> },
                 { href: 'https://twitter.com',   icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b9e7e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg> },
@@ -50,6 +50,13 @@ export default function Footer() {
                   {icon}
                 </a>
               ))}
+            </div>
+
+            <div style={{ borderTop: '1px solid #1a3a24', paddingTop: 20 }}>
+              <p style={{ color: '#4a7a5a', fontSize: 11, lineHeight: 1.7 }}>
+                Free for every Ethiopian and the global diaspora.<br />
+                No subscriptions. No paywalls. No affiliate bias.
+              </p>
             </div>
           </div>
 
