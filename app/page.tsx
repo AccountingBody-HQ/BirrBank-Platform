@@ -233,7 +233,7 @@ export default function HomePage() {
               className="font-serif font-bold text-slate-950"
               style={{ fontSize: 'clamp(28px, 3.5vw, 38px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
             >
-              Compare, track and understand<br className="hidden sm:block" /> every corner of Ethiopia's financial market
+              Ethiopia's financial market,<br /> fully covered.
             </h2>
           </div>
 
@@ -246,8 +246,8 @@ export default function HomePage() {
                 style={{ padding: '28px 24px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
               >
                 <div
-                  className="bg-green-50 group-hover:bg-green-100 transition-colors rounded-xl flex items-center justify-center shrink-0 mb-5"
-                  style={{ width: 48, height: 48 }}
+                  className="bg-white group-hover:bg-green-50 transition-colors rounded-xl flex items-center justify-center shrink-0 mb-5"
+                  style={{ width: 48, height: 48, border: '1px solid #e2e8f0' }}
                 >
                   {cat.icon}
                 </div>
