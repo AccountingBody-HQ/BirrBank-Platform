@@ -46,7 +46,7 @@ export default function Navigation() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   return (
-    <nav style={{background:'#f0fdf4', borderBottom:'1px solid #bbf7d0'}} className="sticky top-0 z-50">
+    <nav style={{background:'#ffffff', borderBottom:'1px solid #e2e8f0'}} className="sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-8 flex items-center justify-between h-16">
 
         <Link href="/" className="flex items-center gap-2 no-underline">
@@ -73,7 +73,7 @@ export default function Navigation() {
               </Link>
               {openDropdown === item.label && (
                 <div className="absolute top-full left-0 mt-1 w-52 rounded-xl overflow-hidden py-1 z-50"
-                  style={{background:'#f0fdf4', border:'1px solid #bbf7d0', boxShadow:'0 16px 40px rgba(0,0,0,0.1)'}}>
+                  style={{background:'#ffffff', border:'1px solid #e2e8f0', boxShadow:'0 16px 40px rgba(0,0,0,0.1)'}}>
                   {item.sub.map(s => (
                     <Link key={s.href} href={s.href}
                       className="block px-4 py-2.5 text-sm transition-colors"
@@ -105,7 +105,7 @@ export default function Navigation() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#f0fdf4', borderTop:'1px solid #bbf7d0'}}>
+        <div className="md:hidden px-6 py-4 space-y-1" style={{background:'#ffffff', borderTop:'1px solid #e2e8f0'}}>
           {NAV.map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileOpen(false)}
               className="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors"
