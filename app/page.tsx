@@ -255,7 +255,6 @@ export default function HomePage() {
                         background: r.best ? '#1A5C38' : 'rgba(255,255,255,0.06)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: 10, fontWeight: 800, color: r.best ? '#fff' : '#475569',
-                        flexShrink: 0,
                       }}>
                         {r.best ? (
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
