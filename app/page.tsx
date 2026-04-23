@@ -291,32 +291,39 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', flag: '🇺🇸', buy: '155.90', sell: '156.40' },
-              { currency: 'GBP', flag: '🇬🇧', buy: '197.20', sell: '197.82' },
-              { currency: 'EUR', flag: '🇪🇺', buy: '168.50', sell: '169.12' },
-              { currency: 'SAR', flag: '🇸🇦', buy: '41.40',  sell: '41.70'  },
-              { currency: 'AED', flag: '🇦🇪', buy: '42.30',  sell: '42.60'  },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70'  },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60'  },
             ].map((fx) => (
               <div
                 key={fx.currency}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
                 style={{ padding: '24px 20px' }}
               >
-                <div className="flex items-center gap-2 mb-4">
-                  <span style={{ fontSize: '20px' }}>{fx.flag}</span>
-                  <span className="font-black text-slate-900 text-sm">{fx.currency} / ETB</span>
+                <div className="mb-4">
+                  <div
+                    className="inline-flex items-center rounded-lg mb-2"
+                    style={{ background: '#f1f5f9', padding: '4px 10px' }}
+                  >
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#1A5C38', letterSpacing: '1px' }}>
+                      {fx.currency}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 font-medium">{fx.name} / ETB</p>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-slate-400 font-medium">Buy</span>
-                    <span className="font-mono font-bold text-slate-800 text-sm">{fx.buy}</span>
+                    <span className="font-mono font-bold text-slate-700" style={{ fontSize: '14px' }}>{fx.buy}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-slate-400 font-medium">Sell</span>
-                    <span className="font-mono font-bold text-slate-900 text-sm">{fx.sell}</span>
+                    <span className="font-mono font-black text-slate-950" style={{ fontSize: '15px' }}>{fx.sell}</span>
                   </div>
                 </div>
-                <p className="text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100">NBE official · Today</p>
+                <p className="text-xs text-slate-400 mt-4 pt-3 border-t border-slate-100">NBE official · Today</p>
               </div>
             ))}
           </div>
