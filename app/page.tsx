@@ -265,9 +265,14 @@ export default function HomePage() {
                 </div>
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
                 <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', minHeight: '72px' }}>{cat.desc}</p>
-                <p className="font-mono font-black mb-5" style={{ fontSize: '13px', color: cat.iconColor }}>
-                  {cat.statNum} {cat.statLabel}
-                </p>
+                <div className="mb-5">
+                  <span
+                    className="inline-flex items-center rounded-full font-mono font-black"
+                    style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '13px', padding: '5px 14px', letterSpacing: '-0.3px' }}
+                  >
+                    {cat.statNum}
+                  </span>
+                </div>
                 <div
                   className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
                   style={{ color: cat.iconColor }}
