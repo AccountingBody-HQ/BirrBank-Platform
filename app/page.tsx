@@ -64,18 +64,10 @@ export default function HomePage() {
                 </Link>
               </div>
               <div className="flex items-center gap-4 pt-6 border-t border-slate-100">
-                <div className="flex -space-x-2">
-                  {['#1A5C38','#2d6a4f','#40916c','#52b788','#74c69d'].map((c,i) => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold" style={{background:c}}>{String.fromCharCode(65+i)}</div>
-                  ))}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-800">Trusted by thousands</p>
-                  <p className="text-xs text-slate-500">across Ethiopia and the diaspora</p>
-                </div>
-                <div className="ml-2 pl-4 border-l border-slate-200">
-                  <p className="text-xs text-slate-400 font-medium">Data sourced from</p>
-                  <p className="text-sm font-black text-slate-800 tracking-tight">NBE · ESX · ECX</p>
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span className="text-xs font-semibold text-slate-600">Data sourced from</span>
+                  <span className="text-xs font-black text-slate-800 tracking-tight">NBE · ESX · ECX</span>
                 </div>
               </div>
             </div>
