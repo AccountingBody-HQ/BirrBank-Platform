@@ -255,18 +255,24 @@ export default function HomePage() {
                 key={cat.label}
                 href={cat.href}
                 className="group bg-white rounded-2xl border border-slate-200 hover:shadow-lg transition-all duration-200 flex flex-col"
-                style={{ padding: '28px 24px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                style={{ padding: '32px 28px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
               >
                 <div
-                  className="rounded-xl flex items-center justify-center shrink-0 mb-5"
+                  className="rounded-xl flex items-center justify-center shrink-0 mb-6"
                   style={{ width: 52, height: 52, background: cat.iconBg }}
                 >
                   {cat.icon}
                 </div>
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                <p className="text-slate-400 flex-1 mb-5 text-xs" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
+                <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8' }}>{cat.desc}</p>
                 <div
-                  className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
+                  className="flex items-center justify-center rounded-lg py-2 mb-5 font-mono font-black"
+                  style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '22px', letterSpacing: '-1px' }}
+                >
+                  {cat.stat}
+                </div>
+                <div
+                  className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all mt-auto"
                   style={{ color: cat.iconColor }}
                 >
                   <span>{cat.action}</span>
