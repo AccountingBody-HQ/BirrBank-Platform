@@ -303,11 +303,11 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70'  },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60'  },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#eff6ff', color: '#1d4ed8' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#f0f4ff', color: '#3730a3' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#fffbeb', color: '#d97706' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#e6f4ed', color: '#1A5C38' },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#ecfeff', color: '#0891b2' },
             ].map((fx) => (
               <div
                 key={fx.currency}
@@ -317,9 +317,9 @@ export default function HomePage() {
                 <div className="mb-4">
                   <div
                     className="inline-flex items-center rounded-lg mb-2"
-                    style={{ background: '#f1f5f9', padding: '4px 10px' }}
+                    style={{ background: fx.bg, padding: '4px 10px' }}
                   >
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#1A5C38', letterSpacing: '1px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
                       {fx.currency}
                     </span>
                   </div>
