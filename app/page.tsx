@@ -3,18 +3,18 @@ import EmailCapture from '@/components/EmailCapture'
 export const dynamic = 'force-dynamic'
 
 const RATES = [
-  { rank: 1, bank: 'Awash Bank',         product: '12-month fixed',  rate: '9.50', badge: 'Highest rate' },
-  { rank: 2, bank: 'Zemen Bank',          product: '12-month fixed',  rate: '9.25', badge: null },
-  { rank: 3, bank: 'Bank of Abyssinia',   product: '12-month fixed',  rate: '9.00', badge: null },
-  { rank: 4, bank: 'Dashen Bank',         product: 'Savings account', rate: '8.75', badge: null },
-  { rank: 5, bank: 'Oromia International',product: 'Savings account', rate: '8.50', badge: null },
+  { rank: 1, bank: 'Awash Bank',          product: '12-month fixed',  rate: '9.50', badge: 'Highest rate' },
+  { rank: 2, bank: 'Zemen Bank',           product: '12-month fixed',  rate: '9.25', badge: null },
+  { rank: 3, bank: 'Bank of Abyssinia',    product: '12-month fixed',  rate: '9.00', badge: null },
+  { rank: 4, bank: 'Dashen Bank',          product: 'Savings account', rate: '8.75', badge: null },
+  { rank: 5, bank: 'Oromia International', product: 'Savings account', rate: '8.50', badge: null },
 ]
 
 const PILLAR_CARDS = [
-  { label: 'Insurance',    stat: '18 providers',    href: '/insurance',   desc: 'Motor · Life · Health · Property · Agricultural', icon: 'Insurance'    },
-  { label: 'Markets',      stat: '45+ IPOs',         href: '/markets',     desc: 'ESX equities · IPO pipeline · T-bill yields',      icon: 'Markets'      },
-  { label: 'Commodities',  stat: 'Live ECX prices',  href: '/commodities', desc: 'Coffee · Sesame · Grains · Beans',                 icon: 'Commodities'  },
-  { label: 'Intelligence', stat: '500+ guides',      href: '/guides',      desc: 'Guides · Regulations · AI assistant · Diaspora',   icon: 'Intelligence' },
+  { label: 'Insurance',    stat: '18 providers',   href: '/insurance',   desc: 'Motor · Life · Health · Property · Agricultural', icon: 'Insurance'    },
+  { label: 'Markets',      stat: '45+ IPOs',        href: '/markets',     desc: 'ESX equities · IPO pipeline · T-bill yields',     icon: 'Markets'      },
+  { label: 'Commodities',  stat: 'Live ECX prices', href: '/commodities', desc: 'Coffee · Sesame · Grains · Beans',                icon: 'Commodities'  },
+  { label: 'Intelligence', stat: '500+ guides',     href: '/guides',      desc: 'Guides · Regulations · AI assistant · Diaspora',  icon: 'Intelligence' },
 ]
 
 const LIVE_DATA = [
@@ -39,41 +39,59 @@ const ArrowRight = () => (
   </svg>
 )
 
-const BTN  = 'font-bold rounded-full transition-all'
+const ChevronUp = () => (
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+)
+
+const ChevronDown = () => (
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
+)
+
+const BTN   = 'font-bold rounded-full transition-all'
 const BTN_SZ = { fontSize: 16, padding: '15px 34px' }
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ═══════════════════════════════════════ HERO ════════════════════════════════════════ */}
+      {/* ════════════════════════════════════ HERO ════════════════════════════════════════ */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 60% -100px,rgba(26,92,56,0.055) 0%,transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 1000px 600px at 55% -120px,rgba(26,92,56,0.05) 0%,transparent 70%)' }}
         />
 
         <div className="relative max-w-6xl mx-auto px-8 pt-24 pb-16">
           <div className="grid grid-cols-2 gap-20 items-start">
 
-            {/* ── Left ── */}
-            <div className="pt-2">
+            {/* ── Left: the statement ── */}
+            <div className="pt-4">
+
+              {/* 2-line commanding headline — the fix */}
               <h1
-                className="font-serif font-bold text-slate-950 mb-7"
-                style={{ fontSize: '70px', letterSpacing: '-2.5px', lineHeight: '1.0' }}
+                className="font-serif font-bold mb-8"
+                style={{ fontSize: '88px', letterSpacing: '-3.5px', lineHeight: '0.97' }}
               >
-                Ethiopia's<br />
-                financial<br />
-                <span style={{ color: '#1A5C38' }}>operating</span><br />
+                <span className="text-slate-950">Ethiopia's<br />financial</span>
+                <br />
+                <span style={{ color: '#1A5C38' }}>operating</span>
+                <br />
                 <span style={{ color: '#1A5C38' }}>system.</span>
               </h1>
 
-              <p className="text-slate-500 mb-10" style={{ fontSize: '18px', lineHeight: '1.75', maxWidth: '400px' }}>
+              <p
+                className="text-slate-500 mb-10"
+                style={{ fontSize: '17px', lineHeight: '1.75', maxWidth: '380px' }}
+              >
                 Compare savings rates across 32 banks. Track ESX markets live.
                 Monitor commodity prices. Access insurance data. All free, always.
               </p>
 
-              <div className="flex gap-3 mb-12">
+              <div className="flex gap-3">
                 <Link
                   href="/banking/savings-rates"
                   className={BTN}
@@ -88,19 +106,6 @@ export default function HomePage() {
                 >
                   Explore markets
                 </Link>
-              </div>
-
-              <div className="flex items-center gap-7 pt-7 border-t border-slate-100">
-                {[
-                  { dot: 'bg-green-500', text: '214 institutions' },
-                  { dot: 'bg-slate-300',  text: 'NBE regulated'   },
-                  { dot: 'bg-slate-300',  text: 'Free forever'     },
-                ].map(({ dot, text }) => (
-                  <div key={text} className="flex items-center gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{text}</span>
-                  </div>
-                ))}
               </div>
             </div>
 
@@ -117,8 +122,8 @@ export default function HomePage() {
                     <p className="text-slate-900 font-bold text-base">Top savings rates</p>
                   </div>
                   <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                    <span className="text-green-700 text-xs font-bold">NBE verified</span>
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-green-700 text-xs font-bold">Live</span>
                   </div>
                 </div>
 
@@ -128,7 +133,7 @@ export default function HomePage() {
                     <div
                       key={r.rank}
                       className={`flex items-center gap-4 ${r.rank === 1 ? 'bg-green-50' : 'bg-white'}`}
-                      style={{ padding: '16px 20px' }}
+                      style={{ padding: '15px 20px' }}
                     >
                       <div
                         className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${
@@ -162,7 +167,7 @@ export default function HomePage() {
 
                 {/* Card footer */}
                 <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                  <p className="text-xs text-slate-400">Sourced from official bank websites</p>
+                  <p className="text-xs text-slate-400">Official bank websites · NBE registry</p>
                   <Link href="/banking/savings-rates" className="text-xs font-bold" style={{ color: '#1A5C38' }}>
                     See all 32 banks →
                   </Link>
@@ -192,16 +197,8 @@ export default function HomePage() {
                   >
                     {d.value}
                   </p>
-                  {d.trend === 'up' && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="18 15 12 9 6 15" />
-                    </svg>
-                  )}
-                  {d.trend === 'down' && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  )}
+                  {d.trend === 'up'   && <ChevronUp />}
+                  {d.trend === 'down' && <ChevronDown />}
                 </div>
                 <p className="text-xs text-slate-400 font-medium">{d.sub}</p>
               </div>
@@ -210,7 +207,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════ PILLARS ═══════════════════════════════════════ */}
+      {/* ══════════════════════════════════ PILLARS ════════════════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
@@ -228,47 +225,48 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm font-medium pb-1">214 institutions · 5 pillars</p>
           </div>
 
-          {/* ── Featured: Banking ── */}
+          {/* ── Featured: Banking — full-width split card ── */}
           <Link
             href="/banking"
-            className="group block bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-xl transition-all duration-300 mb-4 overflow-hidden"
-            style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}
+            className="group block bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-2xl transition-all duration-300 mb-4 overflow-hidden"
+            style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}
           >
             <div className="grid grid-cols-2">
 
-              {/* Left: copy */}
-              <div style={{ padding: '44px 48px' }}>
-                <div className="flex items-center gap-3 mb-6">
+              {/* Left: copy panel */}
+              <div style={{ padding: '48px 52px' }}>
+                <div className="flex items-center gap-3 mb-7">
                   <div
-                    className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors"
+                    className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors shrink-0"
                     style={{ width: 44, height: 44 }}
                   >
                     {PILLAR_ICONS['Banking']}
                   </div>
                   <span className="text-xs font-black uppercase tracking-widest text-slate-400">Banking</span>
-                  <span
-                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold border"
-                    style={{ background: '#f0fdf4', borderColor: '#bbf7d0', color: '#1A5C38' }}
-                  >
-                    Featured pillar
+                  <span className="flex items-center gap-1.5 text-xs font-bold" style={{ color: '#1A5C38' }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    Updated today
                   </span>
                 </div>
+
                 <p
-                  className="font-serif font-bold text-slate-950 mb-4"
-                  style={{ fontSize: '30px', letterSpacing: '-1px', lineHeight: 1.2 }}
+                  className="font-serif font-bold text-slate-950 mb-5"
+                  style={{ fontSize: '32px', letterSpacing: '-1px', lineHeight: 1.2 }}
                 >
-                  Compare every bank in Ethiopia
+                  Compare every bank<br />in Ethiopia
                 </p>
-                <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.75 }}>
+
+                <p className="text-slate-500 mb-9" style={{ fontSize: '15px', lineHeight: 1.8 }}>
                   Savings rates, FX rates, loan products and mobile money across every
                   NBE-licensed institution — verified daily from official bank websites.
                 </p>
+
                 <div className="flex flex-wrap gap-2">
                   {['32 commercial banks', '55 MFIs', '27 payment operators', '62 transfer agencies'].map((chip) => (
                     <span
                       key={chip}
                       className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full text-xs font-semibold text-slate-600"
-                      style={{ padding: '6px 14px' }}
+                      style={{ padding: '7px 14px' }}
                     >
                       <span className="w-1 h-1 rounded-full bg-green-500 shrink-0" />
                       {chip}
@@ -277,30 +275,37 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right: live rate */}
+              {/* Right: live rate panel */}
               <div
-                className="border-l border-slate-100 flex flex-col justify-center"
-                style={{ padding: '44px 48px', background: '#f8faf8' }}
+                className="border-l border-slate-100 flex flex-col justify-center relative overflow-hidden"
+                style={{ padding: '48px 52px', background: '#f8faf8' }}
               >
-                <p className="text-xs font-black uppercase tracking-widest text-green-600 mb-4">
-                  Top savings rate today
-                </p>
-                <p
-                  className="font-mono font-black text-slate-950 mb-2"
-                  style={{ fontSize: '76px', letterSpacing: '-4px', lineHeight: 1 }}
-                >
-                  9.50<span style={{ fontSize: '38px', color: '#1A5C38' }}>%</span>
-                </p>
-                <p className="text-slate-500 font-medium mb-1" style={{ fontSize: '14px' }}>
-                  Awash Bank · 12-month fixed deposit
-                </p>
-                <p className="text-xs text-slate-400 mb-10">NBE verified · Updated today</p>
+                {/* Subtle radial accent behind the number */}
                 <div
-                  className="flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all"
-                  style={{ color: '#1A5C38' }}
-                >
-                  <span>Compare all 32 banks</span>
-                  <ArrowRight />
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'radial-gradient(ellipse 280px 280px at 50% 45%,rgba(26,92,56,0.05) 0%,transparent 70%)' }}
+                />
+                <div className="relative">
+                  <p className="text-xs font-black uppercase tracking-widest text-green-600 mb-5">
+                    Top savings rate · Today
+                  </p>
+                  <p
+                    className="font-mono font-black text-slate-950 leading-none mb-3"
+                    style={{ fontSize: '80px', letterSpacing: '-4px' }}
+                  >
+                    9.50<span style={{ fontSize: '40px', color: '#1A5C38' }}>%</span>
+                  </p>
+                  <p className="text-slate-600 font-semibold mb-1" style={{ fontSize: '14px' }}>
+                    Awash Bank · 12-month fixed deposit
+                  </p>
+                  <p className="text-xs text-slate-400 mb-10">NBE verified · Updated today</p>
+                  <div
+                    className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all"
+                    style={{ color: '#1A5C38' }}
+                  >
+                    <span>Compare all 32 banks</span>
+                    <ArrowRight />
+                  </div>
                 </div>
               </div>
             </div>
@@ -322,7 +327,7 @@ export default function HomePage() {
                   {PILLAR_ICONS[p.icon]}
                 </div>
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{p.label}</p>
-                <p className="text-slate-400 leading-relaxed flex-1 mb-5" style={{ fontSize: '12px', lineHeight: '1.7' }}>
+                <p className="text-slate-400 leading-relaxed flex-1 mb-6" style={{ fontSize: '12px', lineHeight: '1.7' }}>
                   {p.desc}
                 </p>
                 <div
@@ -338,7 +343,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════ TRUST ═════════════════════════════════════════ */}
+      {/* ══════════════════════════════════ TRUST ══════════════════════════════════════════ */}
       <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
@@ -350,7 +355,7 @@ export default function HomePage() {
             >
               Built on verified data
             </h2>
-            <p className="text-slate-400 mx-auto" style={{ fontSize: '16px', lineHeight: 1.7, maxWidth: '480px' }}>
+            <p className="text-slate-400 mx-auto" style={{ fontSize: '16px', lineHeight: 1.7, maxWidth: '460px' }}>
               No affiliate commissions. No sponsored placements. The best rate is always ranked first.
             </p>
           </div>
@@ -366,7 +371,7 @@ export default function HomePage() {
                 ),
                 tag: 'NBE verified',
                 headline: '214 licensed institutions. Zero approximations.',
-                body: 'Every institution verified against the National Bank of Ethiopia\'s official registry. We list only what NBE licenses — no unlicensed operators, no grey-market services.',
+                body: "Every institution verified against the National Bank of Ethiopia's official registry. We list only what NBE licenses — no unlicensed operators, no grey-market services.",
               },
               {
                 icon: (
@@ -377,7 +382,7 @@ export default function HomePage() {
                 ),
                 tag: 'Updated daily',
                 headline: 'Every rate shows a verified date.',
-                body: 'Stale data is automatically flagged. Any rate older than 7 days appears with a warning badge. You always know how fresh the data is before making a decision.',
+                body: 'Stale data is automatically flagged. Any rate older than 7 days appears with a warning badge. You always know exactly how fresh the data is before making a decision.',
               },
               {
                 icon: (
@@ -391,20 +396,28 @@ export default function HomePage() {
                 body: 'BirrBank earns nothing from the institutions it lists. The best rate is always #1 regardless of who offers it. Permanently free for every Ethiopian.',
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="border border-slate-100 rounded-2xl" style={{ padding: '36px 32px' }}>
-                <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mb-6">
+              <div
+                key={tag}
+                className="border border-slate-100 rounded-2xl"
+                style={{ padding: '40px 36px' }}
+              >
+                <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-2xl flex items-center justify-center mb-7">
                   {icon}
                 </div>
                 <p className="text-xs font-black uppercase tracking-widest text-green-600 mb-3">{tag}</p>
-                <h3 className="font-bold text-slate-900 mb-3" style={{ fontSize: '18px', lineHeight: 1.35 }}>{headline}</h3>
-                <p className="text-slate-500 leading-relaxed" style={{ fontSize: '14px', lineHeight: '1.75' }}>{body}</p>
+                <h3 className="font-bold text-slate-900 mb-4" style={{ fontSize: '18px', lineHeight: 1.35 }}>
+                  {headline}
+                </h3>
+                <p className="text-slate-500 leading-relaxed" style={{ fontSize: '14px', lineHeight: '1.8' }}>
+                  {body}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════ EMAIL ══════════════════════════════════════════ */}
+      {/* ══════════════════════════════════ EMAIL ══════════════════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-2 gap-20 items-center">
           <div>
@@ -416,7 +429,7 @@ export default function HomePage() {
               The best rates.<br />
               <span style={{ color: '#1A5C38' }}>Direct to your inbox.</span>
             </h2>
-            <p className="text-slate-500 mb-8" style={{ fontSize: '16px', lineHeight: '1.75' }}>
+            <p className="text-slate-500 mb-8" style={{ fontSize: '16px', lineHeight: '1.8' }}>
               Once a week — no noise, no promotions. Just the sharpest moves across
               savings rates, FX, ESX markets and ECX commodity prices.
             </p>
