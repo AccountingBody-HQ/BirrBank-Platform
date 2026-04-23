@@ -18,7 +18,7 @@ const CATEGORIES = [
     href: '/banking',
     action: 'Compare savings rates',
     desc: 'Find the best savings, FX and loan rates across all 32 banks.',
-    stat: '32 banks',
+    statNum: '32', statLabel: 'commercial banks',
     iconBg: '#e6f4ed',
     iconColor: '#1A5C38',
     icon: (
@@ -32,7 +32,7 @@ const CATEGORIES = [
     href: '/insurance',
     action: 'Compare insurance',
     desc: 'Motor, life, health and property insurance from all 18 providers.',
-    stat: '18 providers',
+    statNum: '18', statLabel: 'insurance providers',
     iconBg: '#eff6ff',
     iconColor: '#1d4ed8',
     icon: (
@@ -46,7 +46,7 @@ const CATEGORIES = [
     href: '/markets',
     action: 'Explore ESX markets',
     desc: 'Track live ESX equities, T-bill yields and the IPO pipeline.',
-    stat: '45+ IPOs',
+    statNum: '45+', statLabel: 'IPOs in pipeline',
     iconBg: '#f5f3ff',
     iconColor: '#7c3aed',
     icon: (
@@ -60,7 +60,7 @@ const CATEGORIES = [
     href: '/commodities',
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
-    stat: 'Live ECX',
+    statNum: 'Live', statLabel: 'ECX commodity prices',
     iconBg: '#fffbeb',
     iconColor: '#d97706',
     icon: (
@@ -76,7 +76,7 @@ const CATEGORIES = [
     href: '/guides',
     action: 'Read the guides',
     desc: '500+ guides on banking, investing, insurance and the diaspora.',
-    stat: '500+ guides',
+    statNum: '500+', statLabel: 'financial guides',
     iconBg: '#ecfeff',
     iconColor: '#0891b2',
     icon: (
@@ -266,10 +266,18 @@ export default function HomePage() {
                 <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
                 <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', height: '72px', overflow: 'hidden' }}>{cat.desc}</p>
                 <div
-                  className="flex items-center justify-center rounded-lg mb-5 font-mono font-black"
-                  style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '20px', letterSpacing: '-0.5px', height: '48px' }}
+                  className="rounded-xl mb-5 flex items-center gap-3"
+                  style={{ background: cat.iconBg, padding: '12px 16px' }}
                 >
-                  {cat.stat}
+                  <div>
+                    <p className="font-mono font-black leading-none" style={{ fontSize: '22px', color: cat.iconColor, letterSpacing: '-1px' }}>
+                      {cat.statNum}
+                      {cat.statNum === 'Live' && (
+                        <span className="inline-block w-2 h-2 rounded-full ml-2 align-middle animate-pulse" style={{ background: cat.iconColor }} />
+                      )}
+                    </p>
+                    <p className="text-xs font-medium mt-1" style={{ color: cat.iconColor, opacity: 0.75 }}>{cat.statLabel}</p>
+                  </div>
                 </div>
                 <div
                   className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"

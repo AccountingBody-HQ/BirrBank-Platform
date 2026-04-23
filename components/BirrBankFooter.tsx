@@ -108,7 +108,7 @@ export default function Footer() {
                     <Link
                       href={href}
                       className="transition-colors hover:text-white"
-                      style={{ color: '#6b9e7e', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}
+                      style={{ color: '#8fbfa0', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}
                     >
                       {label}
                     </Link>
