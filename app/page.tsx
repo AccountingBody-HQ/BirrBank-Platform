@@ -233,7 +233,7 @@ export default function HomePage() {
               className="font-serif font-bold text-slate-950"
               style={{ fontSize: 'clamp(28px, 3.5vw, 38px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
             >
-              Ethiopia's financial market,<br /> fully covered.
+              Ethiopia's financial market, fully covered.
             </h2>
           </div>
 
