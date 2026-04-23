@@ -97,7 +97,7 @@ export default function Footer() {
           ].map(col => (
             <div key={col.title}>
               <p style={{
-                color: '#ffffff', fontSize: 11, fontWeight: 800,
+                color: '#e2f5ea', fontSize: 11, fontWeight: 900,
                 textTransform: 'uppercase', letterSpacing: '2px', marginBottom: 16,
               }}>
                 {col.title}
