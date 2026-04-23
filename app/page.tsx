@@ -129,7 +129,7 @@ export default function HomePage() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Full market coverage</p>
             <h2 className="font-serif font-bold text-slate-950" style={{fontSize:'38px', letterSpacing:'-1.5px'}}>Everything in Ethiopia's financial market</h2>
           </div>
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {PILLARS.map((p) => (
               <Link key={p.label} href={p.href} className="group bg-white rounded-2xl border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all duration-200 flex flex-col" style={{padding:'32px 24px', boxShadow:'0 2px 16px rgba(0,0,0,0.04)'}}>
                 <div className="bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-green-50 transition-colors shrink-0" style={{width:'44px', height:'44px', marginBottom:'16px'}}>
