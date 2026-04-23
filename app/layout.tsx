@@ -1,5 +1,5 @@
 // ============================================
-// HRLAKE — ROOT LAYOUT
+// BIRRBANK — ROOT LAYOUT
 // GTM, Clerk, Fonts, Metadata, Nav, Footer
 // ============================================
 
@@ -10,7 +10,6 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Navigation from '@/components/BirrBankNav'
 import Footer from '@/components/BirrBankFooter'
-import { createClient } from '@supabase/supabase-js'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent'
 
@@ -35,19 +34,19 @@ export const metadata: Metadata = {
   ),
   title: {
     default: "BirrBank — Ethiopia's Financial Intelligence Platform",
-    template: '%s | HRLake',
+    template: "%s | BirrBank",
   },
   description:
-    'The deep source for global HR intelligence. Employer costs, tax brackets, employment law, and payroll compliance data — updated from official government sources.',
+    "Ethiopia's financial intelligence platform. Compare savings rates, track ESX markets, monitor commodity prices and access insurance data — free, always.",
   keywords: [
-    'global payroll',
-    'employer of record',
-    'EOR',
-    'payroll calculator',
-    'employment law',
-    'HR compliance',
-    'international payroll',
-    'employer costs',
+    'Ethiopian banks',
+    'savings rates Ethiopia',
+    'ESX stock market',
+    'Ethiopian insurance',
+    'NBE exchange rates',
+    'ECX commodity prices',
+    'Ethiopian financial platform',
+    'BirrBank',
   ],
   authors: [{ name: 'BirrBank' }],
   creator: 'BirrBank',
@@ -70,13 +69,13 @@ export const metadata: Metadata = {
     siteName: 'BirrBank',
     title: "BirrBank — Ethiopia's Financial Intelligence Platform",
     description:
-      'Employer costs, tax brackets, employment law, and compliance data for every country.',
+      "Ethiopia's financial intelligence platform. Compare savings rates, track ESX markets, monitor commodity prices and access insurance data.",
     images: [
       {
         url: '/og-default.png',
         width: 1200,
         height: 630,
-        alt: 'HRLake',
+        alt: 'BirrBank',
       },
     ],
   },
@@ -84,7 +83,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "BirrBank — Ethiopia's Financial Intelligence Platform",
     description:
-      'Employer costs, tax brackets, employment law, and compliance data for every country.',
+      "Ethiopia's financial intelligence platform. Compare savings rates, track ESX markets, monitor commodity prices and access insurance data.",
     images: ['/og-default.png'],
   },
   verification: {
