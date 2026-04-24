@@ -61,7 +61,7 @@ const CATEGORIES = [
     href: '/commodities',
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
-    statNum: 'Live', statLabel: 'ECX daily',
+    statNum: 'Daily', statLabel: 'ECX prices',
     iconBg: '#fffbeb',
     iconColor: '#d97706',
     icon: (
