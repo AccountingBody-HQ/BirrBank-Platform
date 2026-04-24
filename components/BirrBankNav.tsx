@@ -78,6 +78,8 @@ export default function Navigation() {
           }}>
             <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
+              <rect x="13.5" y="2" width="3" height="5" rx="1.5" fill="#ffffff"/>
+              <rect x="13.5" y="25" width="3" height="5" rx="1.5" fill="#ffffff"/>
             </svg>
           </div>
           <div className="flex items-start">
