@@ -24,9 +24,8 @@ export default function Footer() {
               </span>
             </div>
 
-            <p style={{ color: '#6b9e7e', fontSize: 14, lineHeight: 1.8, marginBottom: 20 }}>
-              Ethiopia's financial operating system. Compare savings rates, track ESX markets,
-              monitor commodity prices and access insurance data — free, always.
+            <p style={{ color: '#6b9e7e', fontSize: 13, lineHeight: 1.75, marginBottom: 20 }}>
+              Ethiopia's financial operating system. Free, mobile-first, covering 214 NBE-regulated institutions across banking, insurance, markets and commodities.
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 24 }}>
@@ -70,7 +69,7 @@ export default function Footer() {
               ['Microfinance',    '/banking/microfinance'],
               ['Money Transfer',  '/banking/money-transfer'],
             ]},
-            { title: 'Markets & Data', links: [
+            { title: 'Markets', links: [
               ['ESX Equities',     '/markets/equities'],
               ['IPO Pipeline',     '/markets/ipo-pipeline'],
               ['Bonds & T-Bills',  '/markets/bonds'],
