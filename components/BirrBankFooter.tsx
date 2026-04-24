@@ -15,9 +15,9 @@ export default function Footer() {
               }}>
                 <svg width="22" height="22" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                   <rect width="32" height="32" rx="7" fill="#1A5C38"/>
-                  <rect x="13.5" y="2.5" width="4" height="6" rx="2" fill="#ffffff"/>
-                  <rect x="13.5" y="23.5" width="4" height="6" rx="2" fill="#ffffff"/>
                   <text x="16" y="24" textAnchor="middle" fontFamily="Impact, Arial Black, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
+                  <rect x="14" y="1" width="4" height="5" rx="2" fill="#ffffff"/>
+                  <rect x="14" y="26" width="4" height="5" rx="2" fill="#ffffff"/>
                 </svg>
               </div>
               <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px' }}>
