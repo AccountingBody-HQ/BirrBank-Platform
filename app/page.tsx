@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════ FEATURED: FX RATES ═════════════════════════ */}
-      <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -335,11 +335,11 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1d4ed8', color: '#ffffff' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#3730a3', color: '#ffffff' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#d97706', color: '#ffffff' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#1A5C38', color: '#ffffff' },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#0891b2', color: '#ffffff' },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#eff6ff', color: '#1d4ed8' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#f0f4ff', color: '#3730a3' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#fffbeb', color: '#d97706' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#e6f4ed', color: '#1A5C38' },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#ecfeff', color: '#0891b2' },
             ].map((fx) => (
               <div
                 key={fx.currency}
