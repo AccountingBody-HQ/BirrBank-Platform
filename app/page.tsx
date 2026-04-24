@@ -335,11 +335,11 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#eff6ff', color: '#1d4ed8' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#f0f4ff', color: '#3730a3' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#fffbeb', color: '#d97706' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#e6f4ed', color: '#1A5C38' },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#ecfeff', color: '#0891b2' },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1A5C38', color: '#ffffff' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1d4ed8', color: '#ffffff' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#7c3aed', color: '#ffffff' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#d97706', color: '#ffffff' },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#0891b2', color: '#ffffff' },
             ].map((fx) => (
               <div
                 key={fx.currency}
