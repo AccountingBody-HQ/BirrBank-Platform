@@ -66,14 +66,11 @@ export default function Navigation() {
             background: '#1A5C38', borderRadius: 8, width: 32, height: 32,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="7" fill="#1A5C38"/>
-  <rect x="10" y="1" width="4" height="7" rx="2" fill="#ffffff"/>
-  <rect x="10" y="24" width="4" height="7" rx="2" fill="#ffffff"/>
-  <path fill="#ffffff" d="M10,7 L10,25 L19,25 Q26,25 26,20 Q26,16 20,15.5 Q25,15 25,10 Q25,7 19,7 Z"/>
-  <path fill="#1A5C38" d="M13,10 L13,14 L18,14 Q21,14 21,12 Q21,10 18,10 Z"/>
-  <path fill="#1A5C38" d="M13,17 L13,22 L19,22 Q23,22 23,19.5 Q23,17 19,17 Z"/>
-</svg>
+                        <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="23" fill="#ffffff">B</text>
+              <rect x="13.5" y="2" width="3" height="5" rx="1.5" fill="#ffffff"/>
+              <rect x="13.5" y="25" width="3" height="5" rx="1.5" fill="#ffffff"/>
+            </svg>
           </div>
           <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>
             BirrBank
