@@ -66,10 +66,11 @@ export default function Navigation() {
             background: '#1A5C38', borderRadius: 8, width: 32, height: 32,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="23" fill="#ffffff">B</text>
-              <rect x="13.5" y="2" width="3" height="5" rx="1.5" fill="#ffffff"/>
-              <rect x="13.5" y="25" width="3" height="5" rx="1.5" fill="#ffffff"/>
+            <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="7" fill="#1A5C38"/>
+              <rect x="13.5" y="2.5" width="4" height="6" rx="2" fill="#ffffff"/>
+              <rect x="13.5" y="23.5" width="4" height="6" rx="2" fill="#ffffff"/>
+              <text x="16" y="24" textAnchor="middle" fontFamily="Impact, Arial Black, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
             </svg>
           </div>
           <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>
