@@ -316,7 +316,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Updated daily</p>
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Live rates</p>
               <h2
                 className="font-serif font-bold text-slate-950"
                 style={{ fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
@@ -335,39 +335,36 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#eff6ff', color: '#1d4ed8' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#f0f4ff', color: '#3730a3' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#fffbeb', color: '#d97706' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#e6f4ed', color: '#1A5C38' },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#ecfeff', color: '#0891b2' },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1d4ed8', color: '#ffffff' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#3730a3', color: '#ffffff' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#d97706', color: '#ffffff' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#1A5C38', color: '#ffffff' },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#0891b2', color: '#ffffff' },
             ].map((fx) => (
               <div
                 key={fx.currency}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
-                style={{ padding: '24px 20px' }}
+                style={{ padding: '20px' }}
               >
-                <div className="mb-4">
+                <div className="flex items-center justify-between mb-4">
                   <div
-                    className="inline-flex items-center rounded-lg mb-2"
-                    style={{ background: fx.bg, padding: '4px 10px' }}
+                    className="inline-flex items-center rounded-lg"
+                    style={{ background: fx.bg, padding: '5px 12px' }}
                   >
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
                       {fx.currency}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 font-medium">{fx.name} / ETB</p>
+                  <p className="text-xs text-slate-400 font-medium">{fx.name}</p>
                 </div>
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400 font-medium">Buy</span>
-                    <span className="font-mono font-bold text-slate-700" style={{ fontSize: '14px' }}>{fx.buy}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400 font-medium">Sell</span>
-                    <span className="font-mono font-black text-slate-950" style={{ fontSize: '15px' }}>{fx.sell}</span>
-                  </div>
+                <div className="mb-1">
+                  <p className="text-xs text-slate-400 font-medium mb-0.5">Sell rate</p>
+                  <p className="font-mono font-black text-slate-950" style={{ fontSize: '22px', letterSpacing: '-1px' }}>{fx.sell} <span className="text-xs font-normal text-slate-400">ETB</span></p>
                 </div>
-                <p className="text-xs text-slate-400 mt-4 pt-3 border-t border-slate-100">NBE official · Today</p>
+                <div className="flex justify-between items-center pt-3 mt-2 border-t border-slate-100">
+                  <span className="text-xs text-slate-400">Buy</span>
+                  <span className="font-mono font-semibold text-slate-600" style={{ fontSize: '13px' }}>{fx.buy}</span>
+                </div>
               </div>
             ))}
           </div>
