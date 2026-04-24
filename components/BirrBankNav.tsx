@@ -33,10 +33,16 @@ const NAV = [
     { label: 'How ECX Works', href: '/commodities/ecx-guide' },
   ]},
   { label: 'Intelligence', href: '/guides', sub: [
-    { label: 'Guides',        href: '/guides' },
-    { label: 'Regulations',   href: '/regulations' },
-    { label: 'AI Assistant',  href: '/ai-assistant' },
-    { label: 'Diaspora Hub',  href: '/diaspora' },
+    { label: 'Guides',       href: '/guides' },
+    { label: 'Regulations',  href: '/regulations' },
+    { label: 'AI Assistant', href: '/ai-assistant' },
+  ]},
+  { label: 'Diaspora', href: '/diaspora', sub: [
+    { label: 'Diaspora Hub',        href: '/diaspora' },
+    { label: 'Send Money Home',     href: '/diaspora/remittance' },
+    { label: 'Invest from Abroad',  href: '/diaspora/invest' },
+    { label: 'Open a Bank Account', href: '/diaspora/bank-account' },
+    { label: 'Track ETB Rates',     href: '/banking/fx-rates' },
   ]},
 ]
 
@@ -45,7 +51,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen]     = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
-  const isActive = (href: string) => pathname.startsWith(href)
+  const isActive = (href: string) => pathname === '/' ? href === '/' : pathname.startsWith(href)
 
   return (
     <nav
@@ -55,7 +61,7 @@ export default function Navigation() {
       <div className="max-w-6xl mx-auto px-8 flex items-center justify-between h-16">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 no-underline">
+        <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0">
           <div style={{
             background: '#1A5C38', borderRadius: 8, width: 32, height: 32,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -72,7 +78,7 @@ export default function Navigation() {
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-0.5">
+        <div className="hidden lg:flex items-center gap-0.5">
           {NAV.map(item => (
             <div
               key={item.label}
@@ -82,7 +88,7 @@ export default function Navigation() {
             >
               <Link
                 href={item.href}
-                className="flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm transition-all"
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
                 style={{
                   color:      isActive(item.href) ? '#1A5C38' : '#374151',
                   fontWeight: isActive(item.href) ? 700 : 500,
@@ -91,7 +97,7 @@ export default function Navigation() {
               >
                 {item.label}
                 <ChevronDown
-                  size={12}
+                  size={11}
                   style={{ color: isActive(item.href) ? '#1A5C38' : '#9ca3af' }}
                   className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
                 />
@@ -126,27 +132,9 @@ export default function Navigation() {
           ))}
         </div>
 
-        {/* Desktop auth */}
-        <div className="hidden md:flex items-center gap-2">
-          <Link
-            href="/sign-in"
-            className="text-sm font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-slate-50"
-            style={{ color: '#374151' }}
-          >
-            Log in
-          </Link>
-          <Link
-            href="/sign-up"
-            className="text-sm font-bold px-5 py-2.5 rounded-full transition-all hover:opacity-90"
-            style={{ background: '#1A5C38', color: '#fff', boxShadow: '0 2px 8px rgba(26,92,56,0.20)' }}
-          >
-            Get started
-          </Link>
-        </div>
-
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 rounded-lg transition-colors hover:bg-slate-100"
+          className="lg:hidden p-2 rounded-lg transition-colors hover:bg-slate-100"
           style={{ color: '#374151' }}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
@@ -157,7 +145,7 @@ export default function Navigation() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div
-          className="md:hidden px-6 py-4 space-y-1"
+          className="lg:hidden px-6 py-4 space-y-1"
           style={{ background: '#ffffff', borderTop: '1px solid #e2e8f0' }}
         >
           {NAV.map(item => (
@@ -174,24 +162,6 @@ export default function Navigation() {
               {item.label}
             </Link>
           ))}
-          <div className="pt-3 flex gap-3" style={{ borderTop: '1px solid #e2e8f0' }}>
-            <Link
-              href="/sign-in"
-              onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center text-sm py-2.5 font-semibold rounded-lg hover:bg-slate-50 transition-colors"
-              style={{ color: '#374151' }}
-            >
-              Log in
-            </Link>
-            <Link
-              href="/sign-up"
-              onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center text-sm font-bold py-2.5 rounded-full"
-              style={{ background: '#1A5C38', color: '#fff' }}
-            >
-              Get started
-            </Link>
-          </div>
         </div>
       )}
     </nav>
