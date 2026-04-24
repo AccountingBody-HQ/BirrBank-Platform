@@ -437,7 +437,7 @@ export default function HomePage() {
                 body: "BirrBank makes no money from rankings or placements. We're funded by advertising and data services — never by the banks or insurers you're comparing.",
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl" style={{ padding: '36px 32px', background: '#0f2d1a', border: '1px solid #1a3a24' }}>
+              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#0f2d1a', border: '1px solid #1a3a24', minHeight: '280px' }}>
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#1a3a24', border: '1px solid #2d6a4f' }}>
                   {icon}
                 </div>
