@@ -86,13 +86,21 @@ export default function Footer() {
               ['Claims Guide',       '/insurance/claims-guide'],
               ['Compare Providers',  '/insurance'],
             ]},
+            { title: 'Diaspora', links: [
+              ['Diaspora Hub',       '/diaspora'],
+              ['Send Money Home',    '/diaspora/remittance'],
+              ['Invest from Abroad', '/diaspora/invest'],
+              ['Open Bank Account',  '/diaspora/bank-account'],
+              ['Track ETB Rates',    '/banking/fx-rates'],
+              ['IPO Pipeline',       '/markets/ipo-pipeline'],
+            ]},
             { title: 'Company', links: [
               ['About BirrBank',  '/about'],
               ['Intelligence Hub','/guides'],
               ['AI Assistant',    '/ai-assistant'],
-              ['Diaspora Hub',    '/diaspora'],
               ['Regulations',     '/regulations'],
-              ['Legal & Privacy', '/legal'],
+              ['Terms & Privacy', '/terms'],
+              ['Contact',         '/contact'],
             ]},
           ].map(col => (
             <div key={col.title}>
@@ -130,7 +138,7 @@ export default function Footer() {
             Always verify rates directly with the institution.
           </p>
           <div style={{ display: 'flex', gap: 20 }}>
-            {[['About', '/about'], ['Legal', '/legal'], ['Privacy', '/privacy'], ['Contact', '/contact']].map(([l, h]) => (
+            {[['About', '/about'], ['Legal', '/terms'], ['Privacy', '/privacy-policy'], ['Contact', '/contact']].map(([l, h]) => (
               <Link
                 key={l}
                 href={h}
