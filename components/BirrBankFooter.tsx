@@ -13,11 +13,7 @@ export default function Footer() {
                 background: '#1A5C38', borderRadius: 8, width: 34, height: 34,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-                  <line x1="3" y1="6"  x2="21" y2="6"/>
-                  <line x1="3" y1="12" x2="21" y2="12"/>
-                  <line x1="3" y1="18" x2="14" y2="18"/>
-                </svg>
+                <span style={{ color: '#ffffff', fontWeight: 900, fontSize: 21, fontFamily: 'Georgia, serif', letterSpacing: '-1px', lineHeight: 1 }}>B</span>
               </div>
               <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px' }}>
                 BirrBank
