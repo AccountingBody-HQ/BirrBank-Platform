@@ -22,7 +22,6 @@ export default function HeroSearch() {
   useEffect(() => {
     if (paused) return
     const target = PLACEHOLDERS[current]
-
     if (!deleting && displayed.length < target.length) {
       const t = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 45)
       return () => clearTimeout(t)
@@ -45,7 +44,7 @@ export default function HeroSearch() {
   function handleBlur()  { if (!query) setPaused(false) }
 
   function handleSearch() {
-    if (query.trim()) router.push(\`/search?q=\${encodeURIComponent(query.trim())}\`)
+    if (query.trim()) router.push('/search?q=' + encodeURIComponent(query.trim()))
   }
 
   function handleKey(e: React.KeyboardEvent) {
@@ -81,7 +80,7 @@ export default function HeroSearch() {
         </button>
       </div>
       <p className="text-xs text-slate-400 mt-2 ml-1">
-        Try: <span className="text-slate-500 font-medium">"best savings rate"</span> · <span className="text-slate-500 font-medium">"USD to ETB"</span> · <span className="text-slate-500 font-medium">"CBE mortgage"</span>
+        Try: <span className="text-slate-500 font-medium">&quot;best savings rate&quot;</span> &cdot; <span className="text-slate-500 font-medium">&quot;USD pto ETB&quot;</span> &cdot; <span className="text-slate-500 font-medium">&quot;CBE mortgage&quot;</span>
       </p>
     </div>
   )
