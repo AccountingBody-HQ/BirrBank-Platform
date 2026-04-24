@@ -51,7 +51,7 @@ export default function Footer() {
               ))}
             </div>
 
-            <div style={{ borderTop: '1px solid #1a3a24', paddingTop: 20 }}>
+            <div style={{ marginTop: 16 }}>
               <p style={{ color: '#4a7a5a', fontSize: 11, lineHeight: 1.7 }}>
                 Free for every Ethiopian and the global diaspora.<br />
                 No subscriptions. No paywalls. No affiliate bias.
