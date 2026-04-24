@@ -4,10 +4,10 @@ export default function Footer() {
   return (
     <footer style={{ background: '#0a1f14', borderTop: '1px solid #1a3a24' }}>
       <div className="max-w-6xl mx-auto px-8 py-20">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8">
 
           {/* Brand column */}
-          <div className="col-span-2 pr-4">
+          <div className="col-span-2 pr-2">
             <div className="flex items-center gap-2.5 mb-5">
               <div style={{
                 background: '#1A5C38', borderRadius: 8, width: 34, height: 34,
