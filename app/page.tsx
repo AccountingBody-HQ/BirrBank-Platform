@@ -474,14 +474,16 @@ export default function HomePage() {
                 'ECX commodity prices for coffee and sesame',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
                   {item}
                 </li>
               ))}
             </ul>
             <div className="flex items-center gap-3 pt-5 border-t border-slate-100">
               <p className="text-xs text-slate-500 font-medium">
-                Join <strong className="text-slate-900">2,400+</strong> Ethiopians and diaspora members already subscribed
+                Free forever · No credit card · Unsubscribe anytime
               </p>
             </div>
           </div>

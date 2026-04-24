@@ -35,9 +35,11 @@ export default function EmailCapture() {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-8" style={{boxShadow:'0 4px 24px rgba(0,0,0,0.06)'}}>
-      <h3 className="font-bold text-slate-900 mb-2" style={{fontSize:'20px'}}>Get weekly updates</h3>
-      <p className="text-slate-500 text-sm mb-6">Trusted by financial professionals across Ethiopia and the diaspora.</p>
+    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{boxShadow:'0 4px 24px rgba(0,0,0,0.06)'}}>
+      <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+      <div className="p-8">
+      <h3 className="font-bold text-slate-900 mb-2" style={{fontSize:'20px'}}>Join Ethiopian finance professionals</h3>
+      <p className="text-slate-500 text-sm mb-6">Weekly rate alerts, market moves and financial intelligence — free.</p>
 
       {status === 'success' ? (
         <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-4 text-center">
@@ -67,6 +69,7 @@ export default function EmailCapture() {
         </div>
       )}
       <p className="text-xs text-slate-400 mt-4 text-center">No spam. Unsubscribe anytime.</p>
+      </div>
     </div>
   )
 }
