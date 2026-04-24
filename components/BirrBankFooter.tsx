@@ -15,9 +15,11 @@ export default function Footer() {
               }}>
                 <svg width="22" height="22" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <rect width="32" height="32" rx="7" fill="#1A5C38"/>
-  <rect x="13.5" y="1" width="5" height="30" rx="2.5" fill="#ffffff"/>
-  <rect x="10" y="7" width="12" height="18" fill="#1A5C38"/>
-  <text x="16" y="25" textAnchor="middle" fontFamily="Impact, Arial Black, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
+  <rect x="10" y="1" width="4" height="7" rx="2" fill="#ffffff"/>
+  <rect x="10" y="24" width="4" height="7" rx="2" fill="#ffffff"/>
+  <path fill="#ffffff" d="M10,7 L10,25 L19,25 Q26,25 26,20 Q26,16 20,15.5 Q25,15 25,10 Q25,7 19,7 Z"/>
+  <path fill="#1A5C38" d="M13,10 L13,14 L18,14 Q21,14 21,12 Q21,10 18,10 Z"/>
+  <path fill="#1A5C38" d="M13,17 L13,22 L19,22 Q23,22 23,19.5 Q23,17 19,17 Z"/>
 </svg>
               </div>
               <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px' }}>
