@@ -358,8 +358,8 @@ export default function HomePage() {
                   <p className="text-xs text-slate-400 font-medium">{fx.name}</p>
                 </div>
                 <div className="mb-1">
-                  <p className="text-xs text-slate-400 font-medium mb-0.5">Sell rate</p>
-                  <p className="font-mono font-black text-slate-950" style={{ fontSize: '22px', letterSpacing: '-1px' }}>{fx.sell} <span className="text-xs font-normal text-slate-400">ETB</span></p>
+                  <p className="text-xs text-slate-400 font-medium mb-1">ETB per 1 {fx.currency}</p>
+                  <p className="font-mono font-black text-slate-950" style={{ fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>{fx.sell}</p>
                 </div>
                 <div className="flex justify-between items-center pt-3 mt-2 border-t border-slate-100">
                   <span className="text-xs text-slate-400">Buy</span>
