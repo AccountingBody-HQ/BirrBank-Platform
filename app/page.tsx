@@ -254,31 +254,35 @@ export default function HomePage() {
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="group bg-white rounded-2xl border border-slate-200 hover:shadow-lg transition-all duration-200 flex flex-col"
-                style={{ padding: '32px 28px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                className="group bg-white rounded-2xl border border-slate-200 hover:shadow-xl transition-all duration-200 flex flex-col overflow-hidden"
+                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
               >
-                <div
-                  className="rounded-xl flex items-center justify-center shrink-0 mb-6"
-                  style={{ width: 52, height: 52, background: cat.iconBg }}
-                >
-                  {cat.icon}
-                </div>
-                <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                <p className="text-slate-400 mb-4 text-xs" style={{ lineHeight: '1.8', minHeight: '72px' }}>{cat.desc}</p>
-                <div className="mb-5">
-                  <span
-                    className="inline-flex items-center rounded-full font-mono font-black"
-                    style={{ background: cat.iconBg, color: cat.iconColor, fontSize: '13px', padding: '5px 14px', letterSpacing: '-0.3px' }}
+                <div style={{ height: 3, background: cat.iconColor }} />
+                <div className="flex flex-col flex-1" style={{ padding: '28px 24px 24px' }}>
+                  <div
+                    className="rounded-xl flex items-center justify-center shrink-0 mb-5"
+                    style={{ width: 48, height: 48, background: cat.iconBg }}
                   >
-                    {cat.statNum}
-                  </span>
-                </div>
-                <div
-                  className="flex items-center gap-1.5 text-xs font-bold group-hover:gap-2.5 transition-all"
-                  style={{ color: cat.iconColor }}
-                >
-                  <span>{cat.action}</span>
-                  <ArrowRight size={11} />
+                    {cat.icon}
+                  </div>
+                  <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
+                  <p className="text-slate-400 text-xs flex-1" style={{ lineHeight: '1.75' }}>{cat.desc}</p>
+                  <div className="my-5" style={{ height: 1, background: '#f1f5f9' }} />
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <p className="font-mono font-black" style={{ fontSize: '22px', color: cat.iconColor, letterSpacing: '-1px', lineHeight: 1 }}>
+                        {cat.statNum}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-1">{cat.statLabel}</p>
+                    </div>
+                    <div
+                      className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all pb-1"
+                      style={{ color: cat.iconColor }}
+                    >
+                      <span>{cat.action}</span>
+                      <ArrowRight size={11} />
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
