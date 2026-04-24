@@ -19,7 +19,7 @@ const CATEGORIES = [
     href: '/banking',
     action: 'Compare savings rates',
     desc: 'Find the best savings, FX and loan rates across all 32 banks.',
-    statNum: '32', statLabel: 'commercial banks',
+    statNum: '32', statLabel: 'banks',
     iconBg: '#e6f4ed',
     iconColor: '#1A5C38',
     icon: (
@@ -33,7 +33,7 @@ const CATEGORIES = [
     href: '/insurance',
     action: 'Compare insurance',
     desc: 'Motor, life, health and property insurance from all 18 providers.',
-    statNum: '18', statLabel: 'insurance providers',
+    statNum: '18', statLabel: 'providers',
     iconBg: '#eff6ff',
     iconColor: '#1d4ed8',
     icon: (
@@ -61,7 +61,7 @@ const CATEGORIES = [
     href: '/commodities',
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
-    statNum: 'Live', statLabel: 'ECX daily prices',
+    statNum: 'Live', statLabel: 'ECX daily',
     iconBg: '#fffbeb',
     iconColor: '#d97706',
     icon: (
@@ -77,7 +77,7 @@ const CATEGORIES = [
     href: '/guides',
     action: 'Read the guides',
     desc: '500+ guides on banking, investing, insurance and the diaspora.',
-    statNum: '500+', statLabel: 'financial guides',
+    statNum: '500+', statLabel: 'guides',
     iconBg: '#ecfeff',
     iconColor: '#0891b2',
     icon: (
@@ -273,13 +273,13 @@ export default function HomePage() {
                     {cat.icon}
                   </div>
                   <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '56px', overflow: 'hidden' }}>{cat.desc}</p>
+                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '68px', overflow: 'hidden' }}>{cat.desc}</p>
                   <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
                     <div className="flex items-baseline gap-2 mb-3">
                       <p className="font-mono font-black" style={{ fontSize: cat.statNum === 'Live' ? '18px' : '24px', color: '#1A5C38', letterSpacing: '-1px', lineHeight: 1 }}>
                         {cat.statNum}
                       </p>
-                      <p className="text-xs text-slate-400" style={{ maxWidth: '80px' }}>{cat.statLabel}</p>
+                      <p className="text-xs text-slate-400">{cat.statLabel}</p>
                     </div>
                     <div
                       className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all"
