@@ -73,7 +73,7 @@ export default function Navigation() {
             </svg>
           </div>
           <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>
-            BirrBank
+            BirrBank<sup style={{ fontSize: 9, fontWeight: 700, verticalAlign: 'super', letterSpacing: 0 }}>®</sup>
           </span>
         </Link>
 
@@ -130,6 +130,21 @@ export default function Navigation() {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Search box */}
+        <div className="hidden lg:flex items-center">
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 hover:border-green-300 hover:bg-white transition-all" style={{ padding: '8px 16px', minWidth: 200 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search banks, rates, guides..."
+              className="bg-transparent text-sm outline-none text-slate-600 placeholder-slate-400 w-full"
+              style={{ fontSize: 13 }}
+            />
+          </div>
         </div>
 
         {/* Mobile hamburger */}
