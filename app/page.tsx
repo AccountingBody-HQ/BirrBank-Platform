@@ -226,16 +226,16 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-8 pb-12">
           <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200" style={{ borderTop: '3px solid #1A5C38' }}>
             {[
-              { value: '214',                                    label: 'NBE-regulated institutions', sub: 'Every licensed entity covered' },
-              { value: TOP_RATES[0].rate + '%',                   label: 'Best savings rate today',    sub: TOP_RATES[0].bank + ' · 12-month fixed'  },
-              { value: 'Free',                                     label: 'Always free to use',         sub: 'No subscriptions, ever'       },
+              { value: '214',                  label: 'Institutions', sub: 'NBE-regulated' },
+              { value: TOP_RATES[0].rate + '%', label: 'Best rate',    sub: 'Savings today' },
+              { value: 'Free',                  label: 'Always',       sub: 'No subscriptions' },
             ].map((s, i) => (
-              <div key={i} className="bg-white px-8 py-6 text-center">
-                <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '26px', letterSpacing: '-1px' }}>
+              <div key={i} className="bg-white px-3 py-5 text-center">
+                <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '22px', letterSpacing: '-1px' }}>
                   {s.value}
                 </p>
-                <p className="font-semibold text-slate-800 mb-0.5" style={{ fontSize: '13px' }}>{s.label}</p>
-                <p className="text-xs text-slate-400">{s.sub}</p>
+                <p className="font-semibold text-slate-800 mb-0.5" style={{ fontSize: '11px' }}>{s.label}</p>
+                <p className="text-xs text-slate-400" style={{ fontSize: '10px' }}>{s.sub}</p>
               </div>
             ))}
           </div>
