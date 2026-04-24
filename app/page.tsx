@@ -130,18 +130,44 @@ export default function HomePage() {
                 all verified from official sources, completely free.
               </p>
 
+              {/* Search bar */}
+              <div className="mb-6" style={{ maxWidth: 460 }}>
+                <div
+                  className="flex items-center gap-3 bg-white rounded-2xl"
+                  style={{ border: '2px solid #1A5C38', boxShadow: '0 4px 24px rgba(26,92,56,0.15)', padding: '6px 6px 6px 18px' }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search banks, rates, insurance, guides..."
+                    className="flex-1 bg-transparent outline-none text-slate-800 placeholder-slate-400"
+                    style={{ fontSize: 14, fontWeight: 500 }}
+                  />
+                  <button
+                    className="font-bold rounded-xl text-white shrink-0"
+                    style={{ background: '#1A5C38', fontSize: 14, padding: '10px 20px' }}
+                  >
+                    Search
+                  </button>
+                </div>
+                <p className="text-xs text-slate-400 mt-2 ml-1">Try: "best savings rate" · "USD to ETB" · "CBE mortgage"</p>
+              </div>
+
+              {/* CTAs */}
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/banking/savings-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, minWidth: 210, textAlign: 'center', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Compare savings rates
                 </Link>
                 <Link
                   href="/banking/fx-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, minWidth: 210, textAlign: 'center', border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
+                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>
@@ -160,9 +186,9 @@ export default function HomePage() {
                     <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Top rates today</p>
                     <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>Savings rates · All Ethiopian banks</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full" />
-                    <span className="text-xs font-bold text-slate-500">Placeholder</span>
+                  <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-xs font-bold text-green-700">Live</span>
                   </div>
                 </div>
 
@@ -205,7 +231,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                  <p className="text-xs text-slate-400">Official bank websites · NBE registry</p>
+                  <p className="text-xs text-slate-400">Official bank sources · NBE registry</p>
                   <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1A5C38' }}>
                     See all 32 banks →
                   </Link>
