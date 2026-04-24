@@ -68,9 +68,9 @@ export default function Navigation() {
           }}>
             <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <rect width="32" height="32" rx="7" fill="#1A5C38"/>
-              <text x="16" y="24" textAnchor="middle" fontFamily="Impact, Arial Black, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
-              <rect x="14" y="1" width="4" height="5" rx="2" fill="#ffffff"/>
-              <rect x="14" y="26" width="4" height="5" rx="2" fill="#ffffff"/>
+              <path fillRule="evenodd" fill="white" d="M7,5 L7,27 L18,27 C26,27 26,16 18,16 C24,16 24,5 18,5 Z M11,8 L16,8 C20,8 20,13 16,13 L11,13 Z M11,17 L18,17 C23,17 23,24 18,24 L11,24 Z"/>
+              <rect x="7" y="0" width="4" height="5" rx="2" fill="white"/>
+              <rect x="7" y="27" width="4" height="5" rx="2" fill="white"/>
             </svg>
           </div>
           <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>
