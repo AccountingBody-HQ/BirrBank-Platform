@@ -80,7 +80,7 @@ export default function HeroSearch() {
         </button>
       </div>
       <p className="text-xs text-slate-400 mt-2 ml-1">
-        Try: <span className="text-slate-500 font-medium">"best savings rate"</span> · <span className="text-slate-500 font-medium">"USD to ETB"</span> · <span className="text-slate-500 font-medium">"CBE mortgage"</span>
+        Try: <span className="text-slate-500 font-medium">best savings rate</span> · <span className="text-slate-500 font-medium">USD to ETB</span> · <span className="text-slate-500 font-medium">CBE mortgage</span>
       </p>
     </div>
   )
