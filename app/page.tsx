@@ -61,7 +61,7 @@ const CATEGORIES = [
     href: '/commodities',
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
-    statNum: 'Live', statLabel: 'ECX prices updated daily',
+    statNum: 'Live', statLabel: 'ECX daily prices',
     iconBg: '#fffbeb',
     iconColor: '#d97706',
     icon: (
@@ -273,13 +273,13 @@ export default function HomePage() {
                     {cat.icon}
                   </div>
                   <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '72px', overflow: 'hidden' }}>{cat.desc}</p>
+                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '56px', overflow: 'hidden' }}>{cat.desc}</p>
                   <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
                     <div className="flex items-baseline gap-2 mb-3">
-                      <p className="font-mono font-black" style={{ fontSize: '24px', color: '#1A5C38', letterSpacing: '-1px', lineHeight: 1 }}>
+                      <p className="font-mono font-black" style={{ fontSize: cat.statNum === 'Live' ? '18px' : '24px', color: '#1A5C38', letterSpacing: '-1px', lineHeight: 1 }}>
                         {cat.statNum}
                       </p>
-                      <p className="text-xs text-slate-400">{cat.statLabel}</p>
+                      <p className="text-xs text-slate-400" style={{ maxWidth: '80px' }}>{cat.statLabel}</p>
                     </div>
                     <div
                       className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all"
