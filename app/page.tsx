@@ -266,7 +266,7 @@ export default function HomePage() {
                     {cat.icon}
                   </div>
                   <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                  <p className="text-slate-400 text-xs flex-1" style={{ lineHeight: '1.75' }}>{cat.desc}</p>
+                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '63px', overflow: 'hidden' }}>{cat.desc}</p>
                   <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
                     <div className="flex items-baseline gap-2 mb-3">
                       <p className="font-mono font-black" style={{ fontSize: '24px', color: cat.iconColor, letterSpacing: '-1px', lineHeight: 1 }}>
