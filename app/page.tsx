@@ -61,7 +61,7 @@ const CATEGORIES = [
     href: '/commodities',
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
-    statNum: 'Live', statLabel: 'ECX commodity prices',
+    statNum: 'Live', statLabel: 'ECX prices updated daily',
     iconBg: '#fffbeb',
     iconColor: '#d97706',
     icon: (
@@ -247,7 +247,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-10">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What would you like to do?</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Explore the platform</p>
             <h2
               className="font-serif font-bold text-slate-950"
               style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
@@ -273,17 +273,17 @@ export default function HomePage() {
                     {cat.icon}
                   </div>
                   <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '63px', overflow: 'hidden' }}>{cat.desc}</p>
+                  <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '72px', overflow: 'hidden' }}>{cat.desc}</p>
                   <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
                     <div className="flex items-baseline gap-2 mb-3">
-                      <p className="font-mono font-black" style={{ fontSize: '24px', color: cat.iconColor, letterSpacing: '-1px', lineHeight: 1 }}>
+                      <p className="font-mono font-black" style={{ fontSize: '24px', color: '#1A5C38', letterSpacing: '-1px', lineHeight: 1 }}>
                         {cat.statNum}
                       </p>
                       <p className="text-xs text-slate-400">{cat.statLabel}</p>
                     </div>
                     <div
                       className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all"
-                      style={{ color: cat.iconColor }}
+                      style={{ color: '#1A5C38' }}
                     >
                       <span>{cat.action}</span>
                       <ArrowRight size={11} />
