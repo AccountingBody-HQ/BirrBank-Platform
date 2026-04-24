@@ -14,8 +14,8 @@ export default function Footer() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="9" y="3" width="3" height="26" rx="1.5" fill="#ffffff"/>
                   <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="23" fill="#ffffff">B</text>
-                  <rect x="14.5" y="3" width="3" height="26" rx="1.5" fill="#ffffff"/>
                 </svg>
               </div>
               <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px' }}>

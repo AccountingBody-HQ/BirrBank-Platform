@@ -67,8 +67,8 @@ export default function Navigation() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="9" y="3" width="3" height="26" rx="1.5" fill="#ffffff"/>
               <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="23" fill="#ffffff">B</text>
-              <rect x="14.5" y="3" width="3" height="26" rx="1.5" fill="#ffffff"/>
             </svg>
           </div>
           <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>
