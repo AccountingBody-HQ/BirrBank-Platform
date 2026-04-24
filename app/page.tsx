@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import HeroSearch from '@/components/HeroSearch'
 export const dynamic = 'force-dynamic'
 
 // ─── Placeholder data — replace with Supabase queries in next phase ──────────
@@ -120,7 +121,7 @@ export default function HomePage() {
               >
                 <span className="text-slate-950">Ethiopia's best</span>
                 <br />
-                <span className="text-slate-950">financial rates,</span>
+                <span className="text-slate-950">financial products,</span>
                 <br />
                 <span style={{ color: '#1A5C38' }}>compared.</span>
               </h1>
@@ -131,28 +132,8 @@ export default function HomePage() {
               </p>
 
               {/* Search bar */}
-              <div className="mb-6" style={{ maxWidth: 460 }}>
-                <div
-                  className="flex items-center gap-3 bg-white rounded-2xl"
-                  style={{ border: '2px solid #1A5C38', boxShadow: '0 4px 24px rgba(26,92,56,0.15)', padding: '6px 6px 6px 18px' }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search banks, rates, insurance, guides..."
-                    className="flex-1 bg-transparent outline-none text-slate-800 placeholder-slate-400"
-                    style={{ fontSize: 14, fontWeight: 500 }}
-                  />
-                  <button
-                    className="font-bold rounded-xl text-white shrink-0"
-                    style={{ background: '#1A5C38', fontSize: 14, padding: '10px 20px' }}
-                  >
-                    Search
-                  </button>
-                </div>
-                <p className="text-xs text-slate-400 mt-2 ml-1">Try: "best savings rate" · "USD to ETB" · "CBE mortgage"</p>
+              <div className="mb-5">
+                <HeroSearch />
               </div>
 
               {/* CTAs */}
@@ -243,7 +224,7 @@ export default function HomePage() {
 
         {/* ── 3-stat credibility bar ── */}
         <div className="relative max-w-6xl mx-auto px-8 pb-12">
-          <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200">
+          <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200" style={{ borderTop: '3px solid #1A5C38' }}>
             {[
               { value: '214',                                    label: 'NBE-regulated institutions', sub: 'Every licensed entity covered' },
               { value: TOP_RATES[0].rate + '%',                   label: 'Best savings rate today',    sub: TOP_RATES[0].bank + ' · 12-month fixed'  },
