@@ -58,7 +58,7 @@ export default function Navigation() {
       className="sticky top-0 z-50"
       style={{
         background: '#ffffff',
-        borderBottom: '2px solid #e2e8f0',
+        borderBottom: '2px solid #cbd5e1',
         boxShadow: '0 2px 12px rgba(0,0,0,0.06)'
       }}
     >
@@ -77,16 +77,14 @@ export default function Navigation() {
             boxShadow: '0 2px 8px rgba(26,92,56,0.25)'
           }}>
             <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="23" fill="#ffffff">B</text>
-              <rect x="13.5" y="2" width="3" height="5" rx="1.5" fill="#ffffff"/>
-              <rect x="13.5" y="25" width="3" height="5" rx="1.5" fill="#ffffff"/>
+              <text x="16" y="24" textAnchor="middle" fontFamily="Arial Black, Helvetica Neue, Arial, sans-serif" fontWeight="900" fontSize="24" fill="#ffffff">B</text>
             </svg>
           </div>
           <div className="flex items-start">
             <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px', lineHeight: 1 }}>
               BirrBank
             </span>
-            <span style={{ color: '#1A5C38', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1 }}>®</span>
+            <span style={{ color: '#1A5C38', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1, marginLeft: 1 }}>®</span>
           </div>
         </Link>
 
@@ -103,7 +101,7 @@ export default function Navigation() {
                 href={item.href}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
                 style={{
-                  color:      isActive(item.href) ? '#1A5C38' : '#1e293b',
+                  color:      isActive(item.href) ? '#1A5C38' : '#0f172a',
                   fontWeight: isActive(item.href) ? 700 : 600,
                   background: isActive(item.href) ? 'rgba(26,92,56,0.08)' : 'transparent',
                 }}
@@ -153,7 +151,7 @@ export default function Navigation() {
               padding: '9px 16px',
               minWidth: 210,
               background: '#f8fafc',
-              border: '1.5px solid #cbd5e1',
+              border: '1.5px solid #94a3b8',
               borderRadius: 999,
               boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)'
             }}
