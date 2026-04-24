@@ -267,16 +267,15 @@ export default function HomePage() {
                   </div>
                   <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
                   <p className="text-slate-400 text-xs flex-1" style={{ lineHeight: '1.75' }}>{cat.desc}</p>
-                  <div className="my-5" style={{ height: 1, background: '#f1f5f9' }} />
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="font-mono font-black" style={{ fontSize: '22px', color: cat.iconColor, letterSpacing: '-1px', lineHeight: 1 }}>
+                  <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
+                    <div className="flex items-baseline gap-2 mb-3">
+                      <p className="font-mono font-black" style={{ fontSize: '24px', color: cat.iconColor, letterSpacing: '-1px', lineHeight: 1 }}>
                         {cat.statNum}
                       </p>
-                      <p className="text-xs text-slate-400 mt-1">{cat.statLabel}</p>
+                      <p className="text-xs text-slate-400">{cat.statLabel}</p>
                     </div>
                     <div
-                      className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all pb-1"
+                      className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all"
                       style={{ color: cat.iconColor }}
                     >
                       <span>{cat.action}</span>
