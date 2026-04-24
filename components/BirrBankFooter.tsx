@@ -13,7 +13,10 @@ export default function Footer() {
                 background: '#1A5C38', borderRadius: 8, width: 34, height: 34,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ color: '#ffffff', fontWeight: 900, fontSize: 21, fontFamily: 'Georgia, serif', letterSpacing: '-1px', lineHeight: 1 }}>B</span>
+                <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+                  <span style={{ color: '#ffffff', fontWeight: 900, fontSize: 20, fontFamily: 'Arial Black, Helvetica Neue, Arial, sans-serif', lineHeight: 1, marginTop: 4 }}>B</span>
+                  <span style={{ display: 'block', width: 13, height: 2.5, background: '#C4962A', borderRadius: 1 }}/>
+                </span>
               </div>
               <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px' }}>
                 BirrBank
