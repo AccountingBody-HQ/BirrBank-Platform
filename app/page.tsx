@@ -109,7 +109,7 @@ export default function HomePage() {
           style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
 
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-0">
+        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
             {/* Left */}
@@ -125,7 +125,7 @@ export default function HomePage() {
                 <span style={{ color: '#1A5C38' }}>compared.</span>
               </h1>
 
-              <p className="text-slate-500 mb-10" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '400px' }}>
+              <p className="text-slate-600 mb-10" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '400px' }}>
                 Savings rates, FX, insurance, ESX markets and commodity prices —
                 all verified from official sources, completely free.
               </p>
@@ -157,12 +157,12 @@ export default function HomePage() {
                 <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Verified today</p>
-                    <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>Top savings rates · All 32 banks</p>
+                    <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Top rates today</p>
+                    <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>Savings rates · All Ethiopian banks</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs font-bold text-green-700">Live</span>
+                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
+                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full" />
+                    <span className="text-xs font-bold text-slate-500">Placeholder</span>
                   </div>
                 </div>
 
@@ -219,9 +219,9 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-8 pb-12">
           <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200">
             {[
-              { value: '214',   label: 'NBE-regulated institutions', sub: 'Every licensed entity covered' },
-              { value: '9.50%', label: 'Best savings rate today',    sub: 'Awash Bank · 12-month fixed'  },
-              { value: 'Free',  label: 'Always free to use',         sub: 'No subscriptions, ever'       },
+              { value: '214',                                    label: 'NBE-regulated institutions', sub: 'Every licensed entity covered' },
+              { value: TOP_RATES[0].rate + '%',                   label: 'Best savings rate today',    sub: TOP_RATES[0].bank + ' · 12-month fixed'  },
+              { value: 'Free',                                     label: 'Always free to use',         sub: 'No subscriptions, ever'       },
             ].map((s, i) => (
               <div key={i} className="bg-white px-8 py-6 text-center">
                 <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '26px', letterSpacing: '-1px' }}>
