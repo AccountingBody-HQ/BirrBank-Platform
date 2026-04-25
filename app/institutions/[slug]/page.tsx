@@ -95,8 +95,9 @@ const CrossIcon = () => (
   </svg>
 )
 
-export default function InstitutionPage({ params }: { params: { slug: string } }) {
-  const inst = INSTITUTIONS[params.slug]
+export default async function InstitutionPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const inst = INSTITUTIONS[slug]
   if (!inst) notFound()
 
   return (
