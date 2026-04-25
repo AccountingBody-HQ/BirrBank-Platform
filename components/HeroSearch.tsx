@@ -55,7 +55,7 @@ export default function HeroSearch() {
     <div style={{ maxWidth: 480 }}>
       <div
         className="flex items-center gap-3 bg-white rounded-2xl"
-        style={{ border: '2px solid #1A5C38', boxShadow: '0 4px 24px rgba(26,92,56,0.15)', padding: '6px 6px 6px 18px' }}
+        style={{ border: '2px solid #1D4ED8', boxShadow: '0 4px 24px rgba(29,78,216,0.12)', padding: '6px 6px 6px 18px' }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -74,7 +74,7 @@ export default function HeroSearch() {
         <button
           onClick={handleSearch}
           className="font-bold rounded-xl text-white shrink-0 transition-opacity hover:opacity-90"
-          style={{ background: '#1A5C38', fontSize: 14, padding: '10px 20px' }}
+          style={{ background: '#1D4ED8', fontSize: 14, padding: '10px 20px' }}
         >
           Search
         </button>

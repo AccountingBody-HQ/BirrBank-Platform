@@ -129,9 +129,9 @@ export default function FxRatesPage() {
               >
                 <div
                   className="inline-flex items-center rounded-lg mb-3"
-                  style={{ background: '#f1f5f9', padding: '4px 10px' }}
+                  style={{ background: '#1D4ED8', padding: '4px 10px' }}
                 >
-                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#1D4ED8', letterSpacing: '1px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '1px' }}>
                     {fx.currency}
                   </span>
                 </div>

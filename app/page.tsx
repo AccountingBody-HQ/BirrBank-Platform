@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════ FEATURED: FX RATES ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -349,7 +349,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-4">
                   <div
                     className="inline-flex items-center rounded-lg"
-                    style={{ background: '#f1f5f9', padding: '5px 12px' }}
+                    style={{ background: '#1D4ED8', padding: '5px 12px' }}
                   >
                     <span style={{ fontSize: '12px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
                       {fx.currency}
