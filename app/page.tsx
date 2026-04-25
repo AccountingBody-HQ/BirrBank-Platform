@@ -1,17 +1,31 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
 import HeroSearch from '@/components/HeroSearch'
+import { createSupabaseAdminClient } from '@/lib/supabase'
+
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in next phase ──────────
+const CURRENCY_NAMES: Record<string, string> = {
+  USD: 'US Dollar',
+  GBP: 'British Pound',
+  EUR: 'Euro',
+  SAR: 'Saudi Riyal',
+  AED: 'UAE Dirham',
+  CNY: 'Chinese Yuan',
+  CHF: 'Swiss Franc',
+}
 
-const TOP_RATES = [
-  { rank: 1, bank: 'Awash Bank',          product: '12-month fixed deposit', rate: '9.50', badge: 'Best rate' },
-  { rank: 2, bank: 'Zemen Bank',           product: '12-month fixed deposit', rate: '9.25', badge: null },
-  { rank: 3, bank: 'Bank of Abyssinia',    product: '12-month fixed deposit', rate: '9.00', badge: null },
-  { rank: 4, bank: 'Dashen Bank',          product: 'Regular savings',        rate: '8.75', badge: null },
-  { rank: 5, bank: 'Oromia International', product: 'Regular savings',        rate: '8.50', badge: null },
-]
+const ACCOUNT_TYPE_LABELS: Record<string, string> = {
+  regular_savings:    'Regular savings',
+  fixed_deposit_3m:   '3-month fixed deposit',
+  fixed_deposit_6m:   '6-month fixed deposit',
+  fixed_deposit_12m:  '12-month fixed deposit',
+  fixed_deposit_24m:  '24-month fixed deposit',
+  current:            'Current account',
+  diaspora:           'Diaspora account',
+  youth:              'Youth savings',
+  women:              'Women savings',
+}
 
 const CATEGORIES = [
   {
@@ -99,7 +113,54 @@ const ArrowRight = ({ size = 13 }: { size?: number }) => (
 const BTN_BASE = 'font-bold rounded-full transition-all'
 const BTN_SZ   = { fontSize: 15, padding: '14px 32px' } as React.CSSProperties
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = createSupabaseAdminClient()
+
+  // ── Live savings rates: top 5 by annual_rate ──────────────────────────────
+  const { data: ratesData } = await supabase
+    .schema('birrbank')
+    .from('savings_rates')
+    .select('annual_rate, account_type, institution_slug, last_verified_date, institutions(name)')
+    .eq('is_current', true)
+    .order('annual_rate', { ascending: false })
+    .limit(5)
+
+  const TOP_RATES = (ratesData ?? []).map((r: any, i: number) => ({
+    rank:    i + 1,
+    bank:    r.institutions?.name ?? r.institution_slug,
+    product: ACCOUNT_TYPE_LABELS[r.account_type] ?? r.account_type,
+    rate:    Number(r.annual_rate).toFixed(2),
+    badge:   i === 0 ? 'Best rate' : null,
+  }))
+
+  // ── NBE FX rates for today ─────────────────────────────────────────────────
+  const today = new Date().toISOString().split('T')[0]
+  const { data: fxData } = await supabase
+    .schema('birrbank')
+    .from('exchange_rates')
+    .select('currency_code, buying_rate, selling_rate, rate_date')
+    .eq('institution_slug', 'nbe')
+    .eq('rate_date', today)
+    .in('currency_code', ['USD', 'GBP', 'EUR', 'SAR', 'AED'])
+    .order('currency_code')
+
+  const FX_RATES = (fxData ?? []).map((r: any) => ({
+    currency: r.currency_code,
+    name:     CURRENCY_NAMES[r.currency_code] ?? r.currency_code,
+    buy:      Number(r.buying_rate).toFixed(2),
+    sell:     Number(r.selling_rate).toFixed(2),
+  }))
+
+  // ── Institution count ──────────────────────────────────────────────────────
+  const { count: institutionCount } = await supabase
+    .schema('birrbank')
+    .from('institutions')
+    .select('count', { count: 'exact', head: true })
+    .eq('is_active', true)
+
+  const bestRate = TOP_RATES[0]?.rate ?? '9.50'
+  const instCount = institutionCount ?? 214
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -119,7 +180,7 @@ export default function HomePage() {
                 className="font-serif font-bold mb-6"
                 style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
               >
-                <span className="text-slate-950">Ethiopia's best</span>
+                <span className="text-slate-950">Ethiopia best</span>
                 <br />
                 <span className="text-slate-950">financial products,</span>
                 <br />
@@ -131,12 +192,10 @@ export default function HomePage() {
                 all verified from official sources, completely free.
               </p>
 
-              {/* Search bar */}
               <div className="mb-5">
                 <HeroSearch />
               </div>
 
-              {/* CTAs */}
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/banking/savings-rates"
@@ -226,9 +285,9 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-8 pb-12">
           <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200" style={{ borderTop: '3px solid #1D4ED8' }}>
             {[
-              { value: '214',                  label: 'Institutions', sub: 'NBE-regulated' },
-              { value: TOP_RATES[0].rate + '%', label: 'Best rate',    sub: 'Savings today' },
-              { value: 'Free',                  label: 'Always',       sub: 'No subscriptions' },
+              { value: instCount.toString(), label: 'Institutions', sub: 'NBE-regulated' },
+              { value: bestRate + '%',        label: 'Best rate',    sub: 'Savings today' },
+              { value: 'Free',                label: 'Always',       sub: 'No subscriptions' },
             ].map((s, i) => (
               <div key={i} className="bg-white px-3 py-5 text-center">
                 <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '22px', letterSpacing: '-1px' }}>
@@ -252,7 +311,7 @@ export default function HomePage() {
               className="font-serif font-bold text-slate-950"
               style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
-              Ethiopia's financial market, fully covered.
+              Ethiopia financial market, fully covered.
             </h2>
           </div>
 
@@ -294,10 +353,9 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Bottom context bar */}
           <div className="mt-10 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
-              Covering all <strong className="text-slate-800">214 NBE-regulated institutions</strong> across 8 categories — banks, insurers, MFIs, payment operators and more.
+              Covering all <strong className="text-slate-800">{instCount} NBE-regulated institutions</strong> across 8 categories — banks, insurers, MFIs, payment operators and more.
             </p>
             <Link
               href="/institutions"
@@ -321,7 +379,7 @@ export default function HomePage() {
                 className="font-serif font-bold text-slate-950"
                 style={{ fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
               >
-                Today's FX rates — NBE official
+                Today FX rates — NBE official
               </h2>
             </div>
             <Link
@@ -334,13 +392,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1D4ED8', color: '#ffffff' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1D4ED8', color: '#ffffff' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#1D4ED8', color: '#ffffff' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#1D4ED8', color: '#ffffff' },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#1D4ED8', color: '#ffffff' },
-            ].map((fx) => (
+            {FX_RATES.map((fx) => (
               <div
                 key={fx.currency}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all"
@@ -351,7 +403,7 @@ export default function HomePage() {
                     className="inline-flex items-center rounded-lg"
                     style={{ background: '#1D4ED8', padding: '5px 12px' }}
                   >
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#ffffff', letterSpacing: '1px' }}>
                       {fx.currency}
                     </span>
                   </div>
@@ -368,7 +420,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          {/* Bottom context bar */}
+
           <div className="mt-10 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
               Official rates published daily by the <strong className="text-slate-800">National Bank of Ethiopia</strong> · Updated 09:30 EAT every business day.
@@ -412,7 +464,7 @@ export default function HomePage() {
                 ),
                 tag: 'NBE verified',
                 headline: '214 institutions. Zero grey-market listings.',
-                body: "Every institution on BirrBank is verified against the National Bank of Ethiopia's official registry. If it's not NBE-licensed, it's not here.",
+                body: "Every institution on BirrBank is verified against the National Bank of Ethiopia official registry. If it is not NBE-licensed, it is not here.",
               },
               {
                 icon: (
@@ -434,7 +486,7 @@ export default function HomePage() {
                 ),
                 tag: 'No commercial bias',
                 headline: 'We earn nothing from the institutions we rank.',
-                body: "BirrBank makes no money from rankings or placements. We're funded by advertising and data services — never by the banks or insurers you're comparing.",
+                body: "BirrBank makes no money from rankings or placements. We are funded by advertising and data services — never by the banks or insurers you are comparing.",
               },
             ].map(({ icon, tag, headline, body }) => (
               <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #334155', minHeight: '280px' }}>
