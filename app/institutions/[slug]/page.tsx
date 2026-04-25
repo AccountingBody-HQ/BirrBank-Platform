@@ -389,14 +389,14 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
       </section>
 
       {/* ══════════════════════════════ DARK CTA ══════════════════════════════════ */}
-      <section style={{ background: '#0a1f14', padding: '72px 32px' }}>
+      <section style={{ background: '#0f172a', padding: '72px 32px' }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#4ade80' }}>Compare further</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Compare further</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
               See how {inst.name} compares to all 32 banks.
             </h3>
-            <p style={{ color: '#6b9e7e', fontSize: '14px', lineHeight: 1.75, maxWidth: 440 }}>
+            <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.75, maxWidth: 440 }}>
               BirrBank ranks every commercial bank by savings rate, loan rate, digital services and FX competitiveness — all on one comparison page.
             </p>
           </div>
@@ -406,7 +406,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
               Compare savings rates
             </Link>
             <Link href="/institutions" className="font-bold rounded-full text-center"
-              style={{ fontSize: 14, padding: '13px 24px', border: '1.5px solid #2d6a4f', color: '#6b9e7e' }}>
+              style={{ fontSize: 14, padding: '13px 24px', border: '1.5px solid #2d6a4f', color: '#94a3b8' }}>
               All institutions
             </Link>
           </div>

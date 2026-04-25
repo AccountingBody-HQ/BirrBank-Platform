@@ -316,30 +316,30 @@ export default function SavingsRatesPage() {
       </section>
 
       {/* ══════════════════════════════ DARK TRUST ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '72px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '72px 32px' }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#4ade80' }}>Data integrity</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Data integrity</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
               Every rate has a verified date. Always.
             </h3>
-            <p style={{ color: '#6b9e7e', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
+            <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
               BirrBank's rate freshness rule: any rate older than 7 days is automatically
               flagged. Stale data is the fastest way to destroy trust — and we never allow it.
             </p>
           </div>
           <div className="flex flex-col gap-3 shrink-0">
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#0f2d1a', border: '1px solid #1a3a24', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
-              <span className="text-sm font-semibold" style={{ color: '#6b9e7e' }}>Verified within 7 days — <span style={{ color: '#4ade80' }}>Live</span></span>
+              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Verified within 7 days — <span style={{ color: '#93c5fd' }}>Live</span></span>
             </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#0f2d1a', border: '1px solid #1a3a24', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#f59e0b' }} />
-              <span className="text-sm font-semibold" style={{ color: '#6b9e7e' }}>7–14 days old — <span style={{ color: '#f59e0b' }}>Check recommended</span></span>
+              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>7–14 days old — <span style={{ color: '#f59e0b' }}>Check recommended</span></span>
             </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#0f2d1a', border: '1px solid #1a3a24', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#ef4444' }} />
-              <span className="text-sm font-semibold" style={{ color: '#6b9e7e' }}>14+ days old — <span style={{ color: '#ef4444' }}>Being updated</span></span>
+              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>14+ days old — <span style={{ color: '#ef4444' }}>Being updated</span></span>
             </div>
           </div>
         </div>

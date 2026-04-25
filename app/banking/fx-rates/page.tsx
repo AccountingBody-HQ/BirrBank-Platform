@@ -319,14 +319,14 @@ export default function FxRatesPage() {
       </section>
 
       {/* ══════════════════════════════ DARK TRUST ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '72px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '72px 32px' }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#4ade80' }}>Source transparency</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Source transparency</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
               The NBE rate is always labelled. Always.
             </h3>
-            <p style={{ color: '#6b9e7e', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
+            <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
               BirrBank never presents a bank rate as if it is the official rate.
               The NBE indicative rate is always clearly identified as the regulatory
               benchmark — distinguishing it from commercial bank rates is a legal

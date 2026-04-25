@@ -385,18 +385,18 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════ TRUST ════════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="text-center mb-12">
-            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#4ade80' }}>Why use BirrBank</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#93c5fd' }}>Why use BirrBank</p>
             <h2
               className="font-serif font-bold mb-4"
               style={{ fontSize: 'clamp(26px, 3.5vw, 38px)', letterSpacing: '-1.2px', color: '#ffffff' }}
             >
               Unbiased. Verified. Free.
             </h2>
-            <p className="mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px', color: '#6b9e7e' }}>
+            <p className="mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px', color: '#94a3b8' }}>
               We never take fees from the institutions we rank. The best rate is always #1 — regardless of who offers it.
             </p>
           </div>
@@ -437,13 +437,13 @@ export default function HomePage() {
                 body: "BirrBank makes no money from rankings or placements. We're funded by advertising and data services — never by the banks or insurers you're comparing.",
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#0f2d1a', border: '1px solid #1a3a24', minHeight: '280px' }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#1a3a24', border: '1px solid #2d6a4f' }}>
+              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #1e293b', minHeight: '280px' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#334155', border: '1px solid #475569' }}>
                   {icon}
                 </div>
-                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#4ade80' }}>{tag}</p>
+                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#93c5fd' }}>{tag}</p>
                 <h3 className="font-bold mb-3" style={{ fontSize: '16px', lineHeight: 1.4, color: '#ffffff' }}>{headline}</h3>
-                <p className="text-sm" style={{ lineHeight: '1.85', color: '#6b9e7e' }}>{body}</p>
+                <p className="text-sm" style={{ lineHeight: '1.85', color: '#94a3b8' }}>{body}</p>
               </div>
             ))}
           </div>

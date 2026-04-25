@@ -67,7 +67,7 @@ export default function Navigation() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0">
           <div style={{
-            background: '#1A5C38',
+            background: '#1D4ED8',
             borderRadius: 8,
             width: 34,
             height: 34,
@@ -103,7 +103,7 @@ export default function Navigation() {
                 href={item.href}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
                 style={{
-                  color:      isActive(item.href) ? '#1A5C38' : '#0f172a',
+                  color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
                   fontWeight: isActive(item.href) ? 700 : 600,
                   background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
                 }}
@@ -111,7 +111,7 @@ export default function Navigation() {
                 {item.label}
                 <ChevronDown
                   size={11}
-                  style={{ color: isActive(item.href) ? '#1A5C38' : '#64748b' }}
+                  style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
                   className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
                 />
               </Link>
@@ -193,7 +193,7 @@ export default function Navigation() {
               onClick={() => setMobileOpen(false)}
               className="block px-3 py-2.5 text-sm rounded-lg transition-colors hover:bg-slate-50"
               style={{
-                color:      isActive(item.href) ? '#1A5C38' : '#1e293b',
+                color:      isActive(item.href) ? '#1D4ED8' : '#1e293b',
                 fontWeight: isActive(item.href) ? 700 : 600,
               }}
             >
