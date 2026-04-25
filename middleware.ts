@@ -28,6 +28,14 @@ const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 export default clerkMiddleware(async (auth, request) => {
   const path = request.nextUrl.pathname
 
+  // Roodber8 admin pages — redirect to login if no valid token
+  if (path.startsWith('/roodber8') && !path.startsWith('/roodber8-login')) {
+    const token = request.cookies.get('admin_token')?.value
+    if (!await tokenValid(token)) {
+      return NextResponse.redirect(new URL('/roodber8-login', request.url))
+    }
+  }
+
   // Admin API routes — return 401 if no valid token
   const isAdminApi = (
     (path.startsWith('/api/admin-') &&
