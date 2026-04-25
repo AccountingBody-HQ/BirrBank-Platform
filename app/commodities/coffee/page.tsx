@@ -1,40 +1,58 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-// All prices in ETB per kg
-
-const COFFEE_GRADES = [
-  { code: 'LUBPAA2', name: 'Limu Grade 2',        region: 'Limu',       process: 'Washed',   price: '98,450', change: '+1,200', changePct: '+1.23', volume: '24.5t', badge: 'Top grade' },
-  { code: 'LUBPAA3', name: 'Limu Grade 3',        region: 'Limu',       process: 'Washed',   price: '92,100', change: '+850',   changePct: '+0.93', volume: '18.2t', badge: null },
-  { code: 'LUBPAA5', name: 'Limu Grade 5',        region: 'Limu',       process: 'Washed',   price: '84,300', change: '-400',   changePct: '-0.47', volume: '12.1t', badge: null },
-  { code: 'LUBPDD5', name: 'Djimma Grade 5',      region: 'Djimma',     process: 'Natural',  price: '79,600', change: '+600',   changePct: '+0.76', volume: '31.8t', badge: null },
-  { code: 'LUBPDD4', name: 'Djimma Grade 4',      region: 'Djimma',     process: 'Natural',  price: '83,200', change: '+420',   changePct: '+0.51', volume: '22.4t', badge: null },
-  { code: 'YRGAA1', name: 'Yirgacheffe Grade 1',  region: 'Yirgacheffe', process: 'Washed',  price: '105,800', change: '+1,500', changePct: '+1.44', volume: '8.3t', badge: 'Premium' },
-  { code: 'YRGAA2', name: 'Yirgacheffe Grade 2',  region: 'Yirgacheffe', process: 'Washed',  price: '99,200', change: '+900',   changePct: '+0.92', volume: '14.7t', badge: null },
-  { code: 'GDKAA2', name: 'Gedeo Grade 2',        region: 'Gedeo',       process: 'Washed',  price: '96,300', change: '+750',   changePct: '+0.78', volume: '11.2t', badge: null },
-  { code: 'HRRA3',  name: 'Harrar Grade 3',       region: 'Harrar',      process: 'Natural', price: '88,700', change: '-200',   changePct: '-0.22', volume: '9.8t',  badge: null },
-  { code: 'KFAA2',  name: 'Kaffa Grade 2',        region: 'Kaffa',       process: 'Washed',  price: '94,500', change: '+650',   changePct: '+0.69', volume: '7.6t',  badge: null },
-]
-
-const REGIONS = ['All regions', 'Limu', 'Djimma', 'Yirgacheffe', 'Gedeo', 'Harrar', 'Kaffa']
+const PILLAR = '#1D4ED8'
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
   </svg>
 )
-
 const ClockIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
   </svg>
 )
 
-const PILLAR = '#1D4ED8'
+function fmt(val: number | null | undefined) {
+  if (val == null) return '—'
+  return Number(val).toLocaleString('en-ET', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+function fmtVol(val: number | null | undefined) {
+  if (val == null) return '—'
+  const t = Number(val) / 1000
+  return t.toFixed(1) + 't'
+}
+function fmtDate(d: string | null | undefined) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
 
-export default function CoffeePricesPage() {
+export default async function CoffeePricesPage() {
+  const supabase = createSupabaseAdminClient()
+  const today = new Date().toISOString().split('T')[0]
+  const displayDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+
+  const { data: coffeeData } = await supabase
+    .schema('birrbank')
+    .from('commodity_prices')
+    .select('*')
+    .eq('commodity_type', 'coffee')
+    .eq('trade_date', today)
+    .order('price_etb', { ascending: false })
+
+  const { count: totalGrades } = await supabase
+    .schema('birrbank')
+    .from('commodity_prices')
+    .select('count', { count: 'exact', head: true })
+    .eq('commodity_type', 'coffee')
+    .eq('trade_date', today)
+
+  const coffees = coffeeData ?? []
+  const topPrice = coffees[0] ? Number(coffees[0].price_etb) : null
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -56,12 +74,12 @@ export default function CoffeePricesPage() {
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             ECX daily settlement prices for every Ethiopian coffee grade and origin —
-            Limu, Yirgacheffe, Djimma, Harrar and more. Prices in ETB per kilogram.
+            Yirgacheffe, Sidama, Jimma and more. Prices in ETB per kilogram.
           </p>
           <div className="flex flex-wrap gap-6">
             {[
               { icon: <ClockIcon />, label: 'ECX official daily prices' },
-              { icon: <ClockIcon />, label: 'All grades and origins' },
+              { icon: <ClockIcon />, label: (totalGrades ?? 0) + ' grades tracked today' },
               { icon: <ClockIcon />, label: 'Washed and natural process' },
               { icon: <ClockIcon />, label: 'Updated every ECX market day' },
             ].map((s) => (
@@ -75,27 +93,18 @@ export default function CoffeePricesPage() {
       </section>
 
       {/* ══════════════════════════════ PRICE TABLE ════════════════════════════════ */}
-      {/* NO ADS on commodity price pages — neutrality rule */}
       <section className="bg-white" style={{ padding: '64px 32px 80px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Filter by region</p>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {REGIONS.map((r, i) => (
-                  <button key={r} className="rounded-full text-xs font-bold transition-all"
-                    style={{ padding: '6px 14px', background: i === 0 ? PILLAR : '#f1f5f9', color: i === 0 ? '#fff' : '#64748b', border: i === 0 ? 'none' : '1px solid #e2e8f0' }}>
-                    {r}
-                  </button>
-                ))}
-              </div>
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Today ECX settlement prices</p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: PILLAR }} />
                 <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#166534', background: '#dcfce7', borderColor: '#bbf7d0' }}>
-                  ECX · 25 Apr 2026
+                  ECX · {displayDate}
                 </span>
               </div>
             </div>
@@ -104,46 +113,56 @@ export default function CoffeePricesPage() {
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #f59e0b)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '130px 1fr 120px 100px 150px 120px 100px', padding: '13px 24px', background: '#f9fafb' }}>
-              {['ECX Code', 'Grade & name', 'Region', 'Process', 'Price (ETB/kg)', 'Change', 'Volume'].map((h) => (
+              style={{ gridTemplateColumns: '130px 1fr 140px 100px 160px 140px 100px', padding: '13px 24px', background: '#f9fafb' }}>
+              {['ECX Code', 'Grade & name', 'Region', 'Grade', 'Price (ETB/kg)', 'Change', 'Volume'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
 
-            {COFFEE_GRADES.map((c, i) => (
-              <div key={c.code} className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-amber-50' : 'bg-white hover:bg-slate-50'}`}>
-                {/* Desktop */}
-                <div className="hidden sm:grid items-center"
-                  style={{ gridTemplateColumns: '130px 1fr 120px 100px 150px 120px 100px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
-                  <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 w-fit" style={{ background: '#EFF6FF', color: PILLAR }}>{c.code}</span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-slate-800" style={{ fontSize: i === 0 ? '15px' : '14px' }}>{c.name}</p>
-                      {c.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#fef3c7', color: '#92400e' }}>{c.badge}</span>}
+            {coffees.length > 0 ? coffees.map((c: any, i: number) => {
+              const changePos = Number(c.price_change ?? 0) >= 0
+              const isTop = i === 0
+              return (
+                <div key={c.id} className={'border-b border-slate-100 transition-colors ' + (isTop ? 'bg-amber-50' : 'bg-white hover:bg-slate-50')}>
+                  <div className="hidden sm:grid items-center"
+                    style={{ gridTemplateColumns: '130px 1fr 140px 100px 160px 140px 100px', padding: isTop ? '18px 24px' : '14px 24px' }}>
+                    <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 w-fit" style={{ background: '#EFF6FF', color: PILLAR }}>{c.commodity_code}</span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-slate-800" style={{ fontSize: isTop ? '15px' : '14px' }}>{c.commodity_name}</p>
+                        {isTop && <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#fef3c7', color: '#92400e' }}>Top price</span>}
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-500">{c.region_of_origin ?? '—'}</p>
+                    <span className="text-xs font-bold rounded-full px-2 py-1 w-fit" style={{ background: '#f1f5f9', color: '#475569' }}>{c.grade ?? '—'}</span>
+                    <p className="font-mono font-black text-slate-900" style={{ fontSize: isTop ? '22px' : '18px', letterSpacing: '-0.5px' }}>
+                      {fmt(c.price_etb)}
+                    </p>
+                    <p className={'font-mono font-bold text-sm ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                      {changePos ? '+' : ''}{fmt(c.price_change)} ({changePos ? '+' : ''}{Number(c.price_change_pct ?? 0).toFixed(2)}%)
+                    </p>
+                    <p className="font-mono text-slate-500 text-sm">{fmtVol(c.volume_kg)}</p>
+                  </div>
+                  <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
+                    <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{c.commodity_code}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-slate-800 text-sm truncate">{c.commodity_name}</p>
+                      <p className="text-xs text-slate-400">{c.region_of_origin ?? '—'} · {c.grade ?? '—'} · {fmtVol(c.volume_kg)}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="font-mono font-black text-slate-900" style={{ fontSize: '16px' }}>{fmt(c.price_etb)}</p>
+                      <p className={'font-mono font-bold text-xs ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                        {changePos ? '+' : ''}{Number(c.price_change_pct ?? 0).toFixed(2)}%
+                      </p>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-500">{c.region}</p>
-                  <span className="text-xs font-bold rounded-full px-2 py-1 w-fit" style={{ background: '#f1f5f9', color: '#475569' }}>{c.process}</span>
-                  <p className="font-mono font-black text-slate-900" style={{ fontSize: i === 0 ? '22px' : '18px', letterSpacing: '-0.5px' }}>{c.price}</p>
-                  <p className={`font-mono font-bold text-sm ${c.change.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
-                    {c.change} ({c.changePct})
-                  </p>
-                  <p className="font-mono text-slate-500 text-sm">{c.volume}</p>
                 </div>
-                {/* Mobile */}
-                <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
-                  <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{c.code}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-800 text-sm truncate">{c.name}</p>
-                    <p className="text-xs text-slate-400">{c.region} · {c.process} · {c.volume}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="font-mono font-black text-slate-900" style={{ fontSize: '16px' }}>{c.price}</p>
-                    <p className={`font-mono font-bold text-xs ${c.changePct.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>{c.changePct}</p>
-                  </div>
-                </div>
+              )
+            }) : (
+              <div className="py-12 text-center">
+                <p className="text-slate-500 text-sm">Coffee prices for today are not yet available. ECX publishes prices each trading day.</p>
               </div>
-            ))}
+            )}
 
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Commodity Exchange (ecx.com.et) · Prices in ETB per kg · Updated every ECX trading day</p>
@@ -170,8 +189,8 @@ export default function CoffeePricesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               { origin: 'Yirgacheffe', region: 'SNNPR', notes: 'Premium washed coffees with bright acidity, floral and citrus notes. Consistently commands the highest ECX prices. Grade 1 and 2 are most sought after by specialty buyers.' },
-              { origin: 'Limu', region: 'Oromia', notes: 'Well-balanced washed coffees with medium acidity and wine-like complexity. Popular in European specialty markets. Grades 2 and 3 are most actively traded on the ECX.' },
-              { origin: 'Djimma', region: 'Oromia', notes: 'Primarily natural process. Larger volumes and more accessible prices make Djimma the most traded origin on the ECX. Grade 5 accounts for the highest volume.' },
+              { origin: 'Sidama', region: 'Sidama', notes: 'Well-balanced washed coffees with medium acidity and wine-like complexity. Popular in European specialty markets. Grades 2 and 3 are most actively traded on the ECX.' },
+              { origin: 'Jimma', region: 'Oromia', notes: 'Primarily natural process. Larger volumes and more accessible prices make Jimma the most traded origin on the ECX. Grade 5 accounts for the highest volume.' },
               { origin: 'Harrar', region: 'Oromia', notes: 'Natural process highland coffee with distinctive blueberry and wine notes. Lower ECX volumes but strong demand from Middle Eastern markets.' },
               { origin: 'Kaffa', region: 'SNNPR', notes: 'The original home of Arabica coffee. Forest and semi-forest coffees with complex profiles. Increasingly sought after for specialty and single-origin roasters.' },
               { origin: 'Gedeo', region: 'SNNPR', notes: 'Overlapping geographically with Yirgacheffe. Washed coffees with similar quality profile but distinct terroir. Growing recognition in international specialty markets.' },
@@ -207,8 +226,8 @@ export default function CoffeePricesPage() {
           </div>
           <div className="flex flex-col gap-3 shrink-0">
             {[
-              { dot: '#22c55e', label: 'ECX official source',        sub: 'ecx.com.et daily settlement prices' },
-              { dot: PILLAR,    label: 'Updated every trading day',  sub: 'No stale prices shown' },
+              { dot: '#22c55e', label: 'ECX official source',       sub: 'ecx.com.et daily settlement prices' },
+              { dot: PILLAR,    label: 'Updated every trading day', sub: 'No stale prices shown' },
               { dot: '#94a3b8', label: 'No commercial bias',        sub: 'No broker or exporter pays for placement' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
