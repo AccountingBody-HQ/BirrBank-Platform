@@ -8,12 +8,12 @@ const STATS = [
 ]
 
 const QUICK_LINKS = [
-  { label: 'Institution Manager', href: '/admin/institution-manager', desc: 'Add and manage all 214 NBE-regulated institutions' },
-  { label: 'Rate Updater',        href: '/admin/rate-updater',        desc: 'Update savings, loan and FX rates across all banks' },
-  { label: 'Data Quality',        href: '/admin/data-quality',        desc: 'Verify institution data and rate freshness' },
-  { label: 'Content Factory',     href: '/admin/content-factory',     desc: 'AI-powered article and guide generation' },
-  { label: 'Securities',          href: '/admin/securities',          desc: 'Manage ESX listings and IPO pipeline data' },
-  { label: 'Commodities',         href: '/admin/commodities',         desc: 'Update ECX coffee, sesame and grain prices' },
+  { label: 'Institution Manager', href: '/roodber8/institution-manager', desc: 'Add and manage all 214 NBE-regulated institutions' },
+  { label: 'Rate Updater',        href: '/roodber8/rate-updater',        desc: 'Update savings, loan and FX rates across all banks' },
+  { label: 'Data Quality',        href: '/roodber8/data-quality',        desc: 'Verify institution data and rate freshness' },
+  { label: 'Content Factory',     href: '/roodber8/content-factory',     desc: 'AI-powered article and guide generation' },
+  { label: 'Securities',          href: '/roodber8/securities',          desc: 'Manage ESX listings and IPO pipeline data' },
+  { label: 'Commodities',         href: '/roodber8/commodities',         desc: 'Update ECX coffee, sesame and grain prices' },
 ]
 
 const CHECKLIST = [

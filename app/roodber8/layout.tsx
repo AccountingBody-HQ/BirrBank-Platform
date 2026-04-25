@@ -9,14 +9,14 @@ import {
 } from 'lucide-react'
 
 const NAV = [
-  { href: '/admin',                      exact: true,  icon: LayoutDashboard, label: 'Command Centre',      sub: 'Overview & actions'         },
-  { href: '/admin/institution-manager',  exact: false, icon: BarChart3,       label: 'Institution Manager', sub: 'Add and manage institutions' },
-  { href: '/admin/rate-updater',         exact: false, icon: RefreshCw,       label: 'Rate Updater',        sub: 'Update rates and prices'     },
-  { href: '/admin/data-quality',         exact: false, icon: ShieldCheck,     label: 'Data Quality',        sub: 'Verify institution data'     },
-  { href: '/admin/content-factory',      exact: false, icon: Sparkles,        label: 'Content Factory',     sub: 'AI article generation'       },
-  { href: '/admin/securities',           exact: false, icon: TrendingUp,      label: 'Securities',          sub: 'ESX equities and IPOs'       },
-  { href: '/admin/commodities',          exact: false, icon: Coffee,          label: 'Commodities',         sub: 'ECX prices and grades'       },
-  { href: '/admin/settings',             exact: false, icon: Settings,        label: 'Settings',            sub: 'Config & environment'        },
+  { href: '/roodber8',                      exact: true,  icon: LayoutDashboard, label: 'Command Centre',      sub: 'Overview & actions'         },
+  { href: '/roodber8/institution-manager',  exact: false, icon: BarChart3,       label: 'Institution Manager', sub: 'Add and manage institutions' },
+  { href: '/roodber8/rate-updater',         exact: false, icon: RefreshCw,       label: 'Rate Updater',        sub: 'Update rates and prices'     },
+  { href: '/roodber8/data-quality',         exact: false, icon: ShieldCheck,     label: 'Data Quality',        sub: 'Verify institution data'     },
+  { href: '/roodber8/content-factory',      exact: false, icon: Sparkles,        label: 'Content Factory',     sub: 'AI article generation'       },
+  { href: '/roodber8/securities',           exact: false, icon: TrendingUp,      label: 'Securities',          sub: 'ESX equities and IPOs'       },
+  { href: '/roodber8/commodities',          exact: false, icon: Coffee,          label: 'Commodities',         sub: 'ECX prices and grades'       },
+  { href: '/roodber8/settings',             exact: false, icon: Settings,        label: 'Settings',            sub: 'Config & environment'        },
 ]
 
 function isActive(pathname: string, href: string, exact: boolean) {
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   async function handleLogout() {
     await fetch('/api/admin-logout', { method: 'POST' })
-    router.push('/admin-login')
+    router.push('/roodber8-login')
   }
 
   return (

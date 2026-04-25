@@ -29,10 +29,10 @@ export default clerkMiddleware(async (auth, request) => {
   const path = request.nextUrl.pathname
 
   // BirrBank admin pages — redirect to admin-login if no valid token
-  if (path.startsWith('/admin') && !path.startsWith('/admin-login')) {
+  if (path.startsWith('/admin') && !path.startsWith('/roodber8-login')) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
-      return NextResponse.redirect(new URL('/admin-login', request.url))
+      return NextResponse.redirect(new URL('/roodber8-login', request.url))
     }
   }
 
