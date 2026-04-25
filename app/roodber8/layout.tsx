@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   async function handleLogout() {
     await fetch('/api/admin-logout', { method: 'POST' })
-    router.push('/roodber8-login')
+    window.location.href = '/roodber8-login'
   }
 
   return (
