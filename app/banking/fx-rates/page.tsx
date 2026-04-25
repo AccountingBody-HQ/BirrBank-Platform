@@ -3,32 +3,29 @@ import EmailCapture from '@/components/EmailCapture'
 export const dynamic = 'force-dynamic'
 
 // ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-// FX rates stored as ETB per 1 foreign currency unit (e.g. 1 USD = 156.40 ETB)
-// NBE indicative rate is the official reference benchmark — always shown first
+// FX rates stored as ETB per 1 foreign currency unit. Never inverse.
 
 const NBE_RATES = [
-  { currency: 'USD', name: 'US Dollar',        buy: '155.90', sell: '156.40', bg: '#1A5C38' },
-  { currency: 'GBP', name: 'British Pound',    buy: '197.20', sell: '197.82', bg: '#1d4ed8' },
-  { currency: 'EUR', name: 'Euro',             buy: '168.50', sell: '169.12', bg: '#7c3aed' },
-  { currency: 'SAR', name: 'Saudi Riyal',      buy: '41.40',  sell: '41.70',  bg: '#d97706' },
-  { currency: 'AED', name: 'UAE Dirham',       buy: '42.30',  sell: '42.60',  bg: '#0891b2' },
-  { currency: 'CAD', name: 'Canadian Dollar',  buy: '112.80', sell: '113.20', bg: '#dc2626' },
-  { currency: 'CHF', name: 'Swiss Franc',      buy: '174.60', sell: '175.10', bg: '#64748b' },
-  { currency: 'CNY', name: 'Chinese Yuan',     buy: '21.40',  sell: '21.60',  bg: '#b91c1c' },
+  { currency: 'USD', name: 'US Dollar',       flag: '🇺🇸', buy: '155.90', sell: '156.40', bg: '#1A5C38' },
+  { currency: 'GBP', name: 'British Pound',   flag: '🇬🇧', buy: '197.20', sell: '197.82', bg: '#1d4ed8' },
+  { currency: 'EUR', name: 'Euro',             flag: '🇪🇺', buy: '168.50', sell: '169.12', bg: '#7c3aed' },
+  { currency: 'SAR', name: 'Saudi Riyal',      flag: '🇸🇦', buy: '41.40',  sell: '41.70',  bg: '#d97706' },
+  { currency: 'AED', name: 'UAE Dirham',       flag: '🇦🇪', buy: '42.30',  sell: '42.60',  bg: '#0891b2' },
+  { currency: 'CNY', name: 'Chinese Yuan',     flag: '🇨🇳', buy: '21.40',  sell: '21.58',  bg: '#dc2626' },
+  { currency: 'INR', name: 'Indian Rupee',     flag: '🇮🇳', buy: '1.84',   sell: '1.86',   bg: '#ea580c' },
+  { currency: 'CHF', name: 'Swiss Franc',      flag: '🇨🇭', buy: '172.10', sell: '172.80', bg: '#0f172a' },
 ]
 
-const BANK_FX = [
-  { bank: 'Commercial Bank of Ethiopia', usd_buy: '155.50', usd_sell: '157.20', eur_buy: '168.10', eur_sell: '169.80', gbp_buy: '196.80', gbp_sell: '198.50', verified: '22 Apr 2026', badge: 'State bank' },
-  { bank: 'Awash Bank',                  usd_buy: '155.70', usd_sell: '156.90', eur_buy: '168.30', eur_sell: '169.50', gbp_buy: '197.00', gbp_sell: '198.20', verified: '22 Apr 2026', badge: 'Tight spread' },
-  { bank: 'Dashen Bank',                 usd_buy: '155.60', usd_sell: '157.00', eur_buy: '168.20', eur_sell: '169.60', gbp_buy: '196.90', gbp_sell: '198.30', verified: '21 Apr 2026', badge: null },
-  { bank: 'Bank of Abyssinia',           usd_buy: '155.40', usd_sell: '157.10', eur_buy: '168.00', eur_sell: '169.70', gbp_buy: '196.70', gbp_sell: '198.40', verified: '21 Apr 2026', badge: null },
-  { bank: 'Zemen Bank',                  usd_buy: '155.80', usd_sell: '156.80', eur_buy: '168.40', eur_sell: '169.40', gbp_buy: '197.10', gbp_sell: '198.10', verified: '20 Apr 2026', badge: 'Premium' },
-  { bank: 'Wegagen Bank',                usd_buy: '155.30', usd_sell: '157.30', eur_buy: '167.90', eur_sell: '169.90', gbp_buy: '196.60', gbp_sell: '198.60', verified: '20 Apr 2026', badge: null },
-  { bank: 'Nib International Bank',      usd_buy: '155.20', usd_sell: '157.40', eur_buy: '167.80', eur_sell: '170.00', gbp_buy: '196.50', gbp_sell: '198.70', verified: '19 Apr 2026', badge: null },
-  { bank: 'Oromia International',        usd_buy: '155.60', usd_sell: '157.00', eur_buy: '168.20', eur_sell: '169.60', gbp_buy: '196.90', gbp_sell: '198.30', verified: '19 Apr 2026', badge: null },
+const BANK_RATES = [
+  { bank: 'Commercial Bank of Ethiopia', usd_buy: '155.75', usd_sell: '156.55', eur_buy: '168.20', eur_sell: '169.30', gbp_buy: '196.90', gbp_sell: '198.10', verified: '25 Apr 2026' },
+  { bank: 'Awash Bank',                  usd_buy: '155.85', usd_sell: '156.45', eur_buy: '168.40', eur_sell: '169.10', gbp_buy: '197.10', gbp_sell: '197.90', verified: '25 Apr 2026' },
+  { bank: 'Dashen Bank',                 usd_buy: '155.80', usd_sell: '156.50', eur_buy: '168.30', eur_sell: '169.20', gbp_buy: '197.00', gbp_sell: '198.00', verified: '24 Apr 2026' },
+  { bank: 'Bank of Abyssinia',           usd_buy: '155.70', usd_sell: '156.60', eur_buy: '168.10', eur_sell: '169.40', gbp_buy: '196.80', gbp_sell: '198.20', verified: '24 Apr 2026' },
+  { bank: 'Zemen Bank',                  usd_buy: '155.90', usd_sell: '156.40', eur_buy: '168.50', eur_sell: '169.05', gbp_buy: '197.20', gbp_sell: '197.80', verified: '23 Apr 2026' },
+  { bank: 'Wegagen Bank',                usd_buy: '155.65', usd_sell: '156.55', eur_buy: '168.00', eur_sell: '169.20', gbp_buy: '196.70', gbp_sell: '198.00', verified: '23 Apr 2026' },
+  { bank: 'Nib International Bank',      usd_buy: '155.70', usd_sell: '156.50', eur_buy: '168.10', eur_sell: '169.15', gbp_buy: '196.90', gbp_sell: '197.90', verified: '22 Apr 2026' },
+  { bank: 'Oromia International',        usd_buy: '155.60', usd_sell: '156.60', eur_buy: '167.90', eur_sell: '169.30', gbp_buy: '196.60', gbp_sell: '198.10', verified: '22 Apr 2026' },
 ]
-
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'SAR', 'AED']
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -48,7 +45,7 @@ const ShieldIcon = () => (
   </svg>
 )
 
-export default function FXRatesPage() {
+export default function FxRatesPage() {
   return (
     <div className="min-h-screen bg-white">
 
@@ -70,7 +67,7 @@ export default function FXRatesPage() {
           </div>
 
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>
-            Banking · FX rates
+            Banking · FX Rates
           </p>
           <h1
             className="font-serif font-bold mb-5 text-slate-950"
@@ -80,16 +77,16 @@ export default function FXRatesPage() {
             <span style={{ color: '#1A5C38' }}>NBE official vs all banks.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
-            Official National Bank of Ethiopia indicative rates alongside per-bank
-            buying and selling rates. Updated every business day at 09:30 EAT.
+            The National Bank of Ethiopia publishes indicative rates daily at 09:30 EAT.
+            Compare the official benchmark against buying and selling rates from every commercial bank.
           </p>
 
           <div className="flex flex-wrap gap-6">
             {[
               { icon: <ShieldIcon />, label: 'Official NBE indicative rates' },
-              { icon: <ClockIcon />,  label: 'Updated 09:30 EAT daily' },
-              { icon: <ShieldIcon />, label: '8 major currencies' },
-              { icon: <ClockIcon />,  label: 'Per-bank buy and sell rates' },
+              { icon: <ClockIcon />,  label: 'Updated 09:30 EAT every business day' },
+              { icon: <ShieldIcon />, label: '8 major currencies vs ETB' },
+              { icon: <ClockIcon />,  label: 'Per-bank buying and selling rates' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
                 <span style={{ color: '#1A5C38' }}>{s.icon}</span>
@@ -100,210 +97,178 @@ export default function FXRatesPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════ NBE OFFICIAL RATES ════════════════════════ */}
+      {/* ══════════════════════ NBE OFFICIAL RATES GRID ═══════════════════════════ */}
       {/* NO ADS ON THIS PAGE — FX dashboard integrity rule */}
-      <section className="bg-white" style={{ padding: '64px 32px 80px' }}>
+      <section className="border-b border-slate-100 bg-white" style={{ padding: '64px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Official reference</p>
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Official NBE rate</p>
               <h2
                 className="font-serif font-bold text-slate-950"
                 style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
               >
-                NBE indicative rates — today
+                Today's NBE indicative rates
               </h2>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-400 sm:pb-1">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="font-semibold">Updated 09:30 EAT · 22 Apr 2026</span>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
+                Updated 09:30 EAT · 25 Apr 2026
+              </span>
             </div>
           </div>
 
-          {/* NBE rate cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
             {NBE_RATES.map((fx) => (
               <div
                 key={fx.currency}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
-                style={{ padding: '16px 14px' }}
+                style={{ padding: '18px 16px' }}
               >
                 <div
                   className="inline-flex items-center rounded-lg mb-3"
                   style={{ background: fx.bg, padding: '4px 10px' }}
                 >
-                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '1px' }}>{fx.currency}</span>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#fff', letterSpacing: '1px' }}>
+                    {fx.currency}
+                  </span>
                 </div>
+                <p className="text-xs text-slate-400 font-medium mb-0.5 truncate">{fx.name}</p>
                 <p className="text-xs text-slate-400 mb-1" style={{ fontSize: '10px' }}>ETB per 1 {fx.currency}</p>
-                <p className="font-mono font-black text-slate-950" style={{ fontSize: '20px', letterSpacing: '-0.5px', lineHeight: 1 }}>{fx.sell}</p>
-                <div className="flex justify-between items-center pt-2 mt-2 border-t border-slate-100">
-                  <span className="text-slate-400" style={{ fontSize: '10px' }}>Buy</span>
-                  <span className="font-mono font-semibold text-slate-500" style={{ fontSize: '11px' }}>{fx.buy}</span>
+                <p className="font-mono font-black text-slate-950 leading-none mb-2" style={{ fontSize: '22px', letterSpacing: '-0.5px' }}>
+                  {fx.sell}
+                </p>
+                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                  <span className="text-xs text-slate-400">Buy</span>
+                  <span className="font-mono font-semibold text-slate-500" style={{ fontSize: '12px' }}>{fx.buy}</span>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <p className="text-xs text-slate-400">
-              <strong className="text-slate-600">Official NBE Rate</strong> — published daily by the National Bank of Ethiopia.
-              This is the reference benchmark. Individual bank rates will differ.
+          <div className="mt-6 flex items-start gap-2 text-xs text-slate-400">
+            <ShieldIcon />
+            <p>
+              <strong className="text-slate-600">Official NBE Rate</strong> — Published by the National Bank of Ethiopia.
+              This is the regulatory benchmark. Individual bank rates may vary.
+              Source: <span style={{ color: '#1A5C38', fontWeight: 600 }}>nbe.gov.et/exchange/indicatives-rates/</span>
             </p>
-            
-              href="https://nbe.gov.et/exchange/indicatives-rates/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold shrink-0 ml-4"
-              style={{ color: '#1A5C38' }}
-            >
-              <span>View on NBE.gov.et</span>
-              <ArrowRight size={11} />
-            </a>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════ PER-BANK COMPARISON ══════════════════════ */}
-      <section className="border-y border-slate-100" style={{ background: '#f8faf8', padding: '80px 32px' }}>
+      {/* ══════════════════════ PER-BANK RATE COMPARISON TABLE ════════════════════ */}
+      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '64px 32px 96px' }}>
         <div className="max-w-6xl mx-auto">
 
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Per-bank rates</p>
-              <h2
-                className="font-serif font-bold text-slate-950"
-                style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
-              >
-                Bank-by-bank FX comparison — USD · EUR · GBP
-              </h2>
-            </div>
-            <p className="text-xs text-slate-400 sm:pb-1 shrink-0">Sell rate = what you pay the bank · Buy rate = what the bank pays you</p>
+          <div className="mb-8">
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Bank-by-bank comparison</p>
+            <h2
+              className="font-serif font-bold text-slate-950"
+              style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}
+            >
+              USD · EUR · GBP — all banks compared
+            </h2>
+            <p className="text-slate-500 mt-2" style={{ fontSize: '14px' }}>
+              Sell rate is what you pay when buying foreign currency. Buy rate is what you receive when selling.
+            </p>
           </div>
 
-          {/* Currency filter tabs */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {CURRENCIES.map((c, i) => (
-              <button
-                key={c}
-                className="rounded-full text-xs font-bold transition-all"
-                style={{
-                  padding: '6px 16px',
-                  background: i === 0 ? '#1A5C38' : '#ffffff',
-                  color:      i === 0 ? '#fff'     : '#64748b',
-                  border:     i === 0 ? 'none'     : '1px solid #e2e8f0',
-                }}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-
-          {/* Bank FX table */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
 
             {/* Header */}
             <div
-              className="hidden sm:grid border-b border-slate-200 bg-white"
-              style={{ gridTemplateColumns: '1fr 110px 110px 110px 110px 110px 110px 110px', padding: '13px 24px' }}
+              className="hidden lg:grid border-b border-slate-200"
+              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '12px 24px', background: '#f8fafc' }}
             >
-              {['Bank', 'USD buy', 'USD sell', 'EUR buy', 'EUR sell', 'GBP buy', 'GBP sell', 'Last verified'].map((h) => (
+              {['Bank', 'USD Buy', 'USD Sell', 'EUR Buy', 'EUR Sell', 'GBP Buy', 'GBP Sell', 'Verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
 
             {/* NBE reference row */}
             <div
-              className="hidden sm:grid items-center border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 110px 110px 110px 110px 110px 110px 110px', padding: '14px 24px', background: '#f0fdf4' }}
+              className="hidden lg:grid items-center border-b-2 border-green-200"
+              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '14px 24px', background: '#f0fdf4' }}
             >
-              <div>
-                <p className="font-bold text-green-900" style={{ fontSize: '14px' }}>National Bank of Ethiopia</p>
-                <span className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1A5C38' }}>Official NBE Rate</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black uppercase rounded-full px-2 py-0.5" style={{ background: '#1A5C38', color: '#fff' }}>NBE</span>
+                <p className="font-bold text-green-900" style={{ fontSize: '13px' }}>Official NBE Indicative</p>
               </div>
-              {['155.90', '156.40', '168.50', '169.12', '197.20', '197.82'].map((v, i) => (
-                <p key={i} className="font-mono font-black text-green-700" style={{ fontSize: '15px', letterSpacing: '-0.5px' }}>{v}</p>
+              {['155.90', '156.40', '168.50', '169.12', '197.20', '197.82'].map((v) => (
+                <p key={v} className="font-mono font-bold text-green-700" style={{ fontSize: '14px' }}>{v}</p>
               ))}
-              <div className="flex items-center gap-1.5">
-                <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
-                <p className="text-xs text-slate-400 font-medium">22 Apr 2026</p>
-              </div>
+              <p className="text-xs font-bold text-green-700">Daily · Official</p>
             </div>
 
             {/* Bank rows */}
-            {BANK_FX.map((b, idx) => (
+            {BANK_RATES.map((r, i) => (
               <div
-                key={b.bank}
-                className="border-b border-slate-100 transition-colors"
+                key={r.bank}
+                className="hidden lg:grid items-center border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '13px 24px' }}
               >
-                {/* Desktop */}
-                <div
-                  className="hidden sm:grid items-center hover:bg-slate-50"
-                  style={{ gridTemplateColumns: '1fr 110px 110px 110px 110px 110px 110px 110px', padding: '14px 24px', background: idx % 2 === 0 ? '#ffffff' : '#fafafa' }}
-                >
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{b.bank}</p>
-                    {b.badge && (
-                      <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#e6f4ed', color: '#1A5C38' }}>
-                        {b.badge}
-                      </span>
-                    )}
-                  </div>
-                  {[b.usd_buy, b.usd_sell, b.eur_buy, b.eur_sell, b.gbp_buy, b.gbp_sell].map((v, i) => (
-                    <p key={i} className="font-mono font-semibold text-slate-700" style={{ fontSize: '14px', letterSpacing: '-0.5px' }}>{v}</p>
-                  ))}
-                  <div className="flex items-center gap-1.5">
-                    <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
-                    <p className="text-xs text-slate-400 font-medium">{b.verified}</p>
-                  </div>
-                </div>
-
-                {/* Mobile */}
-                <div className="sm:hidden" style={{ padding: '14px 16px' }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="font-bold text-slate-800 text-sm">{b.bank}</p>
-                    {b.badge && (
-                      <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#e6f4ed', color: '#1A5C38' }}>{b.badge}</span>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { label: 'USD sell', val: b.usd_sell },
-                      { label: 'EUR sell', val: b.eur_sell },
-                      { label: 'GBP sell', val: b.gbp_sell },
-                    ].map((item) => (
-                      <div key={item.label} className="bg-slate-50 rounded-lg text-center" style={{ padding: '8px' }}>
-                        <p className="text-xs text-slate-400 mb-0.5">{item.label}</p>
-                        <p className="font-mono font-black text-slate-800" style={{ fontSize: '13px' }}>{item.val}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-400 mt-2">Verified {b.verified}</p>
+                <p className="font-semibold text-slate-800" style={{ fontSize: '14px' }}>{r.bank}</p>
+                <p className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.usd_buy}</p>
+                <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.usd_sell}</p>
+                <p className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.eur_buy}</p>
+                <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.eur_sell}</p>
+                <p className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.gbp_buy}</p>
+                <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.gbp_sell}</p>
+                <div className="flex items-center gap-1.5">
+                  <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
+                  <p className="text-xs text-slate-400">{r.verified}</p>
                 </div>
               </div>
             ))}
 
-            {/* Footer */}
+            {/* Mobile rows */}
+            {BANK_RATES.map((r) => (
+              <div key={r.bank + '-mob'} className="lg:hidden border-b border-slate-100 bg-white" style={{ padding: '14px 16px' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="font-bold text-slate-800 text-sm">{r.bank}</p>
+                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                    <ClockIcon /><span>{r.verified}</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: 'USD sell', val: r.usd_sell },
+                    { label: 'EUR sell', val: r.eur_sell },
+                    { label: 'GBP sell', val: r.gbp_sell },
+                  ].map((fx) => (
+                    <div key={fx.label} className="bg-slate-50 rounded-lg text-center" style={{ padding: '8px' }}>
+                      <p className="text-xs text-slate-400 mb-1">{fx.label}</p>
+                      <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{fx.val}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* Table footer */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-slate-50" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
-                Sell rate = ETB you pay per 1 foreign unit · Buy rate = ETB you receive per 1 foreign unit · Sourced from official bank websites
+                Rates sourced from individual bank websites · NBE rate from nbe.gov.et · All rates ETB per 1 foreign unit
               </p>
-              <Link href="/banking/money-transfer" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
-                Compare remittance fees →
+              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+                View all 32 bank profiles →
               </Link>
             </div>
           </div>
 
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
-            FX rates are indicative and change throughout the trading day. Always confirm the rate directly
-            with the bank before any transaction. BirrBank is not a foreign exchange dealer.
+            FX rates are for comparison purposes only. Actual rates at the point of transaction may differ.
+            Always confirm with the institution before any currency exchange.
           </p>
         </div>
       </section>
 
-      {/* ══════════════════════════════ EXPLAINER ════════════════════════════════ */}
-      <section className="bg-white border-b border-slate-100" style={{ padding: '96px 32px' }}>
+      {/* ══════════════════════════════ HOW FX WORKS ═════════════════════════════ */}
+      <section className="border-b border-slate-100 bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>
@@ -311,25 +276,25 @@ export default function FXRatesPage() {
               className="font-serif font-bold text-slate-950"
               style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
             >
-              Understanding FX rates in Ethiopia.
+              Understanding Ethiopian FX rates.
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
                 step: '01',
-                title: 'The NBE indicative rate',
-                body: 'The National Bank of Ethiopia publishes an official indicative rate each business day at 09:30 EAT. This is the benchmark. Commercial banks set their own rates around this reference — you will always pay more or receive less than the NBE rate.',
+                title: 'NBE indicative vs bank rate',
+                body: 'The NBE publishes a daily indicative rate — the official benchmark. Banks set their own buying and selling rates within an allowed margin. The spread between buy and sell is the bank\'s FX revenue.',
               },
               {
                 step: '02',
                 title: 'Buy rate vs sell rate',
-                body: 'The sell rate is what you pay the bank (selling USD to get ETB). The buy rate is what the bank pays you (buying your USD). The difference — the spread — is how banks earn on FX. A tighter spread means a better deal.',
+                body: 'The sell rate is what you pay when purchasing foreign currency (e.g. sending money abroad). The buy rate is what you receive when selling foreign currency to the bank. Sell is always higher.',
               },
               {
                 step: '03',
-                title: 'Sending money from abroad',
-                body: 'If you are in the diaspora sending ETB home, compare money transfer agencies and bank SWIFT rates separately. Licensed agencies like Western Union and MoneyGram often offer competitive all-in rates including fees.',
+                title: 'Diaspora transfers',
+                body: 'For remittances, the effective rate includes both the FX rate and any transfer fee. Compare the total cost — not just the headline rate — when choosing between banks and money transfer agencies.',
               },
             ].map((s) => (
               <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
@@ -343,41 +308,38 @@ export default function FXRatesPage() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-6">
-            <Link href="/banking/money-transfer" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
+            <Link href="/diaspora/remittance" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
               Compare remittance services <ArrowRight />
             </Link>
-            <Link href="/diaspora" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
-              Diaspora hub <ArrowRight />
+            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
+              Read all FX guides <ArrowRight />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════ DARK TRUST ════════════════════════════════ */}
-      <section style={{ background: '#0a1f14', padding: '72px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#0a1f14', padding: '72px 32px' }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#4ade80' }}>Data source</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#4ade80' }}>Source transparency</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
-              The official NBE rate. Always labelled clearly.
+              The NBE rate is always labelled. Always.
             </h3>
             <p style={{ color: '#6b9e7e', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
-              BirrBank never presents a bank rate as the official rate. The NBE indicative
-              rate is always displayed as the reference benchmark — clearly labelled
-              as 'Official NBE Rate'. This distinction is both legally and reputationally important.
+              BirrBank never presents a bank rate as if it is the official rate.
+              The NBE indicative rate is always clearly identified as the regulatory
+              benchmark — distinguishing it from commercial bank rates is a legal
+              and reputational requirement we treat as non-negotiable.
             </p>
           </div>
-          <div className="shrink-0">
-            
-              href="https://nbe.gov.et/exchange/indicatives-rates/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-bold rounded-full transition-all"
-              style={{ fontSize: 14, padding: '14px 28px', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.35)' }}
-            >
-              View NBE source data <ArrowRight />
-            </a>
-          </div>
+          <Link
+            href="/banking/money-transfer"
+            className="font-bold rounded-full transition-all shrink-0"
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1A5C38', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(26,92,56,0.3)' }}
+          >
+            Compare money transfer →
+          </Link>
         </div>
       </section>
 
@@ -385,24 +347,24 @@ export default function FXRatesPage() {
       <section className="bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">FX rate alerts</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Daily FX alerts</p>
             <h2
               className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
-              Track ETB exchange<br />
-              <span style={{ color: '#1A5C38' }}>rates every week.</span>
+              Track ETB exchange rates<br />
+              <span style={{ color: '#1A5C38' }}>from anywhere in the world.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
-              Weekly FX summary direct to your inbox — USD, GBP, EUR, SAR and AED
-              vs ETB. Essential reading for the diaspora and businesses with import or export exposure.
+              Weekly FX digest for diaspora and businesses. Know when the
+              rate moves before you transfer.
             </p>
             <ul className="space-y-3 mb-8">
               {[
-                'Weekly NBE rate summary — all major currencies',
-                'Notable bank spread changes and best rates',
-                'FX policy updates from the National Bank of Ethiopia',
-                'Remittance cost comparisons for the diaspora',
+                'USD, GBP, EUR, SAR and AED vs ETB weekly summary',
+                'Best bank buying and selling rates each week',
+                'NBE policy changes affecting exchange rates',
+                'Cheapest remittance corridors for diaspora',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
