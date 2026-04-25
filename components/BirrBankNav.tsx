@@ -97,7 +97,7 @@ export default function Navigation() {
               key={item.label}
               className="relative"
               onMouseEnter={() => setOpenDropdown(item.label)}
-              onMouseLeave={() => setOpenDropdown(null)}
+              onMouseLeave={() => setTimeout(() => setOpenDropdown(null), 150)}
             >
               <Link
                 href={item.href}
@@ -118,11 +118,11 @@ export default function Navigation() {
 
               {openDropdown === item.label && (
                 <div
-                  className="absolute top-full left-0 mt-1.5 w-52 rounded-xl overflow-hidden py-1.5 z-50"
+                  className="absolute left-0 w-52 z-50"
                   style={{
-                    background: '#ffffff',
-                    border:     '1.5px solid #e2e8f0',
-                    boxShadow:  '0 20px 48px rgba(0,0,0,0.12)',
+                    top: '100%',
+                    paddingTop: '6px',
+                    background: 'transparent',
                   }}
                 >
                   {item.sub.map(s => (

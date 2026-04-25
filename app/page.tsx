@@ -164,7 +164,7 @@ export default function HomePage() {
                 <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Top rates today</p>
+                    <p className="text-xs font-black uppercase tracking-widest mb-0.5" style={{ color: '#1D4ED8' }}>Top rates today</p>
                     <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>Savings rates · All Ethiopian banks</p>
                   </div>
                   <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
@@ -405,7 +405,7 @@ export default function HomePage() {
             {[
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     <polyline points="9 12 11 14 15 10"/>
                   </svg>
@@ -416,7 +416,7 @@ export default function HomePage() {
               },
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>
                   </svg>
@@ -427,7 +427,7 @@ export default function HomePage() {
               },
               {
                 icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="1" x2="12" y2="23"/>
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                   </svg>
@@ -438,7 +438,7 @@ export default function HomePage() {
               },
             ].map(({ icon, tag, headline, body }) => (
               <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #334155', minHeight: '280px' }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#334155', border: '1px solid #475569' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#1e3a5f', border: '1px solid #1d4ed8' }}>
                   {icon}
                 </div>
                 <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#93c5fd' }}>{tag}</p>
