@@ -253,8 +253,8 @@ export default function LoansPage() {
                       placeholder={field.placeholder}
                       className="w-full rounded-xl border border-slate-200 text-slate-800 font-mono font-semibold transition-all"
                       style={{ padding: '12px 16px', fontSize: '16px', outline: 'none' }}
-                      onFocus={(e) => e.target.style.borderColor = PILLAR}
-                      onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                      
+                      
                     />
                     <p className="text-xs text-slate-400 mt-1">{field.hint}</p>
                   </div>
