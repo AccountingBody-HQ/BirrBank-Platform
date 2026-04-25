@@ -113,42 +113,30 @@ export default function Navigation() {
             <div
               key={item.label}
               className="relative"
+              onMouseEnter={() => setOpenDropdown(item.label)}
+              onMouseLeave={() => setOpenDropdown(null)}
             >
-              <div className="flex items-center">
-                <Link
-                  href={item.href}
-                  className="flex items-center px-3 py-2 rounded-l-lg text-sm transition-all"
-                  style={{
-                    color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
-                    fontWeight: isActive(item.href) ? 700 : 600,
-                    background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
-                  }}
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  {item.label}
-                </Link>
-                <button
-                  onClick={() => toggleDropdown(item.label)}
-                  className="flex items-center px-1 py-2 rounded-r-lg text-sm transition-all"
-                  style={{
-                    background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    paddingRight: '8px',
-                  }}
-                >
-                  <ChevronDown
-                    size={11}
-                    style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
-                    className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
-                  />
-                </button>
-              </div>
+              <Link
+                href={item.href}
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
+                style={{
+                  color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
+                  fontWeight: isActive(item.href) ? 700 : 600,
+                  background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
+                }}
+              >
+                {item.label}
+                <ChevronDown
+                  size={11}
+                  style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
+                  className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
+                />
+              </Link>
 
               {openDropdown === item.label && (
                 <div
                   className="absolute left-0 w-56 z-50"
-                  style={{ top: 'calc(100% + 4px)' }}
+                  style={{ top: '100%', paddingTop: '8px' }}
                 >
                   <div style={{
                     background: '#ffffff',
