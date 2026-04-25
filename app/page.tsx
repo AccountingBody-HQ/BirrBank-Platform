@@ -197,7 +197,7 @@ export default function HomePage() {
                           style={{ fontSize: r.rank === 1 ? '15px' : '13px' }}>
                           {r.bank}
                         </p>
-                        <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'text-green-600 font-bold uppercase tracking-wide' : 'text-slate-400'}`}>
+                        <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'font-bold uppercase tracking-wide text-blue-700' : 'text-slate-400'}`}>
                           {r.badge ?? r.product}
                         </p>
                       </div>

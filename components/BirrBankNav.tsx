@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
@@ -50,11 +50,28 @@ export default function Navigation() {
   const pathname                        = usePathname()
   const [mobileOpen, setMobileOpen]     = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const navRef                          = useRef<HTMLDivElement>(null)
 
   const isActive = (href: string) => pathname === '/' ? href === '/' : pathname.startsWith(href)
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  function toggleDropdown(label: string) {
+    setOpenDropdown(prev => prev === label ? null : label)
+  }
+
   return (
     <nav
+      ref={navRef}
       className="sticky top-0 z-50"
       style={{
         background: '#ffffff',
@@ -96,16 +113,16 @@ export default function Navigation() {
             <div
               key={item.label}
               className="relative"
-              onMouseEnter={() => setOpenDropdown(item.label)}
-              onMouseLeave={() => setTimeout(() => setOpenDropdown(null), 150)}
             >
-              <Link
-                href={item.href}
+              <button
+                onClick={() => toggleDropdown(item.label)}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
                 style={{
                   color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
                   fontWeight: isActive(item.href) ? 700 : 600,
                   background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 {item.label}
@@ -114,7 +131,7 @@ export default function Navigation() {
                   style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
                   className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
                 />
-              </Link>
+              </button>
 
               {openDropdown === item.label && (
                 <div
@@ -133,14 +150,10 @@ export default function Navigation() {
                       <Link
                         key={s.href}
                         href={s.href}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-slate-50"
+                        className="block px-4 py-2.5 text-sm transition-colors hover:bg-slate-50 hover:text-blue-700"
                         style={{ color: '#1e293b', fontWeight: 500 }}
                         onClick={() => setOpenDropdown(null)}
                       >
-                        <span
-                          className="w-1.5 h-1.5 rounded-full shrink-0"
-                          style={{ background: '#1D4ED8' }}
-                        />
                         {s.label}
                       </Link>
                     ))}
