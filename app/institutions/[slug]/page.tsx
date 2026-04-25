@@ -247,7 +247,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: '12px 24px', background: '#ffffff' }}>
+            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: '12px 24px', background: '#f9fafb' }}>
               {['Product', 'Annual rate', 'Min. balance', 'Term', 'Last verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
@@ -286,7 +286,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
       </section>
 
       {/* ══════════════════════════════ LOAN RATES ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>

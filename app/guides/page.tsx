@@ -146,7 +146,7 @@ export default function GuidesPage() {
       </section>
 
       {/* ══════════════════════════════ GUIDE CATEGORIES ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Browse by topic</p>
@@ -265,7 +265,7 @@ export default function GuidesPage() {
       </section>
 
       {/* ══════════════════════════════ AI ASSISTANT CTA ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #22d3ee)` }} />
@@ -352,7 +352,7 @@ export default function GuidesPage() {
                 <ArrowRight size={13} />
               </Link>
             ))}
-            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Sources: NBE (nbe.gov.et) · ECMA (ecma.gov.et) · ECX (ecx.com.et)</p>
               <Link href="/regulations" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All directives →

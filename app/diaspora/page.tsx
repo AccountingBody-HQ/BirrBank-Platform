@@ -169,7 +169,7 @@ export default function DiasporaPage() {
       </section>
 
       {/* ══════════════════════════════ SUB PAGES ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -247,7 +247,7 @@ export default function DiasporaPage() {
       </section>
 
       {/* ══════════════════════════════ REMITTANCE COMPARISON ════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
@@ -267,7 +267,7 @@ export default function DiasporaPage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 100px 120px 110px 100px 130px', padding: '12px 24px', background: '#ffffff' }}
+              style={{ gridTemplateColumns: '1fr 100px 120px 110px 100px 130px', padding: '12px 24px', background: '#f9fafb' }}
             >
               {['Provider', 'Corridor', 'Typical fee', 'Speed', 'Min. amount', 'Status'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -323,7 +323,7 @@ export default function DiasporaPage() {
               </div>
             ))}
 
-            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Fees are indicative and may vary by amount and corridor · Always verify before transferring</p>
               <Link href="/diaspora/remittance" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Full remittance guide →
@@ -409,7 +409,7 @@ export default function DiasporaPage() {
                 body: 'NBE publishes a new indicative rate every business day at 09:30 EAT. BirrBank surfaces it instantly — so diaspora in every time zone know the rate before their bank does.',
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #1e293b', minHeight: '260px' }}>
+              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #334155', minHeight: '260px' }}>
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#334155', border: '1px solid #475569' }}>
                   {icon}
                 </div>

@@ -139,7 +139,7 @@ export default function SavingsRatesPage() {
             {/* Table header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#ffffff' }}
+              style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#f9fafb' }}
             >
               {['#', 'Bank', 'Account type', 'Min. balance', 'Annual rate', 'Last verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -244,7 +244,7 @@ export default function SavingsRatesPage() {
             ))}
 
             {/* Table footer */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-white" style={{ padding: '14px 24px' }}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Showing {SAVINGS_RATES.length} of 32 banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
               </p>
@@ -264,7 +264,7 @@ export default function SavingsRatesPage() {
       </section>
 
       {/* ══════════════════════════════ HOW TO CHOOSE ════════════════════════════ */}
-      <section className="border-b border-y border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-y border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>
@@ -329,15 +329,15 @@ export default function SavingsRatesPage() {
             </p>
           </div>
           <div className="flex flex-col gap-3 shrink-0">
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
               <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Verified within 7 days — <span style={{ color: '#93c5fd' }}>Live</span></span>
             </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#f59e0b' }} />
               <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>7–14 days old — <span style={{ color: '#f59e0b' }}>Check recommended</span></span>
             </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #1e293b', padding: '14px 20px' }}>
+            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
               <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#ef4444' }} />
               <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>14+ days old — <span style={{ color: '#ef4444' }}>Being updated</span></span>
             </div>

@@ -243,7 +243,7 @@ export default function HomePage() {
       </section>
 
       {/* ═════════════════════════════ PRODUCT CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-10">
@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════ FEATURED: FX RATES ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -437,7 +437,7 @@ export default function HomePage() {
                 body: "BirrBank makes no money from rankings or placements. We're funded by advertising and data services — never by the banks or insurers you're comparing.",
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #1e293b', minHeight: '280px' }}>
+              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #334155', minHeight: '280px' }}>
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#334155', border: '1px solid #475569' }}>
                   {icon}
                 </div>

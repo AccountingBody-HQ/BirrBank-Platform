@@ -182,7 +182,7 @@ export default function FxRatesPage() {
             {/* Header */}
             <div
               className="hidden lg:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '12px 24px', background: '#ffffff' }}
+              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '12px 24px', background: '#f9fafb' }}
             >
               {['Bank', 'USD Buy', 'USD Sell', 'EUR Buy', 'EUR Sell', 'GBP Buy', 'GBP Sell', 'Verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -250,7 +250,7 @@ export default function FxRatesPage() {
             ))}
 
             {/* Table footer */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-white" style={{ padding: '14px 24px' }}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Rates sourced from individual bank websites · NBE rate from nbe.gov.et · All rates ETB per 1 foreign unit
               </p>

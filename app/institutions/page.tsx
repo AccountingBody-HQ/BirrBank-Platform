@@ -101,7 +101,7 @@ export default function InstitutionsPage() {
       </section>
 
       {/* ══════════════════════════════ CATEGORY GRID ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Browse by type</p>
@@ -178,7 +178,7 @@ export default function InstitutionsPage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: '12px 24px', background: '#ffffff' }}
+              style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: '12px 24px', background: '#f9fafb' }}
             >
               {['Bank', 'Type', 'Founded', 'Best savings rate', 'Score'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -243,7 +243,7 @@ export default function InstitutionsPage() {
               </Link>
             ))}
 
-            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Showing {FEATURED_BANKS.length} of 32 banks · Source: NBE registry (nbe.gov.et)
               </p>
