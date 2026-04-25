@@ -1,34 +1,19 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-// All rates stored as percentages (9.50 = 9.50% annual). Never decimals.
-
-const SAVINGS_RATES = [
-  { rank: 1,  bank: 'Awash Bank',              type: 'Fixed 12M',  rate: '9.50', min: '5,000',   sharia: false, verified: '22 Apr 2026', badge: 'Best rate' },
-  { rank: 2,  bank: 'Zemen Bank',               type: 'Fixed 12M',  rate: '9.25', min: '10,000',  sharia: false, verified: '22 Apr 2026', badge: null },
-  { rank: 3,  bank: 'Bank of Abyssinia',         type: 'Fixed 12M',  rate: '9.00', min: '5,000',   sharia: false, verified: '21 Apr 2026', badge: null },
-  { rank: 4,  bank: 'Dashen Bank',               type: 'Regular',    rate: '8.75', min: '500',     sharia: false, verified: '21 Apr 2026', badge: null },
-  { rank: 5,  bank: 'Oromia International',       type: 'Regular',    rate: '8.50', min: '500',     sharia: false, verified: '20 Apr 2026', badge: null },
-  { rank: 6,  bank: 'Nib International Bank',     type: 'Fixed 12M',  rate: '8.50', min: '5,000',   sharia: false, verified: '20 Apr 2026', badge: null },
-  { rank: 7,  bank: 'Wegagen Bank',              type: 'Regular',    rate: '8.25', min: '500',     sharia: false, verified: '19 Apr 2026', badge: null },
-  { rank: 8,  bank: 'Hibret Bank',               type: 'Regular',    rate: '8.25', min: '500',     sharia: false, verified: '19 Apr 2026', badge: null },
-  { rank: 9,  bank: 'Abay Bank',                 type: 'Fixed 12M',  rate: '8.00', min: '2,000',   sharia: false, verified: '18 Apr 2026', badge: null },
-  { rank: 10, bank: 'Bunna International',        type: 'Regular',    rate: '8.00', min: '500',     sharia: false, verified: '18 Apr 2026', badge: null },
-  { rank: 11, bank: 'Hijra Bank',                type: 'Mudarabah',  rate: '7.75', min: '1,000',   sharia: true,  verified: '17 Apr 2026', badge: 'Sharia' },
-  { rank: 12, bank: 'ZamZam Bank',               type: 'Mudarabah',  rate: '7.75', min: '1,000',   sharia: true,  verified: '17 Apr 2026', badge: 'Sharia' },
-  { rank: 13, bank: 'Commercial Bank of Ethiopia', type: 'Regular',   rate: '7.50', min: '50',      sharia: false, verified: '22 Apr 2026', badge: 'Most branches' },
-  { rank: 14, bank: 'Cooperative Bank of Oromia', type: 'Regular',   rate: '7.50', min: '200',     sharia: false, verified: '16 Apr 2026', badge: null },
-  { rank: 15, bank: 'Lion International Bank',    type: 'Regular',    rate: '7.25', min: '500',     sharia: false, verified: '16 Apr 2026', badge: null },
-  { rank: 16, bank: 'Berhan Bank',               type: 'Regular',    rate: '7.25', min: '500',     sharia: false, verified: '15 Apr 2026', badge: null },
-  { rank: 17, bank: 'Enat Bank',                 type: 'Regular',    rate: '7.00', min: '500',     sharia: false, verified: '15 Apr 2026', badge: null },
-  { rank: 18, bank: 'Gadaa Bank',                type: 'Regular',    rate: '7.00', min: '500',     sharia: false, verified: '14 Apr 2026', badge: 'ESX listed' },
-  { rank: 19, bank: 'Amhara Bank',               type: 'Regular',    rate: '7.00', min: '300',     sharia: false, verified: '14 Apr 2026', badge: null },
-  { rank: 20, bank: 'Sidama Bank',               type: 'Regular',    rate: '6.75', min: '300',     sharia: false, verified: '13 Apr 2026', badge: null },
-]
-
-const ACCOUNT_TYPES = ['All types', 'Regular savings', 'Fixed 12M', 'Sharia-compliant']
+const ACCOUNT_TYPE_LABELS: Record<string, string> = {
+  regular_savings:   'Regular savings',
+  fixed_deposit_3m:  'Fixed 3M',
+  fixed_deposit_6m:  'Fixed 6M',
+  fixed_deposit_12m: 'Fixed 12M',
+  fixed_deposit_24m: 'Fixed 24M',
+  current:           'Current',
+  diaspora:          'Diaspora',
+  youth:             'Youth savings',
+  women:             'Women savings',
+}
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -48,7 +33,57 @@ const ClockIcon = () => (
   </svg>
 )
 
-export default function SavingsRatesPage() {
+function staleness(dateStr: string): 'fresh' | 'warn' | 'stale' {
+  const days = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000)
+  if (days <= 7)  return 'fresh'
+  if (days <= 14) return 'warn'
+  return 'stale'
+}
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function formatMin(val: number) {
+  return val.toLocaleString('en-ET')
+}
+
+export default async function SavingsRatesPage() {
+  const supabase = createSupabaseAdminClient()
+
+  const { data: ratesData } = await supabase
+    .schema('birrbank')
+    .from('savings_rates')
+    .select('annual_rate, account_type, minimum_balance_etb, is_sharia_compliant, last_verified_date, institution_slug, institutions(name, is_listed_on_esx)')
+    .eq('is_current', true)
+    .order('annual_rate', { ascending: false })
+
+  const { count: bankCount } = await supabase
+    .schema('birrbank')
+    .from('institutions')
+    .select('count', { count: 'exact', head: true })
+    .eq('type', 'bank')
+    .eq('is_active', true)
+
+  const SAVINGS_RATES = (ratesData ?? []).map((r: any, i: number) => {
+    const isESX    = r.institutions?.is_listed_on_esx ?? false
+    const isSharia = r.is_sharia_compliant
+    const badge    = i === 0 ? 'Best rate' : isSharia ? 'Sharia' : isESX ? 'ESX listed' : null
+    return {
+      rank:     i + 1,
+      bank:     r.institutions?.name ?? r.institution_slug,
+      type:     ACCOUNT_TYPE_LABELS[r.account_type] ?? r.account_type,
+      rate:     Number(r.annual_rate).toFixed(2),
+      min:      formatMin(Number(r.minimum_balance_etb ?? 0)),
+      sharia:   isSharia,
+      verified: formatDate(r.last_verified_date),
+      freshness: staleness(r.last_verified_date),
+      badge,
+    }
+  })
+
+  const totalBanks = bankCount ?? 32
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -59,7 +94,6 @@ export default function SavingsRatesPage() {
           style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
             <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
             <span>›</span>
@@ -76,17 +110,16 @@ export default function SavingsRatesPage() {
             style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
           >
             Best savings rates in<br />
-            <span style={{ color: '#1D4ED8' }}>Ethiopia — all 32 banks.</span>
+            <span style={{ color: '#1D4ED8' }}>Ethiopia — all {totalBanks} banks.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             Every commercial bank savings and fixed deposit rate, verified from official
             sources and updated weekly. Filter by account type or Sharia-compliance.
           </p>
 
-          {/* Key stats bar */}
           <div className="flex flex-wrap gap-6">
             {[
-              { icon: <ShieldIcon />, label: '32 banks compared' },
+              { icon: <ShieldIcon />, label: totalBanks + ' banks compared' },
               { icon: <ClockIcon />,  label: 'Updated this week' },
               { icon: <ShieldIcon />, label: 'NBE-verified institutions only' },
               { icon: <ClockIcon />,  label: 'Last verified dates on every row' },
@@ -101,42 +134,22 @@ export default function SavingsRatesPage() {
       </section>
 
       {/* ══════════════════════════════ COMPARISON TABLE ══════════════════════════ */}
-      {/* NO ADS ON THIS PAGE — comparison integrity rule */}
       <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
         <div className="max-w-6xl mx-auto">
 
-          {/* Filter bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Filter by account type</p>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {ACCOUNT_TYPES.map((t, i) => (
-                  <button
-                    key={t}
-                    className="rounded-full text-xs font-bold transition-all"
-                    style={{
-                      padding: '6px 14px',
-                      background: i === 0 ? '#1D4ED8' : '#f1f5f9',
-                      color:      i === 0 ? '#fff'     : '#64748b',
-                      border:     i === 0 ? 'none'     : '1px solid #e2e8f0',
-                    }}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">All savings products</p>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <ClockIcon />
-              <span>Showing {SAVINGS_RATES.length} institutions · Sorted by rate (high to low)</span>
+              <span>Showing {SAVINGS_RATES.length} products · Sorted by rate (high to low)</span>
             </div>
           </div>
 
-          {/* Table */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
-            {/* Table header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
               style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#f9fafb' }}
@@ -146,23 +159,19 @@ export default function SavingsRatesPage() {
               ))}
             </div>
 
-            {/* Rows */}
             {SAVINGS_RATES.map((r) => (
               <div
-                key={r.rank}
-                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-white'}`}
+                key={r.rank + r.bank + r.type}
+                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
               >
                 {/* Desktop row */}
                 <div
                   className="hidden sm:grid items-center"
                   style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: r.rank === 1 ? '18px 24px' : '14px 24px' }}
                 >
-                  {/* Rank */}
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black"
-                    style={r.rank === 1
-                      ? { background: '#1D4ED8', color: '#fff' }
-                      : { background: '#f1f5f9', color: '#94a3b8' }}
+                    style={r.rank === 1 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#94a3b8' }}
                   >
                     {r.rank === 1 ? (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -171,7 +180,6 @@ export default function SavingsRatesPage() {
                     ) : r.rank}
                   </div>
 
-                  {/* Bank name + badge */}
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className={`font-bold ${r.rank === 1 ? 'text-blue-900' : 'text-slate-800'}`}
@@ -186,7 +194,7 @@ export default function SavingsRatesPage() {
                               ? { background: '#fef3c7', color: '#92400e' }
                               : r.badge === 'Best rate'
                               ? { background: '#dbeafe', color: '#1D4ED8' }
-                              : { background: '#ffffff', color: '#1e40af' }
+                              : { background: '#f0fdf4', color: '#166534' }
                           }
                         >
                           {r.badge}
@@ -195,13 +203,10 @@ export default function SavingsRatesPage() {
                     </div>
                   </div>
 
-                  {/* Account type */}
                   <p className="text-sm text-slate-500">{r.type}</p>
 
-                  {/* Min balance */}
                   <p className="text-sm font-mono text-slate-600">ETB {r.min}</p>
 
-                  {/* Rate — the dominant number */}
                   <p
                     className={`font-mono font-black ${r.rank === 1 ? 'text-blue-700' : 'text-slate-800'}`}
                     style={{ fontSize: r.rank === 1 ? '26px' : '20px', letterSpacing: '-1px' }}
@@ -209,10 +214,17 @@ export default function SavingsRatesPage() {
                     {r.rate}%
                   </p>
 
-                  {/* Last verified */}
                   <div className="flex items-center gap-1.5">
-                    <span style={{ color: '#1D4ED8' }}><ClockIcon /></span>
-                    <p className="text-xs text-slate-400 font-medium">{r.verified}</p>
+                    <span style={{
+                      color: r.freshness === 'fresh' ? '#1D4ED8' : r.freshness === 'warn' ? '#d97706' : '#ef4444'
+                    }}>
+                      <ClockIcon />
+                    </span>
+                    <p className="text-xs font-medium" style={{
+                      color: r.freshness === 'fresh' ? '#475569' : r.freshness === 'warn' ? '#d97706' : '#ef4444'
+                    }}>
+                      {r.verified}
+                    </p>
                   </div>
                 </div>
 
@@ -243,10 +255,9 @@ export default function SavingsRatesPage() {
               </div>
             ))}
 
-            {/* Table footer */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
-                Showing {SAVINGS_RATES.length} of 32 banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
+                Showing {SAVINGS_RATES.length} products from {totalBanks} banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
               </p>
               <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 View all 214 institutions →
@@ -254,7 +265,6 @@ export default function SavingsRatesPage() {
             </div>
           </div>
 
-          {/* Disclaimer — required on every rate page */}
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
             Rates are for comparison purposes only and may change without notice.
             Always verify the current rate directly with the institution before opening an account.
@@ -304,11 +314,7 @@ export default function SavingsRatesPage() {
             ))}
           </div>
           <div className="mt-8">
-            <Link
-              href="/guides"
-              className="inline-flex items-center gap-2 text-sm font-bold"
-              style={{ color: '#1D4ED8' }}
-            >
+            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1D4ED8' }}>
               Read all banking guides <ArrowRight />
             </Link>
           </div>
@@ -324,23 +330,23 @@ export default function SavingsRatesPage() {
               Every rate has a verified date. Always.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
-              BirrBank's rate freshness rule: any rate older than 7 days is automatically
+              BirrBank rate freshness rule: any rate older than 7 days is automatically
               flagged. Stale data is the fastest way to destroy trust — and we never allow it.
             </p>
           </div>
           <div className="flex flex-col gap-3 shrink-0">
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
-              <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
-              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Verified within 7 days — <span style={{ color: '#93c5fd' }}>Live</span></span>
-            </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#f59e0b' }} />
-              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>7–14 days old — <span style={{ color: '#f59e0b' }}>Check recommended</span></span>
-            </div>
-            <div className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#ef4444' }} />
-              <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>14+ days old — <span style={{ color: '#ef4444' }}>Being updated</span></span>
-            </div>
+            {[
+              { color: '#22c55e', label: 'Verified within 7 days', status: 'Live', statusColor: '#93c5fd' },
+              { color: '#f59e0b', label: '7–14 days old', status: 'Check recommended', statusColor: '#f59e0b' },
+              { color: '#ef4444', label: '14+ days old', status: 'Being updated', statusColor: '#ef4444' },
+            ].map((s) => (
+              <div key={s.label} className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color }} />
+                <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>
+                  {s.label} — <span style={{ color: s.statusColor }}>{s.status}</span>
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -358,12 +364,12 @@ export default function SavingsRatesPage() {
               <span style={{ color: '#1D4ED8' }}>savings rates change.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
-              Weekly digest of every savings rate change across all 32 banks.
+              Weekly digest of every savings rate change across all {totalBanks} banks.
               Be the first to know when a bank raises — or cuts — its rate.
             </p>
             <ul className="space-y-3 mb-8">
               {[
-                'Rate changes across all 32 commercial banks',
+                'Rate changes across all ' + totalBanks + ' commercial banks',
                 'New fixed deposit products and limited-time offers',
                 'Sharia-compliant product updates',
                 'NBE minimum rate directive changes',
