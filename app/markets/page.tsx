@@ -231,7 +231,7 @@ export default function MarketsPage() {
                   <span className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center" style={{ background: PILLAR_BG, color: PILLAR }}>{s.ticker}</span>
                   <div>
                     <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company}</p>
-                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#EFF6FF', color: PILLAR }}>{s.badge}</span>}
+                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#f8faf8', color: PILLAR }}>{s.badge}</span>}
                   </div>
                   <p className="text-sm text-slate-500">{s.sector}</p>
                   <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px', letterSpacing: '-0.5px' }}>{s.price}</p>
@@ -306,7 +306,7 @@ export default function MarketsPage() {
                   className="text-xs font-bold rounded-full px-3 py-1 inline-flex w-fit items-center gap-1.5"
                   style={ipo.status === 'Under review'
                     ? { background: '#fef3c7', color: '#92400e' }
-                    : { background: '#EFF6FF', color: PILLAR }}
+                    : { background: '#f8faf8', color: PILLAR }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: ipo.status === 'Under review' ? '#f59e0b' : PILLAR }} />
                   {ipo.status}
@@ -319,7 +319,7 @@ export default function MarketsPage() {
               <div key={ipo.company + '-mob'} className="sm:hidden border-b border-slate-100 bg-white" style={{ padding: '14px 16px' }}>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-slate-800 text-sm">{ipo.company}</p>
-                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#EFF6FF', color: PILLAR }}>
+                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#f8faf8', color: PILLAR }}>
                     {ipo.status}
                   </span>
                 </div>

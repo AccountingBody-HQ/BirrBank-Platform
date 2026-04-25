@@ -180,7 +180,7 @@ export default function BankingHubPage() {
               >
                 <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div className="flex gap-4 items-start" style={{ padding: '24px' }}>
-                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#EFF6FF' }}>
+                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#f8fafc' }}>
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">

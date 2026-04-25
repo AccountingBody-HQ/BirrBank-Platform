@@ -227,8 +227,8 @@ export default function DiasporaPage() {
             {FX_DIASPORA.map((fx) => (
               <div key={fx.from} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all" style={{ padding: '24px' }}>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="inline-flex items-center rounded-lg" style={{ background: fx.bg, padding: '5px 12px' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', letterSpacing: '1px' }}>{fx.from}</span>
+                  <div className="inline-flex items-center rounded-lg" style={{ background: '#f1f5f9', padding: '5px 12px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#1D4ED8', letterSpacing: '1px' }}>{fx.from}</span>
                   </div>
                   <p className="text-xs text-slate-400 font-medium">{fx.name}</p>
                 </div>

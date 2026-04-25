@@ -148,7 +148,7 @@ export default function HomePage() {
                 <Link
                   href="/banking/fx-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1D4ED8', background: 'transparent' }}
+                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: '#1D4ED8', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>
@@ -224,7 +224,7 @@ export default function HomePage() {
 
         {/* ── 3-stat credibility bar ── */}
         <div className="relative max-w-6xl mx-auto px-8 pb-12">
-          <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200" style={{ borderTop: '3px solid #1A5C38' }}>
+          <div className="grid grid-cols-3 gap-px bg-slate-200 rounded-2xl overflow-hidden border border-slate-200" style={{ borderTop: '3px solid #1D4ED8' }}>
             {[
               { value: '214',                  label: 'Institutions', sub: 'NBE-regulated' },
               { value: TOP_RATES[0].rate + '%', label: 'Best rate',    sub: 'Savings today' },
@@ -268,7 +268,7 @@ export default function HomePage() {
                 <div className="flex flex-col flex-1" style={{ padding: '28px 24px 24px' }}>
                   <div
                     className="rounded-xl flex items-center justify-center shrink-0 mb-5"
-                    style={{ width: 48, height: 48, background: cat.iconBg }}
+                    style={{ width: 48, height: 48, background: '#f8fafc' }}
                   >
                     {cat.icon}
                   </div>
@@ -349,7 +349,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-4">
                   <div
                     className="inline-flex items-center rounded-lg"
-                    style={{ background: fx.bg, padding: '5px 12px' }}
+                    style={{ background: '#f1f5f9', padding: '5px 12px' }}
                   >
                     <span style={{ fontSize: '12px', fontWeight: 800, color: fx.color, letterSpacing: '1px' }}>
                       {fx.currency}

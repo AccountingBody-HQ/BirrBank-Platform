@@ -204,7 +204,7 @@ export default function GuidesPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3" style={{ padding: '36px 36px' }}>
                 <div className="lg:col-span-2 pr-0 lg:pr-12">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
+                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#f8faf8', color: '#1D4ED8' }}>
                       {FEATURED_GUIDES[0].pillar}
                     </span>
                     <span className="text-xs text-slate-400">{FEATURED_GUIDES[0].readTime}</span>

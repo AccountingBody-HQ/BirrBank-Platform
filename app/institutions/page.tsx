@@ -203,7 +203,7 @@ export default function InstitutionsPage() {
                         {b.name}
                       </p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#f8faf8', color: '#1D4ED8' }}>
                           {b.badge}
                         </span>
                       )}
@@ -228,7 +228,7 @@ export default function InstitutionsPage() {
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <p className="font-bold text-slate-800 text-sm">{b.name}</p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>{b.badge}</span>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#f8faf8', color: '#1D4ED8' }}>{b.badge}</span>
                       )}
                     </div>
                     <p className="text-xs text-slate-400">{b.type} · Est. {b.founded}</p>
