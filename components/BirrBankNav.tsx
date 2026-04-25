@@ -83,10 +83,10 @@ export default function Navigation() {
             </svg>
           </div>
           <div className="flex items-start">
-            <span style={{ color: '#1A5C38', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px', lineHeight: 1 }}>
+            <span style={{ color: '#1D4ED8', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px', lineHeight: 1 }}>
               BirrBank
             </span>
-            <span style={{ color: '#1A5C38', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1, marginLeft: 1 }}>®</span>
+            <span style={{ color: '#1D4ED8', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1, marginLeft: 1 }}>®</span>
           </div>
         </Link>
 
@@ -105,7 +105,7 @@ export default function Navigation() {
                 style={{
                   color:      isActive(item.href) ? '#1A5C38' : '#0f172a',
                   fontWeight: isActive(item.href) ? 700 : 600,
-                  background: isActive(item.href) ? 'rgba(26,92,56,0.08)' : 'transparent',
+                  background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
                 }}
               >
                 {item.label}
@@ -134,7 +134,7 @@ export default function Navigation() {
                     >
                       <span
                         className="w-1.5 h-1.5 rounded-full shrink-0"
-                        style={{ background: '#1A5C38' }}
+                        style={{ background: '#1D4ED8' }}
                       />
                       {s.label}
                     </Link>

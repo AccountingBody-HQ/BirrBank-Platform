@@ -6,14 +6,14 @@ export const dynamic = 'force-dynamic'
 // FX rates stored as ETB per 1 foreign currency unit. Never inverse.
 
 const NBE_RATES = [
-  { currency: 'USD', name: 'US Dollar',       flag: '🇺🇸', buy: '155.90', sell: '156.40', bg: '#1A5C38' },
-  { currency: 'GBP', name: 'British Pound',   flag: '🇬🇧', buy: '197.20', sell: '197.82', bg: '#1d4ed8' },
-  { currency: 'EUR', name: 'Euro',             flag: '🇪🇺', buy: '168.50', sell: '169.12', bg: '#7c3aed' },
-  { currency: 'SAR', name: 'Saudi Riyal',      flag: '🇸🇦', buy: '41.40',  sell: '41.70',  bg: '#d97706' },
-  { currency: 'AED', name: 'UAE Dirham',       flag: '🇦🇪', buy: '42.30',  sell: '42.60',  bg: '#0891b2' },
-  { currency: 'CNY', name: 'Chinese Yuan',     flag: '🇨🇳', buy: '21.40',  sell: '21.58',  bg: '#dc2626' },
-  { currency: 'INR', name: 'Indian Rupee',     flag: '🇮🇳', buy: '1.84',   sell: '1.86',   bg: '#ea580c' },
-  { currency: 'CHF', name: 'Swiss Franc',      flag: '🇨🇭', buy: '172.10', sell: '172.80', bg: '#0f172a' },
+  { currency: 'USD', name: 'US Dollar',       flag: '🇺🇸', buy: '155.90', sell: '156.40', bg: '#1D4ED8' },
+  { currency: 'GBP', name: 'British Pound',   flag: '🇬🇧', buy: '197.20', sell: '197.82', bg: '#1D4ED8' },
+  { currency: 'EUR', name: 'Euro',             flag: '🇪🇺', buy: '168.50', sell: '169.12', bg: '#1D4ED8' },
+  { currency: 'SAR', name: 'Saudi Riyal',      flag: '🇸🇦', buy: '41.40',  sell: '41.70',  bg: '#1D4ED8' },
+  { currency: 'AED', name: 'UAE Dirham',       flag: '🇦🇪', buy: '42.30',  sell: '42.60',  bg: '#1D4ED8' },
+  { currency: 'CNY', name: 'Chinese Yuan',     flag: '🇨🇳', buy: '21.40',  sell: '21.58',  bg: '#1D4ED8' },
+  { currency: 'INR', name: 'Indian Rupee',     flag: '🇮🇳', buy: '1.84',   sell: '1.86',   bg: '#1D4ED8' },
+  { currency: 'CHF', name: 'Swiss Franc',      flag: '🇨🇭', buy: '172.10', sell: '172.80', bg: '#1D4ED8' },
 ]
 
 const BANK_RATES = [
@@ -53,7 +53,7 @@ export default function FxRatesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
 
@@ -63,10 +63,10 @@ export default function FxRatesPage() {
             <span>›</span>
             <Link href="/banking" className="hover:text-slate-600 transition-colors">Banking</Link>
             <span>›</span>
-            <span style={{ color: '#1A5C38', fontWeight: 700 }}>FX Rates</span>
+            <span style={{ color: '#1D4ED8', fontWeight: 700 }}>FX Rates</span>
           </div>
 
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>
             Banking · FX Rates
           </p>
           <h1
@@ -74,7 +74,7 @@ export default function FxRatesPage() {
             style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
           >
             Ethiopian FX rates —<br />
-            <span style={{ color: '#1A5C38' }}>NBE official vs all banks.</span>
+            <span style={{ color: '#1D4ED8' }}>NBE official vs all banks.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             The National Bank of Ethiopia publishes indicative rates daily at 09:30 EAT.
@@ -89,7 +89,7 @@ export default function FxRatesPage() {
               { icon: <ClockIcon />,  label: 'Per-bank buying and selling rates' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: '#1A5C38' }}>{s.icon}</span>
+                <span style={{ color: '#1D4ED8' }}>{s.icon}</span>
                 <span className="text-xs font-semibold text-slate-500">{s.label}</span>
               </div>
             ))}
@@ -113,8 +113,8 @@ export default function FxRatesPage() {
               </h2>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
                 Updated 09:30 EAT · 25 Apr 2026
               </span>
             </div>
@@ -124,7 +124,7 @@ export default function FxRatesPage() {
             {NBE_RATES.map((fx) => (
               <div
                 key={fx.currency}
-                className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
+                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all"
                 style={{ padding: '18px 16px' }}
               >
                 <div
@@ -153,7 +153,7 @@ export default function FxRatesPage() {
             <p>
               <strong className="text-slate-600">Official NBE Rate</strong> — Published by the National Bank of Ethiopia.
               This is the regulatory benchmark. Individual bank rates may vary.
-              Source: <span style={{ color: '#1A5C38', fontWeight: 600 }}>nbe.gov.et/exchange/indicatives-rates/</span>
+              Source: <span style={{ color: '#1D4ED8', fontWeight: 600 }}>nbe.gov.et/exchange/indicatives-rates/</span>
             </p>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function FxRatesPage() {
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
             {/* Header */}
             <div
@@ -191,17 +191,17 @@ export default function FxRatesPage() {
 
             {/* NBE reference row */}
             <div
-              className="hidden lg:grid items-center border-b-2 border-green-200"
+              className="hidden lg:grid items-center border-b-2 border-blue-200"
               style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '14px 24px', background: '#f0fdf4' }}
             >
               <div className="flex items-center gap-2">
-                <span className="text-xs font-black uppercase rounded-full px-2 py-0.5" style={{ background: '#1A5C38', color: '#fff' }}>NBE</span>
-                <p className="font-bold text-green-900" style={{ fontSize: '13px' }}>Official NBE Indicative</p>
+                <span className="text-xs font-black uppercase rounded-full px-2 py-0.5" style={{ background: '#1D4ED8', color: '#fff' }}>NBE</span>
+                <p className="font-bold text-blue-900" style={{ fontSize: '13px' }}>Official NBE Indicative</p>
               </div>
               {['155.90', '156.40', '168.50', '169.12', '197.20', '197.82'].map((v) => (
-                <p key={v} className="font-mono font-bold text-green-700" style={{ fontSize: '14px' }}>{v}</p>
+                <p key={v} className="font-mono font-bold text-blue-700" style={{ fontSize: '14px' }}>{v}</p>
               ))}
-              <p className="text-xs font-bold text-green-700">Daily · Official</p>
+              <p className="text-xs font-bold text-blue-700">Daily · Official</p>
             </div>
 
             {/* Bank rows */}
@@ -219,7 +219,7 @@ export default function FxRatesPage() {
                 <p className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.gbp_buy}</p>
                 <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.gbp_sell}</p>
                 <div className="flex items-center gap-1.5">
-                  <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
+                  <span style={{ color: '#1D4ED8' }}><ClockIcon /></span>
                   <p className="text-xs text-slate-400">{r.verified}</p>
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function FxRatesPage() {
               <p className="text-xs text-slate-400">
                 Rates sourced from individual bank websites · NBE rate from nbe.gov.et · All rates ETB per 1 foreign unit
               </p>
-              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 View all 32 bank profiles →
               </Link>
             </div>
@@ -298,7 +298,7 @@ export default function FxRatesPage() {
               },
             ].map((s) => (
               <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: '#1A5C38' }} />
+                <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div style={{ padding: '28px 24px' }}>
                   <p className="font-mono font-black mb-3" style={{ fontSize: '32px', color: '#e2e8f0', lineHeight: 1 }}>{s.step}</p>
                   <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '15px' }}>{s.title}</p>
@@ -308,10 +308,10 @@ export default function FxRatesPage() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-6">
-            <Link href="/diaspora/remittance" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
+            <Link href="/diaspora/remittance" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1D4ED8' }}>
               Compare remittance services <ArrowRight />
             </Link>
-            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
+            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1D4ED8' }}>
               Read all FX guides <ArrowRight />
             </Link>
           </div>
@@ -336,7 +336,7 @@ export default function FxRatesPage() {
           <Link
             href="/banking/money-transfer"
             className="font-bold rounded-full transition-all shrink-0"
-            style={{ fontSize: 14, padding: '14px 28px', background: '#1A5C38', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(26,92,56,0.3)' }}
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}
           >
             Compare money transfer →
           </Link>
@@ -353,7 +353,7 @@ export default function FxRatesPage() {
               style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               Track ETB exchange rates<br />
-              <span style={{ color: '#1A5C38' }}>from anywhere in the world.</span>
+              <span style={{ color: '#1D4ED8' }}>from anywhere in the world.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Weekly FX digest for diaspora and businesses. Know when the
@@ -367,7 +367,7 @@ export default function FxRatesPage() {
                 'Cheapest remittance corridors for diaspora',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

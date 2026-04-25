@@ -20,10 +20,10 @@ const CATEGORIES = [
     action: 'Compare savings rates',
     desc: 'Find the best savings, FX and loan rates across all 32 banks.',
     statNum: '32', statLabel: 'banks',
-    iconBg: '#e6f4ed',
-    iconColor: '#1A5C38',
+    iconBg: '#EFF6FF',
+    iconColor: '#1D4ED8',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/>
       </svg>
     ),
@@ -34,10 +34,10 @@ const CATEGORIES = [
     action: 'Compare insurance',
     desc: 'Motor, life, health and property insurance from all 18 providers.',
     statNum: '18', statLabel: 'providers',
-    iconBg: '#e6f4ed',
-    iconColor: '#1A5C38',
+    iconBg: '#EFF6FF',
+    iconColor: '#1D4ED8',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
     ),
@@ -48,10 +48,10 @@ const CATEGORIES = [
     action: 'Explore ESX markets',
     desc: 'Track live ESX equities, T-bill yields and the IPO pipeline.',
     statNum: '45+', statLabel: 'IPOs in pipeline',
-    iconBg: '#e6f4ed',
-    iconColor: '#1A5C38',
+    iconBg: '#EFF6FF',
+    iconColor: '#1D4ED8',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
@@ -62,10 +62,10 @@ const CATEGORIES = [
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
     statNum: 'Daily', statLabel: 'ECX prices',
-    iconBg: '#e6f4ed',
-    iconColor: '#1A5C38',
+    iconBg: '#EFF6FF',
+    iconColor: '#1D4ED8',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22V12M12 12C12 6 7 4 7 4s5 2 5 8z"/>
         <path d="M12 12C12 6 17 4 17 4s-5 2-5 8z"/>
         <line x1="8" y1="22" x2="16" y2="22"/>
@@ -78,10 +78,10 @@ const CATEGORIES = [
     action: 'Read the guides',
     desc: '500+ guides on banking, investing, insurance and the diaspora.',
     statNum: '500+', statLabel: 'guides',
-    iconBg: '#e6f4ed',
-    iconColor: '#1A5C38',
+    iconBg: '#EFF6FF',
+    iconColor: '#1D4ED8',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
       </svg>
@@ -107,7 +107,7 @@ export default function HomePage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
 
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-6">
@@ -123,7 +123,7 @@ export default function HomePage() {
                 <br />
                 <span className="text-slate-950">financial products,</span>
                 <br />
-                <span style={{ color: '#1A5C38' }}>compared.</span>
+                <span style={{ color: '#1D4ED8' }}>compared.</span>
               </h1>
 
               <p className="text-slate-600 mb-10" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '400px' }}>
@@ -141,14 +141,14 @@ export default function HomePage() {
                 <Link
                   href="/banking/savings-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', background: '#1D4ED8', color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Compare savings rates
                 </Link>
                 <Link
                   href="/banking/fx-rates"
                   className={BTN_BASE}
-                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
+                  style={{ ...BTN_SZ, minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1D4ED8', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>
@@ -161,15 +161,15 @@ export default function HomePage() {
                 className="bg-white rounded-2xl overflow-hidden"
                 style={{ border: '1px solid #e2e8f0', boxShadow: '0 24px 64px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)' }}
               >
-                <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+                <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-black text-green-600 uppercase tracking-widest mb-0.5">Top rates today</p>
                     <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>Savings rates · All Ethiopian banks</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs font-bold text-green-700">Live</span>
+                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                    <span className="text-xs font-bold text-blue-700">Live</span>
                   </div>
                 </div>
 
@@ -177,13 +177,13 @@ export default function HomePage() {
                   {TOP_RATES.map((r) => (
                     <div
                       key={r.rank}
-                      className={`flex items-center gap-4 transition-colors ${r.rank === 1 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
+                      className={`flex items-center gap-4 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
                       style={{ padding: r.rank === 1 ? '16px 20px' : '12px 20px' }}
                     >
                       <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
                         style={r.rank === 1
-                          ? { background: '#1A5C38', color: '#fff' }
+                          ? { background: '#1D4ED8', color: '#fff' }
                           : { background: '#f1f5f9', color: '#94a3b8' }}
                       >
                         {r.rank === 1 ? (
@@ -193,7 +193,7 @@ export default function HomePage() {
                         ) : r.rank}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-bold truncate ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}
+                        <p className={`font-bold truncate ${r.rank === 1 ? 'text-blue-900' : 'text-slate-800'}`}
                           style={{ fontSize: r.rank === 1 ? '15px' : '13px' }}>
                           {r.bank}
                         </p>
@@ -202,7 +202,7 @@ export default function HomePage() {
                         </p>
                       </div>
                       <div
-                        className={`font-mono font-black ${r.rank === 1 ? 'text-green-700' : 'text-slate-700'}`}
+                        className={`font-mono font-black ${r.rank === 1 ? 'text-blue-700' : 'text-slate-700'}`}
                         style={{ fontSize: r.rank === 1 ? '26px' : '16px', letterSpacing: '-1px' }}
                       >
                         {r.rate}%
@@ -213,7 +213,7 @@ export default function HomePage() {
 
                 <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                   <p className="text-xs text-slate-400">Official bank sources · NBE registry</p>
-                  <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1A5C38' }}>
+                  <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
                     See all 32 banks →
                   </Link>
                 </div>
@@ -276,14 +276,14 @@ export default function HomePage() {
                   <p className="text-slate-400 text-xs" style={{ lineHeight: '1.75', height: '68px', overflow: 'hidden' }}>{cat.desc}</p>
                   <div className="mt-5 pt-5" style={{ borderTop: '1px solid #f1f5f9' }}>
                     <div className="flex items-baseline gap-2 mb-3">
-                      <p className="font-mono font-black" style={{ fontSize: cat.statNum === 'Live' ? '18px' : '24px', color: '#1A5C38', letterSpacing: '-1px', lineHeight: 1 }}>
+                      <p className="font-mono font-black" style={{ fontSize: cat.statNum === 'Live' ? '18px' : '24px', color: '#1D4ED8', letterSpacing: '-1px', lineHeight: 1 }}>
                         {cat.statNum}
                       </p>
                       <p className="text-xs text-slate-400">{cat.statLabel}</p>
                     </div>
                     <div
                       className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all"
-                      style={{ color: '#1A5C38' }}
+                      style={{ color: '#1D4ED8' }}
                     >
                       <span>{cat.action}</span>
                       <ArrowRight size={11} />
@@ -302,7 +302,7 @@ export default function HomePage() {
             <Link
               href="/institutions"
               className="inline-flex items-center gap-2 text-sm font-bold shrink-0"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               View all institutions <ArrowRight />
             </Link>
@@ -327,7 +327,7 @@ export default function HomePage() {
             <Link
               href="/banking/fx-rates"
               className="inline-flex items-center gap-2 text-sm font-bold shrink-0 sm:pb-1"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               See all rates <ArrowRight />
             </Link>
@@ -335,15 +335,15 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1A5C38', color: '#ffffff' },
-              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1d4ed8', color: '#ffffff' },
-              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#7c3aed', color: '#ffffff' },
-              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#d97706', color: '#ffffff' },
-              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#0891b2', color: '#ffffff' },
+              { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1D4ED8', color: '#ffffff' },
+              { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1D4ED8', color: '#ffffff' },
+              { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#1D4ED8', color: '#ffffff' },
+              { currency: 'SAR', name: 'Saudi Riyal',   buy: '41.40',  sell: '41.70',  bg: '#1D4ED8', color: '#ffffff' },
+              { currency: 'AED', name: 'UAE Dirham',    buy: '42.30',  sell: '42.60',  bg: '#1D4ED8', color: '#ffffff' },
             ].map((fx) => (
               <div
                 key={fx.currency}
-                className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
+                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all"
                 style={{ padding: '20px' }}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -376,7 +376,7 @@ export default function HomePage() {
             <Link
               href="/banking/fx-rates"
               className="inline-flex items-center gap-2 text-sm font-bold shrink-0"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               Full FX dashboard <ArrowRight />
             </Link>
@@ -460,7 +460,7 @@ export default function HomePage() {
               style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               The best rates,<br />
-              <span style={{ color: '#1A5C38' }}>direct to your inbox.</span>
+              <span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Once a week. No noise. Just the sharpest moves across savings
@@ -474,7 +474,7 @@ export default function HomePage() {
                 'ECX commodity prices for coffee and sesame',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

@@ -56,7 +56,7 @@ export default function SavingsRatesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
           {/* Breadcrumb */}
@@ -65,10 +65,10 @@ export default function SavingsRatesPage() {
             <span>›</span>
             <Link href="/banking" className="hover:text-slate-600 transition-colors">Banking</Link>
             <span>›</span>
-            <span style={{ color: '#1A5C38', fontWeight: 700 }}>Savings Rates</span>
+            <span style={{ color: '#1D4ED8', fontWeight: 700 }}>Savings Rates</span>
           </div>
 
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>
             Banking · Savings rates
           </p>
           <h1
@@ -76,7 +76,7 @@ export default function SavingsRatesPage() {
             style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
           >
             Best savings rates in<br />
-            <span style={{ color: '#1A5C38' }}>Ethiopia — all 32 banks.</span>
+            <span style={{ color: '#1D4ED8' }}>Ethiopia — all 32 banks.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             Every commercial bank savings and fixed deposit rate, verified from official
@@ -92,7 +92,7 @@ export default function SavingsRatesPage() {
               { icon: <ClockIcon />,  label: 'Last verified dates on every row' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: '#1A5C38' }}>{s.icon}</span>
+                <span style={{ color: '#1D4ED8' }}>{s.icon}</span>
                 <span className="text-xs font-semibold text-slate-500">{s.label}</span>
               </div>
             ))}
@@ -116,7 +116,7 @@ export default function SavingsRatesPage() {
                     className="rounded-full text-xs font-bold transition-all"
                     style={{
                       padding: '6px 14px',
-                      background: i === 0 ? '#1A5C38' : '#f1f5f9',
+                      background: i === 0 ? '#1D4ED8' : '#f1f5f9',
                       color:      i === 0 ? '#fff'     : '#64748b',
                       border:     i === 0 ? 'none'     : '1px solid #e2e8f0',
                     }}
@@ -134,7 +134,7 @@ export default function SavingsRatesPage() {
 
           {/* Table */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
             {/* Table header */}
             <div
@@ -150,7 +150,7 @@ export default function SavingsRatesPage() {
             {SAVINGS_RATES.map((r) => (
               <div
                 key={r.rank}
-                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
               >
                 {/* Desktop row */}
                 <div
@@ -161,7 +161,7 @@ export default function SavingsRatesPage() {
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black"
                     style={r.rank === 1
-                      ? { background: '#1A5C38', color: '#fff' }
+                      ? { background: '#1D4ED8', color: '#fff' }
                       : { background: '#f1f5f9', color: '#94a3b8' }}
                   >
                     {r.rank === 1 ? (
@@ -174,7 +174,7 @@ export default function SavingsRatesPage() {
                   {/* Bank name + badge */}
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className={`font-bold ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`}
+                      <p className={`font-bold ${r.rank === 1 ? 'text-blue-900' : 'text-slate-800'}`}
                         style={{ fontSize: r.rank === 1 ? '15px' : '14px' }}>
                         {r.bank}
                       </p>
@@ -185,7 +185,7 @@ export default function SavingsRatesPage() {
                             r.badge === 'Sharia'
                               ? { background: '#fef3c7', color: '#92400e' }
                               : r.badge === 'Best rate'
-                              ? { background: '#dcfce7', color: '#166534' }
+                              ? { background: '#dbeafe', color: '#1D4ED8' }
                               : { background: '#eff6ff', color: '#1e40af' }
                           }
                         >
@@ -203,7 +203,7 @@ export default function SavingsRatesPage() {
 
                   {/* Rate — the dominant number */}
                   <p
-                    className={`font-mono font-black ${r.rank === 1 ? 'text-green-700' : 'text-slate-800'}`}
+                    className={`font-mono font-black ${r.rank === 1 ? 'text-blue-700' : 'text-slate-800'}`}
                     style={{ fontSize: r.rank === 1 ? '26px' : '20px', letterSpacing: '-1px' }}
                   >
                     {r.rate}%
@@ -211,7 +211,7 @@ export default function SavingsRatesPage() {
 
                   {/* Last verified */}
                   <div className="flex items-center gap-1.5">
-                    <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
+                    <span style={{ color: '#1D4ED8' }}><ClockIcon /></span>
                     <p className="text-xs text-slate-400 font-medium">{r.verified}</p>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ export default function SavingsRatesPage() {
                 <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
-                    style={r.rank === 1 ? { background: '#1A5C38', color: '#fff' } : { background: '#f1f5f9', color: '#94a3b8' }}
+                    style={r.rank === 1 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#94a3b8' }}
                   >
                     {r.rank}
                   </div>
@@ -229,7 +229,7 @@ export default function SavingsRatesPage() {
                       <p className="font-bold text-slate-800 text-sm truncate">{r.bank}</p>
                       {r.badge && (
                         <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0"
-                          style={r.badge === 'Sharia' ? { background: '#fef3c7', color: '#92400e' } : { background: '#dcfce7', color: '#166534' }}>
+                          style={r.badge === 'Sharia' ? { background: '#fef3c7', color: '#92400e' } : { background: '#dbeafe', color: '#1D4ED8' }}>
                           {r.badge}
                         </span>
                       )}
@@ -248,7 +248,7 @@ export default function SavingsRatesPage() {
               <p className="text-xs text-slate-400">
                 Showing {SAVINGS_RATES.length} of 32 banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
               </p>
-              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 View all 214 institutions →
               </Link>
             </div>
@@ -294,7 +294,7 @@ export default function SavingsRatesPage() {
               },
             ].map((s) => (
               <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: '#1A5C38' }} />
+                <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div style={{ padding: '28px 24px' }}>
                   <p className="font-mono font-black mb-3" style={{ fontSize: '32px', color: '#e2e8f0', lineHeight: 1 }}>{s.step}</p>
                   <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '15px' }}>{s.title}</p>
@@ -307,7 +307,7 @@ export default function SavingsRatesPage() {
             <Link
               href="/guides"
               className="inline-flex items-center gap-2 text-sm font-bold"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               Read all banking guides <ArrowRight />
             </Link>
@@ -355,7 +355,7 @@ export default function SavingsRatesPage() {
               style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               Get notified when<br />
-              <span style={{ color: '#1A5C38' }}>savings rates change.</span>
+              <span style={{ color: '#1D4ED8' }}>savings rates change.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Weekly digest of every savings rate change across all 32 banks.
@@ -369,7 +369,7 @@ export default function SavingsRatesPage() {
                 'NBE minimum rate directive changes',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

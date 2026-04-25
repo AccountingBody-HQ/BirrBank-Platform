@@ -5,12 +5,12 @@ export const dynamic = 'force-dynamic'
 // All counts from Supabase count() in production — never hardcoded
 
 const INSTITUTION_TYPES = [
-  { type: 'bank',             label: 'Commercial Banks',       count: 32,  phase: 'Live',     pillar: 'Banking',     color: '#1A5C38', bg: '#e6f4ed', href: '/institutions?type=bank' },
+  { type: 'bank',             label: 'Commercial Banks',       count: 32,  phase: 'Live',     pillar: 'Banking',     color: '#1D4ED8', bg: '#EFF6FF', href: '/institutions?type=bank' },
   { type: 'insurer',          label: 'Insurance Companies',    count: 18,  phase: 'Live',     pillar: 'Insurance',   color: '#1d4ed8', bg: '#eff6ff', href: '/institutions?type=insurer' },
-  { type: 'microfinance',     label: 'Microfinance Institutes', count: 55, phase: 'Building', pillar: 'Banking',     color: '#1A5C38', bg: '#e6f4ed', href: '/institutions?type=microfinance' },
-  { type: 'payment_operator', label: 'Payment Operators',      count: 27,  phase: 'Building', pillar: 'Banking',     color: '#1A5C38', bg: '#e6f4ed', href: '/institutions?type=payment_operator' },
+  { type: 'microfinance',     label: 'Microfinance Institutes', count: 55, phase: 'Building', pillar: 'Banking',     color: '#1D4ED8', bg: '#EFF6FF', href: '/institutions?type=microfinance' },
+  { type: 'payment_operator', label: 'Payment Operators',      count: 27,  phase: 'Building', pillar: 'Banking',     color: '#1D4ED8', bg: '#EFF6FF', href: '/institutions?type=payment_operator' },
   { type: 'money_transfer',   label: 'Money Transfer Agencies',count: 62,  phase: 'Building', pillar: 'Diaspora',    color: '#0891b2', bg: '#ecfeff', href: '/institutions?type=money_transfer' },
-  { type: 'fx_bureau',        label: 'FX Bureaus',             count: 13,  phase: 'Live',     pillar: 'Banking',     color: '#1A5C38', bg: '#e6f4ed', href: '/institutions?type=fx_bureau' },
+  { type: 'fx_bureau',        label: 'FX Bureaus',             count: 13,  phase: 'Live',     pillar: 'Banking',     color: '#1D4ED8', bg: '#EFF6FF', href: '/institutions?type=fx_bureau' },
   { type: 'capital_lease',    label: 'Capital Goods Finance',  count: 6,   phase: 'Coming',   pillar: 'Banking',     color: '#64748b', bg: '#f1f5f9', href: '/institutions?type=capital_lease' },
   { type: 'reinsurer',        label: 'Reinsurance Company',    count: 1,   phase: 'Coming',   pillar: 'Insurance',   color: '#64748b', bg: '#f1f5f9', href: '/institutions?type=reinsurer' },
 ]
@@ -58,7 +58,7 @@ export default function InstitutionsPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
 
@@ -66,10 +66,10 @@ export default function InstitutionsPage() {
           <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
             <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
             <span>›</span>
-            <span style={{ color: '#1A5C38', fontWeight: 700 }}>All Institutions</span>
+            <span style={{ color: '#1D4ED8', fontWeight: 700 }}>All Institutions</span>
           </div>
 
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>
             NBE-regulated universe
           </p>
           <h1
@@ -77,7 +77,7 @@ export default function InstitutionsPage() {
             style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
           >
             All {totalInstitutions} NBE-regulated<br />
-            <span style={{ color: '#1A5C38' }}>institutions, in one place.</span>
+            <span style={{ color: '#1D4ED8' }}>institutions, in one place.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             Every bank, insurer, microfinance institute, payment operator, money transfer
@@ -92,7 +92,7 @@ export default function InstitutionsPage() {
               { icon: <ShieldIcon />, label: 'Verified against NBE registry' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: '#1A5C38' }}>{s.icon}</span>
+                <span style={{ color: '#1D4ED8' }}>{s.icon}</span>
                 <span className="text-xs font-semibold text-slate-500">{s.label}</span>
               </div>
             ))}
@@ -128,7 +128,7 @@ export default function InstitutionsPage() {
                       className="text-xs font-bold rounded-full px-2 py-1 shrink-0"
                       style={
                         t.phase === 'Live'
-                          ? { background: '#dcfce7', color: '#166534' }
+                          ? { background: '#dbeafe', color: '#1D4ED8' }
                           : t.phase === 'Building'
                           ? { background: '#fef3c7', color: '#92400e' }
                           : { background: '#f1f5f9', color: '#64748b' }
@@ -139,7 +139,7 @@ export default function InstitutionsPage() {
                   </div>
                   <p className="font-bold text-slate-900 mb-1" style={{ fontSize: '14px' }}>{t.label}</p>
                   <p className="text-xs text-slate-400 mb-4">{t.pillar} pillar</p>
-                  <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                  <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                     <span>Browse all</span><ArrowRight size={11} />
                   </div>
                 </div>
@@ -167,13 +167,13 @@ export default function InstitutionsPage() {
                 All 32 NBE-licensed banks
               </h2>
             </div>
-            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Compare savings rates <ArrowRight />
             </Link>
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
             {/* Header */}
             <div
@@ -189,7 +189,7 @@ export default function InstitutionsPage() {
               <Link
                 key={b.slug}
                 href={`/institutions/${b.slug}`}
-                className={`block border-b border-slate-100 transition-colors ${i === 0 ? 'bg-green-50 hover:bg-green-100' : 'bg-white hover:bg-slate-50'}`}
+                className={`block border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50 hover:bg-green-100' : 'bg-white hover:bg-slate-50'}`}
               >
                 {/* Desktop */}
                 <div
@@ -198,12 +198,12 @@ export default function InstitutionsPage() {
                 >
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className={`font-bold ${i === 0 ? 'text-green-900' : 'text-slate-800'}`}
+                      <p className={`font-bold ${i === 0 ? 'text-blue-900' : 'text-slate-800'}`}
                         style={{ fontSize: i === 0 ? '15px' : '14px' }}>
                         {b.name}
                       </p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#e6f4ed', color: '#1A5C38' }}>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
                           {b.badge}
                         </span>
                       )}
@@ -212,7 +212,7 @@ export default function InstitutionsPage() {
                   </div>
                   <p className="text-sm text-slate-500 capitalize">{b.type}</p>
                   <p className="text-sm text-slate-500">{b.founded}</p>
-                  <p className={`font-mono font-black ${i === 0 ? 'text-green-700' : 'text-slate-800'}`}
+                  <p className={`font-mono font-black ${i === 0 ? 'text-blue-700' : 'text-slate-800'}`}
                     style={{ fontSize: i === 0 ? '20px' : '16px', letterSpacing: '-0.5px' }}>
                     {b.savingsRate}%
                   </p>
@@ -228,7 +228,7 @@ export default function InstitutionsPage() {
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <p className="font-bold text-slate-800 text-sm">{b.name}</p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#e6f4ed', color: '#1A5C38' }}>{b.badge}</span>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>{b.badge}</span>
                       )}
                     </div>
                     <p className="text-xs text-slate-400">{b.type} · Est. {b.founded}</p>
@@ -247,7 +247,7 @@ export default function InstitutionsPage() {
               <p className="text-xs text-slate-400">
                 Showing {FEATURED_BANKS.length} of 32 banks · Source: NBE registry (nbe.gov.et)
               </p>
-              <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Compare all rates →
               </Link>
             </div>
@@ -276,7 +276,7 @@ export default function InstitutionsPage() {
           <Link
             href="/banking/savings-rates"
             className="font-bold rounded-full transition-all shrink-0"
-            style={{ fontSize: 14, padding: '14px 28px', background: '#1A5C38', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(26,92,56,0.3)' }}
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}
           >
             Compare savings rates →
           </Link>

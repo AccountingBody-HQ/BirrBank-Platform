@@ -100,8 +100,8 @@ const StarIcon = () => (
   </svg>
 )
 
-const PILLAR = '#1A5C38'
-const PILLAR_BG = '#e6f4ed'
+const PILLAR = '#1D4ED8'
+const PILLAR_BG = '#EFF6FF'
 
 export default function InsurancePage() {
   return (
@@ -111,7 +111,7 @@ export default function InsurancePage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Insurance</p>
@@ -132,14 +132,14 @@ export default function InsurancePage() {
                 <Link
                   href="/insurance/motor"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Compare motor insurance
                 </Link>
                 <Link
                   href="/insurance/claims-guide"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: `2px solid ${PILLAR}`, color: PILLAR, background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: PILLAR, background: 'transparent' }}
                 >
                   Claims guide
                 </Link>
@@ -198,7 +198,7 @@ export default function InsurancePage() {
                     <p className="text-slate-500 text-xs mb-3" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400">{cat.stat}</span>
-                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                         <span>Compare</span><ArrowRight size={11} />
                       </div>
                     </div>
@@ -220,7 +220,7 @@ export default function InsurancePage() {
                 18 NBE-licensed insurers
               </h2>
             </div>
-            <Link href="/institutions?type=insurer" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/institutions?type=insurer" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full insurer directory <ArrowRight />
             </Link>
           </div>
@@ -241,7 +241,7 @@ export default function InsurancePage() {
             {INSURERS.map((ins, i) => (
               <div
                 key={ins.name}
-                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
               >
                 {/* Desktop */}
                 <div
@@ -257,7 +257,7 @@ export default function InsurancePage() {
                   <span
                     className="text-xs font-bold rounded-full px-3 py-1 w-fit"
                     style={ins.type === 'State'
-                      ? { background: '#dcfce7', color: '#166534' }
+                      ? { background: '#dbeafe', color: '#1D4ED8' }
                       : { background: '#f1f5f9', color: '#475569' }}
                   >
                     {ins.type}
@@ -294,7 +294,7 @@ export default function InsurancePage() {
 
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: NBE insurer registry (nbe.gov.et) · 18 licensed insurers total</p>
-              <Link href="/institutions?type=insurer" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/institutions?type=insurer" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All 18 insurers →
               </Link>
             </div>
@@ -305,7 +305,7 @@ export default function InsurancePage() {
       {/* ══════════════════════════════ MOTOR CTA HIGHLIGHT ══════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-green-100" style={{ boxShadow: '0 4px 24px rgba(26,92,56,0.06)' }}>
+          <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #60a5fa)` }} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div style={{ padding: '48px 40px' }}>
@@ -323,7 +323,7 @@ export default function InsurancePage() {
                 <Link
                   href="/insurance/motor"
                   className="inline-flex items-center gap-2 font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(29,78,216,0.20)' }}
                 >
                   Compare motor insurance <ArrowRight size={14} />
                 </Link>
@@ -394,7 +394,7 @@ export default function InsurancePage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Insurance alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               New products and<br />
-              <span style={{ color: '#1A5C38' }}>premium changes, free.</span>
+              <span style={{ color: '#1D4ED8' }}>premium changes, free.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Be the first to know when an insurer launches a new product,
@@ -408,7 +408,7 @@ export default function InsurancePage() {
                 'Agricultural and micro-insurance product launches',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

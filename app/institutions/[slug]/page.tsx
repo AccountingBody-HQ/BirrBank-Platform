@@ -85,7 +85,7 @@ const ClockIcon = () => (
   </svg>
 )
 const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"/>
   </svg>
 )
@@ -105,7 +105,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
       {/* ══════════════════════════════ HERO ══════════════════════════════════════ */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 400px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 400px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
 
           {/* Breadcrumb */}
@@ -114,20 +114,20 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
             <span>›</span>
             <Link href="/institutions" className="hover:text-slate-600 transition-colors">Institutions</Link>
             <span>›</span>
-            <span style={{ color: '#1A5C38', fontWeight: 700 }}>{inst.name}</span>
+            <span style={{ color: '#1D4ED8', fontWeight: 700 }}>{inst.name}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#1A5C38' }}>
+                <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#1D4ED8' }}>
                   {inst.type}
                 </p>
                 {inst.badge && (
-                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#e6f4ed', color: '#1A5C38' }}>{inst.badge}</span>
+                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>{inst.badge}</span>
                 )}
                 {inst.is_listed_on_esx && (
-                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#f5f3ff', color: '#7c3aed' }}>
+                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
                     ESX: {inst.ticker}
                   </span>
                 )}
@@ -155,10 +155,10 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
             {/* Score card */}
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
-              <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+              <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
               <div style={{ padding: '28px 24px' }}>
                 <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-3">BirrBank score</p>
-                <p className="font-mono font-black mb-1" style={{ fontSize: '52px', color: '#1A5C38', letterSpacing: '-2px', lineHeight: 1 }}>
+                <p className="font-mono font-black mb-1" style={{ fontSize: '52px', color: '#1D4ED8', letterSpacing: '-2px', lineHeight: 1 }}>
                   {inst.score}
                 </p>
                 <p className="text-xs text-slate-400 mb-6">out of 5.0</p>
@@ -184,14 +184,14 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
       {/* ══════════════════ DUAL-VIEW TABS (if ESX listed) ════════════════════════ */}
       {inst.is_listed_on_esx && inst.stock && (
-        <section className="border-b border-slate-100" style={{ background: '#f5f3ff', padding: '64px 32px' }}>
+        <section className="border-b border-slate-100" style={{ background: '#EFF6FF', padding: '64px 32px' }}>
           <div className="max-w-6xl mx-auto">
             <div className="rounded-2xl overflow-hidden border border-purple-100" style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.08)' }}>
               <div style={{ height: 4, background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }} />
               <div style={{ padding: '32px' }}>
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: '#7c3aed' }}>
+                    <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: '#1D4ED8' }}>
                       Dual-view — ESX listed
                     </p>
                     <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.8px' }}>
@@ -200,7 +200,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                   </div>
                   <Link href={`/markets/${inst.ticker?.toLowerCase()}`}
                     className="inline-flex items-center gap-2 font-bold rounded-full text-sm"
-                    style={{ padding: '10px 20px', background: '#7c3aed', color: '#fff' }}>
+                    style={{ padding: '10px 20px', background: '#1D4ED8', color: '#fff' }}>
                     View on ESX <ArrowRight size={12} />
                   </Link>
                 </div>
@@ -212,7 +212,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                     { label: 'Dividend yield',   value: inst.stock.dividend,         sub: 'Annual' },
                   ].map((s) => (
                     <div key={s.label} className="bg-white rounded-xl border border-purple-100 text-center" style={{ padding: '20px 12px' }}>
-                      <p className="font-mono font-black mb-1" style={{ fontSize: '20px', color: '#7c3aed', letterSpacing: '-0.5px' }}>{s.value}</p>
+                      <p className="font-mono font-black mb-1" style={{ fontSize: '20px', color: '#1D4ED8', letterSpacing: '-0.5px' }}>{s.value}</p>
                       <p className="text-xs font-bold text-slate-700 mb-0.5">{s.label}</p>
                       <p className="text-xs text-slate-400">{s.sub}</p>
                     </div>
@@ -240,32 +240,32 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                 {inst.name} savings rates
               </h2>
             </div>
-            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Compare all banks <ArrowRight />
             </Link>
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: '12px 24px', background: '#f8fafc' }}>
               {['Product', 'Annual rate', 'Min. balance', 'Term', 'Last verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
             {inst.savings.map((s, i) => (
-              <div key={s.product} className={`border-b border-slate-100 ${i === 0 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'} transition-colors`}>
+              <div key={s.product} className={`border-b border-slate-100 ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'} transition-colors`}>
                 <div className="hidden sm:grid items-center" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
                   <div>
-                    <p className={`font-bold ${i === 0 ? 'text-green-900' : 'text-slate-800'}`} style={{ fontSize: i === 0 ? '15px' : '14px' }}>{s.product}</p>
+                    <p className={`font-bold ${i === 0 ? 'text-blue-900' : 'text-slate-800'}`} style={{ fontSize: i === 0 ? '15px' : '14px' }}>{s.product}</p>
                     {s.sharia && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#fef3c7', color: '#92400e' }}>Sharia</span>}
                   </div>
-                  <p className={`font-mono font-black ${i === 0 ? 'text-green-700' : 'text-slate-800'}`} style={{ fontSize: i === 0 ? '24px' : '18px', letterSpacing: '-0.5px' }}>
+                  <p className={`font-mono font-black ${i === 0 ? 'text-blue-700' : 'text-slate-800'}`} style={{ fontSize: i === 0 ? '24px' : '18px', letterSpacing: '-0.5px' }}>
                     {s.rate}%
                   </p>
                   <p className="font-mono text-slate-600 text-sm">ETB {s.min}</p>
                   <p className="text-slate-500 text-sm">{s.term}</p>
                   <div className="flex items-center gap-1.5">
-                    <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
+                    <span style={{ color: '#1D4ED8' }}><ClockIcon /></span>
                     <p className="text-xs text-slate-400">{s.verified}</p>
                   </div>
                 </div>
@@ -295,14 +295,14 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                 {inst.name} loan rates
               </h2>
             </div>
-            <Link href="/banking/loans" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/banking/loans" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Compare all banks <ArrowRight />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {inst.loans.map((l) => (
               <div key={l.type} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: '#1A5C38' }} />
+                <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div style={{ padding: '24px' }}>
                   <p className="font-bold text-slate-900 mb-4" style={{ fontSize: '15px' }}>{l.type}</p>
                   <div className="flex items-baseline gap-1 mb-1">
@@ -334,7 +334,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
           {/* FX rates */}
           {inst.fx && (
             <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <div style={{ height: 3, background: '#1A5C38' }} />
+              <div style={{ height: 3, background: '#1D4ED8' }} />
               <div style={{ padding: '28px 24px' }}>
                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">FX rates</p>
                 <div className="space-y-3">
@@ -351,10 +351,10 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                   ))}
                 </div>
                 <div className="flex items-center gap-1.5 mt-4">
-                  <span style={{ color: '#1A5C38' }}><ClockIcon /></span>
+                  <span style={{ color: '#1D4ED8' }}><ClockIcon /></span>
                   <p className="text-xs text-slate-400">Verified {inst.fx.verified}</p>
                 </div>
-                <Link href="/banking/fx-rates" className="inline-flex items-center gap-1.5 text-xs font-bold mt-3" style={{ color: '#1A5C38' }}>
+                <Link href="/banking/fx-rates" className="inline-flex items-center gap-1.5 text-xs font-bold mt-3" style={{ color: '#1D4ED8' }}>
                   Compare all banks <ArrowRight size={11} />
                 </Link>
               </div>
@@ -363,7 +363,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
           {/* Digital services */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-            <div style={{ height: 3, background: '#1A5C38' }} />
+            <div style={{ height: 3, background: '#1D4ED8' }} />
             <div style={{ padding: '28px 24px' }}>
               <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Digital services</p>
               <div className="space-y-3">
@@ -402,7 +402,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <Link href="/banking/savings-rates" className="font-bold rounded-full text-center"
-              style={{ fontSize: 14, padding: '13px 24px', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 16px rgba(26,92,56,0.3)' }}>
+              style={{ fontSize: 14, padding: '13px 24px', background: '#1D4ED8', color: '#fff', boxShadow: '0 4px 16px rgba(29,78,216,0.25)' }}>
               Compare savings rates
             </Link>
             <Link href="/institutions" className="font-bold rounded-full text-center"

@@ -32,7 +32,7 @@ const SUB_CATEGORIES = [
     desc: 'Track all ESX-listed companies — prices, volumes, P/E ratios and dividends.',
     stat: '3 listed',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
@@ -43,7 +43,7 @@ const SUB_CATEGORIES = [
     desc: '45+ prospectuses under ECMA review. Track upcoming listings before they open.',
     stat: '45+ IPOs',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
       </svg>
     ),
@@ -54,7 +54,7 @@ const SUB_CATEGORIES = [
     desc: 'NBE Treasury bill auction results — yields, tenors and minimum investments.',
     stat: '9.15% best yield',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
       </svg>
     ),
@@ -65,7 +65,7 @@ const SUB_CATEGORIES = [
     desc: 'Step-by-step guide to opening a brokerage account and buying ESX-listed shares.',
     stat: 'Beginner guide',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
       </svg>
     ),
@@ -84,8 +84,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#1A5C38'
-const PILLAR_BG = '#e6f4ed'
+const PILLAR = '#1D4ED8'
+const PILLAR_BG = '#EFF6FF'
 
 export default function MarketsPage() {
   return (
@@ -95,7 +95,7 @@ export default function MarketsPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Markets</p>
@@ -116,14 +116,14 @@ export default function MarketsPage() {
                 <Link
                   href="/markets/equities"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   View listed equities
                 </Link>
                 <Link
                   href="/markets/ipo-pipeline"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: `2px solid ${PILLAR}`, color: PILLAR, background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: PILLAR, background: 'transparent' }}
                 >
                   IPO pipeline
                 </Link>
@@ -175,7 +175,7 @@ export default function MarketsPage() {
                     <p className="text-slate-500 text-xs mb-3" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400">{cat.stat}</span>
-                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                         <span>Explore</span><ArrowRight size={11} />
                       </div>
                     </div>
@@ -199,8 +199,8 @@ export default function MarketsPage() {
               </h2>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 rounded-full px-3 py-1.5">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
                 End-of-day · 24 Apr 2026
               </span>
             </div>
@@ -231,7 +231,7 @@ export default function MarketsPage() {
                   <span className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center" style={{ background: PILLAR_BG, color: PILLAR }}>{s.ticker}</span>
                   <div>
                     <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company}</p>
-                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#e6f4ed', color: PILLAR }}>{s.badge}</span>}
+                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#EFF6FF', color: PILLAR }}>{s.badge}</span>}
                   </div>
                   <p className="text-sm text-slate-500">{s.sector}</p>
                   <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px', letterSpacing: '-0.5px' }}>{s.price}</p>
@@ -258,7 +258,7 @@ export default function MarketsPage() {
 
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Securities Exchange (esx.et) · End-of-day prices</p>
-              <Link href="/markets/equities" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/markets/equities" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Full equities view →
               </Link>
             </div>
@@ -276,7 +276,7 @@ export default function MarketsPage() {
                 45+ prospectuses under ECMA review
               </h2>
             </div>
-            <Link href="/markets/ipo-pipeline" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/markets/ipo-pipeline" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full pipeline <ArrowRight />
             </Link>
           </div>
@@ -306,7 +306,7 @@ export default function MarketsPage() {
                   className="text-xs font-bold rounded-full px-3 py-1 inline-flex w-fit items-center gap-1.5"
                   style={ipo.status === 'Under review'
                     ? { background: '#fef3c7', color: '#92400e' }
-                    : { background: '#e6f4ed', color: PILLAR }}
+                    : { background: '#EFF6FF', color: PILLAR }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: ipo.status === 'Under review' ? '#f59e0b' : PILLAR }} />
                   {ipo.status}
@@ -319,7 +319,7 @@ export default function MarketsPage() {
               <div key={ipo.company + '-mob'} className="sm:hidden border-b border-slate-100 bg-white" style={{ padding: '14px 16px' }}>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-slate-800 text-sm">{ipo.company}</p>
-                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#e6f4ed', color: PILLAR }}>
+                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#EFF6FF', color: PILLAR }}>
                     {ipo.status}
                   </span>
                 </div>
@@ -329,7 +329,7 @@ export default function MarketsPage() {
 
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: ECMA (Ethiopian Capital Markets Authority) · Updated monthly</p>
-              <Link href="/markets/ipo-pipeline" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/markets/ipo-pipeline" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 See all 45+ IPOs →
               </Link>
             </div>
@@ -347,7 +347,7 @@ export default function MarketsPage() {
                 NBE T-bill auction yields
               </h2>
             </div>
-            <Link href="/markets/bonds" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/markets/bonds" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full bonds & T-bills <ArrowRight />
             </Link>
           </div>
@@ -438,7 +438,7 @@ export default function MarketsPage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Markets intelligence</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               ESX updates and IPO alerts,<br />
-              <span style={{ color: '#1A5C38' }}>direct to your inbox.</span>
+              <span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Weekly markets digest for retail investors and diaspora. Know before the IPO opens.
@@ -451,7 +451,7 @@ export default function MarketsPage() {
                 'NBE and ECMA regulatory updates affecting investors',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

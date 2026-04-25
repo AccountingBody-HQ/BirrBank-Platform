@@ -14,10 +14,10 @@ const REMITTANCE_PROVIDERS = [
 ]
 
 const FX_DIASPORA = [
-  { from: 'USD', name: 'US Dollar',    rate: '156.40', flag: '🇺🇸', bg: '#1A5C38', remit: '$5B+/yr' },
-  { from: 'GBP', name: 'British Pound',rate: '197.82', flag: '🇬🇧', bg: '#1d4ed8', remit: 'Large diaspora' },
-  { from: 'SAR', name: 'Saudi Riyal',  rate: '41.70',  flag: '🇸🇦', bg: '#d97706', remit: '3M+ Ethiopians' },
-  { from: 'AED', name: 'UAE Dirham',   rate: '42.60',  flag: '🇦🇪', bg: '#0891b2', remit: 'Growing corridor' },
+  { from: 'USD', name: 'US Dollar',    rate: '156.40', flag: '🇺🇸', bg: '#1D4ED8', remit: '$5B+/yr' },
+  { from: 'GBP', name: 'British Pound',rate: '197.82', flag: '🇬🇧', bg: '#1D4ED8', remit: 'Large diaspora' },
+  { from: 'SAR', name: 'Saudi Riyal',  rate: '41.70',  flag: '🇸🇦', bg: '#1D4ED8', remit: '3M+ Ethiopians' },
+  { from: 'AED', name: 'UAE Dirham',   rate: '42.60',  flag: '🇦🇪', bg: '#1D4ED8', remit: 'Growing corridor' },
 ]
 
 const DIASPORA_GUIDES = [
@@ -26,14 +26,14 @@ const DIASPORA_GUIDES = [
     pillar: 'Banking',
     readTime: '6 min read',
     href: '/guides/diaspora-bank-account',
-    color: '#1A5C38',
+    color: '#1D4ED8',
   },
   {
     title: 'How to invest in Ethiopian stocks (ESX) from abroad',
     pillar: 'Markets',
     readTime: '8 min read',
     href: '/guides/invest-esx-from-abroad',
-    color: '#7c3aed',
+    color: '#1D4ED8',
   },
   {
     title: 'Cheapest ways to send money to Ethiopia in 2026',
@@ -103,8 +103,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#1A5C38'
-const PILLAR_BG = '#e6f4ed'
+const PILLAR = '#1D4ED8'
+const PILLAR_BG = '#EFF6FF'
 
 export default function DiasporaPage() {
   return (
@@ -114,10 +114,10 @@ export default function DiasporaPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>Diaspora</p>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>Diaspora</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
             <div>
               <h1
@@ -125,7 +125,7 @@ export default function DiasporaPage() {
                 style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
               >
                 Ethiopia's financial<br />
-                <span style={{ color: '#1A5C38' }}>hub for the diaspora.</span>
+                <span style={{ color: '#1D4ED8' }}>hub for the diaspora.</span>
               </h1>
               <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '440px' }}>
                 Send money home cheaper. Invest in Ethiopian stocks from abroad.
@@ -136,14 +136,14 @@ export default function DiasporaPage() {
                 <Link
                   href="/diaspora/remittance"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Compare remittance rates
                 </Link>
                 <Link
                   href="/banking/fx-rates"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: `2px solid ${PILLAR}`, color: PILLAR, background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: PILLAR, background: 'transparent' }}
                 >
                   Track ETB rates
                 </Link>
@@ -195,7 +195,7 @@ export default function DiasporaPage() {
                     <p className="text-slate-500 text-xs mb-3" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400">{cat.stat}</span>
-                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                         <span>Go</span><ArrowRight size={11} />
                       </div>
                     </div>
@@ -218,14 +218,14 @@ export default function DiasporaPage() {
                 Today's exchange rates — NBE official
               </h2>
             </div>
-            <Link href="/banking/fx-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/banking/fx-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full FX dashboard <ArrowRight />
             </Link>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {FX_DIASPORA.map((fx) => (
-              <div key={fx.from} className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all" style={{ padding: '24px' }}>
+              <div key={fx.from} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all" style={{ padding: '24px' }}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="inline-flex items-center rounded-lg" style={{ background: fx.bg, padding: '5px 12px' }}>
                     <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', letterSpacing: '1px' }}>{fx.from}</span>
@@ -234,7 +234,7 @@ export default function DiasporaPage() {
                 </div>
                 <p className="text-xs text-slate-400 mb-1">ETB per 1 {fx.from}</p>
                 <p className="font-mono font-black text-slate-950 mb-2" style={{ fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>{fx.rate}</p>
-                <p className="text-xs font-medium" style={{ color: '#1A5C38' }}>{fx.remit}</p>
+                <p className="text-xs font-medium" style={{ color: '#1D4ED8' }}>{fx.remit}</p>
               </div>
             ))}
           </div>
@@ -256,7 +256,7 @@ export default function DiasporaPage() {
                 Cheapest way to send money to Ethiopia
               </h2>
             </div>
-            <Link href="/diaspora/remittance" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/diaspora/remittance" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full comparison <ArrowRight />
             </Link>
           </div>
@@ -285,21 +285,21 @@ export default function DiasporaPage() {
                     <p className="font-bold text-slate-800" style={{ fontSize: i === 0 ? '15px' : '14px' }}>{r.name}</p>
                     {r.badge && (
                       <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block"
-                        style={r.badge === 'Best rate' ? { background: '#dcfce7', color: '#166534' } : { background: PILLAR_BG, color: PILLAR }}>
+                        style={r.badge === 'Best rate' ? { background: '#dbeafe', color: '#1D4ED8' } : { background: PILLAR_BG, color: PILLAR }}>
                         {r.badge}
                       </span>
                     )}
                   </div>
                   <p className="text-sm text-slate-500">{r.corridor}</p>
-                  <p className={`font-mono font-black ${i === 0 ? 'text-green-700' : 'text-slate-800'}`}
+                  <p className={`font-mono font-black ${i === 0 ? 'text-blue-700' : 'text-slate-800'}`}
                     style={{ fontSize: i === 0 ? '20px' : '16px', letterSpacing: '-0.5px' }}>
                     {r.fee}
                   </p>
                   <p className="text-sm text-slate-600">{r.speed}</p>
                   <p className="font-mono text-sm text-slate-600">{r.minAmount}</p>
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold rounded-full px-3 py-1 w-fit"
-                    style={{ background: '#dcfce7', color: '#166534' }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    style={{ background: '#dbeafe', color: '#1D4ED8' }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                     NBE licensed
                   </span>
                 </div>
@@ -311,7 +311,7 @@ export default function DiasporaPage() {
                       <p className="font-bold text-slate-800 text-sm">{r.name}</p>
                       {r.badge && (
                         <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0"
-                          style={r.badge === 'Best rate' ? { background: '#dcfce7', color: '#166534' } : { background: PILLAR_BG, color: PILLAR }}>
+                          style={r.badge === 'Best rate' ? { background: '#dbeafe', color: '#1D4ED8' } : { background: PILLAR_BG, color: PILLAR }}>
                           {r.badge}
                         </span>
                       )}
@@ -325,7 +325,7 @@ export default function DiasporaPage() {
 
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Fees are indicative and may vary by amount and corridor · Always verify before transferring</p>
-              <Link href="/diaspora/remittance" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/diaspora/remittance" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Full remittance guide →
               </Link>
             </div>
@@ -359,7 +359,7 @@ export default function DiasporaPage() {
                   <p className="font-bold text-slate-900 mb-4 leading-snug" style={{ fontSize: '15px' }}>{g.title}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-slate-400 font-medium">{g.readTime}</span>
-                    <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                    <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                       <span>Read</span><ArrowRight size={11} />
                     </div>
                   </div>
@@ -368,7 +368,7 @@ export default function DiasporaPage() {
             ))}
           </div>
           <div className="mt-8">
-            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1A5C38' }}>
+            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: '#1D4ED8' }}>
               All diaspora guides <ArrowRight />
             </Link>
           </div>
@@ -429,7 +429,7 @@ export default function DiasporaPage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Diaspora weekly</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               Stay connected to<br />
-              <span style={{ color: '#1A5C38' }}>Ethiopia's economy.</span>
+              <span style={{ color: '#1D4ED8' }}>Ethiopia's economy.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Weekly digest built for Ethiopians abroad. ETB rates, ESX updates,
@@ -443,7 +443,7 @@ export default function DiasporaPage() {
                 'Banking and investment news from Addis Ababa',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

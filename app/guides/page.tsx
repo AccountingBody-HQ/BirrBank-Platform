@@ -10,7 +10,7 @@ const FEATURED_GUIDES = [
     title: 'Best savings rates in Ethiopia — complete guide 2026',
     excerpt: 'A full comparison of savings and fixed deposit rates across all 32 commercial banks, with analysis of which account type suits each saver.',
     pillar: 'Banking',
-    pillarColor: '#1A5C38',
+    pillarColor: '#1D4ED8',
     readTime: '8 min read',
     published: '22 Apr 2026',
   },
@@ -19,7 +19,7 @@ const FEATURED_GUIDES = [
     title: 'How to invest in the Ethiopian Securities Exchange (ESX)',
     excerpt: 'Step-by-step guide to opening a brokerage account, understanding listed equities, and participating in IPOs on the ESX from Ethiopia or abroad.',
     pillar: 'Markets',
-    pillarColor: '#7c3aed',
+    pillarColor: '#1D4ED8',
     readTime: '10 min read',
     published: '20 Apr 2026',
   },
@@ -62,12 +62,12 @@ const FEATURED_GUIDES = [
 ]
 
 const CATEGORIES = [
-  { label: 'Banking',      href: '/guides?pillar=banking',      color: '#1A5C38', bg: '#e6f4ed', count: '120+' },
-  { label: 'Markets',      href: '/guides?pillar=markets',      color: '#1A5C38', bg: '#e6f4ed', count: '80+'  },
-  { label: 'Insurance',    href: '/guides?pillar=insurance',    color: '#1A5C38', bg: '#e6f4ed', count: '60+'  },
-  { label: 'Commodities',  href: '/guides?pillar=commodities',  color: '#1A5C38', bg: '#e6f4ed', count: '40+'  },
-  { label: 'Diaspora',     href: '/guides?pillar=diaspora',     color: '#1A5C38', bg: '#e6f4ed', count: '50+'  },
-  { label: 'Regulations',  href: '/guides?pillar=regulations',  color: '#1A5C38', bg: '#e6f4ed', count: '70+'  },
+  { label: 'Banking',      href: '/guides?pillar=banking',      color: '#1D4ED8', bg: '#EFF6FF', count: '120+' },
+  { label: 'Markets',      href: '/guides?pillar=markets',      color: '#1D4ED8', bg: '#EFF6FF', count: '80+'  },
+  { label: 'Insurance',    href: '/guides?pillar=insurance',    color: '#1D4ED8', bg: '#EFF6FF', count: '60+'  },
+  { label: 'Commodities',  href: '/guides?pillar=commodities',  color: '#1D4ED8', bg: '#EFF6FF', count: '40+'  },
+  { label: 'Diaspora',     href: '/guides?pillar=diaspora',     color: '#1D4ED8', bg: '#EFF6FF', count: '50+'  },
+  { label: 'Regulations',  href: '/guides?pillar=regulations',  color: '#1D4ED8', bg: '#EFF6FF', count: '70+'  },
 ]
 
 const RECENT_REGULATIONS = [
@@ -82,7 +82,7 @@ const ArrowRight = ({ size = 13 }: { size?: number }) => (
   </svg>
 )
 
-const PILLAR = '#1A5C38'
+const PILLAR = '#1D4ED8'
 
 export default function GuidesPage() {
   return (
@@ -92,7 +92,7 @@ export default function GuidesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Intelligence</p>
@@ -113,14 +113,14 @@ export default function GuidesPage() {
                 <Link
                   href="/ai-assistant"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Ask the AI assistant
                 </Link>
                 <Link
                   href="/regulations"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: `2px solid ${PILLAR}`, color: PILLAR, background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: PILLAR, background: 'transparent' }}
                 >
                   Regulations tracker
                 </Link>
@@ -168,7 +168,7 @@ export default function GuidesPage() {
                     <p className="font-mono font-black" style={{ fontSize: '16px', color: cat.color }}>{cat.count}</p>
                   </div>
                   <p className="font-bold text-slate-800 mb-1" style={{ fontSize: '13px' }}>{cat.label}</p>
-                  <div className="flex items-center justify-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                  <div className="flex items-center justify-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                     <span>Browse</span><ArrowRight size={10} />
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function GuidesPage() {
                 Most read this week
               </h2>
             </div>
-            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               All 500+ guides <ArrowRight />
             </Link>
           </div>
@@ -204,24 +204,24 @@ export default function GuidesPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3" style={{ padding: '36px 36px' }}>
                 <div className="lg:col-span-2 pr-0 lg:pr-12">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#e6f4ed', color: '#1A5C38' }}>
+                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
                       {FEATURED_GUIDES[0].pillar}
                     </span>
                     <span className="text-xs text-slate-400">{FEATURED_GUIDES[0].readTime}</span>
                     <span className="text-xs text-slate-400">{FEATURED_GUIDES[0].published}</span>
                   </div>
-                  <h3 className="font-serif font-bold text-slate-950 mb-4 group-hover:text-green-800 transition-colors"
+                  <h3 className="font-serif font-bold text-slate-950 mb-4 group-hover:text-blue-700 transition-colors"
                     style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.8px', lineHeight: 1.2 }}>
                     {FEATURED_GUIDES[0].title}
                   </h3>
                   <p className="text-slate-500 mb-6" style={{ fontSize: '15px', lineHeight: 1.8 }}>{FEATURED_GUIDES[0].excerpt}</p>
-                  <div className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all" style={{ color: '#1A5C38' }}>
+                  <div className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all" style={{ color: '#1D4ED8' }}>
                     <span>Read guide</span><ArrowRight size={13} />
                   </div>
                 </div>
                 <div className="hidden lg:flex items-center justify-center" style={{ background: '#f8faf8', borderRadius: 16, padding: '32px' }}>
                   <div className="text-center">
-                    <p className="font-mono font-black mb-1" style={{ fontSize: '48px', color: '#1A5C38', letterSpacing: '-2px', lineHeight: 1 }}>9.50%</p>
+                    <p className="font-mono font-black mb-1" style={{ fontSize: '48px', color: '#1D4ED8', letterSpacing: '-2px', lineHeight: 1 }}>9.50%</p>
                     <p className="text-sm font-bold text-slate-600">Best rate today</p>
                     <p className="text-xs text-slate-400 mt-1">Awash Bank · 12M fixed</p>
                   </div>
@@ -247,13 +247,13 @@ export default function GuidesPage() {
                     </span>
                     <span className="text-xs text-slate-400">{g.readTime}</span>
                   </div>
-                  <h3 className="font-bold text-slate-900 mb-3 flex-1 group-hover:text-green-800 transition-colors leading-snug" style={{ fontSize: '15px' }}>
+                  <h3 className="font-bold text-slate-900 mb-3 flex-1 group-hover:text-blue-700 transition-colors leading-snug" style={{ fontSize: '15px' }}>
                     {g.title}
                   </h3>
                   <p className="text-slate-500 text-xs mb-4 leading-relaxed line-clamp-3">{g.excerpt}</p>
                   <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                     <span className="text-xs text-slate-400">{g.published}</span>
-                    <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                    <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                       <span>Read</span><ArrowRight size={11} />
                     </div>
                   </div>
@@ -267,7 +267,7 @@ export default function GuidesPage() {
       {/* ══════════════════════════════ AI ASSISTANT CTA ═════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-green-100" style={{ boxShadow: '0 4px 24px rgba(26,92,56,0.06)' }}>
+          <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #22d3ee)` }} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div style={{ padding: '48px 40px' }}>
@@ -287,7 +287,7 @@ export default function GuidesPage() {
                 <Link
                   href="/ai-assistant"
                   className="inline-flex items-center gap-2 font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(29,78,216,0.20)' }}
                 >
                   Open AI assistant <ArrowRight size={14} />
                 </Link>
@@ -300,7 +300,7 @@ export default function GuidesPage() {
                     '"What does the NBE directive on FX fees mean for me?"',
                     '"Compare TeleBirr vs HelloCash for small businesses."',
                   ].map((q) => (
-                    <div key={q} className="bg-white rounded-xl border border-green-100 text-sm text-slate-600 font-medium"
+                    <div key={q} className="bg-white rounded-xl border border-blue-100 text-sm text-slate-600 font-medium"
                       style={{ padding: '12px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                       {q}
                     </div>
@@ -322,13 +322,13 @@ export default function GuidesPage() {
                 Recent NBE and ECMA directives
               </h2>
             </div>
-            <Link href="/regulations" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/regulations" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Full regulations library <ArrowRight />
             </Link>
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             {RECENT_REGULATIONS.map((reg, i) => (
               <Link
                 key={reg.title}
@@ -338,7 +338,7 @@ export default function GuidesPage() {
               >
                 <div className="flex items-start gap-4 flex-1 min-w-0">
                   <span className="text-xs font-black rounded-full px-2 py-1 shrink-0 mt-0.5"
-                    style={{ background: reg.regulator === 'NBE' ? '#e6f4ed' : '#f5f3ff', color: reg.regulator === 'NBE' ? '#1A5C38' : '#7c3aed' }}>
+                    style={{ background: reg.regulator === 'NBE' ? '#EFF6FF' : '#EFF6FF', color: reg.regulator === 'NBE' ? '#1D4ED8' : '#1D4ED8' }}>
                     {reg.regulator}
                   </span>
                   <div className="min-w-0">
@@ -354,7 +354,7 @@ export default function GuidesPage() {
             ))}
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Sources: NBE (nbe.gov.et) · ECMA (ecma.gov.et) · ECX (ecx.com.et)</p>
-              <Link href="/regulations" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/regulations" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All directives →
               </Link>
             </div>
@@ -378,7 +378,7 @@ export default function GuidesPage() {
           <Link
             href="/ai-assistant"
             className="font-bold rounded-full transition-all shrink-0"
-            style={{ fontSize: 14, padding: '14px 28px', background: '#1A5C38', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(26,92,56,0.3)' }}
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}
           >
             Try the AI assistant →
           </Link>
@@ -392,7 +392,7 @@ export default function GuidesPage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Weekly intelligence</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               The sharpest Ethiopian<br />
-              <span style={{ color: '#1A5C38' }}>finance digest, weekly.</span>
+              <span style={{ color: '#1D4ED8' }}>finance digest, weekly.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               New guides, regulation updates and market intelligence —
@@ -406,7 +406,7 @@ export default function GuidesPage() {
                 'Curated market intelligence for investors and businesses',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

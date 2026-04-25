@@ -13,10 +13,10 @@ const COFFEE_PRICES = [
 ]
 
 const OTHER_PRICES = [
-  { code: 'WHGS2',  name: 'White Sesame Grade 2', type: 'Sesame', price: '48,200', change: '+320',   changePct: '+0.67', bg: '#d97706' },
-  { code: 'BRDC3',  name: 'Red Kidney Bean G3',   type: 'Beans',  price: '32,500', change: '-150',   changePct: '-0.46', bg: '#dc2626' },
-  { code: 'LWBP2',  name: 'White Wheat Grade 2',  type: 'Grains', price: '18,900', change: '+200',   changePct: '+1.07', bg: '#ca8a04' },
-  { code: 'SBWO2',  name: 'Soybean Grade 2',      type: 'Grains', price: '22,400', change: '+180',   changePct: '+0.81', bg: '#65a30d' },
+  { code: 'WHGS2',  name: 'White Sesame Grade 2', type: 'Sesame', price: '48,200', change: '+320',   changePct: '+0.67', bg: '#1D4ED8' },
+  { code: 'BRDC3',  name: 'Red Kidney Bean G3',   type: 'Beans',  price: '32,500', change: '-150',   changePct: '-0.46', bg: '#1D4ED8' },
+  { code: 'LWBP2',  name: 'White Wheat Grade 2',  type: 'Grains', price: '18,900', change: '+200',   changePct: '+1.07', bg: '#1D4ED8' },
+  { code: 'SBWO2',  name: 'Soybean Grade 2',      type: 'Grains', price: '22,400', change: '+180',   changePct: '+0.81', bg: '#1D4ED8' },
 ]
 
 const SUB_CATEGORIES = [
@@ -81,8 +81,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#1A5C38'
-const PILLAR_BG = '#e6f4ed'
+const PILLAR = '#1D4ED8'
+const PILLAR_BG = '#EFF6FF'
 
 export default function CommoditiesPage() {
   return (
@@ -92,7 +92,7 @@ export default function CommoditiesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Commodities</p>
@@ -113,14 +113,14 @@ export default function CommoditiesPage() {
                 <Link
                   href="/commodities/coffee"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Coffee prices
                 </Link>
                 <Link
                   href="/commodities/sesame"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: `2px solid ${PILLAR}`, color: PILLAR, background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: PILLAR, background: 'transparent' }}
                 >
                   Sesame prices
                 </Link>
@@ -172,7 +172,7 @@ export default function CommoditiesPage() {
                     <p className="text-slate-500 text-xs mb-3" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400">{cat.stat}</span>
-                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                         <span>Explore</span><ArrowRight size={11} />
                       </div>
                     </div>
@@ -202,7 +202,7 @@ export default function CommoditiesPage() {
                   ECX · 25 Apr 2026
                 </span>
               </div>
-              <Link href="/commodities/coffee" className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#1A5C38' }}>
+              <Link href="/commodities/coffee" className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: '#1D4ED8' }}>
                 All grades <ArrowRight />
               </Link>
             </div>
@@ -257,7 +257,7 @@ export default function CommoditiesPage() {
 
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Commodity Exchange (ecx.com.et) · Prices in ETB per kg</p>
-              <Link href="/commodities/coffee" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1A5C38' }}>
+              <Link href="/commodities/coffee" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All coffee grades →
               </Link>
             </div>
@@ -286,7 +286,7 @@ export default function CommoditiesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {OTHER_PRICES.map((c) => (
               <div key={c.code} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: '#1A5C38' }} />
+                <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div style={{ padding: '24px' }}>
                   <div className="flex items-center justify-between mb-3">
                     <span className="font-mono font-bold text-xs rounded-lg px-2 py-1" style={{ background: PILLAR_BG, color: PILLAR }}>{c.code}</span>
@@ -297,7 +297,7 @@ export default function CommoditiesPage() {
                     {c.price}
                   </p>
                   <p className="text-xs text-slate-400 mb-3">ETB per kg</p>
-                  <div className={`inline-flex items-center gap-1 text-xs font-bold rounded-full px-2 py-1 ${c.change.startsWith('+') ? 'text-green-700 bg-green-50' : 'text-red-600 bg-red-50'}`}>
+                  <div className={`inline-flex items-center gap-1 text-xs font-bold rounded-full px-2 py-1 ${c.change.startsWith('+') ? 'text-blue-700 bg-blue-50' : 'text-red-600 bg-red-50'}`}>
                     {c.change} ({c.changePct})
                   </div>
                 </div>
@@ -365,7 +365,7 @@ export default function CommoditiesPage() {
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Daily commodity alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               ECX prices,<br />
-              <span style={{ color: '#1A5C38' }}>direct to your inbox.</span>
+              <span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Weekly commodity price digest for exporters, lenders and investors.
@@ -379,7 +379,7 @@ export default function CommoditiesPage() {
                 'ECX market news and new commodity listings',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}

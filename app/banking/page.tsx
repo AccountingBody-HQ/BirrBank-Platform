@@ -13,9 +13,9 @@ const TOP_SAVINGS = [
 ]
 
 const FX_PREVIEW = [
-  { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1A5C38' },
-  { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1d4ed8' },
-  { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#7c3aed' },
+  { currency: 'USD', name: 'US Dollar',     buy: '155.90', sell: '156.40', bg: '#1D4ED8' },
+  { currency: 'GBP', name: 'British Pound', buy: '197.20', sell: '197.82', bg: '#1D4ED8' },
+  { currency: 'EUR', name: 'Euro',          buy: '168.50', sell: '169.12', bg: '#1D4ED8' },
 ]
 
 const SUB_CATEGORIES = [
@@ -25,7 +25,7 @@ const SUB_CATEGORIES = [
     desc: 'Compare savings and fixed deposit rates across all 32 commercial banks.',
     stat: '32 banks',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
       </svg>
     ),
@@ -36,7 +36,7 @@ const SUB_CATEGORIES = [
     desc: 'Personal, car, home and business loan rates with EMI calculator.',
     stat: 'All loan types',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
       </svg>
     ),
@@ -47,7 +47,7 @@ const SUB_CATEGORIES = [
     desc: 'Official NBE indicative rates vs per-bank buying and selling rates.',
     stat: 'Updated daily',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
       </svg>
     ),
@@ -58,7 +58,7 @@ const SUB_CATEGORIES = [
     desc: 'TeleBirr, HelloCash, Amole and CBEBirr — compare all payment operators.',
     stat: '27 operators',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
       </svg>
     ),
@@ -69,7 +69,7 @@ const SUB_CATEGORIES = [
     desc: 'Micro-loans, rural finance and SME credit from 55 licensed MFIs.',
     stat: '55 MFIs',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
     ),
@@ -80,7 +80,7 @@ const SUB_CATEGORIES = [
     desc: 'Compare diaspora remittance fees and transfer speed across 62 agencies.',
     stat: '62 agencies',
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
       </svg>
     ),
@@ -101,11 +101,11 @@ export default function BankingHubPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
 
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>
             Banking
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
@@ -115,7 +115,7 @@ export default function BankingHubPage() {
                 style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
               >
                 Compare every bank<br />
-                <span style={{ color: '#1A5C38' }}>in Ethiopia.</span>
+                <span style={{ color: '#1D4ED8' }}>in Ethiopia.</span>
               </h1>
               <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '440px' }}>
                 Savings rates, loans, FX and digital services across all 32 commercial banks —
@@ -125,14 +125,14 @@ export default function BankingHubPage() {
                 <Link
                   href="/banking/savings-rates"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: '#1A5C38', color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: '#1D4ED8', color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.20)' }}
                 >
                   Compare savings rates
                 </Link>
                 <Link
                   href="/banking/fx-rates"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1A5C38', background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1D4ED8', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>
@@ -147,7 +147,7 @@ export default function BankingHubPage() {
                 { value: 'Daily', label: 'FX rate updates',     sub: '09:30 EAT' },
               ].map((s) => (
                 <div key={s.label} className="bg-white rounded-2xl border border-slate-200 text-center" style={{ padding: '20px 12px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                  <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '20px', letterSpacing: '-1px', color: '#1A5C38' }}>{s.value}</p>
+                  <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '20px', letterSpacing: '-1px', color: '#1D4ED8' }}>{s.value}</p>
                   <p className="font-semibold text-slate-700 mb-0.5" style={{ fontSize: '11px' }}>{s.label}</p>
                   <p className="text-slate-400" style={{ fontSize: '10px' }}>{s.sub}</p>
                 </div>
@@ -178,9 +178,9 @@ export default function BankingHubPage() {
                 className="group bg-white rounded-2xl border border-slate-200 hover:shadow-xl transition-all duration-200 flex flex-col overflow-hidden"
                 style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
               >
-                <div style={{ height: 3, background: '#1A5C38' }} />
+                <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div className="flex gap-4 items-start" style={{ padding: '24px' }}>
-                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#e6f4ed' }}>
+                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#EFF6FF' }}>
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -188,7 +188,7 @@ export default function BankingHubPage() {
                     <p className="text-slate-500 text-xs mb-3" style={{ lineHeight: '1.7' }}>{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400">{cat.stat}</span>
-                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1A5C38' }}>
+                      <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
                         <span>Explore</span>
                         <ArrowRight size={11} />
                       </div>
@@ -217,7 +217,7 @@ export default function BankingHubPage() {
             <Link
               href="/banking/savings-rates"
               className="inline-flex items-center gap-2 text-sm font-bold shrink-0 sm:pb-1"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               See all 32 banks <ArrowRight />
             </Link>
@@ -225,7 +225,7 @@ export default function BankingHubPage() {
 
           {/* Table */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
             {/* Header */}
             <div className="grid grid-cols-12 bg-slate-50 border-b border-slate-200" style={{ padding: '12px 24px' }}>
@@ -239,14 +239,14 @@ export default function BankingHubPage() {
             {TOP_SAVINGS.map((r) => (
               <div
                 key={r.rank}
-                className={`grid grid-cols-12 items-center border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`grid grid-cols-12 items-center border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
                 style={{ padding: r.rank === 1 ? '18px 24px' : '14px 24px' }}
               >
                 <div className="col-span-1">
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black"
                     style={r.rank === 1
-                      ? { background: '#1A5C38', color: '#fff' }
+                      ? { background: '#1D4ED8', color: '#fff' }
                       : { background: '#f1f5f9', color: '#94a3b8' }}
                   >
                     {r.rank === 1 ? (
@@ -257,11 +257,11 @@ export default function BankingHubPage() {
                   </div>
                 </div>
                 <div className="col-span-5">
-                  <p className={`font-bold ${r.rank === 1 ? 'text-green-900' : 'text-slate-800'}`} style={{ fontSize: r.rank === 1 ? '15px' : '14px' }}>
+                  <p className={`font-bold ${r.rank === 1 ? 'text-blue-900' : 'text-slate-800'}`} style={{ fontSize: r.rank === 1 ? '15px' : '14px' }}>
                     {r.bank}
                   </p>
                   {r.badge && (
-                    <span className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1A5C38' }}>{r.badge}</span>
+                    <span className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1D4ED8' }}>{r.badge}</span>
                   )}
                 </div>
                 <div className="col-span-4">
@@ -269,7 +269,7 @@ export default function BankingHubPage() {
                 </div>
                 <div className="col-span-2 text-right">
                   <p
-                    className={`font-mono font-black ${r.rank === 1 ? 'text-green-700' : 'text-slate-800'}`}
+                    className={`font-mono font-black ${r.rank === 1 ? 'text-blue-700' : 'text-slate-800'}`}
                     style={{ fontSize: r.rank === 1 ? '24px' : '18px', letterSpacing: '-1px' }}
                   >
                     {r.rate}%
@@ -281,7 +281,7 @@ export default function BankingHubPage() {
             {/* Footer row */}
             <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Official bank sources · NBE registry · Last verified this week</p>
-              <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1A5C38' }}>
+              <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
                 Full comparison — all 32 banks →
               </Link>
             </div>
@@ -310,7 +310,7 @@ export default function BankingHubPage() {
             <Link
               href="/banking/fx-rates"
               className="inline-flex items-center gap-2 text-sm font-bold shrink-0 sm:pb-1"
-              style={{ color: '#1A5C38' }}
+              style={{ color: '#1D4ED8' }}
             >
               Full FX dashboard <ArrowRight />
             </Link>
@@ -320,7 +320,7 @@ export default function BankingHubPage() {
             {FX_PREVIEW.map((fx) => (
               <div
                 key={fx.currency}
-                className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all"
+                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all"
                 style={{ padding: '24px' }}
               >
                 <div className="flex items-center justify-between mb-5">
@@ -343,7 +343,7 @@ export default function BankingHubPage() {
             <p className="text-sm text-slate-500">
               Official rates from the <strong className="text-slate-700">National Bank of Ethiopia</strong> · Updated 09:30 EAT every business day.
             </p>
-            <Link href="/banking/fx-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1A5C38' }}>
+            <Link href="/banking/fx-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               Compare per-bank rates <ArrowRight />
             </Link>
           </div>
@@ -411,7 +411,7 @@ export default function BankingHubPage() {
               style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}
             >
               Rate changes,<br />
-              <span style={{ color: '#1A5C38' }}>direct to your inbox.</span>
+              <span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
               Get notified the moment a bank changes its savings rate or FX margin.
@@ -425,7 +425,7 @@ export default function BankingHubPage() {
                 'NBE directives affecting deposit and lending rates',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}
