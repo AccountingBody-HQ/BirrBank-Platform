@@ -1,40 +1,52 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-// All prices in ETB per kg
-
-const GRAIN_PRICES = [
-  { code: 'LWBP2',  name: 'White Wheat Grade 2',    type: 'Wheat',    origin: 'Arsi',      price: '18,900', change: '+200',  changePct: '+1.07', volume: '124.5t', badge: 'Most traded' },
-  { code: 'LWBP3',  name: 'White Wheat Grade 3',    type: 'Wheat',    origin: 'Arsi',      price: '17,400', change: '+150',  changePct: '+0.87', volume: '98.2t',  badge: null },
-  { code: 'LMBP2',  name: 'Mixed Wheat Grade 2',    type: 'Wheat',    origin: 'Bale',      price: '17,100', change: '+180',  changePct: '+1.06', volume: '76.3t',  badge: null },
-  { code: 'SBWO2',  name: 'Soybean Grade 2',        type: 'Soybean',  origin: 'Jimma',     price: '22,400', change: '+180',  changePct: '+0.81', volume: '38.7t',  badge: null },
-  { code: 'SBWO3',  name: 'Soybean Grade 3',        type: 'Soybean',  origin: 'Jimma',     price: '20,100', change: '+120',  changePct: '+0.60', volume: '24.1t',  badge: null },
-  { code: 'MZYS2',  name: 'Yellow Maize Grade 2',   type: 'Maize',    origin: 'Oromia',    price: '12,600', change: '-80',   changePct: '-0.63', volume: '210.4t', badge: null },
-  { code: 'MZYS3',  name: 'Yellow Maize Grade 3',   type: 'Maize',    origin: 'Oromia',    price: '11,200', change: '-60',   changePct: '-0.53', volume: '158.2t', badge: null },
-  { code: 'SRGH2',  name: 'White Sorghum Grade 2',  type: 'Sorghum',  origin: 'SNNPR',     price: '10,800', change: '+90',   changePct: '+0.84', volume: '89.6t',  badge: null },
-  { code: 'TEFF2',  name: 'White Teff Grade 2',     type: 'Teff',     origin: 'Oromia',    price: '28,500', change: '+350',  changePct: '+1.24', volume: '45.3t',  badge: 'Premium grain' },
-  { code: 'TEFF3',  name: 'Mixed Teff Grade 3',     type: 'Teff',     origin: 'Oromia',    price: '24,200', change: '+280',  changePct: '+1.17', volume: '32.8t',  badge: null },
-]
-
-const GRAIN_TYPES = ['All types', 'Wheat', 'Soybean', 'Maize', 'Sorghum', 'Teff']
+const PILLAR = '#1D4ED8'
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
   </svg>
 )
-
 const ClockIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
   </svg>
 )
 
-const PILLAR = '#1D4ED8'
+function fmt(val: number | null | undefined) {
+  if (val == null) return '—'
+  return Number(val).toLocaleString('en-ET', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+function fmtVol(val: number | null | undefined) {
+  if (val == null) return '—'
+  return (Number(val) / 1000).toFixed(1) + 't'
+}
 
-export default function GrainPricesPage() {
+export default async function GrainPricesPage() {
+  const supabase = createSupabaseAdminClient()
+  const today = new Date().toISOString().split('T')[0]
+  const displayDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+
+  const { data: grainData } = await supabase
+    .schema('birrbank')
+    .from('commodity_prices')
+    .select('*')
+    .in('commodity_type', ['grain', 'bean', 'soybean', 'chickpea'])
+    .eq('trade_date', today)
+    .order('price_etb', { ascending: false })
+
+  const { count: totalGrades } = await supabase
+    .schema('birrbank')
+    .from('commodity_prices')
+    .select('count', { count: 'exact', head: true })
+    .in('commodity_type', ['grain', 'bean', 'soybean', 'chickpea'])
+    .eq('trade_date', today)
+
+  const grains = grainData ?? []
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -52,17 +64,17 @@ export default function GrainPricesPage() {
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Commodities · Grains</p>
           <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
             Ethiopian grain prices —<br />
-            <span style={{ color: PILLAR }}>wheat, maize, teff and soybean.</span>
+            <span style={{ color: PILLAR }}>wheat, beans, soybean and more.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
-            ECX daily settlement prices for all grain commodities — wheat, soybean, maize,
-            sorghum and teff. Critical food security data updated every ECX trading day.
+            ECX daily settlement prices for Ethiopian grains and legumes —
+            wheat, kidney beans, soybeans, chickpeas and more. Prices in ETB per kilogram.
           </p>
           <div className="flex flex-wrap gap-6">
             {[
               { icon: <ClockIcon />, label: 'ECX official daily prices' },
-              { icon: <ClockIcon />, label: 'Wheat, maize, teff, soybean, sorghum' },
-              { icon: <ClockIcon />, label: 'All grades and origins' },
+              { icon: <ClockIcon />, label: (totalGrades ?? 0) + ' grades tracked today' },
+              { icon: <ClockIcon />, label: 'Wheat, beans, soybean and more' },
               { icon: <ClockIcon />, label: 'Updated every ECX market day' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
@@ -75,76 +87,67 @@ export default function GrainPricesPage() {
       </section>
 
       {/* ══════════════════════════════ PRICE TABLE ════════════════════════════════ */}
-      {/* NO ADS on commodity price pages — neutrality rule */}
       <section className="bg-white" style={{ padding: '64px 32px 80px' }}>
         <div className="max-w-6xl mx-auto">
-
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Filter by grain type</p>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {GRAIN_TYPES.map((t, i) => (
-                  <button key={t} className="rounded-full text-xs font-bold transition-all"
-                    style={{ padding: '6px 14px', background: i === 0 ? PILLAR : '#f1f5f9', color: i === 0 ? '#fff' : '#64748b', border: i === 0 ? 'none' : '1px solid #e2e8f0' }}>
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: PILLAR }} />
-                <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#166534', background: '#dcfce7', borderColor: '#bbf7d0' }}>
-                  ECX · 25 Apr 2026
-                </span>
-              </div>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Today ECX settlement prices</p>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: PILLAR }} />
+              <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#166534', background: '#dcfce7', borderColor: '#bbf7d0' }}>
+                ECX · {displayDate}
+              </span>
             </div>
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #f59e0b)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '120px 1fr 100px 120px 140px 120px 100px', padding: '13px 24px', background: '#f9fafb' }}>
-              {['ECX Code', 'Grade & name', 'Type', 'Origin', 'Price (ETB/kg)', 'Change', 'Volume'].map((h) => (
+              style={{ gridTemplateColumns: '130px 1fr 140px 120px 160px 140px 100px', padding: '13px 24px', background: '#f9fafb' }}>
+              {['ECX Code', 'Commodity', 'Region', 'Type', 'Price (ETB/kg)', 'Change', 'Volume'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
 
-            {GRAIN_PRICES.map((g, i) => (
-              <div key={g.code} className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}>
-                {/* Desktop */}
-                <div className="hidden sm:grid items-center"
-                  style={{ gridTemplateColumns: '120px 1fr 100px 120px 140px 120px 100px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
-                  <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 w-fit" style={{ background: '#EFF6FF', color: PILLAR }}>{g.code}</span>
-                  <div>
+            {grains.length > 0 ? grains.map((c: any, i: number) => {
+              const changePos = Number(c.price_change ?? 0) >= 0
+              const isTop = i === 0
+              return (
+                <div key={c.id} className={'border-b border-slate-100 transition-colors ' + (isTop ? 'bg-amber-50' : 'bg-white hover:bg-slate-50')}>
+                  <div className="hidden sm:grid items-center"
+                    style={{ gridTemplateColumns: '130px 1fr 140px 120px 160px 140px 100px', padding: isTop ? '18px 24px' : '14px 24px' }}>
+                    <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 w-fit" style={{ background: '#EFF6FF', color: PILLAR }}>{c.commodity_code}</span>
                     <div className="flex items-center gap-2">
-                      <p className="font-bold text-slate-800" style={{ fontSize: i === 0 ? '15px' : '14px' }}>{g.name}</p>
-                      {g.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#dbeafe', color: PILLAR }}>{g.badge}</span>}
+                      <p className="font-bold text-slate-800" style={{ fontSize: isTop ? '15px' : '14px' }}>{c.commodity_name}</p>
+                      {isTop && <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#fef3c7', color: '#92400e' }}>Top price</span>}
+                    </div>
+                    <p className="text-sm text-slate-500">{c.region_of_origin ?? '—'}</p>
+                    <span className="text-xs font-bold rounded-full px-2 py-1 w-fit capitalize" style={{ background: '#f1f5f9', color: '#475569' }}>{c.commodity_type}</span>
+                    <p className="font-mono font-black text-slate-900" style={{ fontSize: isTop ? '22px' : '18px', letterSpacing: '-0.5px' }}>{fmt(c.price_etb)}</p>
+                    <p className={'font-mono font-bold text-sm ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                      {changePos ? '+' : ''}{fmt(c.price_change)} ({changePos ? '+' : ''}{Number(c.price_change_pct ?? 0).toFixed(2)}%)
+                    </p>
+                    <p className="font-mono text-slate-500 text-sm">{fmtVol(c.volume_kg)}</p>
+                  </div>
+                  <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
+                    <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{c.commodity_code}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-slate-800 text-sm truncate">{c.commodity_name}</p>
+                      <p className="text-xs text-slate-400">{c.region_of_origin ?? '—'} · {c.commodity_type} · {fmtVol(c.volume_kg)}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="font-mono font-black text-slate-900" style={{ fontSize: '16px' }}>{fmt(c.price_etb)}</p>
+                      <p className={'font-mono font-bold text-xs ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                        {changePos ? '+' : ''}{Number(c.price_change_pct ?? 0).toFixed(2)}%
+                      </p>
                     </div>
                   </div>
-                  <span className="text-xs font-bold rounded-full px-2 py-1 w-fit" style={{ background: '#f1f5f9', color: '#475569' }}>{g.type}</span>
-                  <p className="text-sm text-slate-500">{g.origin}</p>
-                  <p className={`font-mono font-black ${i === 0 ? 'text-blue-700' : 'text-slate-900'}`}
-                    style={{ fontSize: i === 0 ? '22px' : '18px', letterSpacing: '-0.5px' }}>{g.price}</p>
-                  <p className={`font-mono font-bold text-sm ${g.change.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
-                    {g.change} ({g.changePct})
-                  </p>
-                  <p className="font-mono text-slate-500 text-sm">{g.volume}</p>
                 </div>
-                {/* Mobile */}
-                <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
-                  <span className="font-mono font-bold text-xs rounded-lg px-2 py-1 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{g.code}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-800 text-sm truncate">{g.name}</p>
-                    <p className="text-xs text-slate-400">{g.type} · {g.origin} · {g.volume}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="font-mono font-black text-slate-900" style={{ fontSize: '16px' }}>{g.price}</p>
-                    <p className={`font-mono font-bold text-xs ${g.changePct.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>{g.changePct}</p>
-                  </div>
-                </div>
+              )
+            }) : (
+              <div className="py-12 text-center">
+                <p className="text-slate-500 text-sm">Grain prices for today are not yet available. ECX publishes prices each trading day.</p>
               </div>
-            ))}
+            )}
 
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Commodity Exchange (ecx.com.et) · Prices in ETB per kg · Updated every ECX trading day</p>
@@ -153,44 +156,38 @@ export default function GrainPricesPage() {
           </div>
 
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
-            Prices are ECX daily settlement prices for reference only. BirrBank is not a commodity broker or trading platform.
+            Prices are ECX daily settlement prices for reference only. Actual transaction prices may vary.
+            BirrBank is not a commodity broker or trading platform.
           </p>
         </div>
       </section>
 
-      {/* ══════════════════════════════ GRAIN GUIDE ══════════════════════════════ */}
+      {/* ══════════════════════════════ GRAINS GUIDE ════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Why grain prices matter</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Grains guide</p>
             <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}>
-              Ethiopian grains — context for every price.
+              Ethiopian ECX grain commodities explained.
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { grain: 'Teff', icon: '🌾', notes: 'The flagship Ethiopian grain, used to make injera. White teff commands the highest price of all grains on the ECX. Prices are sensitive to rainfall patterns in Oromia and SNNPR growing regions.' },
-              { grain: 'Wheat', icon: '🌿', notes: 'Largest volume grain traded on the ECX. Critical for food security and bread production. Arsi and Bale zones are the major production areas. Government intervention can affect ECX prices.' },
-              { grain: 'Maize', icon: '🌽', notes: 'Highest volume grain by tonnage on the ECX. Used for food, animal feed and industrial processing. Price is highly sensitive to seasonal supply and import policy decisions.' },
-              { grain: 'Soybean', icon: '🫘', notes: 'Growing importance as Ethiopia expands its edible oil sector. Jimma is the primary growing region. Prices track global soybean markets more closely than other ECX commodities.' },
-              { grain: 'Sorghum', icon: '🌱', notes: 'Drought-resistant staple crop produced in SNNPR and lowland areas. Lower price point than teff and wheat but vital for food security in arid regions.' },
-            ].map((g) => (
-              <div key={g.grain} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+              { name: 'Wheat', note: 'White and mixed wheat from Arsi and Bale highlands. Highest volume grain on the ECX. Key food security crop with strong domestic and export demand.' },
+              { name: 'Kidney Beans', note: 'Major export commodity to Europe and Asia. Harar region produces the highest-quality grades. Strong seasonal price movements around harvest.' },
+              { name: 'Soybean', note: 'Growing ECX commodity from Jimma and Wollega. Rising demand from domestic food processors and international buyers for oil and protein extraction.' },
+              { name: 'Chickpea', note: 'Important pulse crop for both domestic consumption and export. Multiple grades traded on ECX with significant volume from central and southern Ethiopia.' },
+              { name: 'White Pea Beans', note: 'Premium export bean with strong demand from European markets. Careful grading on moisture and size determines the price premium achieved at ECX.' },
+              { name: 'Lubia Beans', note: 'White and mixed lubia traded on the ECX. Important staple and export commodity. Prices sensitive to seasonal production from SNNPR and Oromia.' },
+            ].map((o) => (
+              <div key={o.name} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                 <div style={{ height: 3, background: PILLAR }} />
                 <div style={{ padding: '24px' }}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <p className="text-2xl">{g.icon}</p>
-                    <p className="font-bold text-slate-900" style={{ fontSize: '15px' }}>{g.grain}</p>
-                  </div>
-                  <p className="text-sm text-slate-500" style={{ lineHeight: 1.75 }}>{g.notes}</p>
+                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '15px' }}>{o.name}</p>
+                  <p className="text-sm text-slate-500" style={{ lineHeight: 1.75 }}>{o.note}</p>
                 </div>
               </div>
             ))}
-          </div>
-          <div className="mt-8">
-            <Link href="/commodities/ecx-guide" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: PILLAR }}>
-              How ECX works <ArrowRight />
-            </Link>
           </div>
         </div>
       </section>
@@ -209,21 +206,10 @@ export default function GrainPricesPage() {
               official ECX closing price for that trading day.
             </p>
           </div>
-          <div className="flex flex-col gap-3 shrink-0">
-            {[
-              { dot: '#22c55e', label: 'ECX official source',       sub: 'ecx.com.et daily settlement prices' },
-              { dot: PILLAR,    label: 'Updated every trading day', sub: 'No stale prices shown' },
-              { dot: '#94a3b8', label: 'No commercial bias',       sub: 'No trader or processor pays for placement' },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.dot }} />
-                <div>
-                  <span className="text-sm font-semibold" style={{ color: '#93c5fd' }}>{s.label}</span>
-                  <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>{s.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Link href="/commodities" className="font-bold rounded-full shrink-0"
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}>
+            All commodities →
+          </Link>
         </div>
       </section>
 
@@ -237,15 +223,15 @@ export default function GrainPricesPage() {
               <span style={{ color: PILLAR }}>weekly to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
-              Weekly summary of ECX grain price movements — wheat, maize, teff, soybean
-              and sorghum — for food businesses, lenders and agri-investors.
+              Weekly summary of ECX grain and pulse price movements —
+              for agribusinesses, exporters and food security analysts.
             </p>
             <ul className="space-y-3 mb-8">
               {[
-                'Weekly ECX grain settlement price summary',
-                'Teff, wheat and maize price movements and trends',
-                'Seasonal supply and demand analysis',
-                'ECX market news and government policy updates',
+                'Weekly ECX grain and pulse settlement price summary',
+                'Price movements across wheat, beans and soybeans',
+                'Volume and trading activity highlights',
+                'ECX market news and agricultural policy updates',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
