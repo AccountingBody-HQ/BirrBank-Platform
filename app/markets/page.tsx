@@ -84,8 +84,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#7c3aed'
-const PILLAR_BG = '#f5f3ff'
+const PILLAR = '#1A5C38'
+const PILLAR_BG = '#e6f4ed'
 
 export default function MarketsPage() {
   return (
@@ -95,7 +95,7 @@ export default function MarketsPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(124,58,237,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Markets</p>
@@ -116,7 +116,7 @@ export default function MarketsPage() {
                 <Link
                   href="/markets/equities"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   View listed equities
                 </Link>
@@ -231,7 +231,7 @@ export default function MarketsPage() {
                   <span className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center" style={{ background: PILLAR_BG, color: PILLAR }}>{s.ticker}</span>
                   <div>
                     <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company}</p>
-                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#ede9fe', color: PILLAR }}>{s.badge}</span>}
+                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#e6f4ed', color: PILLAR }}>{s.badge}</span>}
                   </div>
                   <p className="text-sm text-slate-500">{s.sector}</p>
                   <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px', letterSpacing: '-0.5px' }}>{s.price}</p>
@@ -306,7 +306,7 @@ export default function MarketsPage() {
                   className="text-xs font-bold rounded-full px-3 py-1 inline-flex w-fit items-center gap-1.5"
                   style={ipo.status === 'Under review'
                     ? { background: '#fef3c7', color: '#92400e' }
-                    : { background: '#ede9fe', color: PILLAR }}
+                    : { background: '#e6f4ed', color: PILLAR }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: ipo.status === 'Under review' ? '#f59e0b' : PILLAR }} />
                   {ipo.status}
@@ -319,7 +319,7 @@ export default function MarketsPage() {
               <div key={ipo.company + '-mob'} className="sm:hidden border-b border-slate-100 bg-white" style={{ padding: '14px 16px' }}>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-slate-800 text-sm">{ipo.company}</p>
-                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#ede9fe', color: PILLAR }}>
+                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#e6f4ed', color: PILLAR }}>
                     {ipo.status}
                   </span>
                 </div>

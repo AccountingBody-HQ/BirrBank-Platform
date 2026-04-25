@@ -103,8 +103,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#0891b2'
-const PILLAR_BG = '#ecfeff'
+const PILLAR = '#1A5C38'
+const PILLAR_BG = '#e6f4ed'
 
 export default function DiasporaPage() {
   return (
@@ -114,10 +114,10 @@ export default function DiasporaPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(8,145,178,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Diaspora</p>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1A5C38' }}>Diaspora</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
             <div>
               <h1
@@ -125,7 +125,7 @@ export default function DiasporaPage() {
                 style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
               >
                 Ethiopia's financial<br />
-                <span style={{ color: PILLAR }}>hub for the diaspora.</span>
+                <span style={{ color: '#1A5C38' }}>hub for the diaspora.</span>
               </h1>
               <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '440px' }}>
                 Send money home cheaper. Invest in Ethiopian stocks from abroad.
@@ -136,7 +136,7 @@ export default function DiasporaPage() {
                 <Link
                   href="/diaspora/remittance"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(8,145,178,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Compare remittance rates
                 </Link>
@@ -225,7 +225,7 @@ export default function DiasporaPage() {
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {FX_DIASPORA.map((fx) => (
-              <div key={fx.from} className="bg-white rounded-2xl border border-slate-200 hover:border-cyan-200 hover:shadow-md transition-all" style={{ padding: '24px' }}>
+              <div key={fx.from} className="bg-white rounded-2xl border border-slate-200 hover:border-green-200 hover:shadow-md transition-all" style={{ padding: '24px' }}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="inline-flex items-center rounded-lg" style={{ background: fx.bg, padding: '5px 12px' }}>
                     <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', letterSpacing: '1px' }}>{fx.from}</span>
@@ -234,7 +234,7 @@ export default function DiasporaPage() {
                 </div>
                 <p className="text-xs text-slate-400 mb-1">ETB per 1 {fx.from}</p>
                 <p className="font-mono font-black text-slate-950 mb-2" style={{ fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>{fx.rate}</p>
-                <p className="text-xs font-medium" style={{ color: PILLAR }}>{fx.remit}</p>
+                <p className="text-xs font-medium" style={{ color: '#1A5C38' }}>{fx.remit}</p>
               </div>
             ))}
           </div>

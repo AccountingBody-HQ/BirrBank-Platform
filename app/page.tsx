@@ -34,10 +34,10 @@ const CATEGORIES = [
     action: 'Compare insurance',
     desc: 'Motor, life, health and property insurance from all 18 providers.',
     statNum: '18', statLabel: 'providers',
-    iconBg: '#eff6ff',
-    iconColor: '#1d4ed8',
+    iconBg: '#e6f4ed',
+    iconColor: '#1A5C38',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
     ),
@@ -48,10 +48,10 @@ const CATEGORIES = [
     action: 'Explore ESX markets',
     desc: 'Track live ESX equities, T-bill yields and the IPO pipeline.',
     statNum: '45+', statLabel: 'IPOs in pipeline',
-    iconBg: '#f5f3ff',
-    iconColor: '#7c3aed',
+    iconBg: '#e6f4ed',
+    iconColor: '#1A5C38',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
@@ -62,10 +62,10 @@ const CATEGORIES = [
     action: 'View ECX prices',
     desc: 'Daily coffee, sesame and grain prices from the Ethiopian Commodity Exchange.',
     statNum: 'Daily', statLabel: 'ECX prices',
-    iconBg: '#fffbeb',
-    iconColor: '#d97706',
+    iconBg: '#e6f4ed',
+    iconColor: '#1A5C38',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22V12M12 12C12 6 7 4 7 4s5 2 5 8z"/>
         <path d="M12 12C12 6 17 4 17 4s-5 2-5 8z"/>
         <line x1="8" y1="22" x2="16" y2="22"/>
@@ -78,10 +78,10 @@ const CATEGORIES = [
     action: 'Read the guides',
     desc: '500+ guides on banking, investing, insurance and the diaspora.',
     statNum: '500+', statLabel: 'guides',
-    iconBg: '#ecfeff',
-    iconColor: '#0891b2',
+    iconBg: '#e6f4ed',
+    iconColor: '#1A5C38',
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0891b2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A5C38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
       </svg>

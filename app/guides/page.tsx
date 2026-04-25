@@ -63,11 +63,11 @@ const FEATURED_GUIDES = [
 
 const CATEGORIES = [
   { label: 'Banking',      href: '/guides?pillar=banking',      color: '#1A5C38', bg: '#e6f4ed', count: '120+' },
-  { label: 'Markets',      href: '/guides?pillar=markets',      color: '#7c3aed', bg: '#f5f3ff', count: '80+'  },
-  { label: 'Insurance',    href: '/guides?pillar=insurance',    color: '#1d4ed8', bg: '#eff6ff', count: '60+'  },
-  { label: 'Commodities',  href: '/guides?pillar=commodities',  color: '#d97706', bg: '#fffbeb', count: '40+'  },
-  { label: 'Diaspora',     href: '/guides?pillar=diaspora',     color: '#0891b2', bg: '#ecfeff', count: '50+'  },
-  { label: 'Regulations',  href: '/guides?pillar=regulations',  color: '#dc2626', bg: '#fef2f2', count: '70+'  },
+  { label: 'Markets',      href: '/guides?pillar=markets',      color: '#1A5C38', bg: '#e6f4ed', count: '80+'  },
+  { label: 'Insurance',    href: '/guides?pillar=insurance',    color: '#1A5C38', bg: '#e6f4ed', count: '60+'  },
+  { label: 'Commodities',  href: '/guides?pillar=commodities',  color: '#1A5C38', bg: '#e6f4ed', count: '40+'  },
+  { label: 'Diaspora',     href: '/guides?pillar=diaspora',     color: '#1A5C38', bg: '#e6f4ed', count: '50+'  },
+  { label: 'Regulations',  href: '/guides?pillar=regulations',  color: '#1A5C38', bg: '#e6f4ed', count: '70+'  },
 ]
 
 const RECENT_REGULATIONS = [
@@ -82,7 +82,7 @@ const ArrowRight = ({ size = 13 }: { size?: number }) => (
   </svg>
 )
 
-const PILLAR = '#0891b2'
+const PILLAR = '#1A5C38'
 
 export default function GuidesPage() {
   return (
@@ -92,7 +92,7 @@ export default function GuidesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(8,145,178,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Intelligence</p>
@@ -113,7 +113,7 @@ export default function GuidesPage() {
                 <Link
                   href="/ai-assistant"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(8,145,178,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Ask the AI assistant
                 </Link>
@@ -267,7 +267,7 @@ export default function GuidesPage() {
       {/* ══════════════════════════════ AI ASSISTANT CTA ═════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-cyan-100" style={{ boxShadow: '0 4px 24px rgba(8,145,178,0.08)' }}>
+          <div className="rounded-2xl overflow-hidden border border-green-100" style={{ boxShadow: '0 4px 24px rgba(26,92,56,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #22d3ee)` }} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div style={{ padding: '48px 40px' }}>
@@ -287,7 +287,7 @@ export default function GuidesPage() {
                 <Link
                   href="/ai-assistant"
                   className="inline-flex items-center gap-2 font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(8,145,178,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(26,92,56,0.22)' }}
                 >
                   Open AI assistant <ArrowRight size={14} />
                 </Link>
@@ -300,7 +300,7 @@ export default function GuidesPage() {
                     '"What does the NBE directive on FX fees mean for me?"',
                     '"Compare TeleBirr vs HelloCash for small businesses."',
                   ].map((q) => (
-                    <div key={q} className="bg-white rounded-xl border border-cyan-100 text-sm text-slate-600 font-medium"
+                    <div key={q} className="bg-white rounded-xl border border-green-100 text-sm text-slate-600 font-medium"
                       style={{ padding: '12px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                       {q}
                     </div>
@@ -328,7 +328,7 @@ export default function GuidesPage() {
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #dc2626, #f87171)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1A5C38, #2d9e5f)' }} />
             {RECENT_REGULATIONS.map((reg, i) => (
               <Link
                 key={reg.title}

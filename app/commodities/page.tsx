@@ -81,8 +81,8 @@ const ClockIcon = () => (
   </svg>
 )
 
-const PILLAR = '#d97706'
-const PILLAR_BG = '#fffbeb'
+const PILLAR = '#1A5C38'
+const PILLAR_BG = '#e6f4ed'
 
 export default function CommoditiesPage() {
   return (
@@ -92,7 +92,7 @@ export default function CommoditiesPage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(217,119,6,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Commodities</p>
@@ -113,7 +113,7 @@ export default function CommoditiesPage() {
                 <Link
                   href="/commodities/coffee"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(217,119,6,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Coffee prices
                 </Link>
@@ -198,7 +198,7 @@ export default function CommoditiesPage() {
             <div className="flex items-center gap-3 shrink-0">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: PILLAR }} />
-                <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#92400e', background: '#fffbeb', borderColor: '#fde68a' }}>
+                <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#166534', background: '#dcfce7', borderColor: '#bbf7d0' }}>
                   ECX · 25 Apr 2026
                 </span>
               </div>
@@ -277,7 +277,7 @@ export default function CommoditiesPage() {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: PILLAR }} />
-              <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#92400e', background: '#fffbeb', borderColor: '#fde68a' }}>
+              <span className="text-xs font-bold rounded-full px-3 py-1.5 border" style={{ color: '#166534', background: '#dcfce7', borderColor: '#bbf7d0' }}>
                 ECX · 25 Apr 2026
               </span>
             </div>
@@ -286,7 +286,7 @@ export default function CommoditiesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {OTHER_PRICES.map((c) => (
               <div key={c.code} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: c.bg }} />
+                <div style={{ height: 3, background: '#1A5C38' }} />
                 <div style={{ padding: '24px' }}>
                   <div className="flex items-center justify-between mb-3">
                     <span className="font-mono font-bold text-xs rounded-lg px-2 py-1" style={{ background: PILLAR_BG, color: PILLAR }}>{c.code}</span>

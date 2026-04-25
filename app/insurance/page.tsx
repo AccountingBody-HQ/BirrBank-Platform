@@ -100,8 +100,8 @@ const StarIcon = () => (
   </svg>
 )
 
-const PILLAR = '#1d4ed8'
-const PILLAR_BG = '#eff6ff'
+const PILLAR = '#1A5C38'
+const PILLAR_BG = '#e6f4ed'
 
 export default function InsurancePage() {
   return (
@@ -111,7 +111,7 @@ export default function InsurancePage() {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(26,92,56,0.05) 0%, transparent 65%)' }}
         />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-12">
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Insurance</p>
@@ -132,7 +132,7 @@ export default function InsurancePage() {
                 <Link
                   href="/insurance/motor"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', background: PILLAR, color: '#fff', boxShadow: '0 4px 20px rgba(26,92,56,0.22)' }}
                 >
                   Compare motor insurance
                 </Link>
@@ -241,7 +241,7 @@ export default function InsurancePage() {
             {INSURERS.map((ins, i) => (
               <div
                 key={ins.name}
-                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-green-50' : 'bg-white hover:bg-slate-50'}`}
               >
                 {/* Desktop */}
                 <div
@@ -305,7 +305,7 @@ export default function InsurancePage() {
       {/* ══════════════════════════════ MOTOR CTA HIGHLIGHT ══════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.08)' }}>
+          <div className="rounded-2xl overflow-hidden border border-green-100" style={{ boxShadow: '0 4px 24px rgba(26,92,56,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #60a5fa)` }} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div style={{ padding: '48px 40px' }}>
@@ -323,7 +323,7 @@ export default function InsurancePage() {
                 <Link
                   href="/insurance/motor"
                   className="inline-flex items-center gap-2 font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(29,78,216,0.25)' }}
+                  style={{ fontSize: 15, padding: '14px 28px', background: PILLAR, color: '#fff', boxShadow: '0 4px 16px rgba(26,92,56,0.22)' }}
                 >
                   Compare motor insurance <ArrowRight size={14} />
                 </Link>
