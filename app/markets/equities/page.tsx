@@ -1,91 +1,69 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-
-const LISTED_SECURITIES = [
-  {
-    ticker: 'WB',
-    company: 'Wegagen Bank',
-    sector: 'Banking',
-    price: '142.50',
-    change: '+2.30',
-    changePct: '+1.64',
-    volume: '124,500',
-    mktCap: '4.2B',
-    pe: '12.4',
-    divYield: '3.2',
-    listed: 'Jan 2025',
-    badge: 'First listed',
-    description: 'One of Ethiopia\'s oldest private commercial banks, Wegagen was the first company to list on the ESX in January 2025.',
-  },
-  {
-    ticker: 'GB',
-    company: 'Gadaa Bank',
-    sector: 'Banking',
-    price: '98.75',
-    change: '+0.75',
-    changePct: '+0.77',
-    volume: '87,200',
-    mktCap: '1.8B',
-    pe: '9.8',
-    divYield: '2.5',
-    listed: 'Mar 2025',
-    badge: null,
-    description: 'Gadaa Bank is a mid-sized commercial bank with strong presence in Oromia region, listed on the ESX in March 2025.',
-  },
-  {
-    ticker: 'EIC',
-    company: 'Ethiopian Insurance Corporation',
-    sector: 'Insurance',
-    price: '210.00',
-    change: '-1.50',
-    changePct: '-0.71',
-    volume: '43,100',
-    mktCap: '6.1B',
-    pe: '15.2',
-    divYield: '1.8',
-    listed: 'Jun 2025',
-    badge: 'Largest by mkt cap',
-    description: 'The state-backed Ethiopian Insurance Corporation is the largest insurer in Ethiopia and the highest market-cap company currently on the ESX.',
-  },
-]
-
-const INDEX_STATS = [
-  { label: 'ESX Composite', value: '1,284.30', change: '+0.84%', sub: 'Index' },
-  { label: 'Total volume', value: '254,800', change: '+12.3%', sub: 'Shares traded today' },
-  { label: 'Market cap', value: 'ETB 12.1B', change: '+1.4%', sub: 'Total ESX market cap' },
-  { label: 'Listed companies', value: '3', change: '45+ in pipeline', sub: 'Active listings' },
-]
+const PILLAR = '#1D4ED8'
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
   </svg>
 )
-
 const ClockIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
   </svg>
 )
 
-const PILLAR = '#1D4ED8'
+function fmt(val: number | null | undefined, decimals = 2) {
+  if (val == null) return '—'
+  return Number(val).toFixed(decimals)
+}
+function fmtVol(val: number | null | undefined) {
+  if (val == null) return '—'
+  return Number(val).toLocaleString('en-ET')
+}
+function fmtCap(val: number | null | undefined) {
+  if (val == null) return '—'
+  const b = Number(val) / 1e9
+  return b.toFixed(1) + 'B'
+}
+function fmtDate(d: string | null | undefined) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
+}
 
-export default function EquitiesPage() {
+export default async function EquitiesPage() {
+  const supabase = createSupabaseAdminClient()
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+
+  const { data: securitiesData } = await supabase
+    .schema('birrbank')
+    .from('listed_securities')
+    .select('*, institutions(name, description)')
+    .eq('security_type', 'equity')
+    .order('market_cap_etb', { ascending: false })
+
+  const { count: ipoCount } = await supabase
+    .schema('birrbank')
+    .from('ipo_pipeline')
+    .select('count', { count: 'exact', head: true })
+    .neq('status', 'listed')
+    .neq('status', 'withdrawn')
+
+  const securities = securitiesData ?? []
+
+  const totalMktCap = securities.reduce((sum: number, s: any) => sum + (Number(s.market_cap_etb) || 0), 0)
+  const totalVolume = securities.reduce((sum: number, s: any) => sum + (Number(s.volume_today) || 0), 0)
+
   return (
     <div className="min-h-screen bg-white">
 
       {/* ══════════════════════════════ HERO ══════════════════════════════════════ */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
-        />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-
-          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
             <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
             <span>›</span>
@@ -93,14 +71,10 @@ export default function EquitiesPage() {
             <span>›</span>
             <span style={{ color: PILLAR, fontWeight: 700 }}>Listed Equities</span>
           </div>
-
           <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>
             Markets · Listed Equities
           </p>
-          <h1
-            className="font-serif font-bold mb-5 text-slate-950"
-            style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
-          >
+          <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
             All ESX-listed equities —<br />
             <span style={{ color: PILLAR }}>prices, volumes and fundamentals.</span>
           </h1>
@@ -108,13 +82,11 @@ export default function EquitiesPage() {
             Every company trading on the Ethiopian Securities Exchange. End-of-day prices,
             volumes, P/E ratios and dividend yields — sourced directly from ESX.
           </p>
-
-          {/* Stats bar */}
           <div className="flex flex-wrap gap-6">
             {[
-              { icon: <ClockIcon />, label: '3 companies currently listed' },
+              { icon: <ClockIcon />, label: securities.length + ' companies currently listed' },
               { icon: <ClockIcon />, label: 'End-of-day prices from ESX' },
-              { icon: <ClockIcon />, label: '45+ IPOs in pipeline' },
+              { icon: <ClockIcon />, label: (ipoCount ?? 0) + ' IPOs in pipeline' },
               { icon: <ClockIcon />, label: 'Updated every market day' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
@@ -130,13 +102,18 @@ export default function EquitiesPage() {
       <section className="border-b border-slate-100 bg-white" style={{ padding: '32px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {INDEX_STATS.map((s) => (
+            {[
+              { label: 'Listed companies',  value: securities.length.toString(),       change: (ipoCount ?? 0) + '+ in pipeline', sub: 'Active listings' },
+              { label: 'Total volume',      value: fmtVol(totalVolume),                change: 'Today',                            sub: 'Shares traded today' },
+              { label: 'Total market cap',  value: 'ETB ' + fmtCap(totalMktCap),      change: 'ESX total',                        sub: 'Combined market cap' },
+              { label: 'IPO pipeline',      value: (ipoCount ?? 0).toString(),         change: 'Under review',                     sub: 'Upcoming listings' },
+            ].map((s) => (
               <div key={s.label} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                 <div style={{ height: 3, background: PILLAR }} />
                 <div style={{ padding: '16px 20px' }}>
                   <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">{s.label}</p>
                   <p className="font-mono font-black text-slate-950" style={{ fontSize: '20px', letterSpacing: '-0.5px', lineHeight: 1 }}>{s.value}</p>
-                  <p className={`text-xs font-semibold mt-1 ${s.change.startsWith('+') ? 'text-green-600' : 'text-slate-400'}`}>{s.change}</p>
+                  <p className="text-xs font-semibold mt-1 text-slate-400">{s.change}</p>
                 </div>
               </div>
             ))}
@@ -145,10 +122,8 @@ export default function EquitiesPage() {
       </section>
 
       {/* ══════════════════════════════ EQUITIES TABLE ════════════════════════════ */}
-      {/* NO ADS on securities pages — comparison integrity rule */}
       <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
         <div className="max-w-6xl mx-auto">
-
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">ESX listed companies</p>
@@ -159,95 +134,71 @@ export default function EquitiesPage() {
             <div className="flex items-center gap-2 shrink-0">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
               <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
-                End-of-day · 24 Apr 2026
+                End-of-day · {today}
               </span>
             </div>
           </div>
 
-          {/* Full table */}
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #a78bfa)' }} />
-
-            {/* Desktop header */}
-            <div
-              className="hidden lg:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '80px 1fr 120px 120px 110px 100px 90px 110px', padding: '13px 24px', background: '#f9fafb' }}
-            >
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+            <div className="hidden lg:grid border-b border-slate-200" style={{ gridTemplateColumns: '80px 1fr 120px 120px 110px 100px 90px 110px', padding: '13px 24px', background: '#f9fafb' }}>
               {['Ticker', 'Company', 'Sector', 'Price (ETB)', 'Change', 'Volume', 'P/E', 'Div yield'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
 
-            {LISTED_SECURITIES.map((s) => (
-              <div
-                key={s.ticker}
-                className="border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
-              >
-                {/* Desktop */}
-                <div
-                  className="hidden lg:grid items-center"
-                  style={{ gridTemplateColumns: '80px 1fr 120px 120px 110px 100px 90px 110px', padding: '18px 24px' }}
-                >
-                  <span
-                    className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center"
-                    style={{ background: '#EFF6FF', color: PILLAR }}
-                  >
-                    {s.ticker}
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company}</p>
-                      {s.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#EFF6FF', color: PILLAR }}>
-                          {s.badge}
-                        </span>
-                      )}
+            {securities.length > 0 ? securities.map((s: any) => {
+              const changePos = Number(s.price_change_pct) >= 0
+              return (
+                <div key={s.ticker} className="border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors">
+                  <div className="hidden lg:grid items-center" style={{ gridTemplateColumns: '80px 1fr 120px 120px 110px 100px 90px 110px', padding: '18px 24px' }}>
+                    <span className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center" style={{ background: '#EFF6FF', color: PILLAR }}>{s.ticker}</span>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company_name}</p>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-0.5">Listed {fmtDate(s.listing_date)}</p>
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">Listed {s.listed}</p>
+                    <p className="text-sm text-slate-500">{s.sector ?? '—'}</p>
+                    <p className="font-mono font-black text-slate-900" style={{ fontSize: '20px', letterSpacing: '-0.5px' }}>{fmt(s.last_price_etb)}</p>
+                    <div>
+                      <p className={'font-mono font-bold text-sm ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                        {changePos ? '+' : ''}{fmt(s.price_change_pct)}%
+                      </p>
+                    </div>
+                    <p className="font-mono text-slate-600 text-sm">{fmtVol(s.volume_today)}</p>
+                    <p className="font-mono text-slate-600 text-sm">{s.pe_ratio ? fmt(s.pe_ratio) + 'x' : '—'}</p>
+                    <p className="font-mono text-slate-600 text-sm">{s.dividend_yield_pct ? fmt(s.dividend_yield_pct) + '%' : '—'}</p>
                   </div>
-                  <p className="text-sm text-slate-500">{s.sector}</p>
-                  <p className="font-mono font-black text-slate-900" style={{ fontSize: '20px', letterSpacing: '-0.5px' }}>{s.price}</p>
-                  <div>
-                    <p className={`font-mono font-bold text-sm ${s.change.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
-                      {s.change}
-                    </p>
-                    <p className={`font-mono text-xs ${s.changePct.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
-                      {s.changePct}
-                    </p>
-                  </div>
-                  <p className="font-mono text-slate-600 text-sm">{s.volume}</p>
-                  <p className="font-mono text-slate-600 text-sm">{s.pe}x</p>
-                  <p className="font-mono text-slate-600 text-sm">{s.divYield}%</p>
-                </div>
-
-                {/* Tablet / mobile */}
-                <div className="lg:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
-                  <span className="font-mono font-black text-xs rounded-lg px-2 py-1.5 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{s.ticker}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-800 text-sm truncate">{s.company}</p>
-                    <p className="text-xs text-slate-400">{s.sector} · Vol {s.volume} · P/E {s.pe}x</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px' }}>{s.price}</p>
-                    <p className={`font-mono font-bold text-xs ${s.changePct.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>{s.changePct}</p>
+                  <div className="lg:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
+                    <span className="font-mono font-black text-xs rounded-lg px-2 py-1.5 shrink-0" style={{ background: '#EFF6FF', color: PILLAR }}>{s.ticker}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-slate-800 text-sm truncate">{s.company_name}</p>
+                      <p className="text-xs text-slate-400">{s.sector} · Vol {fmtVol(s.volume_today)} · P/E {s.pe_ratio ? fmt(s.pe_ratio) + 'x' : '—'}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px' }}>{fmt(s.last_price_etb)}</p>
+                      <p className={'font-mono font-bold text-xs ' + (changePos ? 'text-green-600' : 'text-red-500')}>
+                        {changePos ? '+' : ''}{fmt(s.price_change_pct)}%
+                      </p>
+                    </div>
                   </div>
                 </div>
+              )
+            }) : (
+              <div className="py-12 text-center">
+                <p className="text-slate-500 text-sm">No equities data available. Check back after market hours.</p>
               </div>
-            ))}
+            )}
 
-            {/* Table footer */}
-            <div
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200"
-              style={{ background: '#f9fafb', padding: '14px 24px' }}
-            >
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Securities Exchange (esx.et) · End-of-day prices · Updated every market day</p>
               <Link href="/markets/ipo-pipeline" className="text-xs font-bold hover:underline shrink-0" style={{ color: PILLAR }}>
-                See 45+ IPOs in pipeline →
+                See {ipoCount ?? 0}+ IPOs in pipeline →
               </Link>
             </div>
           </div>
 
-          {/* Disclaimer */}
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
             Prices are for comparison and informational purposes only. Always verify current prices
             directly with your broker or the ESX before making any investment decision.
@@ -266,34 +217,38 @@ export default function EquitiesPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {LISTED_SECURITIES.map((s) => (
+            {securities.map((s: any) => (
               <div key={s.ticker} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                 <div style={{ height: 3, background: PILLAR }} />
                 <div style={{ padding: '28px 24px' }}>
                   <div className="flex items-center gap-3 mb-4">
                     <span className="font-mono font-black text-sm rounded-lg px-3 py-1.5" style={{ background: '#EFF6FF', color: PILLAR }}>{s.ticker}</span>
                     <div>
-                      <p className="font-bold text-slate-900" style={{ fontSize: '14px' }}>{s.company}</p>
-                      <p className="text-xs text-slate-400">Listed {s.listed}</p>
+                      <p className="font-bold text-slate-900" style={{ fontSize: '14px' }}>{s.company_name}</p>
+                      <p className="text-xs text-slate-400">Listed {fmtDate(s.listing_date)}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-500 mb-5" style={{ lineHeight: 1.75 }}>{s.description}</p>
+                  {s.institutions?.description ? (
+                    <p className="text-sm text-slate-500 mb-5" style={{ lineHeight: 1.75 }}>{s.institutions.description}</p>
+                  ) : (
+                    <p className="text-sm text-slate-400 mb-5" style={{ lineHeight: 1.75 }}>{s.company_name} is listed on the Ethiopian Securities Exchange.</p>
+                  )}
                   <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
                     <div>
                       <p className="text-xs text-slate-400 mb-0.5">Market cap</p>
-                      <p className="font-mono font-bold text-slate-800 text-sm">ETB {s.mktCap}</p>
+                      <p className="font-mono font-bold text-slate-800 text-sm">ETB {fmtCap(s.market_cap_etb)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 mb-0.5">Div yield</p>
-                      <p className="font-mono font-bold text-slate-800 text-sm">{s.divYield}%</p>
+                      <p className="font-mono font-bold text-slate-800 text-sm">{s.dividend_yield_pct ? fmt(s.dividend_yield_pct) + '%' : '—'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 mb-0.5">P/E ratio</p>
-                      <p className="font-mono font-bold text-slate-800 text-sm">{s.pe}x</p>
+                      <p className="font-mono font-bold text-slate-800 text-sm">{s.pe_ratio ? fmt(s.pe_ratio) + 'x' : '—'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 mb-0.5">Sector</p>
-                      <p className="font-bold text-slate-800 text-sm">{s.sector}</p>
+                      <p className="font-bold text-slate-800 text-sm">{s.sector ?? '—'}</p>
                     </div>
                   </div>
                 </div>
@@ -320,7 +275,7 @@ export default function EquitiesPage() {
           <div className="flex flex-col gap-3 shrink-0">
             {[
               { dot: '#22c55e', label: 'ESX verified',      sub: 'Official exchange source' },
-              { dot: PILLAR,    label: 'End-of-day',          sub: 'Not real-time — timestamped' },
+              { dot: PILLAR,    label: 'End-of-day',         sub: 'Not real-time — timestamped' },
               { dot: '#94a3b8', label: 'No commercial bias', sub: 'Rankings never sold' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
