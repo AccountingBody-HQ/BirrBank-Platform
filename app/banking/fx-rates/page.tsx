@@ -157,7 +157,8 @@ export default function FXRatesPage() {
               className="inline-flex items-center gap-1.5 text-xs font-bold shrink-0 ml-4"
               style={{ color: '#1A5C38' }}
             >
-              View on NBE.gov.et <ArrowRight size={11} />
+              <span>View on NBE.gov.et</span>
+              <ArrowRight size={11} />
             </a>
           </div>
         </div>
