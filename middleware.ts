@@ -28,7 +28,7 @@ const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 export default clerkMiddleware(async (auth, request) => {
   const path = request.nextUrl.pathname
 
-  // Admin pages — redirect to login if no valid token
+  // Legacy admin pages (roodber8) — keep protected during transition
   if (path.startsWith('/roodber8') && !path.startsWith('/roodber8-login')) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
@@ -36,8 +36,15 @@ export default clerkMiddleware(async (auth, request) => {
     }
   }
 
+  // BirrBank admin pages — redirect to admin-login if no valid token
+  if (path.startsWith('/admin') && !path.startsWith('/admin-login')) {
+    const token = request.cookies.get('admin_token')?.value
+    if (!await tokenValid(token)) {
+      return NextResponse.redirect(new URL('/admin-login', request.url))
+    }
+  }
+
   // Admin API routes — return 401 if no valid token
-  // excludes /api/admin-auth and /api/admin-logout (must stay public)
   const isAdminApi = (
     (path.startsWith('/api/admin-') &&
       !path.startsWith('/api/admin-auth') &&
