@@ -114,24 +114,36 @@ export default function Navigation() {
               key={item.label}
               className="relative"
             >
-              <button
-                onClick={() => toggleDropdown(item.label)}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all"
-                style={{
-                  color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
-                  fontWeight: isActive(item.href) ? 700 : 600,
-                  background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                {item.label}
-                <ChevronDown
-                  size={11}
-                  style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
-                  className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
-                />
-              </button>
+              <div className="flex items-center">
+                <Link
+                  href={item.href}
+                  className="flex items-center px-3 py-2 rounded-l-lg text-sm transition-all"
+                  style={{
+                    color:      isActive(item.href) ? '#1D4ED8' : '#0f172a',
+                    fontWeight: isActive(item.href) ? 700 : 600,
+                    background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
+                  }}
+                  onClick={() => setOpenDropdown(null)}
+                >
+                  {item.label}
+                </Link>
+                <button
+                  onClick={() => toggleDropdown(item.label)}
+                  className="flex items-center px-1 py-2 rounded-r-lg text-sm transition-all"
+                  style={{
+                    background: isActive(item.href) ? 'rgba(29,78,216,0.08)' : 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    paddingRight: '8px',
+                  }}
+                >
+                  <ChevronDown
+                    size={11}
+                    style={{ color: isActive(item.href) ? '#1D4ED8' : '#64748b' }}
+                    className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')}
+                  />
+                </button>
+              </div>
 
               {openDropdown === item.label && (
                 <div
