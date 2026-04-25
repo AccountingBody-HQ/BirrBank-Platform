@@ -132,7 +132,7 @@ export default function BankingHubPage() {
                 <Link
                   href="/banking/fx-rates"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1A5C38', color: '#1D4ED8', background: 'transparent' }}
+                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, textAlign: 'center', border: '2px solid #1D4ED8', color: '#1D4ED8', background: 'transparent' }}
                 >
                   Check FX rates
                 </Link>

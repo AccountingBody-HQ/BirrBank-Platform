@@ -118,27 +118,33 @@ export default function Navigation() {
 
               {openDropdown === item.label && (
                 <div
-                  className="absolute left-0 w-52 z-50"
-                  style={{
-                    top: '100%',
-                    paddingTop: '6px',
-                    background: 'transparent',
-                  }}
+                  className="absolute left-0 w-56 z-50"
+                  style={{ top: 'calc(100% + 4px)' }}
                 >
-                  {item.sub.map(s => (
-                    <Link
-                      key={s.href}
-                      href={s.href}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-white"
-                      style={{ color: '#1e293b', fontWeight: 500 }}
-                    >
-                      <span
-                        className="w-1.5 h-1.5 rounded-full shrink-0"
-                        style={{ background: '#1D4ED8' }}
-                      />
-                      {s.label}
-                    </Link>
-                  ))}
+                  <div style={{
+                    background: '#ffffff',
+                    border: '1.5px solid #e2e8f0',
+                    borderRadius: '12px',
+                    boxShadow: '0 20px 48px rgba(0,0,0,0.14)',
+                    padding: '6px 0',
+                    overflow: 'hidden',
+                  }}>
+                    {item.sub.map(s => (
+                      <Link
+                        key={s.href}
+                        href={s.href}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-slate-50"
+                        style={{ color: '#1e293b', fontWeight: 500 }}
+                        onClick={() => setOpenDropdown(null)}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full shrink-0"
+                          style={{ background: '#1D4ED8' }}
+                        />
+                        {s.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
