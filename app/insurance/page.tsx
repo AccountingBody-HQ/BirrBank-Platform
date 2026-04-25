@@ -165,7 +165,7 @@ export default function InsurancePage() {
       </section>
 
       {/* ══════════════════════════════ PRODUCT TYPES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -231,7 +231,7 @@ export default function InsurancePage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 100px 1fr 80px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '1fr 100px 1fr 80px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Insurer', 'Type', 'Products offered', 'Score'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -241,7 +241,7 @@ export default function InsurancePage() {
             {INSURERS.map((ins, i) => (
               <div
                 key={ins.name}
-                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-white'}`}
               >
                 {/* Desktop */}
                 <div
@@ -292,7 +292,7 @@ export default function InsurancePage() {
               </div>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: NBE insurer registry (nbe.gov.et) · 18 licensed insurers total</p>
               <Link href="/institutions?type=insurer" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All 18 insurers →
@@ -303,7 +303,7 @@ export default function InsurancePage() {
       </section>
 
       {/* ══════════════════════════════ MOTOR CTA HIGHLIGHT ══════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #60a5fa)` }} />

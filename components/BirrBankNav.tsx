@@ -129,7 +129,7 @@ export default function Navigation() {
                     <Link
                       key={s.href}
                       href={s.href}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-slate-50"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors hover:bg-white"
                       style={{ color: '#1e293b', fontWeight: 500 }}
                     >
                       <span
@@ -152,7 +152,7 @@ export default function Navigation() {
             style={{
               padding: '9px 16px',
               minWidth: 210,
-              background: '#f8fafc',
+              background: '#ffffff',
               border: '1.5px solid #94a3b8',
               borderRadius: 999,
               boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)'
@@ -191,7 +191,7 @@ export default function Navigation() {
               key={item.label}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="block px-3 py-2.5 text-sm rounded-lg transition-colors hover:bg-slate-50"
+              className="block px-3 py-2.5 text-sm rounded-lg transition-colors hover:bg-white"
               style={{
                 color:      isActive(item.href) ? '#1D4ED8' : '#1e293b',
                 fontWeight: isActive(item.href) ? 700 : 600,

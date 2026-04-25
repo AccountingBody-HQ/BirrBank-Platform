@@ -37,7 +37,7 @@ function SignUpPrompt() {
       <p className="text-slate-500 text-sm mb-4">Create a free account for 10 questions per month.</p>
       <div className="flex gap-2 justify-center">
         <a href="/sign-up/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Create free account</a>
-        <a href="/sign-in/" className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Sign in</a>
+        <a href="/sign-in/" className="bg-white hover:bg-white border border-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Sign in</a>
       </div>
     </div>
   );
@@ -59,7 +59,7 @@ function UpgradePrompt() {
         </div>
         <div className="flex gap-2">
           <a href="/pricing/" className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl text-sm">Upgrade — $29/mo</a>
-          <a href="/pricing/" className="text-center bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm">$249/yr</a>
+          <a href="/pricing/" className="text-center bg-white border border-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl text-sm">$249/yr</a>
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
   }
 
   return (
-    <div className="flex flex-col bg-slate-50" style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, overflow: "hidden" }}>
+    <div className="flex flex-col bg-white" style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, overflow: "hidden" }}>
 
       {/* Header */}
       <div className="border-b border-slate-200 bg-white shrink-0 shadow-sm">

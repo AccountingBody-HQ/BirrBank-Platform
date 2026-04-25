@@ -124,10 +124,10 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                   {inst.type}
                 </p>
                 {inst.badge && (
-                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>{inst.badge}</span>
+                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#ffffff', color: '#1D4ED8' }}>{inst.badge}</span>
                 )}
                 {inst.is_listed_on_esx && (
-                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#EFF6FF', color: '#1D4ED8' }}>
+                  <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#ffffff', color: '#1D4ED8' }}>
                     ESX: {inst.ticker}
                   </span>
                 )}
@@ -184,7 +184,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
       {/* ══════════════════ DUAL-VIEW TABS (if ESX listed) ════════════════════════ */}
       {inst.is_listed_on_esx && inst.stock && (
-        <section className="border-b border-slate-100" style={{ background: '#EFF6FF', padding: '64px 32px' }}>
+        <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '64px 32px' }}>
           <div className="max-w-6xl mx-auto">
             <div className="rounded-2xl overflow-hidden border border-purple-100" style={{ boxShadow: '0 4px 24px rgba(124,58,237,0.08)' }}>
               <div style={{ height: 4, background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }} />
@@ -247,13 +247,13 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
 
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: '12px 24px', background: '#f8fafc' }}>
+            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: '12px 24px', background: '#ffffff' }}>
               {['Product', 'Annual rate', 'Min. balance', 'Term', 'Last verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
             {inst.savings.map((s, i) => (
-              <div key={s.product} className={`border-b border-slate-100 ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'} transition-colors`}>
+              <div key={s.product} className={`border-b border-slate-100 ${i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-white'} transition-colors`}>
                 <div className="hidden sm:grid items-center" style={{ gridTemplateColumns: '1fr 120px 120px 100px 110px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
                   <div>
                     <p className={`font-bold ${i === 0 ? 'text-blue-900' : 'text-slate-800'}`} style={{ fontSize: i === 0 ? '15px' : '14px' }}>{s.product}</p>
@@ -278,7 +278,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                 </div>
               </div>
             ))}
-            <div className="bg-slate-50 border-t border-slate-200" style={{ padding: '12px 24px' }}>
+            <div className="bg-white border-t border-slate-200" style={{ padding: '12px 24px' }}>
               <p className="text-xs text-slate-400">Rates for comparison only · Verify directly with {inst.name} · BirrBank is not a financial adviser</p>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
       </section>
 
       {/* ══════════════════════════════ LOAN RATES ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>

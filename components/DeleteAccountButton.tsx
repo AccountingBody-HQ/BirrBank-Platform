@@ -47,7 +47,7 @@ export default function DeleteAccountButton() {
               <button onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors">
                 Yes, delete my account
               </button>
-              <button onClick={() => setStep("idle")} className="border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl px-4 py-2 text-sm font-semibold transition-colors">
+              <button onClick={() => setStep("idle")} className="border border-slate-200 text-slate-600 hover:bg-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors">
                 Cancel
               </button>
             </div>

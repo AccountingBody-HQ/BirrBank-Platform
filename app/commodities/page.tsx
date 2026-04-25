@@ -146,7 +146,7 @@ export default function CommoditiesPage() {
       </section>
 
       {/* ══════════════════════════════ SUB-CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -214,7 +214,7 @@ export default function CommoditiesPage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '120px 1fr 120px 140px 110px 100px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '120px 1fr 120px 140px 110px 100px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['ECX Code', 'Grade & Origin', 'Region', 'Price (ETB/kg)', 'Change', 'Volume'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -224,7 +224,7 @@ export default function CommoditiesPage() {
             {COFFEE_PRICES.map((c, i) => (
               <div
                 key={c.code}
-                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-amber-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-amber-50' : 'bg-white hover:bg-white'}`}
               >
                 {/* Desktop */}
                 <div
@@ -255,7 +255,7 @@ export default function CommoditiesPage() {
               </div>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Commodity Exchange (ecx.com.et) · Prices in ETB per kg</p>
               <Link href="/commodities/coffee" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All coffee grades →
@@ -266,7 +266,7 @@ export default function CommoditiesPage() {
       </section>
 
       {/* ══════════════════════════════ OTHER COMMODITIES ════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>

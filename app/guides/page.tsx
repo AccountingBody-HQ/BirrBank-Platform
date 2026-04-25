@@ -146,7 +146,7 @@ export default function GuidesPage() {
       </section>
 
       {/* ══════════════════════════════ GUIDE CATEGORIES ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Browse by topic</p>
@@ -204,7 +204,7 @@ export default function GuidesPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3" style={{ padding: '36px 36px' }}>
                 <div className="lg:col-span-2 pr-0 lg:pr-12">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#f8faf8', color: '#1D4ED8' }}>
+                    <span className="text-xs font-bold rounded-full px-3 py-1" style={{ background: '#ffffff', color: '#1D4ED8' }}>
                       {FEATURED_GUIDES[0].pillar}
                     </span>
                     <span className="text-xs text-slate-400">{FEATURED_GUIDES[0].readTime}</span>
@@ -219,7 +219,7 @@ export default function GuidesPage() {
                     <span>Read guide</span><ArrowRight size={13} />
                   </div>
                 </div>
-                <div className="hidden lg:flex items-center justify-center" style={{ background: '#f8faf8', borderRadius: 16, padding: '32px' }}>
+                <div className="hidden lg:flex items-center justify-center" style={{ background: '#ffffff', borderRadius: 16, padding: '32px' }}>
                   <div className="text-center">
                     <p className="font-mono font-black mb-1" style={{ fontSize: '48px', color: '#1D4ED8', letterSpacing: '-2px', lineHeight: 1 }}>9.50%</p>
                     <p className="text-sm font-bold text-slate-600">Best rate today</p>
@@ -265,7 +265,7 @@ export default function GuidesPage() {
       </section>
 
       {/* ══════════════════════════════ AI ASSISTANT CTA ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="rounded-2xl overflow-hidden border border-blue-100" style={{ boxShadow: '0 4px 24px rgba(29,78,216,0.06)' }}>
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #22d3ee)` }} />
@@ -333,7 +333,7 @@ export default function GuidesPage() {
               <Link
                 key={reg.title}
                 href="/regulations"
-                className="flex items-center justify-between gap-4 border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                className="flex items-center justify-between gap-4 border-b border-slate-100 bg-white hover:bg-white transition-colors"
                 style={{ padding: '18px 24px' }}
               >
                 <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -352,7 +352,7 @@ export default function GuidesPage() {
                 <ArrowRight size={13} />
               </Link>
             ))}
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Sources: NBE (nbe.gov.et) · ECMA (ecma.gov.et) · ECX (ecx.com.et)</p>
               <Link href="/regulations" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 All directives →

@@ -177,7 +177,7 @@ export default function HomePage() {
                   {TOP_RATES.map((r) => (
                     <div
                       key={r.rank}
-                      className={`flex items-center gap-4 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
+                      className={`flex items-center gap-4 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-white'}`}
                       style={{ padding: r.rank === 1 ? '16px 20px' : '12px 20px' }}
                     >
                       <div
@@ -211,7 +211,7 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <div className="px-5 py-3 bg-white border-t border-slate-100 flex items-center justify-between">
                   <p className="text-xs text-slate-400">Official bank sources · NBE registry</p>
                   <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
                     See all 32 banks →
@@ -243,7 +243,7 @@ export default function HomePage() {
       </section>
 
       {/* ═════════════════════════════ PRODUCT CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-10">
@@ -268,7 +268,7 @@ export default function HomePage() {
                 <div className="flex flex-col flex-1" style={{ padding: '28px 24px 24px' }}>
                   <div
                     className="rounded-xl flex items-center justify-center shrink-0 mb-5"
-                    style={{ width: 48, height: 48, background: '#f8fafc' }}
+                    style={{ width: 48, height: 48, background: '#ffffff' }}
                   >
                     {cat.icon}
                   </div>
@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════ FEATURED: FX RATES ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">

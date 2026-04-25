@@ -149,7 +149,7 @@ export default function MarketsPage() {
       </section>
 
       {/* ══════════════════════════════ SUB-CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -210,7 +210,7 @@ export default function MarketsPage() {
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #a78bfa)` }} />
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '80px 1fr 120px 110px 110px 110px 110px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '80px 1fr 120px 110px 110px 110px 110px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Ticker', 'Company', 'Sector', 'Price (ETB)', 'Change', 'Volume', 'Mkt Cap'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -221,7 +221,7 @@ export default function MarketsPage() {
               <Link
                 key={s.ticker}
                 href={`/markets/${s.ticker.toLowerCase()}`}
-                className="block border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                className="block border-b border-slate-100 bg-white hover:bg-white transition-colors"
               >
                 {/* Desktop */}
                 <div
@@ -231,7 +231,7 @@ export default function MarketsPage() {
                   <span className="font-mono font-black text-sm rounded-lg px-2 py-1 text-center" style={{ background: PILLAR_BG, color: PILLAR }}>{s.ticker}</span>
                   <div>
                     <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{s.company}</p>
-                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#f8faf8', color: PILLAR }}>{s.badge}</span>}
+                    {s.badge && <span className="text-xs font-bold rounded-full px-2 py-0.5 mt-0.5 inline-block" style={{ background: '#ffffff', color: PILLAR }}>{s.badge}</span>}
                   </div>
                   <p className="text-sm text-slate-500">{s.sector}</p>
                   <p className="font-mono font-black text-slate-900" style={{ fontSize: '18px', letterSpacing: '-0.5px' }}>{s.price}</p>
@@ -256,7 +256,7 @@ export default function MarketsPage() {
               </Link>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: Ethiopian Securities Exchange (esx.et) · End-of-day prices</p>
               <Link href="/markets/equities" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Full equities view →
@@ -267,7 +267,7 @@ export default function MarketsPage() {
       </section>
 
       {/* ══════════════════════════════ IPO PIPELINE ═════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
@@ -285,7 +285,7 @@ export default function MarketsPage() {
             <div style={{ height: 4, background: `linear-gradient(90deg, ${PILLAR}, #a78bfa)` }} />
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 120px 100px 120px 160px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '1fr 120px 100px 120px 160px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Company', 'Sector', 'Shares', 'Lead manager', 'Status'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -295,7 +295,7 @@ export default function MarketsPage() {
             {IPO_PIPELINE.map((ipo) => (
               <div
                 key={ipo.company}
-                className="hidden sm:grid items-center border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                className="hidden sm:grid items-center border-b border-slate-100 bg-white hover:bg-white transition-colors"
                 style={{ gridTemplateColumns: '1fr 120px 100px 120px 160px', padding: '14px 24px' }}
               >
                 <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{ipo.company}</p>
@@ -306,7 +306,7 @@ export default function MarketsPage() {
                   className="text-xs font-bold rounded-full px-3 py-1 inline-flex w-fit items-center gap-1.5"
                   style={ipo.status === 'Under review'
                     ? { background: '#fef3c7', color: '#92400e' }
-                    : { background: '#f8faf8', color: PILLAR }}
+                    : { background: '#ffffff', color: PILLAR }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: ipo.status === 'Under review' ? '#f59e0b' : PILLAR }} />
                   {ipo.status}
@@ -319,7 +319,7 @@ export default function MarketsPage() {
               <div key={ipo.company + '-mob'} className="sm:hidden border-b border-slate-100 bg-white" style={{ padding: '14px 16px' }}>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-slate-800 text-sm">{ipo.company}</p>
-                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#f8faf8', color: PILLAR }}>
+                  <span className="text-xs font-bold rounded-full px-2 py-0.5" style={ipo.status === 'Under review' ? { background: '#fef3c7', color: '#92400e' } : { background: '#ffffff', color: PILLAR }}>
                     {ipo.status}
                   </span>
                 </div>
@@ -327,7 +327,7 @@ export default function MarketsPage() {
               </div>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Source: ECMA (Ethiopian Capital Markets Authority) · Updated monthly</p>
               <Link href="/markets/ipo-pipeline" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 See all 45+ IPOs →

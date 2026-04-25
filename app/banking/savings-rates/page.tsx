@@ -139,7 +139,7 @@ export default function SavingsRatesPage() {
             {/* Table header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#ffffff' }}
             >
               {['#', 'Bank', 'Account type', 'Min. balance', 'Annual rate', 'Last verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -150,7 +150,7 @@ export default function SavingsRatesPage() {
             {SAVINGS_RATES.map((r) => (
               <div
                 key={r.rank}
-                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-white'}`}
               >
                 {/* Desktop row */}
                 <div
@@ -186,7 +186,7 @@ export default function SavingsRatesPage() {
                               ? { background: '#fef3c7', color: '#92400e' }
                               : r.badge === 'Best rate'
                               ? { background: '#dbeafe', color: '#1D4ED8' }
-                              : { background: '#eff6ff', color: '#1e40af' }
+                              : { background: '#ffffff', color: '#1e40af' }
                           }
                         >
                           {r.badge}
@@ -244,7 +244,7 @@ export default function SavingsRatesPage() {
             ))}
 
             {/* Table footer */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-slate-50" style={{ padding: '14px 24px' }}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-white" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Showing {SAVINGS_RATES.length} of 32 banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
               </p>
@@ -264,7 +264,7 @@ export default function SavingsRatesPage() {
       </section>
 
       {/* ══════════════════════════════ HOW TO CHOOSE ════════════════════════════ */}
-      <section className="border-b border-y border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-y border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>

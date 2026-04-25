@@ -160,7 +160,7 @@ export default function FxRatesPage() {
       </section>
 
       {/* ══════════════════════ PER-BANK RATE COMPARISON TABLE ════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '64px 32px 96px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '64px 32px 96px' }}>
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-8">
@@ -182,7 +182,7 @@ export default function FxRatesPage() {
             {/* Header */}
             <div
               className="hidden lg:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Bank', 'USD Buy', 'USD Sell', 'EUR Buy', 'EUR Sell', 'GBP Buy', 'GBP Sell', 'Verified'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -208,7 +208,7 @@ export default function FxRatesPage() {
             {BANK_RATES.map((r, i) => (
               <div
                 key={r.bank}
-                className="hidden lg:grid items-center border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                className="hidden lg:grid items-center border-b border-slate-100 bg-white hover:bg-white transition-colors"
                 style={{ gridTemplateColumns: '1fr 100px 100px 100px 100px 100px 100px 110px', padding: '13px 24px' }}
               >
                 <p className="font-semibold text-slate-800" style={{ fontSize: '14px' }}>{r.bank}</p>
@@ -240,7 +240,7 @@ export default function FxRatesPage() {
                     { label: 'EUR sell', val: r.eur_sell },
                     { label: 'GBP sell', val: r.gbp_sell },
                   ].map((fx) => (
-                    <div key={fx.label} className="bg-slate-50 rounded-lg text-center" style={{ padding: '8px' }}>
+                    <div key={fx.label} className="bg-white rounded-lg text-center" style={{ padding: '8px' }}>
                       <p className="text-xs text-slate-400 mb-1">{fx.label}</p>
                       <p className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{fx.val}</p>
                     </div>
@@ -250,7 +250,7 @@ export default function FxRatesPage() {
             ))}
 
             {/* Table footer */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-slate-50" style={{ padding: '14px 24px' }}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200 bg-white" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Rates sourced from individual bank websites · NBE rate from nbe.gov.et · All rates ETB per 1 foreign unit
               </p>

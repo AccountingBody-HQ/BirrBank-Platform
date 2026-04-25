@@ -101,7 +101,7 @@ export default function InstitutionsPage() {
       </section>
 
       {/* ══════════════════════════════ CATEGORY GRID ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Browse by type</p>
@@ -178,7 +178,7 @@ export default function InstitutionsPage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Bank', 'Type', 'Founded', 'Best savings rate', 'Score'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -189,7 +189,7 @@ export default function InstitutionsPage() {
               <Link
                 key={b.slug}
                 href={`/institutions/${b.slug}`}
-                className={`block border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50 hover:bg-green-100' : 'bg-white hover:bg-slate-50'}`}
+                className={`block border-b border-slate-100 transition-colors ${i === 0 ? 'bg-blue-50 hover:bg-green-100' : 'bg-white hover:bg-white'}`}
               >
                 {/* Desktop */}
                 <div
@@ -203,7 +203,7 @@ export default function InstitutionsPage() {
                         {b.name}
                       </p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#f8faf8', color: '#1D4ED8' }}>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#ffffff', color: '#1D4ED8' }}>
                           {b.badge}
                         </span>
                       )}
@@ -228,7 +228,7 @@ export default function InstitutionsPage() {
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <p className="font-bold text-slate-800 text-sm">{b.name}</p>
                       {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#f8faf8', color: '#1D4ED8' }}>{b.badge}</span>
+                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#ffffff', color: '#1D4ED8' }}>{b.badge}</span>
                       )}
                     </div>
                     <p className="text-xs text-slate-400">{b.type} · Est. {b.founded}</p>
@@ -243,7 +243,7 @@ export default function InstitutionsPage() {
               </Link>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">
                 Showing {FEATURED_BANKS.length} of 32 banks · Source: NBE registry (nbe.gov.et)
               </p>

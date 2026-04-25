@@ -31,7 +31,7 @@ export default function SignInPage() {
               cardBox: 'w-full',
               headerTitle: 'text-slate-900 font-bold text-lg',
               headerSubtitle: 'text-slate-500 text-sm',
-              socialButtonsBlockButton: 'border border-slate-200 hover:bg-slate-50 rounded-xl font-medium text-sm',
+              socialButtonsBlockButton: 'border border-slate-200 hover:bg-white rounded-xl font-medium text-sm',
               dividerLine: 'bg-slate-200',
               dividerText: 'text-slate-400 text-xs',
               formFieldLabel: 'text-slate-700 text-sm font-medium',

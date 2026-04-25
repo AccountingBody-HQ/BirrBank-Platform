@@ -169,7 +169,7 @@ export default function DiasporaPage() {
       </section>
 
       {/* ══════════════════════════════ SUB PAGES ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -247,7 +247,7 @@ export default function DiasporaPage() {
       </section>
 
       {/* ══════════════════════════════ REMITTANCE COMPARISON ════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
@@ -267,7 +267,7 @@ export default function DiasporaPage() {
             {/* Header */}
             <div
               className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 100px 120px 110px 100px 130px', padding: '12px 24px', background: '#f8fafc' }}
+              style={{ gridTemplateColumns: '1fr 100px 120px 110px 100px 130px', padding: '12px 24px', background: '#ffffff' }}
             >
               {['Provider', 'Corridor', 'Typical fee', 'Speed', 'Min. amount', 'Status'].map((h) => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
@@ -275,7 +275,7 @@ export default function DiasporaPage() {
             </div>
 
             {REMITTANCE_PROVIDERS.map((r, i) => (
-              <div key={r.name} className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-cyan-50' : 'bg-white hover:bg-slate-50'}`}>
+              <div key={r.name} className={`border-b border-slate-100 transition-colors ${i === 0 ? 'bg-cyan-50' : 'bg-white hover:bg-white'}`}>
                 {/* Desktop */}
                 <div
                   className="hidden sm:grid items-center"
@@ -323,7 +323,7 @@ export default function DiasporaPage() {
               </div>
             ))}
 
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Fees are indicative and may vary by amount and corridor · Always verify before transferring</p>
               <Link href="/diaspora/remittance" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
                 Full remittance guide →

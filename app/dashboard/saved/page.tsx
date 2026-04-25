@@ -35,7 +35,7 @@ export default async function SavedCalculationsPage() {
   const calculations = await getSavedCalculations(userId)
 
   return (
-    <main className="bg-slate-50 flex-1">
+    <main className="bg-white flex-1">
 
       {/* Header */}
       <div className="bg-slate-950 border-b border-slate-800">
@@ -77,7 +77,7 @@ export default async function SavedCalculationsPage() {
             <div className="divide-y divide-slate-100">
               {calculations.map((calc: any) => (
                 <div key={calc.id}
-                  className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-5 items-center gap-4 hover:bg-slate-50 transition-colors">
+                  className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-5 items-center gap-4 hover:bg-white transition-colors">
 
                   <div>
                     <div className="font-semibold text-slate-800 text-sm">

@@ -59,7 +59,7 @@ export default function ContactPage() {
       </section>
 
       {/* FORM SECTION */}
-      <section className="bg-slate-50 border-b border-slate-200">
+      <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-3 gap-16">
 
@@ -146,7 +146,7 @@ export default function ContactPage() {
                         name="full_name"
                         required
                         placeholder="Jane Smith"
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                       />
                     </div>
                     <div>
@@ -156,7 +156,7 @@ export default function ContactPage() {
                         type="email"
                         required
                         placeholder="jane@company.com"
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                       />
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                     <input
                       name="organisation"
                       placeholder="Company or firm name (optional)"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                     />
                   </div>
 
@@ -179,7 +179,7 @@ export default function ContactPage() {
                             name="country"
                             required
                             defaultValue=""
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 text-sm"
+                            className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 text-sm"
                           >
                             <option value="" disabled>Select a country</option>
                             <option value="Australia">Australia</option>
@@ -210,7 +210,7 @@ export default function ContactPage() {
                             name="data_field"
                             required
                             placeholder="e.g. Employer social security rate"
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                            className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                           />
                         </div>
                       </div>
@@ -220,7 +220,7 @@ export default function ContactPage() {
                           <input
                             name="current_value"
                             placeholder="What the site currently shows"
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                            className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                           />
                         </div>
                         <div>
@@ -228,7 +228,7 @@ export default function ContactPage() {
                           <input
                             name="correct_value"
                             placeholder="What it should be"
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                            className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                           />
                         </div>
                       </div>
@@ -238,7 +238,7 @@ export default function ContactPage() {
                           name="source_url"
                           type="url"
                           placeholder="https://gov-website.example.com/tax-rates"
-                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm"
                         />
                       </div>
                     </>
@@ -253,7 +253,7 @@ export default function ContactPage() {
                       required={formType === 'general'}
                       rows={5}
                       placeholder={formType === 'correction' ? 'Any additional context about the correction...' : 'How can we help?'}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm resize-none"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-colors text-slate-900 placeholder:text-slate-400 text-sm resize-none"
                     />
                   </div>
 

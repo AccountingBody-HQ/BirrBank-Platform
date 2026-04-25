@@ -109,7 +109,7 @@ export default async function AboutPage() {
                 { value: 'Monthly', label: 'Update Cycle',   sub: 'Tier 1 countries' },
                 { value: '100%',    label: 'Source Verified',sub: 'Government sources only' },
               ].map(s => (
-                <div key={s.label} className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+                <div key={s.label} className="bg-white border border-slate-200 rounded-2xl p-6">
                   <div className="text-3xl font-black text-slate-900 tracking-tight">{s.value}</div>
                   <div className="text-sm font-bold text-slate-700 mt-1">{s.label}</div>
                   <div className="text-xs text-slate-500 mt-0.5">{s.sub}</div>
@@ -121,7 +121,7 @@ export default async function AboutPage() {
       </section>
 
       {/* WHO ITS FOR */}
-      <section className="bg-slate-50 border-b border-slate-200">
+      <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-14">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Who It&apos;s For</p>

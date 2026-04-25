@@ -93,7 +93,7 @@ export default function CookiePolicyPage() {
                       { name: 'hrlake_admin',        provider: 'HRLake', purpose: 'Admin area session (internal use only)',            duration: '7 days'  },
                       { name: 'cookie_consent',   provider: 'HRLake', purpose: 'Stores your cookie consent preferences',           duration: '1 year'  },
                     ].map(row => (
-                      <tr key={row.name} className="hover:bg-slate-50">
+                      <tr key={row.name} className="hover:bg-white">
                         <td className="px-5 py-3 font-mono text-xs text-slate-700">{row.name}</td>
                         <td className="hidden sm:table-cell px-5 py-3 text-slate-600">{row.provider}</td>
                         <td className="px-5 py-3 text-slate-600">{row.purpose}</td>
@@ -123,7 +123,7 @@ export default function CookiePolicyPage() {
                       { name: '_ga_*',       provider: 'Google Analytics', purpose: 'Maintains session state',             duration: '2 years'  },
                       { name: '_vercel_*',   provider: 'Vercel Analytics', purpose: 'Platform performance analytics',      duration: 'Session'  },
                     ].map(row => (
-                      <tr key={row.name} className="hover:bg-slate-50">
+                      <tr key={row.name} className="hover:bg-white">
                         <td className="px-5 py-3 font-mono text-xs text-slate-700">{row.name}</td>
                         <td className="hidden sm:table-cell px-5 py-3 text-slate-600">{row.provider}</td>
                         <td className="px-5 py-3 text-slate-600">{row.purpose}</td>

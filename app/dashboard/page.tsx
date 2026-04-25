@@ -62,7 +62,7 @@ export default async function DashboardPage() {
   const firstName = user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'there'
 
   return (
-    <main className="bg-slate-50 flex-1">
+    <main className="bg-white flex-1">
 
       {/* Header */}
       <div className="bg-slate-950 border-b border-slate-800">
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
                 </div>
               ) : (
                 savedCalculations.map((calc: any) => (
-                  <div key={calc.id} className="px-7 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                  <div key={calc.id} className="px-7 py-4 flex items-center justify-between hover:bg-white transition-colors">
                     <div>
                       <div className="font-semibold text-slate-800 text-sm">{calc.name || calc.country_code?.toUpperCase()}</div>
                       <div className="text-slate-400 text-xs mt-0.5">
@@ -171,7 +171,7 @@ export default async function DashboardPage() {
                 { href: '/insights/',      icon: Shield,         label: 'HR Insights',           sub: 'Employment law, compliance, and HR guides' },
               ].map(item => (
                 <Link key={item.href} href={item.href}
-                  className="px-7 py-4 flex items-center gap-4 hover:bg-slate-50 transition-colors group">
+                  className="px-7 py-4 flex items-center gap-4 hover:bg-white transition-colors group">
                   <div className="bg-blue-50 text-blue-600 w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
                     <item.icon size={16} />
                   </div>

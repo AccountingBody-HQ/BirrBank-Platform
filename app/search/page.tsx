@@ -214,7 +214,7 @@ function SearchContent() {
   const hasAnyResults = counts.all > 0
 
   return (
-    <main className="bg-slate-50 flex-1">
+    <main className="bg-white flex-1">
       <div className="bg-slate-950 border-b border-slate-800">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-12">
           <nav className="flex items-center gap-2 text-xs text-slate-400 mb-4">
@@ -363,7 +363,7 @@ function SearchContent() {
 export default function SearchPage() {
   return (
     <Suspense fallback={
-      <div className="bg-slate-50 flex items-center justify-center">
+      <div className="bg-white flex items-center justify-center">
         <Loader2 size={24} className="animate-spin text-slate-400" />
       </div>
     }>

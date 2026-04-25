@@ -158,7 +158,7 @@ export default function BankingHubPage() {
       </section>
 
       {/* ══════════════════════════════ SUB-CATEGORIES ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">What we cover</p>
@@ -180,7 +180,7 @@ export default function BankingHubPage() {
               >
                 <div style={{ height: 3, background: '#1D4ED8' }} />
                 <div className="flex gap-4 items-start" style={{ padding: '24px' }}>
-                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#f8fafc' }}>
+                  <div className="rounded-xl flex items-center justify-center shrink-0" style={{ width: 48, height: 48, background: '#ffffff' }}>
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -228,7 +228,7 @@ export default function BankingHubPage() {
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
 
             {/* Header */}
-            <div className="grid grid-cols-12 bg-slate-50 border-b border-slate-200" style={{ padding: '12px 24px' }}>
+            <div className="grid grid-cols-12 bg-white border-b border-slate-200" style={{ padding: '12px 24px' }}>
               <div className="col-span-1"><p className="text-xs font-black text-slate-400 uppercase tracking-widest">#</p></div>
               <div className="col-span-5"><p className="text-xs font-black text-slate-400 uppercase tracking-widest">Bank</p></div>
               <div className="col-span-4"><p className="text-xs font-black text-slate-400 uppercase tracking-widest">Product</p></div>
@@ -239,7 +239,7 @@ export default function BankingHubPage() {
             {TOP_SAVINGS.map((r) => (
               <div
                 key={r.rank}
-                className={`grid grid-cols-12 items-center border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
+                className={`grid grid-cols-12 items-center border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-white'}`}
                 style={{ padding: r.rank === 1 ? '18px 24px' : '14px 24px' }}
               >
                 <div className="col-span-1">
@@ -279,7 +279,7 @@ export default function BankingHubPage() {
             ))}
 
             {/* Footer row */}
-            <div className="flex items-center justify-between bg-slate-50 border-t border-slate-200" style={{ padding: '14px 24px' }}>
+            <div className="flex items-center justify-between bg-white border-t border-slate-200" style={{ padding: '14px 24px' }}>
               <p className="text-xs text-slate-400">Official bank sources · NBE registry · Last verified this week</p>
               <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
                 Full comparison — all 32 banks →
@@ -295,7 +295,7 @@ export default function BankingHubPage() {
       </section>
 
       {/* ══════════════════════════════ FX RATES PREVIEW ═════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f8faf8', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#ffffff', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
