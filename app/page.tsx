@@ -287,25 +287,19 @@ export default async function HomePage() {
               Ethiopia financial market,<br />fully covered.
             </h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {CATEGORIES.map((cat) => (
               <Link key={cat.label} href={cat.href}
-                className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-200 flex flex-col overflow-hidden">
+                className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
                 <div style={{ height: 3, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-                <div className="flex flex-col flex-1 p-6">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-5 text-blue-600">
+                <div className="flex flex-col flex-1 p-7">
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 text-blue-600" style={{ background: '#eff6ff', border: '1px solid #dbeafe' }}>
                     {cat.icon}
                   </div>
-                  <p className="font-bold text-slate-900 mb-2" style={{ fontSize: '15px' }}>{cat.label}</p>
-                  <p className="text-slate-400 text-xs leading-relaxed flex-1">{cat.desc}</p>
-                  <div className="mt-5 pt-5 border-t border-slate-100">
-                    <div className="flex items-baseline gap-2 mb-3">
-                      <p className="font-mono font-black text-blue-600" style={{ fontSize: '22px', letterSpacing: '-1px', lineHeight: 1 }}>{cat.statNum}</p>
-                      <p className="text-xs text-slate-400">{cat.statLabel}</p>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:gap-2 transition-all">
-                      <span>{cat.action}</span><ArrowRight size={11} />
-                    </div>
+                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '16px' }}>{cat.label}</p>
+                  <p className="text-slate-500 text-sm leading-relaxed flex-1">{cat.desc}</p>
+                  <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                    {cat.action} <ArrowRight size={13} />
                   </div>
                 </div>
               </Link>
@@ -368,7 +362,7 @@ export default async function HomePage() {
             ))}
           </div>
           {/* Mobile cards */}
-          <div className="grid grid-cols-2 gap-3 md:hidden">
+          <div className="grid grid-cols-1 gap-3 md:hidden">
             {FX_RATES.map((fx) => (
               <div key={fx.currency} className="bg-white rounded-xl border border-slate-200 p-4">
                 <div className="flex items-center justify-between mb-3">

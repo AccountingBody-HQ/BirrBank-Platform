@@ -73,10 +73,13 @@ export default function HeroSearch() {
         />
         <button
           onClick={handleSearch}
-          className="font-bold rounded-xl text-white shrink-0 transition-opacity hover:opacity-90"
+          className="font-bold rounded-xl text-white shrink-0 transition-opacity hover:opacity-90 flex items-center gap-2"
           style={{ background: '#1D4ED8', fontSize: 14, padding: '10px 20px' }}
         >
           Search
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
         </button>
       </div>
       <p className="text-xs text-slate-400 mt-2 ml-1">
