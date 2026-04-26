@@ -46,7 +46,8 @@ export default clerkMiddleware(async (auth, request) => {
     path.startsWith('/api/insert-country-data') ||
     path.startsWith('/api/verify-table') ||
     path.startsWith('/api/populate-table') ||
-    path.startsWith('/api/content-factory/')
+    path.startsWith('/api/content-factory/') ||
+    path.startsWith('/api/birrbank-')
   )
   if (isAdminApi) {
     const token = request.cookies.get('admin_token')?.value
