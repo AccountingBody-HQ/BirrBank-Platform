@@ -196,11 +196,11 @@ export default async function HomePage() {
                 <span className="text-blue-300 text-xs font-semibold tracking-wide">Ethiopia Financial Operating System</span>
               </div>
               <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6" style={{ letterSpacing: '-0.025em' }}>
-                Ethiopia best<br />financial products,<br /><span className="text-blue-400">compared.</span>
+                Ethiopia's financial<br />products,<br /><span className="text-blue-400">compared.</span>
               </h1>
               <p className="text-slate-400 text-lg leading-relaxed mb-10 max-w-md">
-                Savings rates, FX, insurance, ESX markets and commodity prices —
-                all verified from official sources, completely free.
+                Savings rates, FX, insurance, ESX markets and commodity prices.
+                All verified from official sources. Completely free.
               </p>
               <div className="mb-8">
                 <HeroSearch />
@@ -280,7 +280,7 @@ export default async function HomePage() {
       </section>
 
       {/* ═══════════════════════════════ CATEGORIES ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
+      <section className="border-b border-slate-100" style={{ background: '#f8fafc', padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
@@ -290,15 +290,15 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {CATEGORIES.map((cat) => (
               <Link key={cat.label} href={cat.href}
-                className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all duration-200 flex flex-col overflow-hidden">
-                <div style={{ height: 3, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-200 flex flex-col overflow-hidden">
+                <div className="h-1.5" style={{ background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                 <div className="flex flex-col flex-1 p-7">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 text-blue-600" style={{ background: '#eff6ff', border: '1px solid #dbeafe' }}>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-blue-600" style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', border: '1px solid #bfdbfe' }}>
                     {cat.icon}
                   </div>
                   <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '16px' }}>{cat.label}</p>
                   <p className="text-slate-500 text-sm leading-relaxed flex-1">{cat.desc}</p>
-                  <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                  <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
                     {cat.action} <ArrowRight size={13} />
                   </div>
                 </div>
@@ -399,7 +399,7 @@ export default async function HomePage() {
               Unbiased. Verified. Free.
             </h2>
             <p className="text-slate-500" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
-              We never take fees from the institutions we rank. The best rate is always #1 — regardless of who offers it.
+              We never take fees from the institutions we rank. The best rate is always #1, regardless of who offers it.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -414,13 +414,13 @@ export default async function HomePage() {
                 icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
                 tag: 'Updated daily',
                 headline: 'Every rate comes with a verified date.',
-                body: 'Any rate older than 7 days is automatically flagged with a warning badge. You always know exactly how fresh the data is before making any decision.',
+                body: 'Any rate older than 7 days is automatically flagged with a warning badge. You always know how fresh the data is before making any decision.',
               },
               {
                 icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
                 tag: 'No commercial bias',
                 headline: 'We earn nothing from the institutions we rank.',
-                body: 'BirrBank makes no money from rankings or placements. We are funded by advertising and data services — never by the banks or insurers you are comparing.',
+                body: 'BirrBank makes no money from rankings or placements. We are funded by advertising and data services, never by the banks or insurers you are comparing.',
               },
             ].map(({ icon, tag, headline, body }) => (
               <div key={tag} className="rounded-2xl flex flex-col overflow-hidden" style={{ background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 4px 24px rgba(29,78,216,0.07)', minHeight: '280px' }}>
@@ -452,7 +452,7 @@ export default async function HomePage() {
             <ul className="space-y-3 mb-8">
               {[
                 'Rate changes across all 32 commercial banks',
-                'FX movements — USD, GBP, SAR, AED vs ETB',
+                'FX movements: USD, GBP, SAR, AED vs ETB',
                 'ESX market updates and new IPO announcements',
                 'ECX commodity prices for coffee and sesame',
               ].map((item) => (
