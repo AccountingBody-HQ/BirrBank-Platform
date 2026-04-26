@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#0f172a', borderTop: '1px solid #1e293b' }}>
+    <footer className="bg-slate-950 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-12">
 
@@ -123,7 +123,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid #1e293b' }}>
+      <div className="border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p style={{ color: '#475569', fontSize: 13 }}>© 2026 BirrBank<span style={{ color: '#ffffff' }}>®</span>. All rights reserved.</p>
           <p style={{ color: '#475569', fontSize: 12, textAlign: 'center', maxWidth: 540, lineHeight: 1.7 }}>
