@@ -101,12 +101,14 @@ export default async function HomePage() {
     rate: Number(r.annual_rate).toFixed(2),
   }))
 
-  const today = new Date().toISOString().split('T')[0]
   const { data: fxData } = await supabase
     .schema('birrbank').from('exchange_rates')
     .select('currency_code, buying_rate, selling_rate, rate_date')
-    .eq('institution_slug', 'nbe').eq('rate_date', today)
-    .in('currency_code', ['USD', 'GBP', 'EUR', 'SAR', 'AED']).order('currency_code')
+    .eq('institution_slug', 'nbe')
+    .in('currency_code', ['USD', 'GBP', 'EUR', 'SAR', 'AED'])
+    .order('rate_date', { ascending: false })
+    .order('currency_code')
+    .limit(5)
 
   const FX_RATES = (fxData ?? []).map((r: any) => ({
     currency: r.currency_code,
