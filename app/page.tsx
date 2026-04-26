@@ -89,26 +89,41 @@ const ArrowRight = ({ size = 14 }: { size?: number }) => (
 export default async function HomePage() {
   const supabase = createSupabaseAdminClient()
 
-  const { data: ratesData } = await supabase
-    .schema('birrbank').from('savings_rates')
-    .select('annual_rate, account_type, institution_slug, last_verified_date, institutions(name)')
-    .eq('is_current', true).order('annual_rate', { ascending: false }).limit(5)
+  const [
+    { data: ratesData },
+    { data: fxData },
+    { count: institutionCount },
+    { data: coffeeData },
+    { data: stockData },
+  ] = await Promise.all([
+    supabase.schema('birrbank').from('savings_rates')
+      .select('annual_rate, account_type, institution_slug, institutions(name)')
+      .eq('is_current', true).order('annual_rate', { ascending: false }).limit(1),
+    supabase.schema('birrbank').from('exchange_rates')
+      .select('currency_code, buying_rate, selling_rate, rate_date')
+      .eq('institution_slug', 'nbe')
+      .in('currency_code', ['USD', 'GBP', 'EUR', 'SAR', 'AED'])
+      .order('rate_date', { ascending: false }).order('currency_code').limit(5),
+    supabase.schema('birrbank').from('institutions')
+      .select('count', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.schema('birrbank').from('commodity_prices')
+      .select('commodity_name, price_etb').eq('commodity_type', 'coffee')
+      .order('trade_date', { ascending: false }).limit(1),
+    supabase.schema('birrbank').from('listed_securities')
+      .select('ticker, company_name, last_price_etb, price_change_pct')
+      .order('last_updated', { ascending: false }).limit(1),
+  ])
 
-  const TOP_RATES = (ratesData ?? []).map((r: any, i: number) => ({
-    rank: i + 1,
-    bank: r.institutions?.name ?? r.institution_slug,
-    product: ACCOUNT_TYPE_LABELS[r.account_type] ?? r.account_type,
-    rate: Number(r.annual_rate).toFixed(2),
-  }))
+  const bestRate = ratesData?.[0] ? Number(ratesData[0].annual_rate).toFixed(2) : '9.50'
+  const bestBank = (ratesData?.[0] as any)?.institutions?.name ?? 'Top bank'
+  const instCount = institutionCount ?? 214
 
-  const { data: fxData } = await supabase
-    .schema('birrbank').from('exchange_rates')
-    .select('currency_code, buying_rate, selling_rate, rate_date')
-    .eq('institution_slug', 'nbe')
-    .in('currency_code', ['USD', 'GBP', 'EUR', 'SAR', 'AED'])
-    .order('rate_date', { ascending: false })
-    .order('currency_code')
-    .limit(5)
+  const usdRate = fxData?.find((r: any) => r.currency_code === 'USD')
+  const usdSell = usdRate ? Number(usdRate.selling_rate).toFixed(2) : '126.40'
+
+  const coffeePrice = coffeeData?.[0] ? Number((coffeeData[0] as any).price_etb).toLocaleString() : '28,500'
+  const stock = stockData?.[0] as any
+  const stockChange = stock?.price_change_pct ? Number(stock.price_change_pct) : 0
 
   const FX_RATES = (fxData ?? []).map((r: any) => ({
     currency: r.currency_code,
@@ -117,20 +132,60 @@ export default async function HomePage() {
     sell: Number(r.selling_rate).toFixed(2),
   }))
 
-  const { count: institutionCount } = await supabase
-    .schema('birrbank').from('institutions')
-    .select('count', { count: 'exact', head: true }).eq('is_active', true)
-
-  const bestRate = TOP_RATES[0]?.rate ?? '9.50'
-  const instCount = institutionCount ?? 214
+  const pillars = [
+    {
+      label: 'Banking',
+      sublabel: 'Best savings rate',
+      value: bestRate + '%',
+      sub: bestBank,
+      href: '/banking/savings-rates',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
+      positive: true,
+    },
+    {
+      label: 'FX',
+      sublabel: 'USD / ETB today',
+      value: usdSell,
+      sub: 'NBE official rate',
+      href: '/banking/fx-rates',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+      positive: true,
+    },
+    {
+      label: 'ESX Markets',
+      sublabel: stock?.ticker ?? 'Latest stock',
+      value: stock ? 'ETB ' + Number(stock.last_price_etb).toFixed(2) : '—',
+      sub: stockChange >= 0 ? '+' + stockChange.toFixed(2) + '% today' : stockChange.toFixed(2) + '% today',
+      href: '/markets',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+      positive: stockChange >= 0,
+    },
+    {
+      label: 'Commodities',
+      sublabel: 'Coffee — ECX today',
+      value: 'ETB ' + coffeePrice,
+      sub: 'Yirgacheffe Grade 2',
+      href: '/commodities/coffee',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V12M12 12C12 6 7 4 7 4s5 2 5 8z"/><path d="M12 12C12 6 17 4 17 4s-5 2-5 8z"/><line x1="8" y1="22" x2="16" y2="22"/></svg>,
+      positive: true,
+    },
+    {
+      label: 'Intelligence',
+      sublabel: 'Financial guides',
+      value: '500+',
+      sub: 'Free to read',
+      href: '/guides',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+      positive: true,
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-white">
 
       {/* ══════════════════════════════════ HERO ═══════════════════════════════════ */}
       <section className="relative bg-slate-950 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 65% -10%, rgba(29,78,216,0.25) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.5) 0%, transparent 50%)' }} />
-
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 65% -10%, rgba(29,78,216,0.2) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.5) 0%, transparent 50%)' }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -164,52 +219,51 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right: rates card */}
+            {/* Right: 5-pillar live snapshot — white card */}
             <div className="hidden lg:block">
-              <div className="bg-slate-900 rounded-2xl overflow-hidden border border-slate-700/50" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.4)' }}>
-                <div style={{ height: 3, background: 'linear-gradient(90deg, #1D4ED8, #3b82f6)' }} />
-                <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.2)' }}>
+                <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #3b82f6)' }} />
+                <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-0.5 text-blue-400">Top rates today</p>
-                    <p className="text-white font-bold" style={{ fontSize: '15px' }}>Savings rates · All Ethiopian banks</p>
+                    <p className="text-xs font-black uppercase tracking-widest mb-0.5" style={{ color: '#1D4ED8' }}>Live market snapshot</p>
+                    <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>All 5 pillars · Updated daily</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
-                    <span className="text-xs font-bold text-blue-300">Live</span>
+                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                    <span className="text-xs font-bold text-blue-700">Live</span>
                   </div>
                 </div>
-                <div className="divide-y divide-slate-800">
-                  {TOP_RATES.map((r) => (
-                    <div key={r.rank} className={`flex items-center gap-4 ${r.rank === 1 ? 'bg-blue-600/10' : ''}`} style={{ padding: r.rank === 1 ? '16px 20px' : '12px 20px' }}>
-                      <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
-                        style={r.rank === 1 ? { background: '#1D4ED8', color: '#fff' } : { background: '#1e293b', color: '#475569' }}>
-                        {r.rank === 1 ? (
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                        ) : r.rank}
+                <div className="divide-y divide-slate-100">
+                  {pillars.map((p, i) => (
+                    <Link key={p.label} href={p.href}
+                      className={'flex items-center gap-4 hover:bg-slate-50 transition-colors ' + (i === 0 ? 'bg-blue-50' : 'bg-white')}
+                      style={{ padding: i === 0 ? '16px 20px' : '13px 20px' }}>
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={i === 0 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
+                        {p.icon}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-bold truncate ${r.rank === 1 ? 'text-white' : 'text-slate-300'}`} style={{ fontSize: r.rank === 1 ? '15px' : '13px' }}>{r.bank}</p>
-                        <p className={`text-xs mt-0.5 ${r.rank === 1 ? 'text-blue-400 font-bold uppercase tracking-wide' : 'text-slate-500'}`}>{r.rank === 1 ? 'Best rate' : r.product}</p>
+                        <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: i === 0 ? '#1D4ED8' : '#94a3b8' }}>{p.label}</p>
+                        <p className="font-semibold text-slate-600 truncate" style={{ fontSize: '12px' }}>{p.sublabel}</p>
                       </div>
-                      <div className={`font-mono font-black ${r.rank === 1 ? 'text-blue-400' : 'text-slate-400'}`} style={{ fontSize: r.rank === 1 ? '26px' : '16px', letterSpacing: '-1px' }}>
-                        {r.rate}%
+                      <div className="text-right shrink-0">
+                        <p className="font-mono font-black" style={{ fontSize: i === 0 ? '22px' : '15px', color: i === 0 ? '#1D4ED8' : '#0f172a', letterSpacing: '-0.5px', lineHeight: 1.2 }}>{p.value}</p>
+                        <p className="text-xs mt-0.5" style={{ color: p.positive ? '#16a34a' : '#dc2626', fontWeight: 600 }}>{p.sub}</p>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
-                <div className="px-5 py-3 border-t border-slate-800 flex items-center justify-between">
-                  <p className="text-xs text-slate-500">Official bank sources · NBE registry</p>
-                  <Link href="/banking/savings-rates" className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors">
-                    See all 32 banks →
+                <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                  <p className="text-xs text-slate-400">Official sources · NBE · ESX · ECX</p>
+                  <Link href="/banking" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
+                    Full platform →
                   </Link>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Stat bar inside dark hero */}
+          {/* Stat bar */}
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-3 gap-8">
             {[
               { value: instCount.toString(), label: 'NBE-regulated institutions' },
@@ -312,46 +366,46 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ═════════════════════════════════ TRUST ═══════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '96px 32px' }}>
+      {/* ═════════════════════════════════ TRUST — WHITE ════════════════════════════ */}
+      <section className="border-b border-slate-100 bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#93c5fd' }}>Why use BirrBank</p>
-            <h2 className="font-serif font-bold text-white mb-4" style={{ fontSize: 'clamp(26px, 3.5vw, 42px)', letterSpacing: '-1.2px' }}>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Why use BirrBank</p>
+            <h2 className="font-serif font-bold text-slate-950 mb-4" style={{ fontSize: 'clamp(26px, 3.5vw, 42px)', letterSpacing: '-1.2px' }}>
               Unbiased. Verified. Free.
             </h2>
-            <p className="text-slate-400 mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
+            <p className="text-slate-500 mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
               We never take fees from the institutions we rank. The best rate is always #1 — regardless of who offers it.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
                 tag: 'NBE verified',
                 headline: '214 institutions. Zero grey-market listings.',
                 body: 'Every institution on BirrBank is verified against the National Bank of Ethiopia official registry. If it is not NBE-licensed, it is not here.',
               },
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
                 tag: 'Updated daily',
                 headline: 'Every rate comes with a verified date.',
                 body: 'Any rate older than 7 days is automatically flagged with a warning badge. You always know exactly how fresh the data is before making any decision.',
               },
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
                 tag: 'No commercial bias',
                 headline: 'We earn nothing from the institutions we rank.',
                 body: 'BirrBank makes no money from rankings or placements. We are funded by advertising and data services — never by the banks or insurers you are comparing.',
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#1e293b', border: '1px solid #334155', minHeight: '280px' }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#1e3a5f', border: '1px solid #1d4ed8' }}>
+              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#f8fafc', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #1D4ED8', minHeight: '260px' }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#eff6ff', border: '1px solid #bfdbfe' }}>
                   {icon}
                 </div>
-                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#93c5fd' }}>{tag}</p>
-                <h3 className="font-bold text-white mb-3" style={{ fontSize: '16px', lineHeight: 1.4 }}>{headline}</h3>
-                <p className="text-sm text-slate-400" style={{ lineHeight: '1.85' }}>{body}</p>
+                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>{tag}</p>
+                <h3 className="font-bold text-slate-900 mb-3" style={{ fontSize: '16px', lineHeight: 1.4 }}>{headline}</h3>
+                <p className="text-sm text-slate-500" style={{ lineHeight: '1.85' }}>{body}</p>
               </div>
             ))}
           </div>

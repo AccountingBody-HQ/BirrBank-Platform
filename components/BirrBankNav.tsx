@@ -91,7 +91,7 @@ export default function Navigation() {
           </div>
           <div className="flex items-start">
             <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 19, letterSpacing: '-0.5px', lineHeight: 1 }}>BirrBank</span>
-            <span style={{ color: '#93c5fd', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1, marginLeft: 1 }}>®</span>
+            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: 11, lineHeight: 1, marginTop: 1, marginLeft: 1 }}>®</span>
           </div>
         </Link>
 
