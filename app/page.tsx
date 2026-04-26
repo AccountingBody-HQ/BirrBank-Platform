@@ -381,31 +381,34 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
+                icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
                 tag: 'NBE verified',
                 headline: '214 institutions. Zero grey-market listings.',
                 body: 'Every institution on BirrBank is verified against the National Bank of Ethiopia official registry. If it is not NBE-licensed, it is not here.',
               },
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
                 tag: 'Updated daily',
                 headline: 'Every rate comes with a verified date.',
                 body: 'Any rate older than 7 days is automatically flagged with a warning badge. You always know exactly how fresh the data is before making any decision.',
               },
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+                icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
                 tag: 'No commercial bias',
                 headline: 'We earn nothing from the institutions we rank.',
                 body: 'BirrBank makes no money from rankings or placements. We are funded by advertising and data services — never by the banks or insurers you are comparing.',
               },
             ].map(({ icon, tag, headline, body }) => (
-              <div key={tag} className="rounded-2xl flex flex-col" style={{ padding: '36px 32px', background: '#f8fafc', border: '1.5px solid #e2e8f0', borderLeft: '4px solid #1D4ED8', minHeight: '260px' }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-6" style={{ background: '#eff6ff', border: '1px solid #bfdbfe' }}>
-                  {icon}
+              <div key={tag} className="rounded-2xl flex flex-col overflow-hidden" style={{ background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 4px 24px rgba(29,78,216,0.07)', minHeight: '280px' }}>
+                <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                <div style={{ padding: '36px 32px' }} className="flex flex-col flex-1">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', border: '1px solid #bfdbfe', boxShadow: '0 4px 12px rgba(29,78,216,0.1)' }}>
+                    {icon}
+                  </div>
+                  <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>{tag}</p>
+                  <h3 className="font-bold text-slate-900 mb-4" style={{ fontSize: '17px', lineHeight: 1.35 }}>{headline}</h3>
+                  <p className="text-sm text-slate-500 flex-1" style={{ lineHeight: '1.85' }}>{body}</p>
                 </div>
-                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>{tag}</p>
-                <h3 className="font-bold text-slate-900 mb-3" style={{ fontSize: '16px', lineHeight: 1.4 }}>{headline}</h3>
-                <p className="text-sm text-slate-500" style={{ lineHeight: '1.85' }}>{body}</p>
               </div>
             ))}
           </div>
