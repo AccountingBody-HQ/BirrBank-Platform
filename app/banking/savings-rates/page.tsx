@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SavingsRatesTable from '@/components/SavingsRatesTable'
 import EmailCapture from '@/components/EmailCapture'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
@@ -73,6 +74,7 @@ export default async function SavingsRatesPage() {
       rank:     i + 1,
       bank:     r.institutions?.name ?? r.institution_slug,
       type:     ACCOUNT_TYPE_LABELS[r.account_type] ?? r.account_type,
+      typeKey:  r.account_type,
       rate:     Number(r.annual_rate).toFixed(2),
       min:      formatMin(Number(r.minimum_balance_etb ?? 0)),
       sharia:   isSharia,
@@ -137,133 +139,7 @@ export default async function SavingsRatesPage() {
       <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
         <div className="max-w-6xl mx-auto">
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">All savings products</p>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <ClockIcon />
-              <span>Showing {SAVINGS_RATES.length} products · Sorted by rate (high to low)</span>
-            </div>
-          </div>
-
-          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-
-            <div
-              className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: '13px 24px', background: '#f9fafb' }}
-            >
-              {['#', 'Bank', 'Account type', 'Min. balance', 'Annual rate', 'Last verified'].map((h) => (
-                <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
-              ))}
-            </div>
-
-            {SAVINGS_RATES.map((r) => (
-              <div
-                key={r.rank + r.bank + r.type}
-                className={`border-b border-slate-100 transition-colors ${r.rank === 1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50'}`}
-              >
-                {/* Desktop row */}
-                <div
-                  className="hidden sm:grid items-center"
-                  style={{ gridTemplateColumns: '44px 1fr 140px 120px 120px 110px', padding: r.rank === 1 ? '18px 24px' : '14px 24px' }}
-                >
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black"
-                    style={r.rank === 1 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#94a3b8' }}
-                  >
-                    {r.rank === 1 ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    ) : r.rank}
-                  </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className={`font-bold ${r.rank === 1 ? 'text-blue-900' : 'text-slate-800'}`}
-                        style={{ fontSize: r.rank === 1 ? '15px' : '14px' }}>
-                        {r.bank}
-                      </p>
-                      {r.badge && (
-                        <span
-                          className="text-xs font-bold rounded-full px-2 py-0.5"
-                          style={
-                            r.badge === 'Sharia'
-                              ? { background: '#fef3c7', color: '#92400e' }
-                              : r.badge === 'Best rate'
-                              ? { background: '#dbeafe', color: '#1D4ED8' }
-                              : { background: '#f0fdf4', color: '#166534' }
-                          }
-                        >
-                          {r.badge}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-slate-500">{r.type}</p>
-
-                  <p className="text-sm font-mono text-slate-600">ETB {r.min}</p>
-
-                  <p
-                    className={`font-mono font-black ${r.rank === 1 ? 'text-blue-700' : 'text-slate-800'}`}
-                    style={{ fontSize: r.rank === 1 ? '26px' : '20px', letterSpacing: '-1px' }}
-                  >
-                    {r.rate}%
-                  </p>
-
-                  <div className="flex items-center gap-1.5">
-                    <span style={{
-                      color: r.freshness === 'fresh' ? '#1D4ED8' : r.freshness === 'warn' ? '#d97706' : '#ef4444'
-                    }}>
-                      <ClockIcon />
-                    </span>
-                    <p className="text-xs font-medium" style={{
-                      color: r.freshness === 'fresh' ? '#475569' : r.freshness === 'warn' ? '#d97706' : '#ef4444'
-                    }}>
-                      {r.verified}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Mobile row */}
-                <div className="sm:hidden flex items-center gap-3" style={{ padding: '14px 16px' }}>
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
-                    style={r.rank === 1 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#94a3b8' }}
-                  >
-                    {r.rank}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <p className="font-bold text-slate-800 text-sm truncate">{r.bank}</p>
-                      {r.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0"
-                          style={r.badge === 'Sharia' ? { background: '#fef3c7', color: '#92400e' } : { background: '#dbeafe', color: '#1D4ED8' }}>
-                          {r.badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-400">{r.type} · ETB {r.min} min · verified {r.verified}</p>
-                  </div>
-                  <p className="font-mono font-black text-slate-800 shrink-0" style={{ fontSize: '20px', letterSpacing: '-1px' }}>
-                    {r.rate}%
-                  </p>
-                </div>
-              </div>
-            ))}
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
-              <p className="text-xs text-slate-400">
-                Showing {SAVINGS_RATES.length} products from {totalBanks} banks · Rates sourced from official bank websites and NBE registry · Sorted by rate (high to low)
-              </p>
-              <Link href="/institutions" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
-                View all 214 institutions →
-              </Link>
-            </div>
-          </div>
+          <SavingsRatesTable rates={SAVINGS_RATES} totalBanks={totalBanks} />
 
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
             Rates are for comparison purposes only and may change without notice.
