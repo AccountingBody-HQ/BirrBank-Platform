@@ -125,7 +125,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p style={{ color: '#475569', fontSize: 13 }}>© 2026 BirrBank<span style={{ color: '#ffffff' }}>®</span>. All rights reserved.</p>
+          <p style={{ color: '#475569', fontSize: 13 }}>© 2026 BirrBank<sup style={{ color: '#ffffff', fontSize: 9, verticalAlign: 'super', lineHeight: 0 }}>®</sup>. All rights reserved.</p>
           <p style={{ color: '#475569', fontSize: 12, textAlign: 'center', maxWidth: 540, lineHeight: 1.7 }}>
             BirrBank provides financial information for comparison purposes only.
             Not a bank, insurer, broker or financial adviser.

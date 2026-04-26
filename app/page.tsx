@@ -186,8 +186,8 @@ export default async function HomePage() {
       {/* ══════════════════════════════════ HERO ═══════════════════════════════════ */}
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 65% -10%, rgba(29,78,216,0.2) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.5) 0%, transparent 50%)' }} />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-12 sm:pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             {/* Left */}
             <div>
@@ -207,13 +207,13 @@ export default async function HomePage() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link href="/banking/savings-rates"
-                  className="font-bold rounded-full transition-all inline-flex items-center justify-center"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, background: '#1D4ED8', color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.35)' }}>
+                  className="font-bold rounded-full transition-all inline-flex items-center justify-center text-center"
+                  style={{ fontSize: 15, padding: '14px 0', width: 220, background: '#1D4ED8', color: '#fff', boxShadow: '0 4px 20px rgba(29,78,216,0.35)' }}>
                   Compare savings rates
                 </Link>
                 <Link href="/banking/fx-rates"
-                  className="font-bold rounded-full transition-all inline-flex items-center justify-center"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, border: '2px solid rgba(255,255,255,0.15)', color: '#fff', background: 'transparent' }}>
+                  className="font-bold rounded-full transition-all inline-flex items-center justify-center text-center"
+                  style={{ fontSize: 15, padding: '14px 0', width: 220, border: '2px solid rgba(255,255,255,0.2)', color: '#fff', background: 'rgba(255,255,255,0.05)' }}>
                   Check FX rates
                 </Link>
               </div>
@@ -264,7 +264,7 @@ export default async function HomePage() {
           </div>
 
           {/* Stat bar */}
-          <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-3 gap-8">
+          <div className="mt-10 sm:mt-16 pt-8 sm:pt-10 border-t border-slate-800 grid grid-cols-3 gap-4 sm:gap-8">
             {[
               { value: instCount.toString(), label: 'NBE-regulated institutions' },
               { value: bestRate + '%',        label: 'Best savings rate today'   },
@@ -283,12 +283,11 @@ export default async function HomePage() {
       <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Explore the platform</p>
             <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               Ethiopia financial market,<br />fully covered.
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {CATEGORIES.map((cat) => (
               <Link key={cat.label} href={cat.href}
                 className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-200 flex flex-col overflow-hidden">
@@ -328,7 +327,6 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Live rates</p>
               <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(24px, 3vw, 36px)', letterSpacing: '-1px', lineHeight: 1.15 }}>
                 Today FX rates — NBE official
               </h2>
@@ -337,18 +335,51 @@ export default async function HomePage() {
               See all rates <ArrowRight />
             </Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {FX_RATES.map((fx) => (
-              <div key={fx.currency} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="inline-flex items-center rounded-lg bg-blue-600 px-3 py-1">
-                    <span className="text-xs font-black text-white tracking-widest">{fx.currency}</span>
-                  </div>
-                  <p className="text-xs text-slate-400 font-medium">{fx.name}</p>
+          {/* Desktop table */}
+          <div className="hidden md:block rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+            <div className="grid grid-cols-5 border-b border-slate-100 bg-slate-50">
+              {['Currency', 'Name', 'Selling (ETB)', 'Buying (ETB)', ''].map((h, i) => (
+                <div key={i} className="px-6 py-3">
+                  <span className="text-xs font-black uppercase tracking-widest text-slate-400">{h}</span>
                 </div>
-                <p className="text-xs text-slate-400 font-medium mb-1">ETB per 1 {fx.currency}</p>
-                <p className="font-mono font-black text-slate-950 mb-3" style={{ fontSize: '28px', letterSpacing: '-1px', lineHeight: 1 }}>{fx.sell}</p>
-                <div className="flex justify-between items-center pt-3 border-t border-slate-100">
+              ))}
+            </div>
+            {FX_RATES.map((fx, i) => (
+              <div key={fx.currency} className={'grid grid-cols-5 border-b border-slate-100 hover:bg-blue-50/30 transition-colors ' + (i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50')}>
+                <div className="px-6 py-4 flex items-center">
+                  <span className="inline-flex items-center rounded-lg bg-blue-600 px-3 py-1">
+                    <span className="text-xs font-black text-white tracking-widest">{fx.currency}</span>
+                  </span>
+                </div>
+                <div className="px-6 py-4 flex items-center">
+                  <span className="text-sm font-medium text-slate-600">{fx.name}</span>
+                </div>
+                <div className="px-6 py-4 flex items-center">
+                  <span className="font-mono font-black text-slate-950" style={{ fontSize: '20px', letterSpacing: '-0.5px' }}>{fx.sell}</span>
+                </div>
+                <div className="px-6 py-4 flex items-center">
+                  <span className="font-mono font-semibold text-slate-500" style={{ fontSize: '16px' }}>{fx.buy}</span>
+                </div>
+                <div className="px-6 py-4 flex items-center justify-end">
+                  <Link href="/banking/fx-rates" className="text-xs font-bold text-blue-600 hover:underline">Details →</Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Mobile cards */}
+          <div className="grid grid-cols-2 gap-3 md:hidden">
+            {FX_RATES.map((fx) => (
+              <div key={fx.currency} className="bg-white rounded-xl border border-slate-200 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="inline-flex items-center rounded-lg bg-blue-600 px-2.5 py-1">
+                    <span className="text-xs font-black text-white tracking-wider">{fx.currency}</span>
+                  </span>
+                  <span className="text-xs text-slate-400">{fx.name}</span>
+                </div>
+                <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '22px', letterSpacing: '-0.5px', lineHeight: 1 }}>{fx.sell}</p>
+                <p className="text-xs text-slate-400 mb-2">Sell rate</p>
+                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                   <span className="text-xs text-slate-400">Buy</span>
                   <span className="font-mono font-semibold text-slate-600 text-sm">{fx.buy}</span>
                 </div>
@@ -369,16 +400,15 @@ export default async function HomePage() {
       {/* ═════════════════════════════════ TRUST — WHITE ════════════════════════════ */}
       <section className="border-b border-slate-100 bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Why use BirrBank</p>
+          <div className="mb-12">
             <h2 className="font-serif font-bold text-slate-950 mb-4" style={{ fontSize: 'clamp(26px, 3.5vw, 42px)', letterSpacing: '-1.2px' }}>
               Unbiased. Verified. Free.
             </h2>
-            <p className="text-slate-500 mx-auto" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
+            <p className="text-slate-500" style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '480px' }}>
               We never take fees from the institutions we rank. The best rate is always #1 — regardless of who offers it.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
@@ -419,7 +449,6 @@ export default async function HomePage() {
       <section className="bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Weekly rate alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(32px, 4vw, 46px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               The best rates,<br /><span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
             </h2>
