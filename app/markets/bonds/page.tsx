@@ -1,50 +1,67 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
-// ─── Placeholder data — replace with Supabase queries in Phase 2 ─────────────
-
-const TBILLS = [
-  { tenor: '28-day',  yield: '7.20', lastAuction: '21 Apr 2026', nextAuction: '28 Apr 2026', minInvest: 'ETB 1,000',  issued: 'ETB 2.1B', issuer: 'NBE' },
-  { tenor: '91-day',  yield: '8.10', lastAuction: '21 Apr 2026', nextAuction: '28 Apr 2026', minInvest: 'ETB 1,000',  issued: 'ETB 3.4B', issuer: 'NBE' },
-  { tenor: '182-day', yield: '8.75', lastAuction: '14 Apr 2026', nextAuction: '05 May 2026', minInvest: 'ETB 5,000',  issued: 'ETB 1.8B', issuer: 'NBE' },
-  { tenor: '364-day', yield: '9.15', lastAuction: '07 Apr 2026', nextAuction: '05 May 2026', minInvest: 'ETB 10,000', issued: 'ETB 4.2B', issuer: 'NBE' },
-]
-
-const GOVT_BONDS = [
-  { name: 'NBE Development Bond',     maturity: '5-year',  coupon: '9.50', minInvest: 'ETB 5,000',  issuer: 'NBE',    status: 'Open',   issued: 'Jan 2024' },
-  { name: 'Ethiopian Roads Bond',     maturity: '7-year',  coupon: '9.75', minInvest: 'ETB 10,000', issuer: 'MoFEC',  status: 'Open',   issued: 'Mar 2024' },
-  { name: 'Ethio Telecom Bond',       maturity: '3-year',  coupon: '8.50', minInvest: 'ETB 5,000',  issuer: 'Corporate', status: 'Closed', issued: 'Jun 2023' },
-  { name: 'NBE Housing Finance Bond', maturity: '10-year', coupon: '10.00', minInvest: 'ETB 25,000', issuer: 'NBE',  status: 'Open',   issued: 'Sep 2024' },
-]
+const PILLAR = '#1D4ED8'
 
 const ArrowRight = ({ size = 13 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
   </svg>
 )
-
 const ClockIcon = () => (
   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
   </svg>
 )
 
-const PILLAR = '#1D4ED8'
+function fmt(val: number | null | undefined, decimals = 2) {
+  if (val == null) return '—'
+  return Number(val).toFixed(decimals)
+}
+function fmtDate(d: string | null | undefined) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+function fmtMin(val: number | null | undefined) {
+  if (val == null) return '—'
+  return 'ETB ' + Number(val).toLocaleString('en-ET')
+}
+function tenorLabel(type: string) {
+  return type.replace('tbill_', '').replace('d', '-day') + ' T-Bill'
+}
 
-export default function BondsPage() {
+export default async function BondsPage() {
+  const supabase = createSupabaseAdminClient()
+
+  const { data: tbillData } = await supabase
+    .schema('birrbank')
+    .from('debt_instruments')
+    .select('*')
+    .like('instrument_type', 'tbill%')
+    .eq('is_current', true)
+    .order('yield_pct', { ascending: false })
+
+  const { data: bondData } = await supabase
+    .schema('birrbank')
+    .from('debt_instruments')
+    .select('*')
+    .in('instrument_type', ['government_bond', 'corporate_bond'])
+    .eq('is_current', true)
+    .order('coupon_rate_pct', { ascending: false })
+
+  const tbills = tbillData ?? []
+  const bonds  = bondData ?? []
+  const bestYield = tbills[0] ? fmt(tbills[0].yield_pct) + '%' : '—'
+
   return (
     <div className="min-h-screen bg-white">
 
       {/* ══════════════════════════════ HERO ══════════════════════════════════════ */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
-        />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-
-          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
             <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
             <span>›</span>
@@ -52,29 +69,21 @@ export default function BondsPage() {
             <span>›</span>
             <span style={{ color: PILLAR, fontWeight: 700 }}>Bonds & T-Bills</span>
           </div>
-
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>
-            Markets · Bonds & T-Bills
-          </p>
-          <h1
-            className="font-serif font-bold mb-5 text-slate-950"
-            style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
-          >
-            NBE T-bill yields and<br />
-            <span style={{ color: PILLAR }}>government bonds — compared.</span>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Markets · Bonds & T-Bills</p>
+          <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
+            Ethiopian T-bills and bonds —<br />
+            <span style={{ color: PILLAR }}>NBE auction yields, all tenors.</span>
           </h1>
           <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
-            Every Treasury bill auction result and government bond offering from the
-            National Bank of Ethiopia. Yields, tenors, minimum investments and next auction dates.
+            Treasury bill auction results from the National Bank of Ethiopia — yields, tenors,
+            minimum investments and auction dates. The safest ETB-denominated investment compared.
           </p>
-
-          {/* Stats bar */}
           <div className="flex flex-wrap gap-6">
             {[
-              { icon: <ClockIcon />, label: '9.15% best T-bill yield (364-day)' },
-              { icon: <ClockIcon />, label: 'Auction results from NBE directly' },
-              { icon: <ClockIcon />, label: 'ETB 1,000 minimum investment' },
-              { icon: <ClockIcon />, label: 'Updated after every auction' },
+              { icon: <ClockIcon />, label: tbills.length + ' T-bill tenors tracked' },
+              { icon: <ClockIcon />, label: 'Best yield: ' + bestYield },
+              { icon: <ClockIcon />, label: 'NBE auction results' },
+              { icon: <ClockIcon />, label: 'Updated weekly after each auction' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2">
                 <span style={{ color: PILLAR }}>{s.icon}</span>
@@ -85,11 +94,9 @@ export default function BondsPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════ T-BILLS ══════════════════════════════════ */}
-      {/* NO ADS on this page — comparison integrity rule */}
-      <section className="bg-white" style={{ padding: '64px 32px 80px' }}>
+      {/* ══════════════════════════════ T-BILL CARDS ══════════════════════════════ */}
+      <section className="bg-white" style={{ padding: '64px 32px' }}>
         <div className="max-w-6xl mx-auto">
-
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Treasury bills</p>
@@ -97,158 +104,113 @@ export default function BondsPage() {
                 NBE T-bill auction yields
               </h2>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <ClockIcon />
-              <span>Last auction: 21 Apr 2026</span>
-            </div>
+            <p className="text-xs text-slate-400">Source: nbe.gov.et/exchange/treasury-bill-auction-results/</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TBILLS.map((t) => (
-              <div key={t.tenor} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: PILLAR }} />
-                <div style={{ padding: '24px' }}>
-                  <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: PILLAR }}>{t.tenor} T-Bill</p>
-                  <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '36px', letterSpacing: '-1px', lineHeight: 1 }}>{t.yield}%</p>
-                  <p className="text-xs text-slate-400 mb-5">Annual yield</p>
-                  <div className="space-y-2 pt-4 border-t border-slate-100">
-                    {[
-                      { label: 'Min. investment', value: t.minInvest },
-                      { label: 'Last auction',    value: t.lastAuction },
-                      { label: 'Next auction',    value: t.nextAuction },
-                      { label: 'Total issued',    value: t.issued },
-                      { label: 'Issuer',          value: t.issuer },
-                    ].map((row) => (
-                      <div key={row.label} className="flex justify-between text-xs">
-                        <span className="text-slate-400">{row.label}</span>
-                        <span className="font-semibold text-slate-700">{row.value}</span>
-                      </div>
-                    ))}
+          {tbills.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {tbills.map((t: any, i: number) => (
+                <div key={t.id} className={'rounded-2xl border overflow-hidden ' + (i === 0 ? 'border-blue-200' : 'border-slate-200')}
+                  style={{ boxShadow: i === 0 ? '0 4px 24px rgba(29,78,216,0.12)' : '0 2px 12px rgba(0,0,0,0.04)' }}>
+                  <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                  <div className={i === 0 ? 'bg-blue-50' : 'bg-white'} style={{ padding: '28px 24px' }}>
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-xs font-black uppercase tracking-widest" style={{ color: PILLAR }}>{tenorLabel(t.instrument_type)}</p>
+                      {i === 0 && <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#dbeafe', color: '#1D4ED8' }}>Best yield</span>}
+                    </div>
+                    <p className="font-mono font-black text-slate-950 mb-1" style={{ fontSize: '36px', letterSpacing: '-1px', lineHeight: 1, color: PILLAR }}>
+                      {t.yield_pct ? fmt(t.yield_pct) + '%' : '—'}
+                    </p>
+                    <p className="text-xs text-slate-400 mb-5">Annual yield</p>
+                    <div className="space-y-2 pt-4 border-t border-slate-200">
+                      {[
+                        { label: 'Min. investment', value: fmtMin(t.minimum_investment) },
+                        { label: 'Last auction',    value: fmtDate(t.auction_date) },
+                        { label: 'Maturity',        value: fmtDate(t.maturity_date) },
+                        { label: 'Issuer',          value: t.issuer },
+                      ].map((f) => (
+                        <div key={f.label} className="flex justify-between text-xs">
+                          <span className="text-slate-400">{f.label}</span>
+                          <span className="font-semibold text-slate-700">{f.value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-slate-400 mt-5 text-center">
-            Source: NBE auction results · nbe.gov.et · For comparison only — verify with your broker before investing
-          </p>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════ GOVT BONDS ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Government & corporate bonds</p>
-              <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}>
-                Active bond offerings
-              </h2>
-            </div>
-          </div>
-
-          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-
-            {/* Desktop header */}
-            <div
-              className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 110px 110px 140px 100px 100px', padding: '13px 24px', background: '#f9fafb' }}
-            >
-              {['Bond name', 'Maturity', 'Coupon', 'Min. invest', 'Issuer', 'Status'].map((h) => (
-                <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
-
-            {GOVT_BONDS.map((b) => (
-              <div key={b.name} className="border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors">
-                {/* Desktop */}
-                <div
-                  className="hidden sm:grid items-center"
-                  style={{ gridTemplateColumns: '1fr 110px 110px 140px 100px 100px', padding: '16px 24px' }}
-                >
-                  <div>
-                    <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{b.name}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">Issued {b.issued}</p>
-                  </div>
-                  <p className="text-sm text-slate-500">{b.maturity}</p>
-                  <p className="font-mono font-black" style={{ fontSize: '18px', color: PILLAR, letterSpacing: '-0.5px' }}>{b.coupon}%</p>
-                  <p className="font-mono text-sm text-slate-600">{b.minInvest}</p>
-                  <p className="text-sm text-slate-500">{b.issuer}</p>
-                  <span
-                    className="text-xs font-bold rounded-full px-3 py-1 inline-flex w-fit"
-                    style={b.status === 'Open'
-                      ? { background: '#dbeafe', color: PILLAR }
-                      : { background: '#f1f5f9', color: '#94a3b8' }}
-                  >
-                    {b.status}
-                  </span>
-                </div>
-
-                {/* Mobile */}
-                <div className="sm:hidden" style={{ padding: '14px 16px' }}>
-                  <div className="flex items-start justify-between gap-3 mb-1">
-                    <p className="font-bold text-slate-800 text-sm">{b.name}</p>
-                    <span
-                      className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0"
-                      style={b.status === 'Open' ? { background: '#dbeafe', color: PILLAR } : { background: '#f1f5f9', color: '#94a3b8' }}
-                    >
-                      {b.status}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-400">{b.maturity} · {b.coupon}% coupon · Min {b.minInvest} · {b.issuer}</p>
-                </div>
-              </div>
-            ))}
-
-            <div
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-200"
-              style={{ background: '#f9fafb', padding: '14px 24px' }}
-            >
-              <p className="text-xs text-slate-400">Source: NBE & MoFEC official bond prospectuses · Updated on new issuances</p>
-              <Link href="/markets" className="text-xs font-bold hover:underline shrink-0" style={{ color: PILLAR }}>
-                Back to Markets →
-              </Link>
+          ) : (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 text-center py-12">
+              <p className="text-slate-500 text-sm">T-bill data is being updated. Check back after the next NBE auction.</p>
             </div>
-          </div>
+          )}
 
-          <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
-            Bond data is for comparison purposes only. Always read the official prospectus and consult
-            a licensed financial adviser before investing. BirrBank is not a broker or financial adviser.
+          <p className="text-xs text-slate-400 mt-5 text-center">
+            Yields from NBE auction results · For comparison only · Always verify with your broker before investing
           </p>
         </div>
       </section>
 
-      {/* ══════════════════════════════ HOW T-BILLS WORK ════════════════════════ */}
-      <section className="border-b border-slate-100 bg-white" style={{ padding: '96px 32px' }}>
+      {/* ══════════════════════════════ BONDS TABLE ═══════════════════════════════ */}
+      {bonds.length > 0 && (
+        <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '64px 32px 96px' }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Government & corporate bonds</p>
+              <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}>
+                Fixed income instruments
+              </h2>
+            </div>
+            <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+              <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+              <div className="hidden sm:grid border-b border-slate-200"
+                style={{ gridTemplateColumns: '1fr 100px 120px 130px 100px 100px', padding: '13px 24px', background: '#f9fafb' }}>
+                {['Bond name', 'Maturity', 'Coupon', 'Min. invest', 'Issuer', 'Status'].map((h) => (
+                  <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
+                ))}
+              </div>
+              {bonds.map((b: any) => (
+                <div key={b.id} className="border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors">
+                  <div className="hidden sm:grid items-center"
+                    style={{ gridTemplateColumns: '1fr 100px 120px 130px 100px 100px', padding: '15px 24px' }}>
+                    <p className="font-bold text-slate-800" style={{ fontSize: '14px' }}>{b.issuer} Bond</p>
+                    <p className="text-sm text-slate-500">{b.maturity_date ? Math.round((new Date(b.maturity_date).getTime() - new Date(b.issue_date).getTime()) / (365.25 * 24 * 3600 * 1000)) + '-year' : '—'}</p>
+                    <p className="font-mono font-bold text-slate-800">{b.coupon_rate_pct ? fmt(b.coupon_rate_pct) + '%' : '—'}</p>
+                    <p className="font-mono text-slate-600 text-sm">{fmtMin(b.minimum_investment)}</p>
+                    <p className="text-sm text-slate-500">{b.issuer}</p>
+                    <span className="text-xs font-bold rounded-full px-2 py-0.5 w-fit" style={{ background: '#dcfce7', color: '#166534' }}>Active</span>
+                  </div>
+                  <div className="sm:hidden" style={{ padding: '14px 16px' }}>
+                    <div className="flex justify-between mb-1">
+                      <p className="font-bold text-slate-800 text-sm">{b.issuer} Bond</p>
+                      <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#dcfce7', color: '#166534' }}>Active</span>
+                    </div>
+                    <p className="text-xs text-slate-400">{b.coupon_rate_pct ? fmt(b.coupon_rate_pct) + '% coupon' : '—'} · {fmtMin(b.minimum_investment)} min</p>
+                  </div>
+                </div>
+              ))}
+              <div className="border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
+                <p className="text-xs text-slate-400">Source: NBE · For comparison only · Not investment advice</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ══════════════════════════════ HOW T-BILLS WORK ═════════════════════════ */}
+      <section className="border-b border-slate-100" style={{ background: bonds.length > 0 ? '#ffffff' : '#f9fafb', padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>
-            <h2
-              className="font-serif font-bold text-slate-950"
-              style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}
-            >
-              How Ethiopian T-bills and bonds work.
+            <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}>
+              How Ethiopian T-bills work.
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              {
-                step: '01',
-                title: 'What is a Treasury bill?',
-                body: 'T-bills are short-term debt instruments issued by the National Bank of Ethiopia. You buy them at a discount and receive the face value at maturity. The difference is your return. Tenors range from 28 days to 364 days.',
-              },
-              {
-                step: '02',
-                title: 'How to buy NBE T-bills',
-                body: 'T-bills are sold through NBE-authorised dealers — primarily commercial banks and licensed securities firms. You submit a bid at the weekly auction specifying the amount and yield you want. Allotment is competitive.',
-              },
-              {
-                step: '03',
-                title: 'T-bills vs savings accounts',
-                body: 'The 364-day T-bill currently yields 9.15% — higher than most bank savings accounts. T-bills carry sovereign risk (very low in Ethiopia) and have no early redemption, unlike savings accounts which allow withdrawals.',
-              },
+              { step: '01', title: 'What a T-bill is', body: 'Treasury bills are short-term debt instruments issued by the NBE on behalf of the government. You lend money to the government for 28, 91, 182 or 364 days and receive your principal plus interest at maturity.' },
+              { step: '02', title: 'How the auction works', body: 'The NBE holds weekly auctions. Investors submit bids through licensed banks and brokers. The yield is set by the auction — meaning the rate you see reflects actual market demand, not an arbitrary rate.' },
+              { step: '03', title: 'Why compare T-bills vs savings', body: 'A 364-day T-bill at 9.15% compares directly to a 12-month fixed deposit. T-bills are government-backed with zero credit risk. Fixed deposits carry bank credit risk but may offer higher rates.' },
             ].map((s) => (
               <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                 <div style={{ height: 3, background: PILLAR }} />
@@ -261,8 +223,8 @@ export default function BondsPage() {
             ))}
           </div>
           <div className="mt-8">
-            <Link href="/guides" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: PILLAR }}>
-              Read all investing guides <ArrowRight />
+            <Link href="/markets/how-to-invest" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: PILLAR }}>
+              Full investing guide <ArrowRight />
             </Link>
           </div>
         </div>
@@ -274,29 +236,17 @@ export default function BondsPage() {
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Data integrity</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
-              Auction results straight from NBE.
+              NBE auction results. Official source.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
               All T-bill yields are sourced from official NBE auction result publications.
-              BirrBank does not estimate or interpolate yields — every number shown is
-              the actual weighted average from the most recent auction.
+              BirrBank does not estimate yields — every figure shown is the actual auction clearing rate.
             </p>
           </div>
-          <div className="flex flex-col gap-3 shrink-0">
-            {[
-              { dot: '#22c55e', label: 'NBE official source',   sub: 'nbe.gov.et auction results' },
-              { dot: PILLAR,    label: 'Post-auction updates',    sub: 'Updated after each weekly auction' },
-              { dot: '#94a3b8', label: 'No estimated yields',   sub: 'Actual weighted averages only' },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-3 rounded-xl" style={{ background: '#1e293b', border: '1px solid #334155', padding: '14px 20px' }}>
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.dot }} />
-                <div>
-                  <span className="text-sm font-semibold" style={{ color: '#93c5fd' }}>{s.label}</span>
-                  <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>{s.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Link href="/banking/savings-rates" className="font-bold rounded-full shrink-0"
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}>
+            Compare savings rates →
+          </Link>
         </div>
       </section>
 
@@ -304,21 +254,20 @@ export default function BondsPage() {
       <section className="bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">T-bill & bond alerts</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">T-bill alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
-              Auction results,<br />
-              <span style={{ color: PILLAR }}>every week in your inbox.</span>
+              NBE auction results,<br />
+              <span style={{ color: PILLAR }}>direct to your inbox.</span>
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>
-              Get the latest NBE T-bill auction results and bond issuances the moment
-              they are published — before your bank sends its own communication.
+              Weekly T-bill auction results as soon as the NBE publishes them — yields, volumes and next auction dates.
             </p>
             <ul className="space-y-3 mb-8">
               {[
-                'Weekly T-bill auction results — all four tenors',
-                'New government and corporate bond issuances',
-                'Yield changes and trend analysis',
-                'Comparison of T-bill yields vs bank savings rates',
+                'Weekly NBE T-bill auction results — all tenors',
+                'Yield changes vs previous auction',
+                'New bond issuances and corporate bond listings',
+                'Comparison with best bank fixed deposit rates',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
@@ -328,9 +277,7 @@ export default function BondsPage() {
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-slate-500 font-medium pt-5 border-t border-slate-100">
-              Free forever · No credit card · Unsubscribe anytime
-            </p>
+            <p className="text-xs text-slate-500 font-medium pt-5 border-t border-slate-100">Free forever · No credit card · Unsubscribe anytime</p>
           </div>
           <EmailCapture />
         </div>
