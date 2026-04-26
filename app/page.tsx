@@ -162,7 +162,7 @@ export default async function HomePage() {
     },
     {
       label: 'Commodities',
-      sublabel: 'Coffee — ECX today',
+      sublabel: 'Coffee · ECX today',
       value: 'ETB ' + coffeePrice,
       sub: 'Yirgacheffe Grade 2',
       href: '/commodities/coffee',
