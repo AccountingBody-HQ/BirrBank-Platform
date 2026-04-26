@@ -18,19 +18,31 @@ const QUICK_LINKS = [
 
 const CHECKLIST = [
   { task: 'All 32 banks fully populated in Supabase',          done: false },
-  { task: 'Rate Updater admin tab operational and tested',      done: false },
+  { task: 'Rate Updater admin tab operational and tested',      done: true  },
   { task: 'NBE daily FX rate import working',                   done: false },
-  { task: 'Homepage savings rate table pulling from Supabase',  done: false },
+  { task: 'Homepage savings rate table pulling from Supabase',  done: true  },
   { task: 'Admin authentication tested end-to-end',             done: true  },
-  { task: 'RLS policies on all 30 birrbank tables',             done: false },
-  { task: 'Last-verified timestamps on all rate rows',          done: false },
-  { task: 'Disclaimer on every page footer',                    done: false },
+  { task: 'RLS policies on all 30 birrbank tables',             done: true  },
+  { task: 'Last-verified timestamps on all rate rows',          done: true  },
+  { task: 'Disclaimer on every page footer',                    done: true  },
+  { task: 'Institution Manager with AI Populate built',         done: true  },
+  { task: 'Data Quality — 7 verification groups built',         done: true  },
+  { task: 'Content Factory — 15 content types built',           done: true  },
+  { task: 'Securities Manager built',                           done: true  },
+  { task: 'Commodities Manager built',                          done: true  },
+  { task: 'EMI calculator on loans page',                       done: true  },
+  { task: 'Savings rates filter and search',                    done: true  },
+  { task: 'guides/[slug] individual pages built',               done: true  },
+  { task: 'regulations/[slug] individual pages built',          done: true  },
+  { task: 'markets/[ticker] individual pages built',            done: true  },
+  { task: 'insurance/travel page built',                        done: true  },
+  { task: 'Canonical tags pointing to birrbank.com',            done: false },
   { task: 'Clerk production keys (pk_live_*)',                  done: false },
   { task: 'Supabase upgraded to Pro',                           done: false },
   { task: 'Vercel upgraded to Pro',                             done: false },
   { task: 'Mobile tested at 375px minimum width',               done: false },
-  { task: 'Canonical tags pointing to birrbank.com',            done: false },
   { task: 'Google Search Console sitemap submitted',            done: false },
+  { task: 'DNS cutover to birrbank.com',                        done: false },
 ]
 
 export default function AdminPage() {
@@ -45,7 +57,7 @@ export default function AdminPage() {
       <div className="mb-8">
         <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>BirrBank Admin</p>
         <h1 className="font-bold text-white mb-1" style={{ fontSize: '28px', letterSpacing: '-0.5px' }}>Command Centre</h1>
-        <p style={{ color: '#475569', fontSize: '14px' }}>Platform overview and pre-launch checklist · Handover v3.0</p>
+        <p style={{ color: '#475569', fontSize: '14px' }}>Platform overview and pre-launch checklist · Handover v5.0</p>
       </div>
 
       {/* Stats */}
