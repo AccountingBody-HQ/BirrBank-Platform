@@ -219,44 +219,50 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right: 5-pillar live snapshot — white card */}
+            {/* Right: 5-pillar live snapshot */}
             <div className="hidden lg:block">
-              <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.2)' }}>
-                <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #3b82f6)' }} />
-                <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+              <div className="rounded-2xl overflow-hidden" style={{ boxShadow: '0 0 0 1px rgba(29,78,216,0.12), 0 24px 64px rgba(0,0,0,0.4), 0 0 80px rgba(29,78,216,0.12)' }}>
+                {/* Dark header */}
+                <div className="flex items-center justify-between px-6 py-5" style={{ background: '#0f172a', borderBottom: '1px solid #1e293b' }}>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest mb-0.5" style={{ color: '#1D4ED8' }}>Live market snapshot</p>
-                    <p className="text-slate-900 font-bold" style={{ fontSize: '15px' }}>All 5 pillars · Updated daily</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#3b82f6' }} />
+                      <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#93c5fd' }}>Live market snapshot</p>
+                    </div>
+                    <p className="font-bold text-white" style={{ fontSize: '15px' }}>All 5 pillars · Updated daily</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-xs font-bold text-blue-700">Live</span>
+                  <div className="rounded-full px-3 py-1.5" style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)' }}>
+                    <span className="text-xs font-bold" style={{ color: '#93c5fd' }}>NBE · ESX · ECX</span>
                   </div>
                 </div>
-                <div className="divide-y divide-slate-100">
+                {/* Rows */}
+                <div className="divide-y divide-slate-100" style={{ background: '#ffffff' }}>
                   {pillars.map((p, i) => (
                     <Link key={p.label} href={p.href}
-                      className={'flex items-center gap-4 hover:bg-slate-50 transition-colors ' + (i === 0 ? 'bg-blue-50' : 'bg-white')}
-                      style={{ padding: i === 0 ? '16px 20px' : '13px 20px' }}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={i === 0 ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
+                      className="flex items-center gap-4 transition-all group hover:bg-blue-50/50"
+                      style={{ padding: i === 0 ? '22px 24px' : '15px 24px', background: i === 0 ? 'linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%)' : '#ffffff' }}>
+                      <div className="rounded-2xl flex items-center justify-center shrink-0"
+                        style={i === 0
+                          ? { width: 46, height: 46, background: 'linear-gradient(135deg, #1D4ED8, #1E40AF)', color: '#fff', boxShadow: '0 6px 16px rgba(29,78,216,0.4)' }
+                          : { width: 38, height: 38, background: '#f8fafc', color: '#94a3b8', border: '1.5px solid #e2e8f0' }}>
                         {p.icon}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: i === 0 ? '#1D4ED8' : '#94a3b8' }}>{p.label}</p>
-                        <p className="font-semibold text-slate-600 truncate" style={{ fontSize: '12px' }}>{p.sublabel}</p>
+                        <p className="font-bold truncate mb-0.5" style={{ fontSize: i === 0 ? '14px' : '13px', color: i === 0 ? '#1e3a8a' : '#64748b' }}>{p.label}</p>
+                        <p className="truncate" style={{ fontSize: '12px', color: i === 0 ? '#3b82f6' : '#94a3b8', fontWeight: i === 0 ? 600 : 400 }}>{p.sublabel}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="font-mono font-black" style={{ fontSize: i === 0 ? '22px' : '15px', color: i === 0 ? '#1D4ED8' : '#0f172a', letterSpacing: '-0.5px', lineHeight: 1.2 }}>{p.value}</p>
-                        <p className="text-xs mt-0.5" style={{ color: p.positive ? '#16a34a' : '#dc2626', fontWeight: 600 }}>{p.sub}</p>
+                        <p className="font-mono font-black" style={{ fontSize: i === 0 ? '30px' : '17px', color: i === 0 ? '#1D4ED8' : '#0f172a', letterSpacing: '-1px', lineHeight: 1.1 }}>{p.value}</p>
+                        <p className="mt-0.5 font-semibold" style={{ fontSize: '11px', color: i === 2 ? (p.positive ? '#16a34a' : '#dc2626') : (i === 0 ? '#3b82f6' : '#94a3b8') }}>{p.sub}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
-                <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                  <p className="text-xs text-slate-400">Official sources · NBE · ESX · ECX</p>
-                  <Link href="/banking" className="text-xs font-bold hover:underline" style={{ color: '#1D4ED8' }}>
-                    Full platform →
+                {/* Footer */}
+                <div className="px-6 py-4 flex items-center justify-between" style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
+                  <p className="text-xs font-medium" style={{ color: '#94a3b8' }}>Verified from official sources daily</p>
+                  <Link href="/banking" className="text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
+                    Full platform <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </Link>
                 </div>
               </div>
