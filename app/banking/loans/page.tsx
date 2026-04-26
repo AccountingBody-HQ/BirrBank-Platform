@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import EmiCalculator from '@/components/EmiCalculator'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 
@@ -181,6 +182,22 @@ export default async function LoansPage() {
             Always verify the current rate directly with the institution before applying.
             BirrBank is not a bank or financial adviser.
           </p>
+        </div>
+      </section>
+
+      {/* EMI CALCULATOR */}
+      <section className="bg-white border-b border-slate-100" style={{ padding: '0 32px 96px' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Calculator</p>
+            <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}>
+              Calculate your monthly repayment.
+            </h2>
+            <p className="text-slate-500 mt-3" style={{ fontSize: '15px', maxWidth: '480px' }}>
+              Enter your loan amount, the bank rate from the table above, and your preferred term to see your monthly EMI instantly.
+            </p>
+          </div>
+          <EmiCalculator />
         </div>
       </section>
 
