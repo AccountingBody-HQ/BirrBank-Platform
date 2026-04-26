@@ -251,7 +251,7 @@ export default async function HomePage() {
                         <p className="truncate mt-0.5" style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 400 }}>{p.sublabel}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="font-mono font-black" style={{ fontSize: i === 0 ? '30px' : '17px', color: i === 0 ? '#1D4ED8' : '#1e293b', letterSpacing: '-1px', lineHeight: 1.1 }}>{p.value}</p>
+                        <p className="font-mono font-black" style={{ fontSize: i === 0 ? '30px' : '17px', color: i === 0 ? '#1D4ED8' : '#475569', letterSpacing: '-1px', lineHeight: 1.1 }}>{p.value}</p>
                         <p className="mt-0.5 font-medium" style={{ fontSize: '11px', color: i === 2 ? (p.positive ? '#16a34a' : '#dc2626') : '#94a3b8' }}>{p.sub}</p>
                       </div>
                     </Link>
