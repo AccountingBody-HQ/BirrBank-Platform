@@ -304,3 +304,72 @@ export async function getCountryInsightCount(options: {
   }
 }
 
+
+// =============================================
+// BIRRBANK — SANITY QUERY FUNCTIONS
+// =============================================
+
+export interface BirrBankArticleCard {
+  _id: string
+  title: string
+  slug: { current: string }
+  publishedAt: string | null
+  excerpt: string | null
+  contentType: string | null
+}
+
+export interface BirrBankArticle {
+  _id: string
+  title: string
+  slug: { current: string }
+  publishedAt: string | null
+  excerpt: string | null
+  contentType: string | null
+  body: any[]
+  canonicalOwner: string | null
+}
+
+export async function getBirrBankGuides(): Promise<BirrBankArticleCard[]> {
+  const query = `*[_type == "article" && "birrbank" in showOnSites] | order(publishedAt desc) {
+    _id, title, slug, publishedAt, excerpt, contentType
+  }`
+  try {
+    return await sanityClient.fetch(query)
+  } catch (error) {
+    console.error('Failed to fetch BirrBank guides:', error)
+    return []
+  }
+}
+
+export async function getBirrBankGuideBySlug(slug: string): Promise<BirrBankArticle | null> {
+  const query = `*[_type == "article" && "birrbank" in showOnSites && slug.current == $slug][0] {
+    _id, title, slug, publishedAt, excerpt, contentType, body, canonicalOwner
+  }`
+  try {
+    return await sanityClient.fetch(query, { slug })
+  } catch (error) {
+    console.error('Failed to fetch BirrBank guide:', error)
+    return null
+  }
+}
+
+export async function getRelatedBirrBankGuides(currentSlug: string, contentType: string | null): Promise<BirrBankArticleCard[]> {
+  const filters = ['_type == "article"', '"birrbank" in showOnSites', 'slug.current != $currentSlug']
+  if (contentType) filters.push('contentType == $contentType')
+  const query = `*[${filters.join(' && ')}] | order(publishedAt desc) [0...3] {
+    _id, title, slug, publishedAt, excerpt, contentType
+  }`
+  try {
+    const params: Record<string, string> = { currentSlug }
+    if (contentType) params.contentType = contentType
+    const results = await sanityClient.fetch(query, params)
+    if (results.length > 0) return results
+    const fallback = `*[_type == "article" && "birrbank" in showOnSites && slug.current != $currentSlug] | order(publishedAt desc) [0...3] {
+      _id, title, slug, publishedAt, excerpt, contentType
+    }`
+    return await sanityClient.fetch(fallback, { currentSlug })
+  } catch (error) {
+    console.error('Failed to fetch related BirrBank guides:', error)
+    return []
+  }
+}
