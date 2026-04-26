@@ -8,6 +8,7 @@ const SITE_MAP: Record<string, string> = {
   HRLake: 'hrlake',
   AccountingBody: 'accountingbody',
   EthioTax: 'ethiotax',
+  BirrBank: 'birrbank',
 }
 
 const CONTENT_TYPE_MAP: Record<string, string> = {
@@ -24,6 +25,21 @@ const CONTENT_TYPE_MAP: Record<string, string> = {
   'Leave and Benefits': 'leave-and-benefits',
   'Compliance Calendar': 'compliance-calendar',
   'Article': 'article',
+  'Bank Review': 'bank-review',
+  'Rate Guide': 'rate-guide',
+  'Insurance Guide': 'insurance-guide',
+  'Market Analysis': 'market-analysis',
+  'Commodity Report': 'commodity-report',
+  'IPO Guide': 'ipo-guide',
+  'Diaspora Guide': 'diaspora-guide',
+  'Regulatory Update': 'regulatory-update',
+  'Investment Guide': 'investment-guide',
+  'Loan Guide': 'loan-guide',
+  'FX Guide': 'fx-guide',
+  'Savings Guide': 'savings-guide',
+  'ECX Guide': 'ecx-guide',
+  'ESX Guide': 'esx-guide',
+  'Financial Explainer': 'financial-explainer',
 }
 
 function makeKey() {

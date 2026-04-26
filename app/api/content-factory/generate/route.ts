@@ -37,6 +37,27 @@ WHAT ACCOUNTINGBODY NEVER DOES:
 - Never invents accounting figures, tax rates or regulatory thresholds
 QUALITY BENCHMARK: Kaplan and BPP professional study texts. ICAEW technical releases. Big Four accounting insight publications. That is the standard.`,
 
+  BirrBank: `
+PLATFORM: BirrBank (birrbank.com)
+BRAND POSITION: Ethiopia's Financial Operating System — free, mobile-first, bilingual financial intelligence platform.
+TAGLINE: Ethiopia's best financial products, compared.
+AUDIENCE: Ethiopian consumers comparing savings rates and loans, diaspora sending money home and investing in Ethiopian stocks, retail investors on the ESX, SMEs comparing business loans and FX rates, and financial professionals tracking the Ethiopian market.
+VOICE: Authoritative, practical, clear. Written for people making real financial decisions with real money. Grounded in the Ethiopian financial reality. Never generic. Never vague.
+ETHIOPIA-SPECIFIC RULES:
+- All monetary values in ETB (Ethiopian Birr) unless comparing with foreign currencies
+- Always reference the National Bank of Ethiopia (NBE) as the primary regulator
+- FX rates are always ETB per 1 foreign unit — 1 USD = [rate] ETB
+- Never invent specific NBE-mandated rates — use directional language and cite nbe.gov.et
+- Ethiopian banks named must be real NBE-licensed banks
+- The Ethiopian Securities Exchange (ESX) launched in January 2025
+- Never claim BirrBank offers financial services — it is an information and comparison platform only
+WHAT BIRRBANK NEVER DOES:
+- Never claims to offer financial services, banking, insurance or investment products
+- Never invents specific NBE rates, thresholds or regulatory deadlines
+- Never reproduces competitor data from banksethiopia.com or similar
+- Never uses generic financial blog language — every article must be specific to the Ethiopian market
+QUALITY BENCHMARK: PwC Ethiopia Tax Facts, EY Ethiopia Investment Guides, Addis Fortune financial coverage, Capital Ethiopia banking analysis. That is the standard.`,
+
   EthioTax: `
 PLATFORM: EthioTax (ethiotax.com)
 BRAND POSITION: The specialist platform for Ethiopian tax, business law and finance.
@@ -304,6 +325,187 @@ ACCURACY RULES:
 - All deadlines must carry verification caveat with authority name
 - Every obligation must name the specific authority responsible
 `,
+  'Bank Review': `
+CONTENT TYPE: Bank Review
+PURPOSE: A comprehensive, factual review of an Ethiopian bank for consumers and diaspora deciding where to bank.
+REQUIRED SECTIONS:
+1. Institution Overview — history, ownership, NBE licence, branch network, market position
+2. Savings Products — account types, current rates, minimum balances, special features
+3. Loan Products — personal, home, business and car loans, rates and eligibility
+4. Digital Services — mobile app, internet banking, USSD, mobile money integration
+5. FX and Remittance — currencies supported, diaspora services
+6. Special Accounts — diaspora, youth, women savings accounts where available
+7. Who Is This Bank Best For — specific user profiles that benefit most
+8. How to Open an Account — step-by-step practical guide
+9. BirrBank Verdict — balanced summary of strengths and weaknesses`,
+
+  'Rate Guide': `
+CONTENT TYPE: Rate Guide
+PURPOSE: A practical rate comparison guide helping Ethiopian consumers find the best savings or loan rates.
+REQUIRED SECTIONS:
+1. Current Rate Environment — overview of rates across Ethiopian banks
+2. How Rates Are Set — NBE directives, market competition, product types
+3. Best Rates by Category — fixed deposits, regular savings, current accounts
+4. How to Read a Rate — understanding APR, minimum balance, lock-in periods
+5. Rate Alert Strategy — how to track rate changes using BirrBank
+6. Practical Recommendations — which products suit which savings goals`,
+
+  'Insurance Guide': `
+CONTENT TYPE: Insurance Guide
+PURPOSE: A practical guide to Ethiopian insurance products for consumers and businesses.
+REQUIRED SECTIONS:
+1. Insurance Overview — the Ethiopian insurance market, NBE regulation, key players
+2. Product Types — motor, life, health, property, travel, agricultural coverage
+3. How Premiums Are Calculated — key factors, typical ranges in ETB
+4. Claims Process — step-by-step how to make a claim in Ethiopia
+5. Comparing Providers — what to look for, BirrBank comparison methodology
+6. Common Mistakes — errors Ethiopians make when buying insurance
+7. Practical Buying Guide — how to choose the right product`,
+
+  'Market Analysis': `
+CONTENT TYPE: Market Analysis
+PURPOSE: A capital markets analysis for Ethiopian retail investors and diaspora.
+REQUIRED SECTIONS:
+1. ESX Market Overview — current listings, index performance, trading volumes
+2. Sector Analysis — banking, manufacturing, agricultural sectors on ESX
+3. IPO Pipeline — upcoming listings, ECMA approvals, subscription windows
+4. T-Bill and Bond Market — current yields, auction results, investment minimums
+5. Investment Returns Comparison — ESX equities vs savings rates vs T-bills
+6. How to Invest on ESX — practical steps for first-time investors
+7. Risk Considerations — market risk, liquidity, regulatory risk in Ethiopian context`,
+
+  'Commodity Report': `
+CONTENT TYPE: Commodity Report
+PURPOSE: An ECX commodity market report for exporters, agribusinesses and investors.
+REQUIRED SECTIONS:
+1. Market Overview — ECX structure, trading hours, commodity classes
+2. Coffee Market — current prices by grade, seasonal factors, export outlook
+3. Sesame Market — price trends, quality grades, export demand
+4. Grain and Bean Market — wheat, soybean, chickpea price movements
+5. Price Drivers — weather, global demand, export policy, birr exchange rate
+6. Who Uses ECX Data — exporters, farmers, agribusinesses, financial institutions
+7. How to Access ECX Prices — BirrBank commodities section, ECX official site`,
+
+  'IPO Guide': `
+CONTENT TYPE: IPO Guide
+PURPOSE: A practical IPO investment guide for Ethiopian retail investors and diaspora.
+REQUIRED SECTIONS:
+1. What is an IPO in Ethiopia — ESX listing process, ECMA approval, prospectus
+2. Current IPO Pipeline — companies under review, expected listing timelines
+3. How to Participate — account opening at CBE Capital or Wegagen Capital
+4. Reading a Prospectus — key sections every investor must review
+5. Valuation Basics — how to assess if an IPO is fairly priced
+6. Risks of IPO Investing — liquidity risk, pricing risk, lock-up periods
+7. Historical Performance — how previous Ethiopian IPOs have performed`,
+
+  'Diaspora Guide': `
+CONTENT TYPE: Diaspora Guide
+PURPOSE: A practical guide for the Ethiopian diaspora on banking, investing and sending money home.
+REQUIRED SECTIONS:
+1. Diaspora Banking Overview — which banks offer diaspora accounts, requirements
+2. Sending Money Home — best remittance services, fees, exchange rates comparison
+3. Opening an Account from Abroad — required documents, online vs in-person
+4. Investing in Ethiopia — ESX stocks, T-bills, fixed deposits from abroad
+5. Property Investment — how diaspora can legally purchase property in Ethiopia
+6. FX Considerations — ETB exchange rate, timing strategies, rate alerts
+7. Tax Implications — Ethiopian and home country tax considerations`,
+
+  'Regulatory Update': `
+CONTENT TYPE: Regulatory Update
+PURPOSE: A clear update on a new NBE, ECMA or ECX directive and its practical impact.
+REQUIRED SECTIONS:
+1. Regulation Overview — which authority issued it, effective date, scope
+2. What Changed — specific changes from previous rules in plain language
+3. Who Is Affected — institutions, consumers, investors, specific product categories
+4. Compliance Requirements — what banks, insurers or businesses must do
+5. Consumer Impact — how this affects Ethiopian consumers and the diaspora
+6. BirrBank Data Update — which BirrBank sections are affected
+7. Official Source — direct link to NBE, ECMA or ECX directive`,
+
+  'Investment Guide': `
+CONTENT TYPE: Investment Guide
+PURPOSE: A practical investment guide for Ethiopian retail investors.
+REQUIRED SECTIONS:
+1. Investment Options in Ethiopia — savings accounts, T-bills, ESX equities compared
+2. Risk and Return Framework — expected returns and risks for each asset class
+3. Starting with Small Amounts — minimum investments across all products
+4. Diversification in an Ethiopian Context — building a balanced portfolio
+5. ESX Step-by-Step — how to open a brokerage account and place first trade
+6. T-Bill Investment — how NBE auctions work, minimum amounts, yield calculation
+7. Long-Term Wealth Building — compound interest, regular savings, reinvestment`,
+
+  'Loan Guide': `
+CONTENT TYPE: Loan Guide
+PURPOSE: A comprehensive loan guide helping Ethiopians find and compare the best loan products.
+REQUIRED SECTIONS:
+1. Ethiopian Loan Market Overview — NBE rate directives, bank competition, market rates
+2. Personal Loans — rates across banks, eligibility, required documents
+3. Home Loans — mortgage availability, rates, LTV ratios, land ownership rules
+4. Business Loans — SME credit, working capital, equipment finance
+5. Agricultural Loans — microfinance options, CBE agricultural credit
+6. How to Compare Loans — APR vs flat rate, total cost calculation, EMI formula
+7. Application Tips — how to improve approval chances at Ethiopian banks`,
+
+  'FX Guide': `
+CONTENT TYPE: FX Guide
+PURPOSE: A practical FX guide for Ethiopians converting currency and the diaspora sending money home.
+REQUIRED SECTIONS:
+1. Ethiopian FX Market — NBE as regulator, official vs commercial bank rates
+2. How the Birr Exchange Rate is Set — NBE indicative rate, bank spreads
+3. Currency by Currency Guide — USD, GBP, EUR, SAR, AED rates and uses
+4. Best Rate Strategy — how to get the best ETB when converting foreign currency
+5. Bank vs FX Bureau — when to use each, fee comparison
+6. Diaspora Remittance FX — how transfer fees and exchange rates combine
+7. Rate Alert Strategy — using BirrBank to track daily NBE and bank rates`,
+
+  'Savings Guide': `
+CONTENT TYPE: Savings Guide
+PURPOSE: A comprehensive savings guide helping Ethiopians choose the best savings products.
+REQUIRED SECTIONS:
+1. Ethiopian Savings Market Overview — NBE minimum rate directive, competitive rates
+2. Account Types Compared — regular savings, fixed deposits, current, diaspora, youth, women
+3. Fixed Deposit Strategy — 3, 6, 12 and 24-month rates compared across banks
+4. Sharia-Compliant Options — Islamic savings products available in Ethiopia
+5. Minimum Balance Requirements — what to watch for across institutions
+6. Interest Calculation — how banks calculate and pay interest in Ethiopia
+7. Best Savings Strategy by Goal — emergency fund, house purchase, education, retirement`,
+
+  'ECX Guide': `
+CONTENT TYPE: ECX Guide
+PURPOSE: A guide to the Ethiopian Commodity Exchange for producers, exporters and investors.
+REQUIRED SECTIONS:
+1. ECX Overview — history, structure, regulation, trading hours
+2. Commodity Classes — coffee grades, sesame varieties, grains, beans traded on ECX
+3. How Prices Are Set — auction mechanism, daily settlement price
+4. Who Trades on ECX — exporters, processors, government agencies, foreign buyers
+5. Reading ECX Price Data — commodity codes, price per quintal, volume units
+6. Price Trends and Seasonality — how to read historical patterns
+7. BirrBank ECX Integration — how BirrBank sources and displays ECX data daily`,
+
+  'ESX Guide': `
+CONTENT TYPE: ESX Guide
+PURPOSE: A guide to the Ethiopian Securities Exchange for retail investors and diaspora.
+REQUIRED SECTIONS:
+1. ESX Overview — launch in January 2025, ECMA regulation, current listings
+2. How ESX Works — trading sessions, settlement, custody at ECSD
+3. Listed Companies — current listings, sectors, market capitalisation
+4. How to Open a Brokerage Account — CBE Capital, Wegagen Capital, process and documents
+5. Placing a Trade — order types, minimum lot sizes, trading fees
+6. Reading ESX Data — price, change, volume, P/E ratio interpretation
+7. IPO Pipeline — how ECMA approvals lead to new listings`,
+
+  'Financial Explainer': `
+CONTENT TYPE: Financial Explainer
+PURPOSE: A clear explanation of an Ethiopian financial concept, term or regulation.
+REQUIRED SECTIONS:
+1. Plain English Definition — what this term means in one clear paragraph
+2. Why It Matters in Ethiopia — the specific Ethiopian context and relevance
+3. How It Works in Practice — step-by-step mechanics with a realistic ETB example
+4. Common Misconceptions — what Ethiopians commonly misunderstand
+5. Real-World Application — a concrete scenario in the Ethiopian financial context
+6. Related Concepts — 3-5 closely related terms the reader should also understand
+7. Where to Learn More — official sources, BirrBank guides, NBE resources`,
+
   'Article': `
 CONTENT TYPE: Article
 PURPOSE: A high-quality, well-researched editorial article on a topic relevant to the platform audience. Must be original, insightful and go beyond what a reader could find by Googling for 30 seconds.

@@ -1,349 +1,499 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { Sparkles, ChevronRight, Globe, Edit3, Check, Loader2, AlertCircle, Send } from 'lucide-react'
 
-const PILLARS = [
-  { key: 'banking',      label: 'Banking',       color: '#1D4ED8' },
-  { key: 'insurance',    label: 'Insurance',      color: '#8b5cf6' },
-  { key: 'markets',      label: 'Markets',        color: '#22c55e' },
-  { key: 'commodities',  label: 'Commodities',    color: '#f59e0b' },
-  { key: 'regulations',  label: 'Regulations',    color: '#ef4444' },
-  { key: 'diaspora',     label: 'Diaspora',       color: '#06b6d4' },
-  { key: 'intelligence', label: 'Intelligence',   color: '#f97316' },
-]
+const SITES = ['HRLake', 'AccountingBody', 'EthioTax', 'BirrBank']
 
-const CONTENT_TYPES: Record<string, { label: string; pillars: string[] }> = {
-  bank_review:         { label: 'Bank Review',          pillars: ['banking']                          },
-  rate_guide:          { label: 'Rate Guide',            pillars: ['banking']                          },
-  insurance_guide:     { label: 'Insurance Guide',       pillars: ['insurance']                        },
-  market_analysis:     { label: 'Market Analysis',       pillars: ['markets']                          },
-  commodity_report:    { label: 'Commodity Report',      pillars: ['commodities']                      },
-  ipo_guide:           { label: 'IPO Guide',             pillars: ['markets']                          },
-  diaspora_guide:      { label: 'Diaspora Guide',        pillars: ['diaspora']                         },
-  regulatory_update:   { label: 'Regulatory Update',     pillars: ['regulations']                      },
-  investment_guide:    { label: 'Investment Guide',      pillars: ['markets', 'banking']               },
-  loan_guide:          { label: 'Loan Guide',            pillars: ['banking']                          },
-  fx_guide:            { label: 'FX Guide',              pillars: ['banking', 'diaspora']              },
-  savings_guide:       { label: 'Savings Guide',         pillars: ['banking']                          },
-  ecx_guide:           { label: 'ECX Guide',             pillars: ['commodities']                      },
-  esx_guide:           { label: 'ESX Guide',             pillars: ['markets']                          },
-  financial_explainer: { label: 'Financial Explainer',   pillars: ['banking','insurance','markets','commodities','regulations','diaspora','intelligence'] },
+const SITE_URLS: Record<string, string> = {
+  HRLake:        'hrlake.com',
+  AccountingBody:'accountingbody.com',
+  EthioTax:      'ethiotax.com',
+  BirrBank:      'birrbank.com',
 }
+
+const CONTENT_TYPES_BY_SITE: Record<string, string[]> = {
+  HRLake:        ['Country Report','Explainer','HR Management','EOR Guide','Tax Guide','Payroll Guide','Accounting Guide','Course','Article','Hiring Guide','HR Compliance Guide','Leave and Benefits','Compliance Calendar'],
+  AccountingBody:['Country Report','Explainer','Accounting Guide','Tax Guide','Course','Article'],
+  EthioTax:      ['Country Report','Explainer','Tax Guide','Article'],
+  BirrBank:      ['Bank Review','Rate Guide','Insurance Guide','Market Analysis','Commodity Report','IPO Guide','Diaspora Guide','Regulatory Update','Investment Guide','Loan Guide','FX Guide','Savings Guide','ECX Guide','ESX Guide','Financial Explainer','Article'],
+}
+
+const TONES = [
+  { label: 'Authoritative', desc: 'Expert, confident, definitive'   },
+  { label: 'Educational',   desc: 'Clear, accessible, structured'   },
+  { label: 'Technical',     desc: 'Precise, detailed, professional'  },
+]
 
 const LENGTHS = [
-  { key: 'short',    label: 'Short',    sub: '500-650 words'   },
-  { key: 'standard', label: 'Standard', sub: '900-1100 words'  },
-  { key: 'deep',     label: 'Deep',     sub: '1800-2200 words' },
+  { label: 'Short',     desc: '~500 words',   value: 'short'    },
+  { label: 'Standard',  desc: '~1,000 words', value: 'standard' },
+  { label: 'Deep Dive', desc: '2,000+ words', value: 'deep'     },
 ]
 
-function wordCount(text: string) {
-  return text.trim().split(/\s+/).filter(Boolean).length
+const STEPS = ['Select', 'Configure', 'Generate', 'Review', 'Publish']
+
+type Config = {
+  site: string; contentType: string; country: string
+  topic: string; tone: string; length: string
+  aiSummary: string; keyTerms: string
 }
 
-function Loader() {
+const EMPTY: Config = {
+  site: '', contentType: '', country: '',
+  topic: '', tone: 'Authoritative', length: 'standard',
+  aiSummary: '', keyTerms: '',
+}
+
+const C = {
+  card:   { background: '#0d1424', border: '1px solid #1a2238', borderRadius: 16 },
+  input:  { background: '#111827', border: '1px solid #1f2937' },
+  active: { background: 'rgba(37,99,235,0.12)', border: '1px solid #2563eb', color: '#ffffff' },
+  idle:   { background: 'rgba(255,255,255,0.03)', border: '1px solid #1f2937', color: '#64748b' },
+}
+
+function SelectCard({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <div className="space-y-3 animate-pulse">
-      {[...Array(4)].map((_,i) => <div key={i} className="h-14 rounded-xl" style={{ background: '#0d1424' }} />)}
-    </div>
+    <button onClick={onClick} className="rounded-xl p-4 text-left transition-all w-full"
+      style={active ? C.active : C.idle}>
+      {children}
+    </button>
   )
 }
 
 export default function ContentFactoryPage() {
-  const [pillar,      setPillar]      = useState('banking')
-  const [contentType, setContentType] = useState('bank_review')
-  const [topic,       setTopic]       = useState('')
-  const [institution, setInstitution] = useState('')
-  const [length,      setLength]      = useState('standard')
-  const [generating,  setGenerating]  = useState(false)
-  const [saving,      setSaving]      = useState(false)
-  const [msg,         setMsg]         = useState('')
-  const [result,      setResult]      = useState<any>(null)
-  const [institutions, setInstitutions] = useState<any[]>([])
-  const [guides,      setGuides]      = useState<any[]>([])
-  const [loadingGuides, setLoadingGuides] = useState(true)
-  const [tab,         setTab]         = useState(0)
+  const [step,         setStep]         = useState(0)
+  const [config,       setConfig]       = useState<Config>(EMPTY)
+  const [generated,    setGenerated]    = useState('')
+  const [edited,       setEdited]       = useState('')
+  const [generating,   setGenerating]   = useState(false)
+  const [publishing,   setPublishing]   = useState(false)
+  const [published,    setPublished]    = useState(false)
+  const [error,        setError]        = useState('')
+  const [showOnSites,  setShowOnSites]  = useState<string[]>([])
+  const [canonical,    setCanonical]    = useState('')
 
-  // Load institutions for dropdown
-  useEffect(() => {
-    fetch('/api/birrbank-institutions')
-      .then(r => r.json())
-      .then(d => setInstitutions(d.institutions ?? []))
-  }, [])
+  const wordCount = (edited || generated).split(/\s+/).filter(Boolean).length
 
-  // Load existing guides
-  const loadGuides = () => {
-    setLoadingGuides(true)
-    fetch('/api/birrbank-institutions') // reuse institutions endpoint for now
-      .then(() => setLoadingGuides(false))
+  function seoScore() {
+    let s = 0
+    if (wordCount >= 300)              s += 25
+    if (wordCount >= 800)              s += 25
+    if (config.topic.length >= 20)     s += 25
+    if (config.aiSummary.length >= 50) s += 25
+    return s
   }
 
-  useEffect(() => { loadGuides() }, [])
-
-  // Filter content types to current pillar
-  const availableTypes = Object.entries(CONTENT_TYPES).filter(([, v]) =>
-    v.pillars.includes(pillar)
-  )
-
-  // Reset content type when pillar changes
-  function handlePillarChange(p: string) {
-    setPillar(p)
-    const available = Object.entries(CONTENT_TYPES).filter(([, v]) => v.pillars.includes(p))
-    if (available.length > 0) setContentType(available[0][0])
+  function step1Valid() {
+    return !!(config.site && config.contentType && config.topic.trim())
   }
 
-  async function generate() {
-    if (!topic.trim()) { setMsg('Topic is required.'); return }
-    setGenerating(true); setResult(null); setMsg('')
-    const res = await fetch('/api/birrbank-content-factory', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'generate',
-        pillar,
-        contentType,
-        topic: topic.trim(),
-        institutionName: institution || undefined,
-        length,
-      }),
-    })
-    const d = await res.json()
-    setGenerating(false)
-    if (d.ok) setResult(d)
-    else setMsg('Error: ' + d.error)
+  function handleSiteChange(site: string) {
+    const types = CONTENT_TYPES_BY_SITE[site] ?? []
+    setConfig(c => ({
+      ...c,
+      site,
+      contentType: types.includes(c.contentType) ? c.contentType : '',
+    }))
   }
 
-  async function saveGuide() {
-    if (!result) return
-    setSaving(true); setMsg('')
-    const inst = institutions.find((i: any) => i.name === institution || i.slug === institution)
-    const res = await fetch('/api/birrbank-content-factory', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'save_guide',
-        title: result.title,
-        pillar,
-        contentType,
-        body: result.content,
-        summary: result.summary,
-        keywords: result.keywords,
-        institutionSlug: inst?.slug || null,
-      }),
-    })
-    const d = await res.json()
-    setSaving(false)
-    if (d.ok) { setMsg('Guide saved to Supabase guides table. Slug: ' + d.slug); setResult(null); setTopic('') }
-    else setMsg('Error: ' + d.error)
+  async function handleGenerate() {
+    setGenerating(true); setError('')
+    try {
+      const controller = new AbortController()
+      const tid = setTimeout(() => controller.abort(), 120000)
+      const res = await fetch('/api/content-factory/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+        signal: controller.signal,
+      })
+      clearTimeout(tid)
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Generation failed')
+      setGenerated(data.content)
+      setEdited(data.content)
+      if (data.aiSummary) setConfig(c => ({ ...c, aiSummary: data.aiSummary }))
+      if (data.keyTerms)  setConfig(c => ({ ...c, keyTerms: data.keyTerms }))
+      setShowOnSites([config.site])
+      setCanonical(config.site)
+      setStep(3)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setGenerating(false)
+    }
   }
 
-  const pillarColor = PILLARS.find(p => p.key === pillar)?.color ?? '#1D4ED8'
+  async function handlePublish() {
+    if (publishing) return
+    setPublishing(true); setError('')
+    try {
+      const res = await fetch('/api/content-factory/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...config,
+          content: edited || generated,
+          showOnSites,
+          canonicalOwner: canonical,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Publish failed')
+      setPublished(true)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setPublishing(false)
+    }
+  }
+
+  function reset() {
+    setStep(0); setConfig(EMPTY); setGenerated(''); setEdited('')
+    setPublished(false); setError(''); setShowOnSites([]); setCanonical('')
+  }
+
+  const seo      = seoScore()
+  const seoColor = seo >= 75 ? '#10b981' : seo >= 50 ? '#f59e0b' : '#ef4444'
+  const contentTypes = config.site ? (CONTENT_TYPES_BY_SITE[config.site] ?? []) : []
 
   return (
-    <div style={{ padding: '32px', minHeight: '100vh', background: '#080d1a' }}>
+    <div className="p-8 max-w-5xl">
 
-      <div className="mb-8">
-        <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>BirrBank Admin</p>
-        <h1 className="font-bold text-white mb-1" style={{ fontSize: '28px', letterSpacing: '-0.5px' }}>Content Factory</h1>
-        <p style={{ color: '#475569', fontSize: '14px' }}>
-          AI-powered guide and article generation for all 5 pillars. 15 content types. Saves directly to the Supabase guides table.
-        </p>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'rgba(245,158,11,0.12)' }}>
+          <Sparkles size={20} style={{ color: '#f59e0b' }} />
+        </div>
+        <div>
+          <p className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: '#1D4ED8' }}>BirrBank Admin</p>
+          <h1 className="text-2xl font-bold text-white">Content Factory</h1>
+          <p className="text-sm" style={{ color: '#475569' }}>Generate, review and publish to all platforms via Sanity</p>
+        </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-xl" style={{ background: '#0d1424', border: '1px solid #1a2238', width: 'fit-content' }}>
-        {['Generate', 'Recent Guides'].map((t, i) => (
-          <button key={t} onClick={() => setTab(i)}
-            className="font-bold rounded-lg text-sm transition-all"
-            style={{ padding: '8px 20px', background: tab === i ? '#1D4ED8' : 'transparent', color: tab === i ? '#fff' : '#475569' }}>
-            {t}
-          </button>
+      {/* Step indicator */}
+      <div className="flex items-center mb-10 flex-wrap gap-y-2">
+        {STEPS.map((s, i) => (
+          <div key={s} className="flex items-center">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl"
+              style={i === step
+                ? { background: '#2563eb', color: '#ffffff' }
+                : i < step
+                  ? { background: 'rgba(16,185,129,0.12)', color: '#10b981' }
+                  : { background: 'rgba(255,255,255,0.03)', color: '#334155' }}>
+              <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                style={i < step
+                  ? { background: '#10b981', color: '#ffffff' }
+                  : i === step
+                    ? { background: 'rgba(255,255,255,0.2)', color: '#ffffff' }
+                    : { background: 'rgba(255,255,255,0.04)', color: '#334155' }}>
+                {i < step ? '✓' : i + 1}
+              </span>
+              <span className="text-sm font-semibold">{s}</span>
+            </div>
+            {i < STEPS.length - 1 && <ChevronRight size={14} style={{ color: '#1e293b' }} className="mx-1" />}
+          </div>
         ))}
       </div>
 
-      {tab === 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Error */}
+      {error && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+          <AlertCircle size={16} style={{ color: '#ef4444' }} className="shrink-0" />
+          <p className="text-sm" style={{ color: '#ef4444' }}>{error}</p>
+        </div>
+      )}
 
-          {/* Config panel */}
-          <div className="space-y-5">
-
-            {msg && (
-              <div className="rounded-xl px-4 py-3 text-sm font-semibold"
-                style={{ background: msg.startsWith('Error') ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)', color: msg.startsWith('Error') ? '#ef4444' : '#22c55e', border: '1px solid ' + (msg.startsWith('Error') ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)') }}>
-                {msg}
-              </div>
-            )}
-
-            {/* Pillar */}
-            <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '20px' }}>
-              <p style={{ color: '#475569', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Pillar</p>
-              <div className="grid grid-cols-2 gap-1.5">
-                {PILLARS.map(p => (
-                  <button key={p.key} onClick={() => handlePillarChange(p.key)}
-                    className="rounded-lg text-xs font-bold text-left px-3 py-2 transition-all"
-                    style={{
-                      background: pillar === p.key ? p.color + '20' : 'transparent',
-                      color: pillar === p.key ? p.color : '#475569',
-                      border: '1px solid ' + (pillar === p.key ? p.color + '60' : '#1a2238'),
-                    }}>
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Content type */}
-            <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '20px' }}>
-              <p style={{ color: '#475569', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Content Type</p>
-              <div className="space-y-1">
-                {availableTypes.map(([key, val]) => (
-                  <button key={key} onClick={() => setContentType(key)}
-                    className="w-full text-left rounded-lg px-3 py-2 text-xs font-semibold transition-all"
-                    style={{
-                      background: contentType === key ? pillarColor + '15' : 'transparent',
-                      color: contentType === key ? pillarColor : '#475569',
-                      borderLeft: contentType === key ? '2px solid ' + pillarColor : '2px solid transparent',
-                    }}>
-                    {val.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Length */}
-            <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '20px' }}>
-              <p style={{ color: '#475569', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Length</p>
-              <div className="grid grid-cols-3 gap-1.5">
-                {LENGTHS.map(l => (
-                  <button key={l.key} onClick={() => setLength(l.key)}
-                    className="rounded-lg text-center py-2.5 transition-all"
-                    style={{
-                      background: length === l.key ? '#1D4ED8' : 'transparent',
-                      border: '1px solid ' + (length === l.key ? '#1D4ED8' : '#1a2238'),
-                    }}>
-                    <p className="text-xs font-bold" style={{ color: length === l.key ? '#fff' : '#475569' }}>{l.label}</p>
-                    <p style={{ fontSize: '10px', color: length === l.key ? 'rgba(255,255,255,0.6)' : '#334155' }}>{l.sub}</p>
-                  </button>
-                ))}
-              </div>
+      {/* ── STEP 1 SELECT ── */}
+      {step === 0 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Target Site</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>Which platform is this content primarily for?</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {SITES.map(site => (
+                <SelectCard key={site} active={config.site === site} onClick={() => handleSiteChange(site)}>
+                  <Globe size={14} className="mb-2 opacity-60" />
+                  <p className="font-semibold text-sm">{site}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#334155' }}>{SITE_URLS[site]}</p>
+                </SelectCard>
+              ))}
             </div>
           </div>
 
-          {/* Topic + output */}
-          <div className="lg:col-span-2 space-y-5">
-
-            {/* Topic input */}
-            <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '20px 24px' }}>
-              <p className="font-bold text-white mb-4" style={{ fontSize: '15px' }}>Article Topic</p>
-              <div className="space-y-3">
-                <div>
-                  <p style={{ color: '#475569', fontSize: '11px', marginBottom: '4px' }}>Topic *</p>
-                  <input value={topic} onChange={e => setTopic(e.target.value)}
-                    placeholder="e.g. Best savings rates in Ethiopia 2025, How to invest on ESX, Awash Bank full review"
-                    className="w-full rounded-xl text-sm text-white"
-                    style={{ background: '#080d1a', border: '1px solid #1a2238', padding: '10px 14px', outline: 'none' }} />
-                </div>
-                <div>
-                  <p style={{ color: '#475569', fontSize: '11px', marginBottom: '4px' }}>Institution (optional — for bank/insurer reviews)</p>
-                  <select value={institution} onChange={e => setInstitution(e.target.value)}
-                    className="w-full rounded-xl text-sm text-white"
-                    style={{ background: '#080d1a', border: '1px solid #1a2238', padding: '10px 14px', outline: 'none' }}>
-                    <option value="">No specific institution</option>
-                    {institutions.map((i: any) => (
-                      <option key={i.slug} value={i.name}>{i.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <button onClick={generate} disabled={generating || !topic.trim()}
-                  className="w-full font-bold rounded-xl text-sm transition-all"
-                  style={{
-                    background: topic.trim() ? pillarColor : '#1a2238',
-                    color: topic.trim() ? '#fff' : '#334155',
-                    padding: '11px 24px',
-                    opacity: generating ? 0.7 : 1,
-                  }}>
-                  {generating ? 'Generating article...' : 'Generate Article'}
-                </button>
+          {config.site && (
+            <div className="rounded-2xl border p-6" style={C.card}>
+              <h2 className="text-white font-bold text-sm mb-1">Content Type</h2>
+              <p className="text-xs mb-4" style={{ color: '#334155' }}>What type of content do you need?</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {contentTypes.map(type => (
+                  <SelectCard key={type} active={config.contentType === type} onClick={() => setConfig(c => ({ ...c, contentType: type }))}>
+                    <p className="font-semibold text-xs">{type}</p>
+                  </SelectCard>
+                ))}
               </div>
             </div>
+          )}
 
-            {generating && (
-              <div className="rounded-2xl p-8 text-center" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
-                <div className="w-8 h-8 rounded-full border-2 border-t-transparent mx-auto mb-3 animate-spin"
-                  style={{ borderColor: pillarColor, borderTopColor: 'transparent' }} />
-                <p style={{ color: '#475569', fontSize: '13px' }}>AI is writing your article...</p>
-                <p style={{ color: '#334155', fontSize: '11px', marginTop: '4px' }}>This may take 30-60 seconds</p>
-              </div>
-            )}
+          {config.site && (
+            <div className="rounded-2xl border p-6" style={C.card}>
+              <h2 className="text-white font-bold text-sm mb-1">
+                Country <span className="font-normal text-xs" style={{ color: '#334155' }}>(optional)</span>
+              </h2>
+              <p className="text-xs mb-4" style={{ color: '#334155' }}>
+                {config.site === 'BirrBank'
+                  ? 'For institution-specific guides, enter the institution name here.'
+                  : 'Required for Country Reports, Tax Guides and EOR Guides. Use ISO2 code (e.g. GB, DE, US).'}
+              </p>
+              <input type="text" value={config.country}
+                onChange={e => setConfig(c => ({ ...c, country: e.target.value }))}
+                placeholder={config.site === 'BirrBank' ? 'e.g. Awash Bank, CBE, Dashen Bank…' : 'e.g. United Kingdom, Germany…'}
+                className="w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-600 focus:outline-none"
+                style={C.input} />
+            </div>
+          )}
 
-            {result && !generating && (
-              <div className="space-y-4">
-                {/* Stats bar */}
-                <div className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ background: '#0d1424', border: '1px solid rgba(34,197,94,0.2)' }}>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      <span className="text-xs font-bold" style={{ color: '#22c55e' }}>Generated</span>
-                    </div>
-                    <span style={{ color: '#334155', fontSize: '12px' }}>{wordCount(result.content)} words</span>
-                    <span style={{ color: '#334155', fontSize: '12px' }}>{result.title}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={saveGuide} disabled={saving}
-                      className="font-bold rounded-lg text-xs"
-                      style={{ background: '#22c55e', color: '#fff', padding: '6px 14px', opacity: saving ? 0.6 : 1 }}>
-                      {saving ? 'Saving...' : 'Save to Supabase'}
-                    </button>
-                    <button onClick={() => { setResult(null); setTopic('') }}
-                      className="font-bold rounded-lg text-xs"
-                      style={{ background: '#1a2238', color: '#64748b', padding: '6px 12px' }}>
-                      Discard
-                    </button>
-                  </div>
-                </div>
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Topic</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>Be specific — the more detail you give, the better the output</p>
+            <textarea value={config.topic} rows={3}
+              onChange={e => setConfig(c => ({ ...c, topic: e.target.value }))}
+              placeholder={config.site === 'BirrBank'
+                ? 'e.g. Best savings rates in Ethiopia 2025 — comparing all 32 banks, fixed deposits vs regular savings…'
+                : 'e.g. Employer payroll obligations for remote workers in the UK including PAYE, National Insurance…'}
+              className="w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-600 focus:outline-none resize-none"
+              style={C.input} />
+          </div>
 
-                {/* Article preview */}
-                <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '24px', maxHeight: '600px', overflowY: 'auto' }}>
-                  <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed" style={{ color: '#94a3b8' }}>
-                    {result.content}
-                  </pre>
-                </div>
-
-                {/* Summary + keywords */}
-                {(result.summary || result.keywords) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {result.summary && (
-                      <div className="rounded-xl p-3" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
-                        <p style={{ color: '#475569', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Search Summary</p>
-                        <p style={{ color: '#64748b', fontSize: '12px', lineHeight: 1.6 }}>{result.summary}</p>
-                      </div>
-                    )}
-                    {result.keywords && (
-                      <div className="rounded-xl p-3" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
-                        <p style={{ color: '#475569', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Keywords</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {result.keywords.split(',').map((k: string) => (
-                            <span key={k} className="text-xs font-semibold px-2 py-0.5 rounded"
-                              style={{ background: 'rgba(29,78,216,0.1)', color: '#1D4ED8' }}>
-                              {k.trim()}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+          <div className="flex justify-end">
+            <button onClick={() => setStep(1)} disabled={!step1Valid()}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+              style={{ background: '#2563eb', color: '#ffffff' }}>
+              Continue <ChevronRight size={15} />
+            </button>
           </div>
         </div>
       )}
 
-      {tab === 1 && (
-        <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '24px' }}>
-          <p className="font-bold text-white mb-2" style={{ fontSize: '15px' }}>Recent Guides</p>
-          <p style={{ color: '#475569', fontSize: '13px' }}>
-            Guides saved from Content Factory appear in the Supabase <span className="font-mono" style={{ color: '#1D4ED8' }}>birrbank.guides</span> table
-            and are served on the public <a href="/guides" target="_blank" style={{ color: '#1D4ED8' }}>/guides</a> page.
+      {/* ── STEP 2 CONFIGURE ── */}
+      {step === 1 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Tone</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>How should the content feel to the reader?</p>
+            <div className="grid grid-cols-3 gap-3">
+              {TONES.map(t => (
+                <SelectCard key={t.label} active={config.tone === t.label} onClick={() => setConfig(c => ({ ...c, tone: t.label }))}>
+                  <p className="font-semibold text-sm">{t.label}</p>
+                  <p className="text-xs mt-1" style={{ color: '#334155' }}>{t.desc}</p>
+                </SelectCard>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Length</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>How comprehensive should this article be?</p>
+            <div className="grid grid-cols-3 gap-3">
+              {LENGTHS.map(l => (
+                <SelectCard key={l.value} active={config.length === l.value} onClick={() => setConfig(c => ({ ...c, length: l.value }))}>
+                  <p className="font-semibold text-sm">{l.label}</p>
+                  <p className="text-xs mt-1" style={{ color: '#334155' }}>{l.desc}</p>
+                </SelectCard>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <button onClick={() => setStep(0)}
+              className="text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1f2937' }}>
+              Back
+            </button>
+            <button onClick={() => setStep(2)}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: '#2563eb', color: '#ffffff' }}>
+              Continue <ChevronRight size={15} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 3 GENERATE ── */}
+      {step === 2 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-5">Ready to Generate</h2>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[
+                { label: 'Target Site',  value: config.site },
+                { label: 'Content Type', value: config.contentType },
+                { label: 'Institution',  value: config.country || '—' },
+                { label: 'Tone',         value: config.tone },
+                { label: 'Length',       value: LENGTHS.find(l => l.value === config.length)?.label ?? config.length },
+              ].map(item => (
+                <div key={item.label} className="rounded-xl p-3" style={{ background: '#111827' }}>
+                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#334155' }}>{item.label}</p>
+                  <p className="text-white text-sm font-semibold">{item.value}</p>
+                </div>
+              ))}
+            </div>
+            <div className="rounded-xl p-3" style={{ background: '#111827' }}>
+              <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#334155' }}>Topic</p>
+              <p className="text-white text-sm">{config.topic}</p>
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <button onClick={() => setStep(1)}
+              className="text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1f2937' }}>
+              Back
+            </button>
+            <button onClick={handleGenerate} disabled={generating}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+              style={{ background: '#2563eb', color: '#ffffff' }}>
+              {generating
+                ? <><Loader2 size={14} className="animate-spin" /> Generating…</>
+                : <><Sparkles size={14} /> Generate Content</>}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 4 REVIEW ── */}
+      {step === 3 && (
+        <div className="space-y-5">
+          <div className="grid grid-cols-4 gap-4">
+            {[
+              { label: 'SEO Score',   value: seo + '%',          color: seoColor   },
+              { label: 'Word Count',  value: wordCount,           color: '#3b82f6'  },
+              { label: 'Status',      value: 'Ready to Review',  color: '#10b981'  },
+              { label: 'Topic Chars', value: config.topic.length, color: '#64748b' },
+            ].map(c => (
+              <div key={c.label} className="rounded-2xl border p-4" style={C.card}>
+                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#334155' }}>{c.label}</p>
+                <p className="text-xl font-black" style={{ color: c.color }}>{c.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-white font-bold text-sm flex items-center gap-2">
+                <Edit3 size={14} style={{ color: '#3b82f6' }} /> Edit Content
+              </h2>
+              <button onClick={() => setEdited(generated)}
+                className="text-xs font-semibold transition-colors" style={{ color: '#334155' }}>
+                Reset to original
+              </button>
+            </div>
+            <textarea value={edited} rows={20}
+              onChange={e => setEdited(e.target.value)}
+              className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none resize-none font-mono leading-relaxed"
+              style={{ ...C.input, color: '#94a3b8' }} />
+          </div>
+
+          <div className="flex justify-between">
+            <button onClick={() => setStep(2)}
+              className="text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1f2937' }}>
+              Regenerate
+            </button>
+            <button onClick={() => setStep(4)}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: '#2563eb', color: '#ffffff' }}>
+              Continue to Publish <ChevronRight size={15} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 5 PUBLISH ── */}
+      {step === 4 && !published && (
+        <div className="space-y-5">
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Show On Sites</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>Which platforms should display this article?</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {SITES.map(site => (
+                <button key={site}
+                  onClick={() => setShowOnSites(prev =>
+                    prev.includes(site) ? prev.filter(s => s !== site) : [...prev, site]
+                  )}
+                  className="rounded-xl p-4 text-left transition-all"
+                  style={showOnSites.includes(site) ? C.active : C.idle}>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="font-semibold text-sm">{site}</p>
+                    {showOnSites.includes(site) && <Check size={13} style={{ color: '#3b82f6' }} />}
+                  </div>
+                  <p className="text-xs" style={{ color: '#334155' }}>{SITE_URLS[site]}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border p-6" style={C.card}>
+            <h2 className="text-white font-bold text-sm mb-1">Canonical Owner</h2>
+            <p className="text-xs mb-4" style={{ color: '#334155' }}>Which site owns the Google SEO ranking for this article?</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {SITES.map(site => (
+                <button key={site} onClick={() => setCanonical(site)}
+                  className="rounded-xl p-4 text-left transition-all"
+                  style={canonical === site
+                    ? { background: 'rgba(16,185,129,0.12)', border: '1px solid #10b981', color: '#ffffff' }
+                    : C.idle}>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="font-semibold text-sm">{site}</p>
+                    {canonical === site && <Check size={13} style={{ color: '#10b981' }} />}
+                  </div>
+                  <p className="text-xs" style={{ color: '#334155' }}>SEO owner</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <button onClick={() => setStep(3)}
+              className="text-sm font-bold px-6 py-2.5 rounded-xl transition-all"
+              style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1f2937' }}>
+              Back
+            </button>
+            <button onClick={handlePublish}
+              disabled={publishing || showOnSites.length === 0 || !canonical}
+              className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
+              style={{ background: '#059669', color: '#ffffff' }}>
+              {publishing
+                ? <><Loader2 size={14} className="animate-spin" /> Publishing…</>
+                : <><Send size={14} /> Publish to Sanity</>}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── SUCCESS ── */}
+      {published && (
+        <div className="rounded-2xl p-12 text-center"
+          style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+            style={{ background: '#059669' }}>
+            <Check size={30} className="text-white" />
+          </div>
+          <h2 className="text-2xl font-black text-white mb-2">Published Successfully</h2>
+          <p className="text-sm mb-2" style={{ color: '#475569' }}>
+            Your article is now live in Sanity and will appear on all selected platforms within 60 seconds.
           </p>
+          <p className="text-sm mb-8" style={{ color: '#334155' }}>
+            Canonical owner: <span className="text-white font-semibold">{canonical}</span>
+          </p>
+          <button onClick={reset}
+            className="flex items-center gap-2 text-sm font-bold px-8 py-3 rounded-xl transition-all mx-auto"
+            style={{ background: '#2563eb', color: '#ffffff' }}>
+            <Sparkles size={14} /> Create Another Article
+          </button>
         </div>
       )}
     </div>
