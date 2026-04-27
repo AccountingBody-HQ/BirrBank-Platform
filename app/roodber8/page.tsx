@@ -1,14 +1,29 @@
+import { createSupabaseAdminClient } from '@/lib/supabase'
+
 export const dynamic = 'force-dynamic'
 
-const STATS = [
-  { label: 'Institutions',     value: '214',  sub: 'NBE-regulated',      color: '#1D4ED8' },
+async function getInstitutionCount() {
+  try {
+    const supabase = createSupabaseAdminClient()
+    const { count } = await supabase
+      .schema('birrbank')
+      .from('institutions')
+      .select('id', { count: 'exact', head: true })
+    return count || 0
+  } catch {
+    return 0
+  }
+}
+
+const STATS_BASE = [
+  { label: 'Institutions',     value: null,   sub: 'NBE-regulated',      color: '#1D4ED8' },
   { label: 'Tables',           value: '30',   sub: 'birrbank schema',    color: '#1D4ED8' },
   { label: 'Sub-pages live',   value: '40+',  sub: 'All pillars',        color: '#22c55e' },
   { label: 'Supabase status',  value: 'Phase 2', sub: 'Not yet wired',   color: '#f59e0b' },
 ]
 
 const QUICK_LINKS = [
-  { label: 'Institution Manager', href: '/roodber8/institution-manager', desc: 'Add and manage all 214 NBE-regulated institutions' },
+  { label: 'Institution Manager', href: '/roodber8/institution-manager', desc: 'Add and manage all NBE-regulated institutions' },
   { label: 'Rate Updater',        href: '/roodber8/rate-updater',        desc: 'Update savings, loan and FX rates across all banks' },
   { label: 'Data Quality',        href: '/roodber8/data-quality',        desc: 'Verify institution data and rate freshness' },
   { label: 'Content Factory',     href: '/roodber8/content-factory',     desc: 'AI-powered article and guide generation' },
@@ -45,7 +60,10 @@ const CHECKLIST = [
   { task: 'DNS cutover to birrbank.com',                        done: false },
 ]
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const institutionCount = await getInstitutionCount()
+  const STATS = STATS_BASE.map(s => s.label === 'Institutions' ? { ...s, value: String(institutionCount) } : s)
+  const QUICK_LINKS_DYNAMIC = QUICK_LINKS.map(l => l.label === 'Institution Manager' ? { ...l, desc: `Add and manage all ${institutionCount} NBE-regulated institutions` } : l)
   const done = CHECKLIST.filter(c => c.done).length
   const total = CHECKLIST.length
   const pct = Math.round((done / total) * 100)
@@ -57,7 +75,7 @@ export default function AdminPage() {
       <div className="mb-8">
         <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>BirrBank Admin</p>
         <h1 className="font-bold text-white mb-1" style={{ fontSize: '28px', letterSpacing: '-0.5px' }}>Command Centre</h1>
-        <p style={{ color: '#475569', fontSize: '14px' }}>Platform overview and pre-launch checklist · Handover v5.0</p>
+        <p style={{ color: '#475569', fontSize: '14px' }}>Platform overview and pre-launch checklist · Handover v10.0</p>
       </div>
 
       {/* Stats */}
@@ -77,7 +95,7 @@ export default function AdminPage() {
         <div className="rounded-2xl" style={{ background: '#0d1424', border: '1px solid #1a2238', padding: '24px' }}>
           <p className="font-bold text-white mb-5" style={{ fontSize: '15px' }}>Admin sections</p>
           <div className="space-y-2">
-            {QUICK_LINKS.map((l) => (
+            {QUICK_LINKS_DYNAMIC.map((l) => (
               <a key={l.href} href={l.href}
                 className="flex items-start justify-between gap-3 rounded-xl transition-all"
                 style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.02)', border: '1px solid #1a2238' }}>
