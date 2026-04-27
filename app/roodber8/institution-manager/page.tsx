@@ -10,7 +10,7 @@ const INSTITUTION_TYPES: Record<string, string> = {
   payment_operator: 'Payment Operator',
   money_transfer:   'Money Transfer',
   fx_bureau:        'FX Bureau',
-  capital_lease:    'Capital Lease',
+  capital_goods_finance:    'Capital Goods Finance',
   reinsurer:        'Reinsurer',
 }
 
@@ -21,7 +21,7 @@ const TYPE_COLORS: Record<string, { color: string; bg: string }> = {
   payment_operator: { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)'  },
   money_transfer:   { color: '#ec4899', bg: 'rgba(236,72,153,0.1)'  },
   fx_bureau:        { color: '#10b981', bg: 'rgba(16,185,129,0.1)'  },
-  capital_lease:    { color: '#f97316', bg: 'rgba(249,115,22,0.1)'  },
+  capital_goods_finance:    { color: '#f97316', bg: 'rgba(249,115,22,0.1)'  },
   reinsurer:        { color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
 }
 
@@ -558,7 +558,7 @@ export default function InstitutionManagerPage() {
       <div className="mb-8">
         <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>BirrBank Admin</p>
         <h1 className="font-bold text-white mb-1" style={{ fontSize: '28px', letterSpacing: '-0.5px' }}>Institution Manager</h1>
-        <p style={{ color: '#475569', fontSize: '14px' }}>Add and manage all 214 NBE-regulated institutions. AI Populate fills rates and descriptions automatically.</p>
+        <p style={{ color: '#475569', fontSize: '14px' }}>Add and manage all NBE-regulated institutions. AI Populate fills rates and descriptions automatically.</p>
       </div>
 
       {/* Tabs */}
