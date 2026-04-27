@@ -1,22 +1,18 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { ChevronRight } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
-const PILLAR = '#1D4ED8'
-const ArrowRight = ({ size = 13 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-  </svg>
-)
-const ClockIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-  </svg>
-)
+export const metadata: Metadata = {
+  title: 'Life Insurance in Ethiopia — All Providers Compared | BirrBank',
+  description: 'Compare term life, whole life and endowment policies from every NBE-licensed insurer in Ethiopia.',
+}
+
 function fmtDate(d: string | null | undefined) {
   if (!d) return '—'
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+  return new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
 }
 function fmtETB(val: number | null | undefined) {
   if (val == null) return '—'
@@ -25,122 +21,123 @@ function fmtETB(val: number | null | undefined) {
 
 export default async function LifeInsurancePage() {
   const supabase = createSupabaseAdminClient()
-  const { data: productsData } = await supabase.schema('birrbank').from('insurance_products').select('*, institutions(name, slug)').eq('product_type', 'life').eq('is_current', true).order('premium_from_etb', { ascending: true })
-  const { count: totalCount } = await supabase.schema('birrbank').from('insurance_products').select('count', { count: 'exact', head: true }).eq('product_type', 'life').eq('is_current', true)
-  const products = productsData ?? []
-
-  const GUIDE = [
-    { step: '01', title: 'Term vs whole life vs endowment', body: 'Term life pays out only if you die during the policy period — lowest premium, pure protection. Whole life covers you for your entire life and builds cash value. Endowment pays out at maturity or death — combines saving with protection.' },
-    { step: '02', title: 'How much cover do you need', body: 'A common rule of thumb is 10-15x your annual income. If you have dependants, outstanding loans or a mortgage, factor those in. Life insurance should cover what your family would lose financially if you were no longer there to provide.' },
-    { step: '03', title: 'Riders and add-ons to consider', body: 'Critical illness riders pay a lump sum on diagnosis of serious illness. Accidental death riders increase the payout for accidental death. Disability riders waive premiums if you become disabled. Always compare the base premium plus riders.' },
-  ]
+  const [productsRes, countRes, insurerCountRes] = await Promise.all([
+    supabase.schema('birrbank').from('insurance_products').select('*, institutions(name, slug)').eq('product_type','life').eq('is_current',true).order('annual_premium_pct',{ascending:true}),
+    supabase.schema('birrbank').from('insurance_products').select('count',{count:'exact',head:true}).eq('product_type','life').eq('is_current',true),
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','insurer').eq('is_active',true),
+  ])
+  const products = productsRes.data ?? []
+  const totalCount = countRes.count ?? 0
+  const insurerCount = insurerCountRes.count ?? 18
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
-            <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link><span>›</span>
-            <Link href="/insurance" className="hover:text-slate-600 transition-colors">Insurance</Link><span>›</span>
-            <span style={{ color: PILLAR, fontWeight: 700 }}>Life Insurance</span>
+    <main className="bg-white flex-1">
+      <section className="relative overflow-hidden" style={{ background:'#0f172a' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background:'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%)' }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-0">
+          <nav className="flex items-center gap-2 text-xs text-slate-500 mb-8">
+            <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link>
+            <ChevronRight size={12} />
+            <Link href="/insurance" className="hover:text-slate-300 transition-colors">Insurance</Link>
+            <ChevronRight size={12} />
+            <span className="text-slate-400">Life Insurance</span>
+          </nav>
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold mb-6"
+            style={{ background:'rgba(29,78,216,0.15)', color:'#93c5fd', border:'1px solid rgba(29,78,216,0.3)' }}>
+            Insurance — Life
           </div>
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Insurance · Life Insurance</p>
-          <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
-            Life insurance in Ethiopia —<br /><span style={{ color: PILLAR }}>term, whole life and endowment.</span>
+          <h1 className="font-serif font-bold text-white mb-4"
+            style={{ fontSize:'clamp(38px, 4.5vw, 56px)', letterSpacing:'-0.025em', lineHeight:1.08 }}>
+            Life insurance in Ethiopia — all {insurerCount} providers compared.
           </h1>
-          <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>Term life, whole life and endowment policies from all NBE-licensed life insurers. Compare premiums, coverage limits and policy features to find the right protection.</p>
-          <div className="flex flex-wrap gap-6">
+          <p className="text-slate-400 mb-8" style={{ fontSize:'16px', lineHeight:1.8, maxWidth:'520px' }}>
+            Term life, whole life and endowment policies from every NBE-licensed insurer — coverage limits, premiums and key features compared free.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link href="/insurance/motor" className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+              Motor insurance
+            </Link>
+            <Link href="/insurance/health" className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+              Health insurance
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[
-              { icon: <ClockIcon />, label: (totalCount ?? 0) + ' products compared' },
-              { icon: <ClockIcon />, label: 'NBE-licensed insurers only' },
-              { icon: <ClockIcon />, label: 'Verified premium data' },
-              { icon: <ClockIcon />, label: 'Last verified dates on every row' },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: PILLAR }}>{s.icon}</span>
-                <span className="text-xs font-semibold text-slate-500">{s.label}</span>
+              { value:String(totalCount || insurerCount), label:'Products compared' },
+              { value:String(insurerCount), label:'Licensed insurers' },
+              { value:'Free', label:'No broker fees' },
+            ].map(s => (
+              <div key={s.label} className="text-center py-6 border-r border-slate-800 last:border-r-0">
+                <div className="font-mono font-black text-white mb-1" style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-1px' }}>{s.value}</div>
+                <div className="text-xs font-semibold text-slate-500">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
-        <div className="max-w-6xl mx-auto">
-          <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Showing {totalCount ?? 0} products · Sorted by premium</p>
-          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 160px 160px 160px 120px', padding: '13px 24px', background: '#f9fafb' }}>
-              {['Insurer & product', 'Annual premium', 'Coverage from', 'Coverage to', 'Verified'].map((h) => (
+      <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
+            <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+            <div className="hidden sm:grid border-b border-slate-200"
+              style={{ gridTemplateColumns:'1fr 160px 160px 160px 120px', padding:'13px 24px', background:'#f8fafc' }}>
+              {['Insurer','Annual premium','Coverage from','Coverage to','Verified'].map(h => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
             {products.length > 0 ? products.map((p: any, i: number) => (
-              <div key={p.id} className={'border-b border-slate-100 transition-colors ' + (i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50')}>
-                <div className="hidden sm:grid items-start" style={{ gridTemplateColumns: '1fr 160px 160px 160px 120px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
+              <div key={p.id} className={'border-b border-slate-100 transition-colors ' + (i===0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50')}>
+                <div className="hidden sm:grid items-start"
+                  style={{ gridTemplateColumns:'1fr 160px 160px 160px 120px', padding:i===0?'18px 24px':'14px 24px' }}>
                   <div>
-                    <p className={'font-bold ' + (i === 0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize: i === 0 ? '15px' : '14px' }}>{p.institutions?.name ?? p.institution_slug}</p>
+                    <p className={'font-bold ' + (i===0?'text-blue-900':'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>{p.institutions?.name ?? p.institution_slug}</p>
                     <p className="text-xs text-slate-400 mt-0.5">{p.product_name}</p>
-                    {p.key_features && Array.isArray(p.key_features) && p.key_features.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {p.key_features.slice(0, 3).map((f: string) => (
-                          <span key={f} className="text-xs rounded-full px-2 py-0.5" style={{ background: '#f1f5f9', color: '#475569' }}>{f}</span>
-                        ))}
-                      </div>
-                    )}
                   </div>
-                  <div>
-                    {p.annual_premium_pct ? (
-                      <p className={'font-mono font-black ' + (i === 0 ? 'text-blue-700' : 'text-slate-800')} style={{ fontSize: i === 0 ? '22px' : '16px', letterSpacing: '-0.5px' }}>{Number(p.annual_premium_pct).toFixed(2)}%</p>
-                    ) : (
-                      <p className={'font-mono font-black ' + (i === 0 ? 'text-blue-700' : 'text-slate-800')} style={{ fontSize: '14px' }}>{fmtETB(p.premium_from_etb)}</p>
-                    )}
-                    {p.annual_premium_pct && <p className="text-xs text-slate-400">of insured value</p>}
-                    {!p.annual_premium_pct && p.premium_from_etb && p.premium_to_etb && <p className="text-xs text-slate-400">to {fmtETB(p.premium_to_etb)}</p>}
-                  </div>
+                  <p className={'font-mono font-black ' + (i===0?'text-blue-700':'text-slate-800')} style={{ fontSize:i===0?'22px':'16px', letterSpacing:'-0.5px' }}>
+                    {p.annual_premium_pct ? Number(p.annual_premium_pct).toFixed(2)+'%' : fmtETB(p.premium_from_etb)}
+                  </p>
                   <p className="font-mono text-slate-600 text-sm">{fmtETB(p.coverage_from_etb)}</p>
                   <p className="font-mono text-slate-600 text-sm">{fmtETB(p.coverage_to_etb)}</p>
-                  <div className="flex items-center gap-1.5"><span style={{ color: PILLAR }}><ClockIcon /></span><p className="text-xs text-slate-400">{fmtDate(p.last_verified_date)}</p></div>
+                  <p className="text-xs text-slate-400">{fmtDate(p.last_verified_date)}</p>
                 </div>
-                <div className="sm:hidden" style={{ padding: '14px 16px' }}>
-                  <div className="flex items-start justify-between gap-3 mb-1">
-                    <p className="font-bold text-slate-800 text-sm">{p.institutions?.name ?? p.institution_slug}</p>
-                    <p className="font-mono font-bold text-slate-800 shrink-0">{p.annual_premium_pct ? Number(p.annual_premium_pct).toFixed(2) + '%' : fmtETB(p.premium_from_etb)}</p>
-                  </div>
-                  <p className="text-xs text-slate-400">{p.product_name} · verified {fmtDate(p.last_verified_date)}</p>
+                <div className="sm:hidden flex items-start justify-between gap-3" style={{ padding:'14px 16px' }}>
+                  <p className="font-bold text-slate-800 text-sm">{p.institutions?.name ?? p.institution_slug}</p>
+                  <p className="font-mono font-bold text-slate-800 shrink-0">{p.annual_premium_pct ? Number(p.annual_premium_pct).toFixed(2)+'%' : fmtETB(p.premium_from_etb)}</p>
                 </div>
               </div>
             )) : (
-              <div className="py-12 text-center"><p className="text-slate-500 text-sm">Insurance data is being verified. Check back soon.</p></div>
+              <div className="py-12 text-center"><p className="text-slate-500 text-sm">Life insurance data is being verified. Check back soon.</p></div>
             )}
-            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
-              <p className="text-xs text-slate-400">Premiums sourced from insurer websites and NBE minimum schedule · For comparison only</p>
-              <Link href="/insurance" className="text-xs font-bold hover:underline shrink-0" style={{ color: PILLAR }}>All insurance →</Link>
+            <div className="border-t border-slate-200 flex items-center justify-between" style={{ background:'#f8fafc', padding:'14px 24px' }}>
+              <p className="text-xs text-slate-400">Sourced from official insurer websites · For comparison only</p>
+              <Link href="/insurance" className="text-xs font-bold" style={{ color:'#1D4ED8' }}>All insurance →</Link>
             </div>
           </div>
-          <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
-            Premiums are for comparison purposes only. Always get a formal quote directly from the insurer. BirrBank is not an insurance broker.
-          </p>
+          <p className="text-xs text-slate-400 mt-5 text-center">Always get a formal quote directly from the insurer. BirrBank is not an insurance broker.</p>
         </div>
       </section>
 
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>
-            <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}>
-              What to look for when choosing life insurance.
-            </h2>
-          </div>
+      <section style={{ background:'#f8fafc', padding:'96px 0' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-serif font-bold text-slate-950 mb-10"
+            style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
+            Understanding life insurance in Ethiopia.
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {GUIDE.map((s) => (
-              <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: PILLAR }} />
-                <div style={{ padding: '28px 24px' }}>
-                  <p className="font-mono font-black mb-3" style={{ fontSize: '32px', color: '#e2e8f0', lineHeight: 1 }}>{s.step}</p>
-                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '15px' }}>{s.title}</p>
-                  <p className="text-sm text-slate-500" style={{ lineHeight: 1.75 }}>{s.body}</p>
+            {[
+              { step:'01', title:'Term vs whole life', body:'Term life pays out only if you die within the policy term — it is pure protection and the cheapest option. Whole life builds a cash value over time and pays regardless of when you die. Endowment policies combine protection with a savings element.' },
+              { step:'02', title:'How premiums are calculated', body:'Life insurance premiums in Ethiopia are based on age, health, sum assured and policy term. Younger policyholders pay significantly lower premiums. Most insurers require a medical questionnaire and some require a physical examination for large sums assured.' },
+              { step:'03', title:'What to check before buying', body:'Confirm the exclusions — most Ethiopian life policies exclude suicide in the first two years, war and pre-existing conditions. Check whether the policy is participating (with-profits) or non-participating. Understand the surrender value if you cancel early.' },
+            ].map(s => (
+              <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-blue-300 hover:shadow-lg transition-all">
+                <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                <div style={{ padding:'28px 24px' }}>
+                  <p className="font-mono font-black mb-3" style={{ fontSize:'32px', color:'#e2e8f0', lineHeight:1 }}>{s.step}</p>
+                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize:'15px' }}>{s.title}</p>
+                  <p className="text-sm text-slate-500" style={{ lineHeight:1.75 }}>{s.body}</p>
                 </div>
               </div>
             ))}
@@ -148,38 +145,39 @@ export default async function LifeInsurancePage() {
         </div>
       </section>
 
-      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '72px 32px' }}>
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
+      <section style={{ background:'#0f172a', padding:'72px 0', borderTop:'1px solid #1e293b' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Data integrity</p>
-            <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>NBE-licensed insurers only. Always.</h3>
-            <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>Every insurer on BirrBank is verified against the NBE registry. Premium data is sourced from official insurer websites and NBE minimum premium schedules.</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color:'#93c5fd' }}>NBE verified</p>
+            <h3 className="font-serif font-bold mb-2" style={{ fontSize:'clamp(22px, 2.5vw, 30px)', color:'#ffffff', letterSpacing:'-0.5px' }}>
+              Every insurer verified against the NBE registry.
+            </h3>
+            <p style={{ color:'#94a3b8', fontSize:'15px', lineHeight:1.75, maxWidth:480 }}>
+              BirrBank only lists insurers holding a valid NBE licence. Premium data is sourced from official insurer websites.
+            </p>
           </div>
-          <Link href="/insurance" className="font-bold rounded-full shrink-0" style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}>All insurance types →</Link>
+          <Link href="/insurance" className="font-bold rounded-full shrink-0"
+            style={{ fontSize:14, padding:'14px 28px', background:'#1D4ED8', color:'#fff', whiteSpace:'nowrap' }}>
+            All insurance types
+          </Link>
         </div>
       </section>
 
-      <section className="bg-white" style={{ padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section style={{ background:'#ffffff', padding:'96px 0' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Insurance alerts</p>
-            <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
-              Life Insurance changes,<br /><span style={{ color: PILLAR }}>direct to your inbox.</span>
+            <h2 className="font-serif font-bold text-slate-950 mb-5"
+              style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+              Life insurance updates, direct to your inbox.
             </h2>
-            <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>Get notified when insurers update their life insurance premiums or launch new products.</p>
-            <ul className="space-y-3 mb-8">
-              {['Life Insurance premium changes across all providers','New product launches and coverage updates','NBE minimum premium schedule changes','Claims guide and process updates'].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-slate-600">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <p className="text-slate-500 mb-8" style={{ fontSize:'15px', lineHeight:1.85 }}>
+              Get notified when insurers update their life insurance premiums or launch new products.
+            </p>
             <p className="text-xs text-slate-500 font-medium pt-5 border-t border-slate-100">Free forever · No credit card · Unsubscribe anytime</p>
           </div>
           <EmailCapture />
         </div>
       </section>
-    </div>
+    </main>
   )
 }
