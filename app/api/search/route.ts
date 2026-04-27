@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient as createSupabaseClient } from "@supabase/supabase-js"
+import { createSupabaseAdminClient } from "@/lib/supabase"
 import { createClient as createSanityClient } from "@sanity/client"
 
-export const runtime = "edge"
+export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -12,10 +12,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ institutions: [], articles: [] })
   }
 
-  const supabase = createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = createSupabaseAdminClient()
 
   const { data: institutions, error: institutionsError } = await supabase
     .schema("birrbank")
