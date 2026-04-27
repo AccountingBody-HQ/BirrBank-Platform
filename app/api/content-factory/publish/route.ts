@@ -5,10 +5,9 @@ export const runtime = 'nodejs'
 export const maxDuration = 60
 
 const SITE_MAP: Record<string, string> = {
-  HRLake: 'hrlake',
+  BirrBank: 'birrbank',
   AccountingBody: 'accountingbody',
   EthioTax: 'ethiotax',
-  BirrBank: 'birrbank',
 }
 
 const CONTENT_TYPE_MAP: Record<string, string> = {

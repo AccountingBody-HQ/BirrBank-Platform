@@ -81,7 +81,7 @@ export async function getInsightArticles(options?: {
 
   const filters: string[] = [
     '_type == "article"',
-    '"hrlake" in showOnSites',
+    '"birrbank" in showOnSites',
   ]
 
   if (topic && topic !== 'all') {
@@ -116,7 +116,7 @@ export async function getInsightArticles(options?: {
 
 // --- GET SINGLE ARTICLE (article page) ---
 export async function getInsightBySlug(slug: string): Promise<SanityArticle | null> {
-  const query = `*[_type == "article" && slug.current == $slug && "hrlake" in showOnSites][0] {
+  const query = `*[_type == "article" && slug.current == $slug && "birrbank" in showOnSites][0] {
     _id, title, slug, publishedAt, excerpt, mcqUrl, body[]{ ..., _type == "tableBlock" => { _type, _key, headers, rows[]{ _type, _key, cells } } },
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current,
@@ -148,7 +148,7 @@ export async function getRelatedArticles(options: {
     categoryFilter = ' && references(*[_type == "category" && title == $category]._id)'
   }
 
-  const query = `*[_type == "article" && "hrlake" in showOnSites && slug.current != $currentSlug${categoryFilter}] | order(publishedAt desc) [0...${limit}] {
+  const query = `*[_type == "article" && "birrbank" in showOnSites && slug.current != $currentSlug${categoryFilter}] | order(publishedAt desc) [0...${limit}] {
     _id, title, slug, publishedAt, excerpt,
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current
@@ -161,7 +161,7 @@ export async function getRelatedArticles(options: {
     const articles = await sanityClient.fetch(query, params)
 
     if (articles.length < limit) {
-      const fallbackQuery = `*[_type == "article" && "hrlake" in showOnSites && slug.current != $currentSlug] | order(publishedAt desc) [0...${limit}] {
+      const fallbackQuery = `*[_type == "article" && "birrbank" in showOnSites && slug.current != $currentSlug] | order(publishedAt desc) [0...${limit}] {
         _id, title, slug, publishedAt, excerpt,
         "category": categories[0]->title,
         "categorySlug": categories[0]->slug.current
@@ -185,7 +185,7 @@ export async function getInsightCount(options?: {
 
   const filters: string[] = [
     '_type == "article"',
-    '"hrlake" in showOnSites',
+    '"birrbank" in showOnSites',
   ]
 
   if (topic && topic !== 'all') {
@@ -212,7 +212,7 @@ export async function getInsightCount(options?: {
 
 // --- GET ALL CATEGORIES ---
 export async function getInsightCategories(): Promise<{ title: string; slug: string }[]> {
-  const query = `*[_type == "category" && count(*[_type == "article" && "hrlake" in showOnSites && references(^._id)]) > 0] | order(title asc) {
+  const query = `*[_type == "category" && count(*[_type == "article" && "birrbank" in showOnSites && references(^._id)]) > 0] | order(title asc) {
     title, "slug": slug.current
   }`
 
@@ -226,7 +226,7 @@ export async function getInsightCategories(): Promise<{ title: string; slug: str
 
 // --- GET ARTICLE BY COUNTRY AND CONTENT TYPE ---
 export async function getCountryArticle(countryCode: string, contentType: string): Promise<SanityArticle | null> {
-  const query = `*[_type == "article" && "hrlake" in showOnSites && relatedCountryCode == $countryCode && contentType == $contentType][0] {
+  const query = `*[_type == "article" && "birrbank" in showOnSites && relatedCountryCode == $countryCode && contentType == $contentType][0] {
     _id, title, slug, publishedAt, excerpt, body[]{ ..., _type == "tableBlock" => { _type, _key, headers, rows[]{ _type, _key, cells } } },
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current,
@@ -254,7 +254,7 @@ export async function getCountryInsightArticles(options: {
   const rangeEnd = offset + limit
   const query = `*[
     _type == "article" &&
-    "hrlake" in showOnSites &&
+    "birrbank" in showOnSites &&
     (
       $country in coalesce(countries, []) ||
       relatedCountryCode == $country ||
@@ -285,7 +285,7 @@ export async function getCountryInsightCount(options: {
   const { countryCode, countryName } = options
   const query = `count(*[
     _type == "article" &&
-    "hrlake" in showOnSites &&
+    "birrbank" in showOnSites &&
     (
       $country in coalesce(countries, []) ||
       relatedCountryCode == $country ||

@@ -176,7 +176,7 @@ ACCURACY RULES:
 
   'Payroll Guide': `
 CONTENT TYPE: Payroll Guide
-PURPOSE: A precise, operationally authoritative guide to running payroll in a specific country or on a specific payroll topic. Must be the definitive reference for a payroll manager, HR director or finance controller who needs to understand and manage payroll compliantly. This is HRLake's specialist payroll content — it must reflect all three pillars: the HR context of employment, the EOR implications where relevant, and the payroll mechanics in full technical detail.
+PURPOSE: A precise, operationally authoritative guide to running payroll in a specific country or on a specific payroll topic. Must be the definitive reference for a payroll manager, HR director or finance controller who needs to understand and manage payroll compliantly. This content must reflect all three pillars: the HR context of employment, the EOR implications where relevant, and the payroll mechanics in full technical detail.
 
 REQUIRED SECTIONS (use these headings exactly):
 1. Payroll Overview — governance framework, which authority administers payroll compliance, key legislation
@@ -664,7 +664,7 @@ function buildPrompt(config: {
     deep:     '2000 to 2500 words — exhaustive, reference-quality. The definitive resource on this topic.',
   }
   const wordTarget   = wordTargets[config.length] ?? wordTargets.standard
-  const platformCtx  = PLATFORM_IDENTITY[config.site]   ?? PLATFORM_IDENTITY.HRLake
+  const platformCtx  = PLATFORM_IDENTITY[config.site]   ?? PLATFORM_IDENTITY.BirrBank
   const structureCtx = CONTENT_STRUCTURES[config.contentType] ?? CONTENT_STRUCTURES.Article
   const countryLine  = config.country
     ? `COUNTRY / JURISDICTION FOCUS: ${config.country}. All content must be specific to this jurisdiction where relevant. Do not blend rules from other countries without explicit labelling.`
