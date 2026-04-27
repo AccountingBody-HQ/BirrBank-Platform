@@ -46,8 +46,8 @@ export default async function MotorInsurancePage() {
             style={{ background:'rgba(29,78,216,0.15)', color:'#93c5fd', border:'1px solid rgba(29,78,216,0.3)' }}>
             Insurance — Motor
           </div>
-          <h1 className="font-bold text-white mb-4"
-            style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(38px, 4.5vw, 56px)', letterSpacing:'-0.025em', lineHeight:1.08 }}>
+          <h1 className="font-serif font-bold text-white mb-4"
+            style={{ fontSize:'clamp(38px, 4.5vw, 56px)', letterSpacing:'-0.025em', lineHeight:1.08 }}>
             Motor insurance in Ethiopia — all providers compared.
           </h1>
           <p className="text-slate-400 mb-8" style={{ fontSize:'16px', lineHeight:1.8, maxWidth:'520px' }}>
@@ -147,8 +147,8 @@ export default async function MotorInsurancePage() {
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-10"
-            style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-10"
+            style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             What to look for when choosing motor insurance.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -175,8 +175,8 @@ export default async function MotorInsurancePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color:'#93c5fd' }}>Data integrity</p>
-            <h3 className="font-bold mb-2"
-              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(22px, 2.5vw, 30px)', color:'#ffffff', letterSpacing:'-0.5px' }}>
+            <h3 className="font-serif font-bold mb-2"
+              style={{ fontSize:'clamp(22px, 2.5vw, 30px)', color:'#ffffff', letterSpacing:'-0.5px' }}>
               NBE-licensed insurers only. Always.
             </h3>
             <p style={{ color:'#94a3b8', fontSize:'15px', lineHeight:1.75, maxWidth:480 }}>
@@ -195,8 +195,8 @@ export default async function MotorInsurancePage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="font-bold text-slate-950 mb-5"
-              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+            <h2 className="font-serif font-bold text-slate-950 mb-5"
+              style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Motor premium changes, direct to your inbox.
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize:'15px', lineHeight:1.85 }}>
