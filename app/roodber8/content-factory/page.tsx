@@ -2,20 +2,18 @@
 import { useState } from 'react'
 import { Sparkles, ChevronRight, Globe, Edit3, Check, Loader2, AlertCircle, Send } from 'lucide-react'
 
-const SITES = ['HRLake', 'AccountingBody', 'EthioTax', 'BirrBank']
+const SITES = ['BirrBank', 'AccountingBody', 'EthioTax']
 
 const SITE_URLS: Record<string, string> = {
-  HRLake:        'hrlake.com',
+  BirrBank:      'birrbank.com',
   AccountingBody:'accountingbody.com',
   EthioTax:      'ethiotax.com',
-  BirrBank:      'birrbank.com',
 }
 
 const CONTENT_TYPES_BY_SITE: Record<string, string[]> = {
-  HRLake:        ['Country Report','Explainer','HR Management','EOR Guide','Tax Guide','Payroll Guide','Accounting Guide','Course','Article','Hiring Guide','HR Compliance Guide','Leave and Benefits','Compliance Calendar'],
+  BirrBank:      ['Bank Review','Rate Guide','Insurance Guide','Market Analysis','Commodity Report','IPO Guide','Diaspora Guide','Regulatory Update','Investment Guide','Loan Guide','FX Guide','Savings Guide','ECX Guide','ESX Guide','Financial Explainer','Article'],
   AccountingBody:['Country Report','Explainer','Accounting Guide','Tax Guide','Course','Article'],
   EthioTax:      ['Country Report','Explainer','Tax Guide','Article'],
-  BirrBank:      ['Bank Review','Rate Guide','Insurance Guide','Market Analysis','Commodity Report','IPO Guide','Diaspora Guide','Regulatory Update','Investment Guide','Loan Guide','FX Guide','Savings Guide','ECX Guide','ESX Guide','Financial Explainer','Article'],
 }
 
 const TONES = [

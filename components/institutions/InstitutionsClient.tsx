@@ -31,7 +31,7 @@ const TYPE_TABS = [
   { value:'fx_bureau', label:'FX Bureaux' }, { value:'capital_goods_finance', label:'Capital Goods' },
 ]
 
-// Quick links shown at bottom of card per type — mirrors HRLake country card pattern
+// Quick links shown at bottom of card per type
 const TYPE_QUICK_LINKS: Record<string, { label: string; href: (slug: string) => string }[]> = {
   bank: [
     { label: 'Rates', href: s => `/institutions/${s}#savings` },

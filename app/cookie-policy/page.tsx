@@ -90,7 +90,7 @@ export default function CookiePolicyPage() {
                     {[
                       { name: '__session',        provider: 'Clerk',               purpose: 'Maintains your authenticated session',              duration: 'Session' },
                       { name: '__client_uat',     provider: 'Clerk',               purpose: 'User authentication token',                        duration: '1 year'  },
-                      { name: 'hrlake_admin',        provider: 'BirrBank', purpose: 'Admin area session (internal use only)',            duration: '7 days'  },
+                      { name: 'birrbank_admin',        provider: 'BirrBank', purpose: 'Admin area session (internal use only)',            duration: '7 days'  },
                       { name: 'cookie_consent',   provider: 'BirrBank', purpose: 'Stores your cookie consent preferences',           duration: '1 year'  },
                     ].map(row => (
                       <tr key={row.name} className="hover:bg-white">
@@ -145,7 +145,7 @@ export default function CookiePolicyPage() {
               <ul>
                 <li><strong>Clerk</strong> — for authentication. Clerk&apos;s cookies are essential and cannot be disabled.</li>
                 <li><strong>Google Analytics</strong> — for usage analytics, only if you consent.</li>
-                <li><strong>Lemon Squeezy</strong> — may set cookies during the checkout process.</li>
+                <li><strong>Sanity</strong> — our CMS may set cookies when loading guide content.</li>
               </ul>
               <p>We do not use any advertising networks or third-party tracking cookies for marketing purposes. We do not share cookie data with advertisers.</p>
 
