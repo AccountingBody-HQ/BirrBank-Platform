@@ -1,323 +1,163 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { Suspense } from 'react'
+import InstitutionsClient from '@/components/institutions/InstitutionsClient'
+
 export const dynamic = 'force-dynamic'
 
-const INSTITUTION_TYPES = [
-  { type: 'bank',             label: 'Commercial Banks',        phase: 'Live',     pillar: 'Banking',   color: '#1D4ED8', href: '/institutions?type=bank' },
-  { type: 'insurer',          label: 'Insurance Companies',     phase: 'Live',     pillar: 'Insurance', color: '#1D4ED8', href: '/institutions?type=insurer' },
-  { type: 'microfinance',     label: 'Microfinance Institutes', phase: 'Building', pillar: 'Banking',   color: '#1D4ED8', href: '/institutions?type=microfinance' },
-  { type: 'payment_operator', label: 'Payment Operators',       phase: 'Building', pillar: 'Banking',   color: '#1D4ED8', href: '/institutions?type=payment_operator' },
-  { type: 'money_transfer',   label: 'Money Transfer Agencies', phase: 'Building', pillar: 'Diaspora',  color: '#0891b2', href: '/institutions?type=money_transfer' },
-  { type: 'fx_bureau',        label: 'FX Bureaus',              phase: 'Live',     pillar: 'Banking',   color: '#1D4ED8', href: '/institutions?type=fx_bureau' },
-  { type: 'capital_goods_finance', label: 'Capital Goods Finance', phase: 'Coming', pillar: 'Banking', color: '#64748b', href: '/institutions?type=capital_goods_finance' },
-  { type: 'reinsurer',        label: 'Reinsurance Company',     phase: 'Coming',   pillar: 'Insurance', color: '#64748b', href: '/institutions?type=reinsurer' },
-]
+export const metadata: Metadata = {
+  title: 'All NBE-Regulated Institutions | BirrBank',
+  description: 'Every bank, insurer, microfinance institute, payment operator, money transfer agency and FX bureau licensed by the National Bank of Ethiopia — verified, profiled and compared free.',
+}
 
-const ArrowRight = ({ size = 13 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-  </svg>
-)
-const StarIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="#d97706" stroke="#d97706" strokeWidth="1">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-  </svg>
-)
-const ShieldIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-  </svg>
-)
+const TYPE_CONFIG: Record<string, { label: string; pillar: string; desc: string }> = {
+  bank:                  { label: 'Commercial Banks',        pillar: 'Banking',   desc: '32 NBE-licensed commercial banks' },
+  insurer:               { label: 'Insurance Companies',     pillar: 'Insurance', desc: '18 licensed insurers' },
+  microfinance:          { label: 'Microfinance Institutes',  pillar: 'Banking',   desc: '55 MFIs nationwide' },
+  payment_operator:      { label: 'Payment Operators',       pillar: 'Banking',   desc: 'Mobile money and digital wallets' },
+  money_transfer:        { label: 'Money Transfer',          pillar: 'Diaspora',  desc: '65 remittance agencies' },
+  fx_bureau:             { label: 'FX Bureaux',              pillar: 'Banking',   desc: '13 independent bureaux' },
+  capital_goods_finance: { label: 'Capital Goods Finance',   pillar: 'Banking',   desc: '6 leasing companies' },
+  reinsurer:             { label: 'Reinsurance',             pillar: 'Insurance', desc: 'Reinsurance providers' },
+}
 
 export default async function InstitutionsPage() {
   const supabase = createSupabaseAdminClient()
 
-  // Count per institution type
-  const typeCounts = await Promise.all(
-    INSTITUTION_TYPES.map(async (t) => {
-      const { count } = await supabase
-        .schema('birrbank')
-        .from('institutions')
-        .select('count', { count: 'exact', head: true })
-        .eq('type', t.type)
-        .eq('is_active', true)
-      return { ...t, count: count ?? 0 }
-    })
-  )
-
-  const totalInstitutions = typeCounts.reduce((sum, t) => sum + t.count, 0)
-
-  // Featured banks with best savings rate
-  const { data: banksData } = await supabase
+  const { data: institutions } = await supabase
     .schema('birrbank')
     .from('institutions')
-    .select('slug, name, type, swift_code, founded_year, is_listed_on_esx, birrbank_score')
-    .eq('type', 'bank')
-    .eq('is_active', true)
+    .select('slug, name, type, swift_code, website_url, coverage_level, nbe_licence_date, nbe_licence_number, branches_count, operational_status, hq_region, service_type, phone, email, is_active')
     .order('name')
 
-  // Get best savings rate per bank
-  const { data: ratesData } = await supabase
-    .schema('birrbank')
-    .from('savings_rates')
-    .select('institution_slug, annual_rate')
-    .eq('is_current', true)
-    .order('annual_rate', { ascending: false })
-
-  // Map best rate per institution
-  const bestRateMap: Record<string, number> = {}
-  for (const r of (ratesData ?? [])) {
-    if (!bestRateMap[r.institution_slug]) {
-      bestRateMap[r.institution_slug] = Number(r.annual_rate)
-    }
+  const typeCounts: Record<string, number> = {}
+  for (const inst of (institutions ?? [])) {
+    typeCounts[inst.type] = (typeCounts[inst.type] ?? 0) + 1
   }
-
-  const BANKS = (banksData ?? []).map((b: any, i: number) => {
-    const isESX    = b.is_listed_on_esx
-    const badge    = i === 0 ? '~60% market share'
-      : isESX ? 'ESX listed'
-      : null
-    const bankType = b.type === 'bank' ? 'Private bank' : b.type
-    return {
-      slug:        b.slug,
-      name:        b.name,
-      type:        bankType,
-      swift:       b.swift_code ?? '—',
-      score:       b.birrbank_score ? Number(b.birrbank_score).toFixed(1) : '—',
-      badge,
-      savingsRate: bestRateMap[b.slug] ? Number(bestRateMap[b.slug]).toFixed(2) : '—',
-      founded:     b.founded_year?.toString() ?? '—',
-    }
-  })
+  const totalCount = institutions?.length ?? 0
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="bg-white flex-1">
 
-      {/* ══════════════════════════════ HERO ══════════════════════════════════════ */}
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }}
-        />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
-            <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
-            <span>›</span>
-            <span style={{ color: '#1D4ED8', fontWeight: 700 }}>All Institutions</span>
+      {/* DARK HERO */}
+      <section className="relative overflow-hidden" style={{ background: '#0f172a' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-0">
+          <nav className="flex items-center gap-2 text-xs text-slate-500 mb-8">
+            <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link>
+            <ChevronRight size={12} />
+            <span className="text-slate-400">Institutions</span>
+          </nav>
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold mb-6"
+            style={{ background: 'rgba(29,78,216,0.15)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.3)' }}>
+            NBE-Regulated Registry
           </div>
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>
-            NBE-regulated universe
-          </p>
-          <h1
-            className="font-serif font-bold mb-5 text-slate-950"
-            style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}
-          >
-            All {totalInstitutions} NBE-regulated<br />
-            <span style={{ color: '#1D4ED8' }}>institutions, in one place.</span>
+          <h1 className="font-bold text-white mb-4"
+            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+            Ethiopia's complete<br />financial institution registry.
           </h1>
-          <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
-            Every bank, insurer, microfinance institute, payment operator, money transfer
-            agency and FX bureau licensed by the National Bank of Ethiopia — verified,
-            profiled and compared free.
+          <p className="text-slate-400 mb-8" style={{ fontSize: '16px', lineHeight: 1.8, maxWidth: '560px' }}>
+            Every bank, insurer, microfinance institute, payment operator, money transfer agency and FX bureau licensed by the National Bank of Ethiopia. Verified, profiled and compared free.
           </p>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link href="/banking/savings-rates"
+              className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, background: '#1D4ED8', color: '#fff' }}>
+              Compare savings rates
+            </Link>
+            <Link href="/banking/fx-rates"
+              className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+              View FX rates
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 mt-10 pt-8 border-t border-slate-800">
             {[
-              { icon: <ShieldIcon />, label: totalInstitutions + ' NBE-licensed institutions' },
-              { icon: <ShieldIcon />, label: '8 institution categories' },
-              { icon: <ShieldIcon />, label: 'Verified against NBE registry' },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: '#1D4ED8' }}>{s.icon}</span>
-                <span className="text-xs font-semibold text-slate-500">{s.label}</span>
+              { value: String(totalCount), label: 'NBE-licensed institutions' },
+              { value: '7', label: 'Institution categories' },
+              { value: 'NBE', label: 'Source: nbe.gov.et' },
+            ].map(s => (
+              <div key={s.label} className="text-center py-6">
+                <div className="font-mono font-black text-white mb-1"
+                  style={{ fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-1px' }}>{s.value}</div>
+                <div className="text-xs font-semibold text-slate-500">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════ CATEGORY GRID ════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Browse by type</p>
-            <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', letterSpacing: '-1.2px', lineHeight: 1.1 }}>
-              The complete NBE-regulated universe.
-            </h2>
-          </div>
-
+      {/* CATEGORY CARDS */}
+      <section style={{ background: '#f8fafc', padding: '96px 0' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-slate-950 mb-10"
+            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
+            Browse by institution type
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {typeCounts.map((t) => (
-              <Link
-                key={t.type}
-                href={t.href}
-                className="group bg-white rounded-2xl border border-slate-200 hover:shadow-xl transition-all duration-200 overflow-hidden"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
-              >
-                <div style={{ height: 3, background: t.color }} />
-                <div style={{ padding: '28px 24px' }}>
+            {Object.entries(TYPE_CONFIG).map(([type, cfg]) => (
+              <Link key={type} href={`/institutions?type=${type}`}
+                className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 overflow-hidden flex flex-col">
+                <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                <div style={{ padding: '28px 24px' }} className="flex flex-col flex-1">
                   <div className="flex items-start justify-between mb-4">
-                    <p className="font-mono font-black" style={{ fontSize: '36px', color: t.color, letterSpacing: '-2px', lineHeight: 1 }}>
-                      {t.count}
+                    <p className="font-mono font-black" style={{ fontSize: '36px', color: '#1D4ED8', letterSpacing: '-2px', lineHeight: 1 }}>
+                      {typeCounts[type] ?? 0}
                     </p>
-                    <span
-                      className="text-xs font-bold rounded-full px-2 py-1 shrink-0"
-                      style={
-                        t.phase === 'Live'
-                          ? { background: '#dbeafe', color: '#1D4ED8' }
-                          : t.phase === 'Building'
-                          ? { background: '#fef3c7', color: '#92400e' }
-                          : { background: '#f1f5f9', color: '#64748b' }
-                      }
-                    >
-                      {t.phase}
-                    </span>
+                    <span className="text-xs font-bold rounded-full px-2 py-1 shrink-0"
+                      style={{ background: '#dbeafe', color: '#1D4ED8' }}>{cfg.pillar}</span>
                   </div>
-                  <p className="font-bold text-slate-900 mb-1" style={{ fontSize: '14px' }}>{t.label}</p>
-                  <p className="text-xs text-slate-400 mb-4">{t.pillar} pillar</p>
+                  <p className="font-bold text-slate-900 mb-1" style={{ fontSize: '14px' }}>{cfg.label}</p>
+                  <p className="text-xs text-slate-400 mb-4 flex-1">{cfg.desc}</p>
                   <div className="flex items-center gap-1 text-xs font-bold group-hover:gap-2 transition-all" style={{ color: '#1D4ED8' }}>
-                    <span>Browse all</span><ArrowRight size={11} />
+                    Browse all
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                    </svg>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-
-          <div className="mt-8 pt-6 border-t border-slate-200">
-            <p className="text-sm text-slate-500">
-              <strong className="text-slate-700">Live</strong> — fully populated with verified data ·
-              <strong className="text-slate-700"> Building</strong> — profiles active, data being verified ·
-              <strong className="text-slate-700"> Coming soon</strong> — registry seeded, full data in Phase 3
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════ FEATURED BANKS ═══════════════════════════ */}
-      <section className="border-b border-slate-100 bg-white" style={{ padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Commercial banks</p>
-              <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-1px', lineHeight: 1.15 }}>
-                All {BANKS.length} NBE-licensed banks
-              </h2>
-            </div>
-            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
-              Compare savings rates <ArrowRight />
-            </Link>
-          </div>
-
-          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-
-            <div
-              className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: '12px 24px', background: '#f9fafb' }}
-            >
-              {['Bank', 'Type', 'Founded', 'Best savings rate', 'Score'].map((h) => (
-                <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
-              ))}
-            </div>
-
-            {BANKS.map((b, i) => (
-              <Link
-                key={b.slug}
-                href={'/institutions/' + b.slug}
-                className={'block border-b border-slate-100 transition-colors ' + (i === 0 ? 'bg-blue-50 hover:bg-blue-100' : 'bg-white hover:bg-slate-50')}
-              >
-                <div
-                  className="hidden sm:grid items-center"
-                  style={{ gridTemplateColumns: '1fr 130px 100px 120px 80px', padding: i === 0 ? '18px 24px' : '13px 24px' }}
-                >
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className={'font-bold ' + (i === 0 ? 'text-blue-900' : 'text-slate-800')}
-                        style={{ fontSize: i === 0 ? '15px' : '14px' }}>
-                        {b.name}
-                      </p>
-                      {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: '#eff6ff', color: '#1D4ED8' }}>
-                          {b.badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-400 font-mono mt-0.5">{b.swift !== '—' ? b.swift : 'No SWIFT'}</p>
-                  </div>
-                  <p className="text-sm text-slate-500 capitalize">{b.type}</p>
-                  <p className="text-sm text-slate-500">{b.founded}</p>
-                  <p className={'font-mono font-black ' + (i === 0 ? 'text-blue-700' : 'text-slate-800')}
-                    style={{ fontSize: i === 0 ? '20px' : '16px', letterSpacing: '-0.5px' }}>
-                    {b.savingsRate !== '—' ? b.savingsRate + '%' : '—'}
-                  </p>
-                  <div className="flex items-center gap-1">
-                    {b.score !== '—' ? <><StarIcon /><span className="font-bold text-slate-700 text-sm">{b.score}</span></> : <span className="text-xs text-slate-400">—</span>}
-                  </div>
-                </div>
-
-                <div className="sm:hidden flex items-center gap-3" style={{ padding: '13px 16px' }}>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                      <p className="font-bold text-slate-800 text-sm">{b.name}</p>
-                      {b.badge && (
-                        <span className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0" style={{ background: '#eff6ff', color: '#1D4ED8' }}>{b.badge}</span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-400">{b.type} · Est. {b.founded}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="font-mono font-black text-slate-800" style={{ fontSize: '18px' }}>
-                      {b.savingsRate !== '—' ? b.savingsRate + '%' : '—'}
-                    </p>
-                    {b.score !== '—' && (
-                      <div className="flex items-center gap-1 justify-end mt-0.5">
-                        <StarIcon /><span className="text-xs font-bold text-slate-600">{b.score}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            ))}
-
-            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
-              <p className="text-xs text-slate-400">
-                Showing {BANKS.length} banks · Source: NBE registry (nbe.gov.et)
-              </p>
-              <Link href="/banking/savings-rates" className="text-xs font-bold hover:underline shrink-0" style={{ color: '#1D4ED8' }}>
-                Compare all rates →
-              </Link>
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-400 mt-4 text-center">
-            Data for comparison purposes only. Always verify directly with the institution.
-            BirrBank is not a bank or financial adviser.
-          </p>
+      {/* INTERACTIVE GRID */}
+      <section style={{ padding: '96px 0', background: '#ffffff' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-slate-950 mb-8"
+            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
+            All {totalCount} institutions
+          </h2>
+          <Suspense fallback={<div className="text-center py-20 text-slate-400 text-sm">Loading...</div>}>
+            <InstitutionsClient institutions={institutions ?? []} />
+          </Suspense>
         </div>
       </section>
 
-      {/* ══════════════════════════════ DARK TRUST ════════════════════════════════ */}
-      <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '72px 32px' }}>
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
+      {/* DARK TRUST */}
+      <section style={{ background: '#0f172a', padding: '72px 0', borderTop: '1px solid #1e293b' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Source integrity</p>
-            <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
+            <h3 className="font-bold mb-2"
+              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
               Every institution verified against the NBE registry.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 520 }}>
-              If it is not licensed by the National Bank of Ethiopia, it does not appear
-              on BirrBank. No grey-market operators. No unverified listings. Ever.
+              If it is not licensed by the National Bank of Ethiopia, it does not appear on BirrBank. No grey-market operators. No unverified listings.
             </p>
           </div>
-          <Link
-            href="/banking/savings-rates"
+          <Link href="/banking/savings-rates"
             className="font-bold rounded-full transition-all shrink-0"
-            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap', boxShadow: '0 4px 20px rgba(29,78,216,0.25)' }}
-          >
-            Compare savings rates →
+            style={{ fontSize: 14, padding: '14px 28px', background: '#1D4ED8', color: '#fff', whiteSpace: 'nowrap' }}>
+            Compare savings rates
           </Link>
         </div>
       </section>
 
-    </div>
+    </main>
   )
 }
