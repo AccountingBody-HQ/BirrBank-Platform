@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — SUPABASE CLIENT
+// BIRRBANK — SUPABASE CLIENT
 // Browser client and Server client (App Router)
 // ============================================
 
