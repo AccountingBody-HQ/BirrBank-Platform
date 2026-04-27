@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — UTILITY FUNCTIONS
+// BirrBank — UTILITY FUNCTIONS
 // ============================================
 
 import { type ClassValue, clsx } from 'clsx'
@@ -81,7 +81,7 @@ export function slugify(str: string): string {
 // Builds an absolute URL from a path using the site base URL
 export function absoluteUrl(path: string): string {
   const base =
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://hrlake.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://birrbank.com'
   return `${base}${path}`
 }
 

@@ -1,7 +1,7 @@
 // ============================================
-// HRLAKE — SANITY CLIENT
+// BirrBank — SANITY CLIENT
 // Connects to shared Sanity CMS project
-// Filters all content to hrlake only
+// Filters all content to birrbank where applicable
 // ============================================
 
 import { createClient } from '@sanity/client'

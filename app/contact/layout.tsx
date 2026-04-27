@@ -1,31 +1,20 @@
 import type { Metadata } from 'next'
-import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
-  title: 'Contact Us — Data Corrections and Enquiries',
-  description: 'Get in touch with the HRLake team. Report a data error, request a country update, or ask a question about our global payroll intelligence platform.',
+  title: 'Contact Us | BirrBank',
+  description: 'Get in touch with the BirrBank team. Report a data error, request an institution update, or ask a question about our Ethiopian financial intelligence platform.',
   alternates: {
-    canonical: 'https://hrlake.com/contact/',
+    canonical: 'https://birrbank.com/contact',
   },
   openGraph: {
-    title: 'Contact Us — Data Corrections and Enquiries',
-    description: 'Report a data error, request a country update, or ask a question about HRLake.',
-    url: 'https://hrlake.com/contact/',
-    siteName: 'HRLake',
+    title: 'Contact Us | BirrBank',
+    description: 'Report a data error or ask a question about BirrBank — Ethiopia\'s financial comparison platform.',
+    url: 'https://birrbank.com/contact',
+    siteName: 'BirrBank',
     type: 'website',
   },
 }
 
-const breadcrumb = getBreadcrumbStructuredData([
-  { name: 'Home', href: 'https://hrlake.com' },
-  { name: 'Contact', href: 'https://hrlake.com/contact/' },
-])
-
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }} />
-      {children}
-    </>
-  )
+  return <>{children}</>
 }

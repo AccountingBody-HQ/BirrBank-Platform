@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, X, ArrowRight, Globe, FileText, Loader2 } from 'lucide-react'
+import { Search, X, ArrowRight, Building2, FileText, Loader2 } from 'lucide-react'
 
-interface Country {
-  iso2: string
+interface Institution {
+  slug: string
   name: string
-  flag_emoji: string
-  region: string
-  currency_code: string
-  hrlake_coverage_level: string
+  type: string
+  coverage_level: string
+  founded_year: number | null
+  is_active: boolean
 }
 interface Article {
   title: string
@@ -20,8 +20,20 @@ interface Article {
   category: string
 }
 interface SearchResults {
-  countries: Country[]
+  institutions: Institution[]
   articles: Article[]
+}
+
+const TYPE_LABELS: Record<string, string> = {
+  bank: 'Bank',
+  insurer: 'Insurer',
+  microfinance: 'Microfinance',
+  payment_operator: 'Payment Operator',
+  money_transfer: 'Money Transfer',
+  fx_bureau: 'FX Bureau',
+  capital_goods_finance: 'Leasing',
+  reinsurer: 'Reinsurer',
+  investment_bank: 'Investment Bank',
 }
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -42,7 +54,7 @@ interface SearchBarProps {
 export default function SearchBar({ variant = 'hero', placeholder, className = '' }: SearchBarProps) {
   const router = useRouter()
   const isHero = variant === 'hero'
-  const defaultPlaceholder = isHero ? 'Search any country, guide, or topic…' : 'Search…'
+  const defaultPlaceholder = isHero ? 'Search banks, insurers, FX rates, guides…' : 'Search…'
 
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResults | null>(null)
@@ -75,20 +87,20 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
   }, [])
 
   const flatItems = [
-    ...(results?.countries.slice(0, 5).map(c => ({ type: 'country' as const, data: c })) ?? []),
+    ...(results?.institutions.slice(0, 5).map(i => ({ type: 'institution' as const, data: i })) ?? []),
     ...(results?.articles.slice(0, 3).map(a => ({ type: 'article' as const, data: a })) ?? []),
   ]
 
   const navigate = useCallback((item: typeof flatItems[0]) => {
     setOpen(false); setQuery('')
-    if (item.type === 'country') router.push('/countries/' + (item.data as Country).iso2.toLowerCase() + '/')
-    else router.push('/insights/' + (item.data as Article).slug + '/')
+    if (item.type === 'institution') router.push('/institutions/' + (item.data as Institution).slug)
+    else router.push('/guides/' + (item.data as Article).slug)
   }, [router])
 
   const submitSearch = useCallback(() => {
     if (!query.trim()) return
     setOpen(false)
-    router.push('/search/?q=' + encodeURIComponent(query.trim()))
+    router.push('/search?q=' + encodeURIComponent(query.trim()))
   }, [query, router])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -99,13 +111,12 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
     else if (e.key === 'Escape') { setOpen(false); setActiveIndex(-1) }
   }
 
-  const hasResults = results && (results.countries.length > 0 || results.articles.length > 0)
-  const noResults = results && !results.countries.length && !results.articles.length
+  const hasResults = results && (results.institutions.length > 0 || results.articles.length > 0)
+  const noResults = results && !results.institutions.length && !results.articles.length
 
   return (
     <div ref={containerRef} className={'relative ' + className}>
 
-      {/* ══ HERO variant ══ */}
       {isHero ? (
         <div className="relative">
           <div className="flex items-center bg-white rounded-2xl shadow-2xl shadow-black/30 border-2 border-transparent focus-within:border-blue-500 transition-all duration-200 overflow-hidden">
@@ -137,7 +148,8 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
             <div className="p-2 shrink-0">
               <button
                 onClick={submitSearch}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold rounded-xl transition-all px-2 py-2.5 sm:px-5"
+                className="flex items-center gap-2 text-white font-bold rounded-xl transition-all px-2 py-2.5 sm:px-5"
+                style={{ background: '#1D4ED8' }}
               >
                 <ArrowRight size={16} className="shrink-0" />
                 <span className="hidden sm:inline text-sm pr-1">Search</span>
@@ -146,7 +158,6 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
           </div>
         </div>
       ) : (
-        /* ══ NAV variant ══ */
         <div className="flex items-center gap-2 bg-white/10 hover:bg-white/15 focus-within:bg-white/15 border border-white/15 hover:border-white/25 focus-within:border-blue-400/60 rounded-lg transition-all duration-200 px-3 py-2">
           {loading
             ? <Loader2 size={13} className="animate-spin text-blue-300 shrink-0" />
@@ -174,27 +185,28 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
         </div>
       )}
 
-      {/* ══ Dropdown ══ */}
       {open && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl shadow-black/20 border border-slate-200/80 overflow-hidden z-50 min-w-[280px]">
 
-          {results && results.countries.length > 0 && (
+          {results && results.institutions.length > 0 && (
             <div>
               <div className="px-4 pt-3 pb-1.5">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em]">Countries</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em]">Institutions</span>
               </div>
-              {results.countries.slice(0, 5).map((country, i) => {
+              {results.institutions.slice(0, 5).map((inst, i) => {
                 const isActive = activeIndex === i
                 return (
-                  <button key={country.iso2}
-                    onClick={() => navigate({ type: 'country', data: country })}
+                  <button key={inst.slug}
+                    onClick={() => navigate({ type: 'institution', data: inst })}
                     onMouseEnter={() => setActiveIndex(i)}
-                    className={'w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left ' + (isActive ? 'bg-blue-50' : 'hover:bg-white')}
+                    className={'w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left ' + (isActive ? 'bg-blue-50' : 'hover:bg-slate-50')}
                   >
-                    <img src={'https://flagcdn.com/20x15/' + country.iso2.toLowerCase() + '.png'} alt={country.name} width={20} height={15} className="rounded-sm shrink-0" />
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: '#eff6ff' }}>
+                      <Building2 size={13} style={{ color: '#1D4ED8' }} />
+                    </div>
                     <div className="min-w-0 flex-1">
-                      <div className={'text-sm font-semibold truncate ' + (isActive ? 'text-blue-700' : 'text-slate-800')}>{country.name}</div>
-                      <div className="text-[11px] text-slate-400 truncate">{country.region} · {country.currency_code}</div>
+                      <div className={'text-sm font-semibold truncate ' + (isActive ? 'text-blue-700' : 'text-slate-800')}>{inst.name}</div>
+                      <div className="text-[11px] text-slate-400 truncate">{TYPE_LABELS[inst.type] ?? inst.type}</div>
                     </div>
                     {isActive && <ArrowRight size={12} className="text-blue-400 shrink-0" />}
                   </button>
@@ -204,18 +216,18 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
           )}
 
           {results && results.articles.length > 0 && (
-            <div className={results.countries.length > 0 ? 'border-t border-slate-100' : ''}>
+            <div className={results.institutions.length > 0 ? 'border-t border-slate-100' : ''}>
               <div className="px-4 pt-3 pb-1.5">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em]">Articles</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.12em]">Guides</span>
               </div>
               {results.articles.slice(0, 3).map((article, i) => {
-                const flatIdx = results.countries.slice(0, 5).length + i
+                const flatIdx = (results.institutions?.slice(0, 5).length ?? 0) + i
                 const isActive = activeIndex === flatIdx
                 return (
                   <button key={article.slug}
                     onClick={() => navigate({ type: 'article', data: article })}
                     onMouseEnter={() => setActiveIndex(flatIdx)}
-                    className={'w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left ' + (isActive ? 'bg-blue-50' : 'hover:bg-white')}
+                    className={'w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left ' + (isActive ? 'bg-blue-50' : 'hover:bg-slate-50')}
                   >
                     <div className="shrink-0 w-6 h-6 bg-indigo-50 rounded-md flex items-center justify-center">
                       <FileText size={12} className="text-indigo-500" />
@@ -233,7 +245,7 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
           {noResults && (
             <div className="px-4 py-5 text-center">
               <p className="text-sm text-slate-500">No results for <span className="font-semibold text-slate-700">"{query}"</span></p>
-              <p className="text-xs text-slate-400 mt-0.5">Try a country name or ISO code</p>
+              <p className="text-xs text-slate-400 mt-0.5">Try a bank name or institution type</p>
             </div>
           )}
 

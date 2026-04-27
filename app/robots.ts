@@ -7,15 +7,14 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
-
-
           '/api/',
           '/dashboard/',
           '/sign-in/',
           '/sign-up/',
+          '/roodber8/',
         ],
       },
     ],
-    sitemap: 'https://hrlake.com/sitemap.xml',
+    sitemap: 'https://birrbank.com/sitemap.xml',
   }
 }
