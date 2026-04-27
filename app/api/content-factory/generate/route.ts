@@ -10,20 +10,6 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 // PLATFORM IDENTITY
 // ─────────────────────────────────────────────
 const PLATFORM_IDENTITY: Record<string, string> = {
-  HRLake: `
-PLATFORM: HRLake (hrlake.com)
-BRAND POSITION: HR Intelligence · EOR Intelligence · Payroll Data
-TAGLINE: Where HR, EOR and payroll knowledge dives deep
-AUDIENCE: Global HR directors, payroll managers, EOR buyers, employment lawyers, CFOs and international expansion teams at mid-to-large organisations.
-VOICE: Authoritative, deep, trusted. Like a senior employment law partner and a global payroll director co-authoring a briefing document. Never superficial. Never generic.
-THREE-PILLAR RULE: Every piece of content must balance all three pillars — HR, EOR and Payroll — equally. No article may lead with payroll only, HR only, or EOR only.
-WHAT HRLAKE NEVER DOES:
-- Never adds qualification tags (CIPD, SHRM, ACCA, CIMA etc.) — legal and copyright risk
-- Never recommends a specific payment processor
-- Never gives legal advice as fact — frames regulatory content as "generally", "typically", "under [jurisdiction] law"
-- Never invents specific legal thresholds, rates or deadlines — flags when figures need verification
-- Never writes generic blog content — every article must contain information a senior professional cannot find in a 30-second Google search
-QUALITY BENCHMARK: Mercer Global Payroll, Deloitte Employment Law Guides, KPMG International EOR Briefings. That is the standard. Meet it or exceed it.`,
 
   AccountingBody: `
 PLATFORM: AccountingBody (accountingbody.com)

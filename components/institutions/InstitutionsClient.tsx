@@ -132,7 +132,7 @@ function InstitutionCard({ inst }: { inst: Institution }) {
         </div>
       </Link>
 
-      {/* Quick links — mirrors HRLake country card bottom strip */}
+      {/* Quick links strip */}
       <div className="border-t border-slate-100 px-4 py-2.5 flex items-center gap-1">
         {quickLinks.map(ql => (
           <Link key={ql.label} href={ql.href(inst.slug)}
