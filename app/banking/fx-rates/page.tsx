@@ -91,8 +91,8 @@ export default async function FxRatesPage() {
             style={{ background: 'rgba(29,78,216,0.15)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.3)' }}>
             Banking — FX Rates
           </div>
-          <h1 className="font-bold text-white mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+          <h1 className="font-serif font-bold text-white mb-4"
+            style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
             Ethiopian FX rates — NBE official vs all banks.
           </h1>
           <p className="text-slate-400 mb-8" style={{ fontSize: '16px', lineHeight: 1.8, maxWidth: '520px' }}>
@@ -129,8 +129,8 @@ export default async function FxRatesPage() {
       <section style={{ background: '#ffffff', padding: '64px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <h2 className="font-bold text-slate-950"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-0.5px' }}>
+            <h2 className="font-serif font-bold text-slate-950"
+              style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-0.5px' }}>
               NBE indicative rates today
             </h2>
             <div className="flex items-center gap-2 shrink-0">
@@ -173,8 +173,8 @@ export default async function FxRatesPage() {
       {/* PER-BANK TABLE */}
       <section style={{ background: '#f8fafc', padding: '64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-2"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-2"
+            style={{ fontSize: 'clamp(22px, 2.8vw, 32px)', letterSpacing: '-0.5px' }}>
             USD · EUR · GBP — all banks compared
           </h2>
           <p className="text-slate-500 mb-8" style={{ fontSize: '14px' }}>
@@ -244,8 +244,8 @@ export default async function FxRatesPage() {
       {/* HOW FX WORKS */}
       <section style={{ background: '#ffffff', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-10"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-10"
+            style={{ fontSize: 'clamp(26px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
             Understanding Ethiopian FX rates.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -280,8 +280,8 @@ export default async function FxRatesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Source transparency</p>
-            <h3 className="font-bold mb-2"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
+            <h3 className="font-serif font-bold mb-2"
+              style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
               The NBE rate is always labelled. Always.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 480 }}>
@@ -300,8 +300,8 @@ export default async function FxRatesPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="font-bold text-slate-950 mb-5"
-              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+            <h2 className="font-serif font-bold text-slate-950 mb-5"
+              style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Track ETB exchange rates from anywhere in the world.
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize:'15px', lineHeight:1.85 }}>

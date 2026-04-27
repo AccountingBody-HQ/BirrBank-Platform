@@ -54,8 +54,8 @@ export default async function InstitutionsPage() {
             style={{ background: 'rgba(29,78,216,0.15)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.3)' }}>
             NBE-Regulated Registry
           </div>
-          <h1 className="font-bold text-white mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+          <h1 className="font-serif font-bold text-white mb-4"
+            style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
             Ethiopia's complete<br />financial institution registry.
           </h1>
           <p className="text-slate-400 mb-8" style={{ fontSize: '16px', lineHeight: 1.8, maxWidth: '560px' }}>
@@ -92,8 +92,8 @@ export default async function InstitutionsPage() {
       {/* CATEGORY CARDS */}
       <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-10"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-10"
+            style={{ fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
             Browse by institution type
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -127,8 +127,8 @@ export default async function InstitutionsPage() {
       {/* INTERACTIVE GRID */}
       <section style={{ padding: '96px 0', background: '#ffffff' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-8"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize: 'clamp(22px, 3vw, 38px)', letterSpacing: '-0.5px' }}>
             All {totalCount} institutions
           </h2>
           <Suspense fallback={<div className="text-center py-20 text-slate-400 text-sm">Loading...</div>}>
@@ -142,8 +142,8 @@ export default async function InstitutionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Source integrity</p>
-            <h3 className="font-bold mb-2"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
+            <h3 className="font-serif font-bold mb-2"
+              style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
               Every institution verified against the NBE registry.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.75, maxWidth: 520 }}>

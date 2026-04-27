@@ -74,8 +74,8 @@ export default async function BankingHubPage() {
             style={{ background: 'rgba(29,78,216,0.15)', color: '#93c5fd', border: '1px solid rgba(29,78,216,0.3)' }}>
             Banking Pillar
           </div>
-          <h1 className="font-bold text-white mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+          <h1 className="font-serif font-bold text-white mb-4"
+            style={{ fontSize: 'clamp(38px, 4.5vw, 56px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
             Compare every bank<br />in Ethiopia.
           </h1>
           <p className="text-slate-400 mb-8" style={{ fontSize: '16px', lineHeight: 1.8, maxWidth: '520px' }}>
@@ -111,8 +111,8 @@ export default async function BankingHubPage() {
       {/* SUB-PAGE CARDS */}
       <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-slate-950 mb-10"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 40px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-slate-950 mb-10"
+            style={{ fontSize: 'clamp(22px, 3vw, 40px)', letterSpacing: '-0.5px' }}>
             The complete Ethiopian banking picture.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -141,8 +141,8 @@ export default async function BankingHubPage() {
       <section style={{ background: '#ffffff', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-            <h2 className="font-bold text-slate-950"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+            <h2 className="font-serif font-bold text-slate-950"
+              style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
               Best savings rates today
             </h2>
             <Link href="/banking/savings-rates" className="flex items-center gap-1 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
@@ -194,8 +194,8 @@ export default async function BankingHubPage() {
       <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-            <h2 className="font-bold text-slate-950"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+            <h2 className="font-serif font-bold text-slate-950"
+              style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
               FX rates — NBE official snapshot
             </h2>
             <Link href="/banking/fx-rates" className="flex items-center gap-1 text-sm font-bold shrink-0" style={{ color:'#1D4ED8' }}>
@@ -234,8 +234,8 @@ export default async function BankingHubPage() {
       {/* TRUST */}
       <section style={{ background: '#0f172a', padding: '96px 0', borderTop: '1px solid #1e293b' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-bold text-white text-center mb-12"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(26px, 3.5vw, 40px)', letterSpacing: '-0.5px' }}>
+          <h2 className="font-serif font-bold text-white text-center mb-12"
+            style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', letterSpacing: '-0.5px' }}>
             The only platform covering all {bankCount} banks.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -266,8 +266,8 @@ export default async function BankingHubPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="font-bold text-slate-950 mb-5"
-              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(32px, 4vw, 46px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+            <h2 className="font-serif font-bold text-slate-950 mb-5"
+              style={{ fontSize:'clamp(32px, 4vw, 46px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Rate changes, direct to your inbox.
             </h2>
             <p className="text-slate-500 mb-8" style={{ fontSize:'15px', lineHeight:1.85 }}>

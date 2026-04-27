@@ -122,8 +122,8 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
           </div>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-10">
             <div className="flex-1">
-              <h1 className="font-bold text-white mb-4"
-                style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(32px, 4vw, 52px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
+              <h1 className="font-serif font-bold text-white mb-4"
+                style={{ fontSize: 'clamp(32px, 4vw, 52px)', letterSpacing: '-0.025em', lineHeight: 1.08 }}>
                 {inst.name}
               </h1>
               {inst.description && (
@@ -436,8 +436,8 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
         <section style={{ background: '#f8fafc', padding: '80px 0', borderTop: '1px solid #e2e8f0' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-8">
-              <h2 className="font-bold text-slate-950"
-                style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(20px, 2.5vw, 30px)', letterSpacing: '-0.5px' }}>
+              <h2 className="font-serif font-bold text-slate-950"
+                style={{ fontSize: 'clamp(20px, 2.5vw, 30px)', letterSpacing: '-0.5px' }}>
                 Related institutions
               </h2>
               <Link href={`/institutions?type=${inst.type}`} className="flex items-center gap-1 text-sm font-bold transition-colors" style={{ color: '#1D4ED8' }}>
@@ -468,8 +468,8 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Compare further</p>
-            <h3 className="font-bold mb-2"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
+            <h3 className="font-serif font-bold mb-2"
+              style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', color: '#ffffff', letterSpacing: '-0.5px' }}>
               See how {inst.name} compares.
             </h3>
             <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.75, maxWidth: 440 }}>
