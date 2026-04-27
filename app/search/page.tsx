@@ -3,16 +3,15 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Globe, FileText, Wrench, ArrowRight, Loader2, X, ChevronRight } from 'lucide-react'
-import { getFlag } from '@/lib/flag'
+import { Search, Building2, FileText, ArrowRight, Loader2, X, ChevronRight } from 'lucide-react'
 
-interface Country {
-  iso2: string
+interface Institution {
+  slug: string
   name: string
-  flag_emoji: string
-  region: string
-  currency_code: string
-  hrlake_coverage_level: string
+  type: string
+  coverage_level: string
+  founded_year: number | null
+  is_active: boolean
 }
 
 interface Article {
@@ -23,15 +22,31 @@ interface Article {
   category: string
 }
 
-type FilterType = 'all' | 'countries' | 'articles'
+type FilterType = 'all' | 'institutions' | 'articles'
 
-const TOOLS = [
-  { name: 'Global Payroll Calculator', href: '/payroll-tools/global-calculator/', desc: 'Full breakdown for any country' },
-  { name: 'Country Comparison Tool', href: '/compare/', desc: 'Side-by-side employer cost comparison' },
-  { name: 'Payroll Tools Hub', href: '/payroll-tools/', desc: 'All calculators and tools' },
-  { name: 'EOR Intelligence', href: '/eor/', desc: 'Employer of Record cost modelling' },
-  { name: 'HR Compliance Hub', href: '/hr-compliance/', desc: 'Global employment law by topic' },
-]
+const TYPE_LABELS: Record<string, string> = {
+  bank: 'Bank',
+  insurer: 'Insurer',
+  microfinance: 'Microfinance',
+  payment_operator: 'Payment Operator',
+  money_transfer: 'Money Transfer',
+  fx_bureau: 'FX Bureau',
+  capital_goods_finance: 'Leasing',
+  reinsurer: 'Reinsurer',
+  investment_bank: 'Investment Bank',
+}
+
+const TYPE_COLOURS: Record<string, string> = {
+  bank: '#1D4ED8',
+  insurer: '#8b5cf6',
+  microfinance: '#06b6d4',
+  payment_operator: '#f59e0b',
+  money_transfer: '#ec4899',
+  fx_bureau: '#10b981',
+  capital_goods_finance: '#f97316',
+  reinsurer: '#64748b',
+  investment_bank: '#64748b',
+}
 
 function formatDate(iso: string) {
   try {
@@ -44,7 +59,6 @@ function coverageBadge(level: string) {
     full:    { label: 'Full data',    classes: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
     partial: { label: 'Partial data', classes: 'bg-amber-50 text-amber-700 border-amber-200' },
     basic:   { label: 'Basic data',   classes: 'bg-slate-100 text-slate-600 border-slate-200' },
-    none:    { label: 'Coming soon',  classes: 'bg-slate-100 text-slate-400 border-slate-200' },
   }
   const b = map[level] ?? map.basic
   return (
@@ -54,21 +68,28 @@ function coverageBadge(level: string) {
   )
 }
 
-function CountryCard({ country }: { country: Country }) {
+function InstitutionCard({ institution }: { institution: Institution }) {
+  const initials = (institution.type ?? 'IN').slice(0, 2).toUpperCase()
+  const colour = TYPE_COLOURS[institution.type] ?? '#64748b'
+  const label = TYPE_LABELS[institution.type] ?? institution.type
   return (
     <Link
-      href={'/countries/' + country.iso2.toLowerCase() + '/'}
+      href={'/institutions/' + institution.slug}
       className="group flex items-center gap-4 bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-2xl px-5 py-4 transition-all duration-200"
     >
-      <span className="text-2xl leading-none shrink-0">{getFlag(country.iso2)}</span>
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white font-black text-sm"
+        style={{ background: colour }}
+      >
+        {initials}
+      </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{country.name}</span>
-          {coverageBadge(country.hrlake_coverage_level)}
+          <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{institution.name}</span>
+          {coverageBadge(institution.coverage_level)}
         </div>
         <div className="text-xs text-slate-400">
-          {country.region} · {country.currency_code}
-
+          {label}{institution.founded_year ? ' · Est. ' + institution.founded_year : ''}
         </div>
       </div>
       <div className="shrink-0 flex items-center gap-1 text-blue-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
@@ -81,7 +102,7 @@ function CountryCard({ country }: { country: Country }) {
 function ArticleCard({ article }: { article: Article }) {
   return (
     <Link
-      href={'/insights/' + article.slug + '/'}
+      href={'/guides/' + article.slug}
       className="group bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md rounded-2xl p-6 transition-all duration-200 block"
     >
       <div className="flex items-start gap-4">
@@ -103,29 +124,11 @@ function ArticleCard({ article }: { article: Article }) {
               <span className="text-[11px] text-slate-400">{formatDate(article.publishedAt)}</span>
             )}
             <span className="flex items-center gap-1 text-indigo-600 text-xs font-semibold group-hover:gap-1.5 transition-all">
-              Read article <ArrowRight size={12} />
+              Read guide <ArrowRight size={12} />
             </span>
           </div>
         </div>
       </div>
-    </Link>
-  )
-}
-
-function ToolCard({ tool }: { tool: typeof TOOLS[0] }) {
-  return (
-    <Link
-      href={tool.href}
-      className="group flex items-center gap-4 bg-white border border-slate-200 hover:border-sky-300 hover:shadow-md rounded-2xl px-5 py-4 transition-all duration-200"
-    >
-      <div className="shrink-0 bg-sky-50 text-sky-600 rounded-xl p-2.5 group-hover:bg-sky-100 transition-colors">
-        <Wrench size={16} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors text-sm">{tool.name}</div>
-        <div className="text-xs text-slate-400 mt-0.5">{tool.desc}</div>
-      </div>
-      <ChevronRight size={15} className="shrink-0 text-slate-300 group-hover:text-blue-400 transition-colors" />
     </Link>
   )
 }
@@ -137,12 +140,12 @@ function FilterTabs({
 }: {
   active: FilterType
   onChange: (f: FilterType) => void
-  counts: { all: number; countries: number; articles: number }
+  counts: { all: number; institutions: number; articles: number }
 }) {
   const tabs: { key: FilterType; label: string; icon: React.ElementType; count: number }[] = [
-    { key: 'all',       label: 'All results', icon: Search,   count: counts.all },
-    { key: 'countries', label: 'Countries',   icon: Globe,    count: counts.countries },
-    { key: 'articles',  label: 'Articles',    icon: FileText, count: counts.articles },
+    { key: 'all',          label: 'All results',   icon: Search,    count: counts.all },
+    { key: 'institutions', label: 'Institutions',  icon: Building2, count: counts.institutions },
+    { key: 'articles',     label: 'Guides',        icon: FileText,  count: counts.articles },
   ]
   return (
     <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1 w-fit">
@@ -172,7 +175,7 @@ function SearchContent() {
 
   const [inputValue, setInputValue] = useState(initialQuery)
   const [query, setQuery] = useState(initialQuery)
-  const [results, setResults] = useState<{ countries: Country[]; articles: Article[] } | null>(null)
+  const [results, setResults] = useState<{ institutions: Institution[]; articles: Article[] } | null>(null)
   const [loading, setLoading] = useState(false)
   const [filter, setFilter] = useState<FilterType>('all')
 
@@ -192,38 +195,31 @@ function SearchContent() {
     const trimmed = inputValue.trim()
     if (!trimmed) return
     setQuery(trimmed)
-    router.replace('/search/?q=' + encodeURIComponent(trimmed), { scroll: false })
+    router.replace('/search?q=' + encodeURIComponent(trimmed), { scroll: false })
     setFilter('all')
   }
 
-  const matchedTools = query.length >= 2
-    ? TOOLS.filter(t =>
-        t.name.toLowerCase().includes(query.toLowerCase()) ||
-        t.desc.toLowerCase().includes(query.toLowerCase())
-      )
-    : []
-
   const counts = {
-    countries: results?.countries.length ?? 0,
-    articles:  results?.articles.length ?? 0,
-    all: (results?.countries.length ?? 0) + (results?.articles.length ?? 0) + matchedTools.length,
+    institutions: results?.institutions.length ?? 0,
+    articles:     results?.articles.length ?? 0,
+    all: (results?.institutions.length ?? 0) + (results?.articles.length ?? 0),
   }
 
-  const showCountries = filter === 'all' || filter === 'countries'
-  const showArticles  = filter === 'all' || filter === 'articles'
-  const hasAnyResults = counts.all > 0
+  const showInstitutions = filter === 'all' || filter === 'institutions'
+  const showArticles     = filter === 'all' || filter === 'articles'
+  const hasAnyResults    = counts.all > 0
 
   return (
     <main className="bg-white flex-1">
-      <div className="bg-slate-950 border-b border-slate-800">
+      <div className="relative overflow-hidden border-b border-slate-800" style={{ background: '#0f172a' }}>
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-12">
           <nav className="flex items-center gap-2 text-xs text-slate-400 mb-4">
-            <a href="/" className="hover:text-slate-200 transition-colors">Home</a>
-            <span>›</span>
+            <Link href="/" className="hover:text-slate-200 transition-colors">Home</Link>
+            <ChevronRight size={12} />
             <span className="text-slate-300">Search</span>
           </nav>
-          <h1 className="font-serif text-3xl lg:text-4xl font-bold text-white mb-8 tracking-tight">
-            {query ? <>Results for <span className="text-blue-400">"{query}"</span></> : 'Search HRLake'}
+          <h1 className="font-serif font-bold text-white mb-8" style={{ fontSize: 'clamp(28px, 4vw, 42px)', letterSpacing: '-0.025em' }}>
+            {query ? <>Results for <span className="text-blue-400">"{query}"</span></> : 'Search BirrBank'}
           </h1>
           <form onSubmit={handleSubmit} className="max-w-2xl">
             <div className="flex items-center bg-white rounded-2xl shadow-xl shadow-black/20 overflow-hidden border-2 border-transparent focus-within:border-blue-400 transition-all duration-200">
@@ -234,7 +230,7 @@ function SearchContent() {
                 type="text"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
-                placeholder="Search countries, employment law, EOR, payroll guides…"
+                placeholder="Search banks, insurers, microfinance, FX rates, guides…"
                 className="flex-1 py-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 bg-transparent outline-none min-w-0"
                 autoFocus
               />
@@ -250,7 +246,8 @@ function SearchContent() {
               <div className="p-2 shrink-0">
                 <button
                   type="submit"
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold rounded-xl transition-all px-2 py-2.5 sm:px-5"
+                  className="flex items-center gap-2 text-white font-bold rounded-xl transition-all px-2 py-2.5 sm:px-5"
+                  style={{ background: '#1D4ED8' }}
                 >
                   <ArrowRight size={16} className="shrink-0" />
                   <span className="hidden sm:inline text-sm pr-1">Search</span>
@@ -272,7 +269,7 @@ function SearchContent() {
         {!loading && !query && (
           <div className="py-12 text-center">
             <Search size={40} className="mx-auto text-slate-300 mb-4" />
-            <p className="text-slate-500 font-medium">Enter a country name, topic, or keyword to search.</p>
+            <p className="text-slate-500 font-medium">Enter a bank name, institution type, or topic to search.</p>
           </div>
         )}
 
@@ -294,13 +291,13 @@ function SearchContent() {
                 </div>
                 <h2 className="font-bold text-slate-800 text-lg mb-2">No results found</h2>
                 <p className="text-slate-500 text-sm mb-6">
-                  No countries or articles matched <span className="font-semibold text-slate-700">"{query}"</span>.
+                  No institutions or guides matched <span className="font-semibold text-slate-700">"{query}"</span>.
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {['United Kingdom', 'Germany', 'Singapore', 'United States'].map(s => (
+                  {['Commercial Bank', 'Awash Bank', 'Telebirr', 'CBE'].map(s => (
                     <button
                       key={s}
-                      onClick={() => { setInputValue(s); setQuery(s); router.replace('/search/?q=' + encodeURIComponent(s)) }}
+                      onClick={() => { setInputValue(s); setQuery(s); router.replace('/search?q=' + encodeURIComponent(s)) }}
                       className="text-xs font-semibold text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-full px-3 py-1.5 transition-colors"
                     >
                       Try "{s}"
@@ -310,19 +307,19 @@ function SearchContent() {
               </div>
             )}
 
-            {showCountries && results.countries.length > 0 && (
+            {showInstitutions && results.institutions.length > 0 && (
               <section className="mb-10">
                 <div className="flex items-center gap-2 mb-4">
-                  <Globe size={15} className="text-blue-500" />
-                  <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Countries</h2>
-                  <span className="text-xs text-slate-400">({results.countries.length})</span>
+                  <Building2 size={15} className="text-blue-500" />
+                  <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Institutions</h2>
+                  <span className="text-xs text-slate-400">({results.institutions.length})</span>
                 </div>
                 <div className="grid gap-3">
-                  {results.countries.map(c => <CountryCard key={c.iso2} country={c} />)}
+                  {results.institutions.map(i => <InstitutionCard key={i.slug} institution={i} />)}
                 </div>
                 <div className="mt-4 text-center">
-                  <Link href="/countries/" className="text-sm text-blue-600 hover:text-blue-700 font-semibold transition-colors">
-                    Browse all countries →
+                  <Link href="/institutions" className="text-sm text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                    Browse all institutions →
                   </Link>
                 </div>
               </section>
@@ -332,24 +329,11 @@ function SearchContent() {
               <section className="mb-10">
                 <div className="flex items-center gap-2 mb-4">
                   <FileText size={15} className="text-indigo-500" />
-                  <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Articles</h2>
+                  <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Guides</h2>
                   <span className="text-xs text-slate-400">({results.articles.length})</span>
                 </div>
                 <div className="grid gap-4">
                   {results.articles.map(a => <ArticleCard key={a.slug} article={a} />)}
-                </div>
-              </section>
-            )}
-
-            {filter === 'all' && matchedTools.length > 0 && (
-              <section className="mb-10">
-                <div className="flex items-center gap-2 mb-4">
-                  <Wrench size={15} className="text-sky-500" />
-                  <h2 className="font-bold text-slate-900 text-sm uppercase tracking-wide">Tools</h2>
-                  <span className="text-xs text-slate-400">({matchedTools.length})</span>
-                </div>
-                <div className="grid gap-3">
-                  {matchedTools.map(t => <ToolCard key={t.href} tool={t} />)}
                 </div>
               </section>
             )}

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const q = searchParams.get("q")?.trim() ?? ""
 
   if (!q || q.length < 2) {
-    return NextResponse.json({ countries: [], articles: [] })
+    return NextResponse.json({ institutions: [], articles: [] })
   }
 
   const supabase = createSupabaseClient(
@@ -17,15 +17,16 @@ export async function GET(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-  const { data: countries, error: countriesError } = await supabase
-    .from("countries")
-    .select("iso2, name, flag_emoji, region, currency_code, hrlake_coverage_level")
-    .or(`name.ilike.%${q}%,iso2.ilike.%${q}%,iso3.ilike.%${q}%`)
+  const { data: institutions, error: institutionsError } = await supabase
+    .schema("birrbank")
+    .from("institutions")
+    .select("slug, name, type, coverage_level, founded_year, is_active")
+    .or(`name.ilike.%${q}%,slug.ilike.%${q}%,type.ilike.%${q}%`)
     .order("name", { ascending: true })
     .limit(10)
 
-  if (countriesError) {
-    console.error("Supabase search error:", countriesError)
+  if (institutionsError) {
+    console.error("Supabase search error:", institutionsError)
   }
 
   let articles: any[] = []
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
       })
       articles = await sanity.fetch(
         `*[_type == "article"
-          && "hrlake" in showOnSites
+          && "birrbank" in showOnSites
           && (
             title match $query
             || pt::text(body) match $query
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json({
-    countries: countries ?? [],
+    institutions: institutions ?? [],
     articles,
   })
 }
