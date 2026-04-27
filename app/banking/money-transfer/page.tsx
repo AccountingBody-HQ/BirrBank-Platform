@@ -1,17 +1,18 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
 import { createSupabaseAdminClient } from '@/lib/supabase'
+import { ChevronRight } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
-const PILLAR = '#1D4ED8'
-const ClockIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-  </svg>
-)
+export const metadata: Metadata = {
+  title: 'Send Money to Ethiopia — Cheapest Remittance Routes Compared | BirrBank',
+  description: 'Compare fees, exchange rates and transfer speeds for sending money to Ethiopia across all major diaspora corridors.',
+}
+
 function fmtDate(d: string | null | undefined) {
   if (!d) return '—'
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+  return new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
 }
 function fmtETB(val: number | null | undefined) {
   if (val == null) return '—'
@@ -20,117 +21,143 @@ function fmtETB(val: number | null | undefined) {
 
 export default async function MoneyTransferPage() {
   const supabase = createSupabaseAdminClient()
-  const { data: transferData } = await supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current', true).order('fee_percentage', { ascending: true })
-  const { count: agencyCount } = await supabase.schema('birrbank').from('institutions').select('count', { count: 'exact', head: true }).eq('type', 'money_transfer').eq('is_active', true)
-  const transfers = transferData ?? []
+  const [transferRes, agencyCountRes] = await Promise.all([
+    supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current',true).order('fee_percentage',{ascending:true}),
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','money_transfer').eq('is_active',true),
+  ])
+  const transfers = transferRes.data ?? []
+  const agencyCount = agencyCountRes.count ?? 0
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
-            <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link><span>›</span>
-            <Link href="/banking" className="hover:text-slate-600 transition-colors">Banking</Link><span>›</span>
-            <span style={{ color: PILLAR, fontWeight: 700 }}>Money Transfer</span>
+    <main className="bg-white flex-1">
+
+      {/* DARK HERO */}
+      <section className="relative overflow-hidden" style={{ background:'#0f172a' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background:'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-0">
+          <nav className="flex items-center gap-2 text-xs text-slate-500 mb-8">
+            <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link>
+            <ChevronRight size={12} />
+            <Link href="/banking" className="hover:text-slate-300 transition-colors">Banking</Link>
+            <ChevronRight size={12} />
+            <span className="text-slate-400">Money Transfer</span>
+          </nav>
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold mb-6"
+            style={{ background:'rgba(29,78,216,0.15)', color:'#93c5fd', border:'1px solid rgba(29,78,216,0.3)' }}>
+            Banking — Money Transfer
           </div>
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: PILLAR }}>Banking · Money Transfer</p>
-          <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
-            Send money to Ethiopia —<br /><span style={{ color: PILLAR }}>cheapest remittance routes compared.</span>
+          <h1 className="font-bold text-white mb-4"
+            style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(38px, 4.5vw, 56px)', letterSpacing:'-0.025em', lineHeight:1.08 }}>
+            Send money to Ethiopia — cheapest remittance routes compared.
           </h1>
-          <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
-            Compare fees, exchange rates and transfer speeds from Western Union, MoneyGram, Wise,
-            Dahabshiil and direct bank transfers across all major diaspora corridors.
+          <p className="text-slate-400 mb-8" style={{ fontSize:'16px', lineHeight:1.8, maxWidth:'520px' }}>
+            Compare fees, exchange rates and transfer speeds from Western Union, MoneyGram, Wise, Dahabshiil and direct bank transfers across all major diaspora corridors.
           </p>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link href="/banking/fx-rates"
+              className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+              Check FX rates
+            </Link>
+            <Link href="/diaspora/remittance"
+              className="font-bold rounded-full transition-all text-center"
+              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+              Diaspora hub
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[
-              { icon: <ClockIcon />, label: transfers.length + ' transfer services compared' },
-              { icon: <ClockIcon />, label: 'Fee percentage and flat fees' },
-              { icon: <ClockIcon />, label: 'Processing time per service' },
-              { icon: <ClockIcon />, label: 'Destination countries covered' },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2">
-                <span style={{ color: PILLAR }}>{s.icon}</span>
-                <span className="text-xs font-semibold text-slate-500">{s.label}</span>
+              { value:String(transfers.length || agencyCount), label:'Transfer services tracked' },
+              { value:String(agencyCount), label:'Registered agencies' },
+              { value:'NBE', label:'Regulatory authority' },
+            ].map(s => (
+              <div key={s.label} className="text-center py-6 border-r border-slate-800 last:border-r-0">
+                <div className="font-mono font-black text-white mb-1" style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-1px' }}>{s.value}</div>
+                <div className="text-xs font-semibold text-slate-500">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-            <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-            <div className="hidden sm:grid border-b border-slate-200" style={{ gridTemplateColumns: '1fr 110px 130px 110px 130px 110px', padding: '13px 24px', background: '#f9fafb' }}>
-              {['Service', 'Fee %', 'Min amount', 'Max amount', 'Processing', 'Verified'].map((h) => (
+      {/* TRANSFER TABLE */}
+      <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
+            <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+            <div className="hidden sm:grid border-b border-slate-200"
+              style={{ gridTemplateColumns:'1fr 110px 130px 110px 130px 110px', padding:'13px 24px', background:'#f8fafc' }}>
+              {['Service','Fee %','Min amount','Max amount','Processing','Verified'].map(h => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
             </div>
             {transfers.length > 0 ? transfers.map((t: any, i: number) => (
-              <div key={t.id} className={'border-b border-slate-100 transition-colors ' + (i === 0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50')}>
-                <div className="hidden sm:grid items-start" style={{ gridTemplateColumns: '1fr 110px 130px 110px 130px 110px', padding: i === 0 ? '18px 24px' : '14px 24px' }}>
+              <div key={t.id} className={'border-b border-slate-100 transition-colors ' + (i===0 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50')}>
+                <div className="hidden sm:grid items-start"
+                  style={{ gridTemplateColumns:'1fr 110px 130px 110px 130px 110px', padding:i===0?'18px 24px':'14px 24px' }}>
                   <div>
-                    <p className={'font-bold ' + (i === 0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize: i === 0 ? '15px' : '14px' }}>{t.institutions?.name ?? t.institution_slug}</p>
+                    <p className={'font-bold ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
+                      {t.institutions?.name ?? t.institution_slug}
+                    </p>
                     {t.notes && <p className="text-xs text-slate-400 mt-0.5">{t.notes}</p>}
                     {t.destination_countries && (
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {t.destination_countries.slice(0, 5).map((c: string) => (
-                          <span key={c} className="text-xs rounded px-1.5 py-0.5" style={{ background: '#f1f5f9', color: '#475569' }}>{c}</span>
+                        {t.destination_countries.slice(0,5).map((c: string) => (
+                          <span key={c} className="text-xs rounded px-1.5 py-0.5" style={{ background:'#f1f5f9', color:'#475569' }}>{c}</span>
                         ))}
-                        {t.destination_countries.length > 5 && <span className="text-xs text-slate-400">+{t.destination_countries.length - 5} more</span>}
+                        {t.destination_countries.length > 5 && <span className="text-xs text-slate-400">+{t.destination_countries.length-5} more</span>}
                       </div>
                     )}
                   </div>
-                  <p className={'font-mono font-black ' + (i === 0 ? 'text-blue-700' : 'text-slate-800')} style={{ fontSize: i === 0 ? '22px' : '16px', letterSpacing: '-0.5px' }}>
-                    {t.fee_percentage ? Number(t.fee_percentage).toFixed(2) + '%' : '—'}
+                  <p className={'font-mono font-black ' + (i===0 ? 'text-blue-700' : 'text-slate-800')} style={{ fontSize:i===0?'22px':'16px', letterSpacing:'-0.5px' }}>
+                    {t.fee_percentage ? Number(t.fee_percentage).toFixed(2)+'%' : '—'}
                   </p>
                   <p className="font-mono text-slate-600 text-sm">{fmtETB(t.min_amount_etb)}</p>
                   <p className="font-mono text-slate-600 text-sm">{fmtETB(t.max_amount_etb)}</p>
-                  <p className="text-sm text-slate-500">{t.processing_hours ? t.processing_hours + (t.processing_hours === 1 ? ' hour' : ' hours') : '—'}</p>
-                  <div className="flex items-center gap-1.5"><span style={{ color: PILLAR }}><ClockIcon /></span><p className="text-xs text-slate-400">{fmtDate(t.last_verified_date)}</p></div>
+                  <p className="text-sm text-slate-500">{t.processing_hours ? t.processing_hours+(t.processing_hours===1?' hour':' hours') : '—'}</p>
+                  <p className="text-xs text-slate-400">{fmtDate(t.last_verified_date)}</p>
                 </div>
-                <div className="sm:hidden" style={{ padding: '14px 16px' }}>
+                <div className="sm:hidden" style={{ padding:'14px 16px' }}>
                   <div className="flex items-start justify-between gap-3 mb-1">
                     <p className="font-bold text-slate-800 text-sm">{t.institutions?.name ?? t.institution_slug}</p>
-                    <p className="font-mono font-bold text-slate-800 shrink-0">{t.fee_percentage ? Number(t.fee_percentage).toFixed(2) + '%' : '—'}</p>
+                    <p className="font-mono font-bold text-slate-800 shrink-0">{t.fee_percentage ? Number(t.fee_percentage).toFixed(2)+'%' : '—'}</p>
                   </div>
-                  <p className="text-xs text-slate-400">{t.processing_hours ? t.processing_hours + 'h processing' : '—'} · {fmtETB(t.min_amount_etb)} min</p>
+                  <p className="text-xs text-slate-400">{t.processing_hours ? t.processing_hours+'h processing' : '—'} · {fmtETB(t.min_amount_etb)} min</p>
                 </div>
               </div>
             )) : (
               <div className="py-10 text-center"><p className="text-slate-500 text-sm">Transfer service data is being verified. Check back soon.</p></div>
             )}
-            <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
+            <div className="flex items-center justify-between border-t border-slate-200" style={{ background:'#f8fafc', padding:'14px 24px' }}>
               <p className="text-xs text-slate-400">Fees sourced from official service websites · For comparison only · Sorted by fee (low to high)</p>
-              <Link href="/diaspora/remittance" className="text-xs font-bold hover:underline shrink-0" style={{ color: PILLAR }}>Full remittance comparison →</Link>
+              <Link href="/diaspora/remittance" className="text-xs font-bold" style={{ color:'#1D4ED8' }}>Full remittance comparison →</Link>
             </div>
           </div>
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
-            Transfer fees and exchange rates may vary. Always check the actual cost at the point of transfer.
-            BirrBank is not a money transfer service.
+            Transfer fees and exchange rates may vary. Always check the actual cost at the point of transfer. BirrBank is not a money transfer service.
           </p>
         </div>
       </section>
 
-      <section className="border-b border-slate-100" style={{ background: '#f9fafb', padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Guide</p>
-            <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(26px, 3vw, 36px)', letterSpacing: '-1.2px', lineHeight: 1.15 }}>How to find the cheapest remittance route.</h2>
-          </div>
+      {/* GUIDE */}
+      <section style={{ background:'#f8fafc', padding:'96px 0' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-bold text-slate-950 mb-10"
+            style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
+            How to find the cheapest remittance route.
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { step: '01', title: 'Compare total cost, not just the fee', body: 'The fee percentage is only part of the cost. The exchange rate margin — the difference between the mid-market rate and the rate you receive — is often the larger cost, especially on large transfers. Always calculate the total ETB received.' },
-              { step: '02', title: 'Processing speed vs cost tradeoff', body: 'Instant transfers (Western Union, MoneyGram) cost more. Bank SWIFT transfers take 24-48 hours but are cheaper for large amounts. Wise offers near-mid-market rates with 24-hour delivery. Match the service to your urgency.' },
-              { step: '03', title: 'Corridor differences matter', body: 'Fees and rates vary significantly by sending country. The US-to-Ethiopia corridor is highly competitive. The UK and Scandinavia corridors are best served by Dahabshiil. Gulf corridors favour Western Union and MoneyGram.' },
-            ].map((s) => (
-              <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-                <div style={{ height: 3, background: PILLAR }} />
-                <div style={{ padding: '28px 24px' }}>
-                  <p className="font-mono font-black mb-3" style={{ fontSize: '32px', color: '#e2e8f0', lineHeight: 1 }}>{s.step}</p>
-                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize: '15px' }}>{s.title}</p>
-                  <p className="text-sm text-slate-500" style={{ lineHeight: 1.75 }}>{s.body}</p>
+              { step:'01', title:'Compare total cost, not just the fee', body:'The fee percentage is only part of the cost. The exchange rate margin — the difference between the mid-market rate and the rate you receive — is often the larger cost, especially on large transfers. Always calculate the total ETB received.' },
+              { step:'02', title:'Processing speed vs cost tradeoff', body:'Instant transfers cost more. Bank SWIFT transfers take 24-48 hours but are cheaper for large amounts. Wise offers near-mid-market rates with 24-hour delivery. Match the service to your urgency.' },
+              { step:'03', title:'Corridor differences matter', body:'Fees and rates vary significantly by sending country. The US-to-Ethiopia corridor is highly competitive. The UK and Scandinavia corridors are best served by Dahabshiil. Gulf corridors favour Western Union and MoneyGram.' },
+            ].map(s => (
+              <div key={s.step} className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-blue-300 hover:shadow-lg transition-all">
+                <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                <div style={{ padding:'28px 24px' }}>
+                  <p className="font-mono font-black mb-3" style={{ fontSize:'32px', color:'#e2e8f0', lineHeight:1 }}>{s.step}</p>
+                  <p className="font-bold text-slate-900 mb-3" style={{ fontSize:'15px' }}>{s.title}</p>
+                  <p className="text-sm text-slate-500" style={{ lineHeight:1.75 }}>{s.body}</p>
                 </div>
               </div>
             ))}
@@ -138,19 +165,44 @@ export default async function MoneyTransferPage() {
         </div>
       </section>
 
-      <section className="bg-white" style={{ padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* DARK TRUST */}
+      <section style={{ background:'#0f172a', padding:'72px 0', borderTop:'1px solid #1e293b' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Remittance alerts</p>
-            <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
-              Fee changes,<br /><span style={{ color: PILLAR }}>direct to your inbox.</span>
+            <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color:'#93c5fd' }}>Source transparency</p>
+            <h3 className="font-bold mb-2"
+              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(22px, 2.5vw, 30px)', color:'#ffffff', letterSpacing:'-0.5px' }}>
+              Fee data sourced directly from official service websites.
+            </h3>
+            <p style={{ color:'#94a3b8', fontSize:'15px', lineHeight:1.75, maxWidth:480 }}>
+              BirrBank does not receive referral fees from any money transfer operator. Every ranking is based solely on the fee percentage and exchange rate margin.
+            </p>
+          </div>
+          <Link href="/diaspora/remittance"
+            className="font-bold rounded-full transition-all shrink-0"
+            style={{ fontSize:14, padding:'14px 28px', background:'#1D4ED8', color:'#fff', whiteSpace:'nowrap' }}>
+            Full diaspora hub
+          </Link>
+        </div>
+      </section>
+
+      {/* EMAIL */}
+      <section style={{ background:'#ffffff', padding:'96px 0' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="font-bold text-slate-950 mb-5"
+              style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+              Fee changes, direct to your inbox.
             </h2>
-            <p className="text-slate-500 mb-8" style={{ fontSize: '15px', lineHeight: 1.85 }}>Weekly digest of remittance fee changes and ETB exchange rate movements for diaspora senders.</p>
+            <p className="text-slate-500 mb-8" style={{ fontSize:'15px', lineHeight:1.85 }}>
+              Weekly digest of remittance fee changes and ETB exchange rate movements for diaspora senders.
+            </p>
             <p className="text-xs text-slate-500 font-medium pt-5 border-t border-slate-100">Free forever · No credit card · Unsubscribe anytime</p>
           </div>
           <EmailCapture />
         </div>
       </section>
-    </div>
+
+    </main>
   )
 }
