@@ -1,113 +1,91 @@
-import Link from 'next/link'
-import { createClient } from '@supabase/supabase-js'
-import { ArrowRight, Globe, Shield, Users, BookOpen, ExternalLink } from 'lucide-react'
-
 import type { Metadata } from 'next'
-import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
-
+import Link from 'next/link'
+import { createSupabaseAdminClient } from '@/lib/supabase'
+import { ArrowRight, Globe, Shield, TrendingUp, Users, ExternalLink } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'About HRLake — Methodology, Data Standards & Mission',
-  description: 'The deep source for global HR intelligence. Data methodology, verification standards, and our mission to cover every country.',
-  alternates: {
-    canonical: 'https://hrlake.com/about/',
-  },
+  title: 'About BirrBank — Mission, Methodology & Data Standards',
+  description: "Ethiopia's financial intelligence platform. How we source, verify and maintain savings rates, FX, insurance, markets and commodity data.",
+  alternates: { canonical: 'https://birrbank.com/about' },
   openGraph: {
-    title: 'About HRLake — Methodology, Data Standards & Mission',
-    description: 'Learn about our data methodology, verification standards, and mission to cover every country.',
-    url: 'https://hrlake.com/about/',
-    siteName: 'HRLake',
+    title: 'About BirrBank — Mission, Methodology & Data Standards',
+    description: "Ethiopia's financial intelligence platform — data methodology and mission.",
+    url: 'https://birrbank.com/about',
+    siteName: 'BirrBank',
     type: 'website',
   },
 }
 
-
-
 const WHO_ITS_FOR = [
-  { icon: Users,    title: 'EOR Firms',               body: 'Employer of Record providers calculating total employment costs and compliance obligations across multiple jurisdictions.' },
-  { icon: Shield,   title: 'HR Directors',             body: 'Global HR leaders managing payroll compliance, leave entitlements, and employment law across international teams.' },
-  { icon: BookOpen, title: 'Lawyers & Accountants',    body: 'Legal and finance professionals advising clients on cross-border employment, tax treaties, and payroll obligations.' },
-  { icon: Globe,    title: 'Founders & Finance Teams', body: 'Companies hiring internationally who need accurate employer cost data before making hiring decisions.' },
+  { icon: Users,      title: 'Retail Savers',          body: 'Ethiopians comparing savings rates and fixed deposit offers across commercial banks to make the most of their money.' },
+  { icon: Shield,     title: 'Diaspora Investors',     body: 'Ethiopian nationals living abroad tracking ETB exchange rates, ESX stock prices, IPO pipelines and investment opportunities.' },
+  { icon: TrendingUp, title: 'Agri-businesses & Exporters', body: 'Exporters, cooperatives and lenders who need daily ECX commodity prices for coffee, sesame and grains to make pricing and lending decisions.' },
+  { icon: Globe,      title: 'Financial Professionals', body: 'Analysts, bankers, insurers and journalists who need a single verified source for Ethiopian financial data across all sectors.' },
 ]
 
 const METHODOLOGY = [
-  { step: '01', title: 'Government Sources Only',  body: 'Every data point is traced to an official publication — a tax authority website, government gazette, or statutory instrument. We do not accept secondary sources, news articles, or unverified third-party data.' },
-  { step: '02', title: 'Expert Review',            body: 'Data is reviewed by qualified payroll professionals before publication. Where rules are complex or ambiguous, practitioner commentary is added to explain edge cases.' },
-  { step: '03', title: 'Monthly Update Cycle',     body: 'All Tier 1 country data (major economies) is reviewed on a rolling monthly cycle. Tax year changes, budget announcements, and rate changes are applied as they are confirmed.' },
-  { step: '04', title: 'Source Transparency',      body: 'Every country page lists its data sources with direct links to the original government publications. You can verify every figure yourself.' },
-]
-
-const COVERAGE = [
-  { tier: 'Tier 1', label: '23 Active Countries',      desc: 'UK, US, Germany, France, Australia, Canada, Singapore, UAE, Japan, Netherlands, and more. Full data depth — all tables populated and verified.', status: 'Live',        color: 'bg-emerald-500' },
-  { tier: 'Tier 2', label: '40 Additional Countries', desc: 'Broader coverage of significant economies across Europe, Asia Pacific, Americas, and Middle East.', status: 'In progress', color: 'bg-blue-500'    },
-  { tier: 'Tier 3', label: '135+ Remaining Countries',desc: 'Full global coverage — every UN-recognised jurisdiction. Core data fields populated for all.', status: 'Planned',     color: 'bg-slate-400'   },
+  { step: '01', title: 'Official Sources Only', body: 'Every data point is traced to an official publication — an NBE circular, ECX settlement report, ESX end-of-day file, or insurer website. We do not accept secondary sources or unverified third-party data.' },
+  { step: '02', title: 'Regular Verification', body: 'Data is checked against source on a rolling cycle. Rate changes, new product launches and regulatory updates are applied as soon as they are confirmed from official sources.' },
+  { step: '03', title: 'Source Transparency', body: 'Every data section cites its source. You can verify every figure yourself — from NBE FX rates to ECX settlement prices to ESX end-of-day prices.' },
+  { step: '04', title: 'Free, Always', body: 'BirrBank is free to use with no account required for core data. We do not accept payment from banks, insurers or brokers to influence rankings or placement.' },
 ]
 
 export default async function AboutPage() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-  const { count } = await supabase
-    .from('countries')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_active', true)
-  const liveCount = count ?? 22
-  const breadcrumb = getBreadcrumbStructuredData([
-    { name: 'Home', href: 'https://hrlake.com' },
-    { name: 'About', href: 'https://hrlake.com/about/' },
+  const supabase = createSupabaseAdminClient()
+  const [instRes, ipoRes] = await Promise.all([
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('is_active',true),
+    supabase.schema('birrbank').from('ipo_pipeline').select('count',{count:'exact',head:true}).neq('status','listed').neq('status','withdrawn'),
   ])
-  return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }} />
-      <main className="bg-white flex-1">
+  const institutionCount = instRes.count ?? 218
+  const ipoCount = ipoRes.count ?? 45
 
-      {/* HERO */}
-      <section className="relative bg-slate-950 overflow-hidden">
-        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)'}} />
+  return (
+    <main className="bg-white flex-1">
+      <section className="relative overflow-hidden" style={{ background:'#0f172a' }}>
+        <div className="absolute inset-0" style={{ background:'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%)' }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
             <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
-              <a href="/" className="hover:text-slate-200 transition-colors">Home</a>
+              <Link href="/" className="hover:text-slate-200 transition-colors">Home</Link>
               <span>›</span>
               <span className="text-slate-300">About</span>
             </nav>
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8"
+              style={{ background:'rgba(29,78,216,0.15)', border:'1px solid rgba(29,78,216,0.3)' }}>
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              <span className="text-blue-300 text-xs font-semibold tracking-wide">About HRLake</span>
+              <span className="text-blue-300 text-xs font-semibold tracking-wide">About BirrBank</span>
             </div>
-            <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{letterSpacing: '-0.025em'}}>
-              Authoritative HR, EOR<br />and <span className="text-blue-400">payroll intelligence</span><br />for global employers.
+            <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-8" style={{ letterSpacing:'-0.025em' }}>
+              Ethiopia's financial intelligence platform — free, verified, always current.
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
-              HRLake exists to give HR directors, EOR professionals, lawyers, and global employers authoritative, verified, and current HR intelligence, EOR data, and payroll compliance information for every country in the world.
+              BirrBank gives retail savers, diaspora investors, agribusinesses and financial professionals authoritative, verified financial data across all five pillars of the Ethiopian economy — banking, insurance, markets, commodities and intelligence.
             </p>
           </div>
         </div>
       </section>
 
-      {/* MISSION */}
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Our Mission</p>
               <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight mb-6">
-                One authoritative source.<br />Every country. Always current.
+                One verified source.<br />Every Ethiopian financial product.
               </h2>
               <div className="space-y-5 text-slate-600 leading-relaxed">
-                <p>Global payroll is fragmented. Employers hiring across borders face a patchwork of government websites in different languages, outdated PDF guides, and consultancy reports that are expensive and often out of date.</p>
-                <p>HRLake is built to fix that. We aggregate, verify, and maintain payroll data — income tax brackets, social security rates, employer costs, employment law, termination rules, and compliance obligations — for every country, in one place, updated continuously.</p>
-                <p>Our goal is to become the reference platform for anyone making payroll or hiring decisions across international borders — whether they are running payroll in five countries or researching employer costs in one.</p>
+                <p>Ethiopian financial data is fragmented. Savings rates sit on individual bank websites. ECX prices are published in formats designed for traders. ESX end-of-day data is hard to find. Insurance premiums are not compared anywhere.</p>
+                <p>BirrBank is built to fix that. We aggregate, verify and maintain financial data across savings, FX, insurance, capital markets and commodities — for Ethiopia, in one place, updated continuously.</p>
+                <p>Our goal is to become the reference platform for anyone making financial decisions in or about Ethiopia — whether they are comparing savings rates, tracking an IPO, or pricing a commodity export.</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-5">
               {[
-                { value: `${liveCount}+`, label: 'Countries Live', sub: 'Growing monthly' },
-                { value: '37+',     label: 'Data Tables',    sub: 'Per country coverage' },
-                { value: 'Monthly', label: 'Update Cycle',   sub: 'Tier 1 countries' },
-                { value: '100%',    label: 'Source Verified',sub: 'Government sources only' },
+                { value:`${institutionCount}+`, label:'Institutions tracked', sub:'Banks, insurers, MFIs and more' },
+                { value:'5',                   label:'Data pillars',         sub:'Banking, insurance, markets, commodities, intelligence' },
+                { value:`${ipoCount}+`,         label:'IPOs in pipeline',    sub:'ECMA filings tracked' },
+                { value:'100%',                 label:'Free to access',      sub:'No account required' },
               ].map(s => (
                 <div key={s.label} className="bg-white border border-slate-200 rounded-2xl p-6">
                   <div className="text-3xl font-black text-slate-900 tracking-tight">{s.value}</div>
@@ -120,12 +98,11 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* WHO ITS FOR */}
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-14">
-            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Who It&apos;s For</p>
-            <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Built for global HR and EOR professionals.</h2>
+            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Who It Is For</p>
+            <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Built for everyone with a financial stake in Ethiopia.</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {WHO_ITS_FOR.map(item => (
@@ -141,14 +118,13 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* METHODOLOGY */}
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="mb-14">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Data Methodology</p>
             <div className="flex items-end justify-between gap-6">
-              <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">How we source and<br />verify every data point.</h2>
-              <p className="hidden lg:block text-slate-500 max-w-md leading-relaxed">Our methodology is designed around one principle: every number must be traceable to an official government source.</p>
+              <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">How we source and verify every data point.</h2>
+              <p className="hidden lg:block text-slate-500 max-w-md leading-relaxed">Our methodology is built on one principle: every number must be traceable to an official source.</p>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -163,23 +139,21 @@ export default async function AboutPage() {
         </div>
       </section>
 
-
-      {/* ACCURACY DISCLAIMER */}
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
           <div className="max-w-3xl">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Data Accuracy</p>
             <h2 className="font-serif text-3xl font-bold text-slate-900 tracking-tight leading-tight mb-6">Accurate data. Honest limitations.</h2>
             <div className="space-y-4 text-slate-600 leading-relaxed">
-              <p>We invest significant effort in ensuring the data on HRLake is accurate, current, and properly sourced. Every data point is linked to an official government publication, and our Tier 1 country data is reviewed on a monthly cycle.</p>
-              <p>However, payroll and tax law is complex and changes frequently. Rates can change mid-year. Rules vary by employment category, industry, and region. Edge cases exist in every jurisdiction.</p>
-              <p className="font-medium text-slate-800">HRLake is a research and reference tool. It is not a substitute for qualified professional advice. Always verify critical decisions with a qualified payroll professional, tax adviser, or employment lawyer in the relevant jurisdiction.</p>
+              <p>We invest significant effort in ensuring the data on BirrBank is accurate, current and properly sourced. Every data point is linked to an official source — NBE publications, ECX settlement reports, ESX end-of-day files, or insurer websites.</p>
+              <p>However, financial data changes frequently. Rates change. Products launch and close. Rules are updated. We cannot guarantee that all data is current at every moment.</p>
+              <p className="font-medium text-slate-800">BirrBank is a research and reference tool. It is not a substitute for qualified professional advice. Always verify critical financial decisions with a qualified adviser in the relevant field.</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-6">
-              <Link href="/disclaimer/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors">
+              <Link href="/disclaimer" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors">
                 Read our full disclaimer <ArrowRight size={15} />
               </Link>
-              <Link href="/contact/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-semibold text-sm transition-colors">
+              <Link href="/contact" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-semibold text-sm transition-colors">
                 Report a data error <ExternalLink size={14} />
               </Link>
             </div>
@@ -187,24 +161,23 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative overflow-hidden" style={{backgroundColor: '#0d1f3c'}}>
-        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)'}} />
+      <section className="relative overflow-hidden" style={{ background:'#0f172a' }}>
+        <div className="absolute inset-0" style={{ background:'radial-gradient(ellipse at 80% 50%, rgba(29,78,216,0.12) 0%, transparent 60%)' }} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 flex flex-col lg:flex-row items-center justify-between gap-10">
           <div>
-            <h2 className="font-serif text-4xl font-bold text-white leading-tight tracking-tight mb-4">Start exploring the data.</h2>
-            <p className="text-slate-400 leading-relaxed max-w-xl">All country data, basic calculators, and public insights are free to access — no account required.</p>
+            <h2 className="font-serif text-4xl font-bold text-white leading-tight tracking-tight mb-4">Start exploring Ethiopian financial data.</h2>
+            <p className="text-slate-400 leading-relaxed max-w-xl">All savings rates, FX rates, ESX prices, ECX commodity data and insurance comparisons are free — no account required.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 shrink-0">
-            <Link href="/countries/" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
-              Browse all countries <ArrowRight size={15} />
+            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
+              Compare savings rates <ArrowRight size={15} />
             </Link>
-
+            <Link href="/markets/equities" className="inline-flex items-center gap-2 border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
+              View ESX equities
+            </Link>
           </div>
         </div>
       </section>
-
     </main>
-    </>
   )
 }
