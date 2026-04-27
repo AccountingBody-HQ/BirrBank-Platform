@@ -7,7 +7,7 @@ export async function GET() {
   const { data: institutions, error } = await supabase
     .schema('birrbank')
     .from('institutions')
-    .select('slug, name, type, is_active, swift_code, website_url, coverage_level, nbe_licence_date, last_data_update')
+    .select('slug, name, type, is_active, swift_code, website_url, coverage_level, nbe_licence_date')
     .order('type')
     .order('name')
 
