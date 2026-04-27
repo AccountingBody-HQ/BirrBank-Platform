@@ -1,8 +1,8 @@
 import { SignUp } from '@clerk/nextjs'
 
 export const metadata = {
-  title: 'Create Account | HRLake',
-  description: 'Create your free HRLake account.',
+  title: 'Create Account | BirrBank',
+  description: 'Create your free BirrBank account.',
 }
 
 export default function SignUpPage() {
@@ -18,7 +18,7 @@ export default function SignUpPage() {
               <circle cx="12" cy="12" r="10" stroke="#3b82f6" strokeWidth="1.5"/>
               <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#3b82f6" strokeWidth="1.5"/>
             </svg>
-            <span className="text-white font-semibold text-base tracking-tight">HRLake</span>
+            <span className="text-white font-semibold text-base tracking-tight">BirrBank</span>
           </div>
           <div className="h-px w-8 bg-blue-500/30" />
         </div>
