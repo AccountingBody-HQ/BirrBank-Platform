@@ -13,6 +13,15 @@ const NAV = [
     { label: 'Microfinance',    href: '/banking/microfinance',   desc: '55 MFIs covered' },
     { label: 'Money Transfer',  href: '/banking/money-transfer', desc: 'Remittance comparison' },
   ]},
+  { label: 'Institutions', href: '/institutions', sub: [
+    { label: 'All Institutions',    href: '/institutions',                      desc: '218 NBE-regulated entities' },
+    { label: 'Banks',               href: '/institutions?type=bank',             desc: '32 licensed commercial banks' },
+    { label: 'Microfinance',        href: '/institutions?type=microfinance',     desc: '55 MFIs nationwide' },
+    { label: 'Payment Operators',   href: '/institutions?type=payment_operator', desc: 'Mobile money and wallets' },
+    { label: 'FX Bureaux',          href: '/institutions?type=fx_bureau',        desc: '13 independent bureaux' },
+    { label: 'Money Transfer',      href: '/institutions?type=money_transfer',   desc: '65 remittance agencies' },
+    { label: 'Insurance Companies', href: '/institutions?type=insurer',          desc: '18 licensed insurers' },
+  ]},
   { label: 'Insurance', href: '/insurance', sub: [
     { label: 'Motor Insurance',    href: '/insurance/motor',        desc: 'Compare all providers' },
     { label: 'Life Insurance',     href: '/insurance/life',         desc: '18 insurers' },
