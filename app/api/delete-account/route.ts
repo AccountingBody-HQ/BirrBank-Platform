@@ -1,5 +1,5 @@
 import { auth, clerkClient } from "@clerk/nextjs/server"
-import { createClient } from "@supabase/supabase-js"
+import { createSupabaseAdminClient } from "@/lib/supabase"
 import { NextResponse } from "next/server"
 
 export async function DELETE() {
@@ -7,13 +7,9 @@ export async function DELETE() {
   if (!userId) return NextResponse.json({ error: "Unauthorised" }, { status: 401 })
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = createSupabaseAdminClient()
 
-    await supabase.schema("hrlake").from("saved_calculations").delete().eq("user_id", userId)
-    await supabase.from("subscriptions").delete().eq("user_id", userId)
+    await supabase.schema("birrbank").from("ai_conversations").delete().eq("user_id", userId)
 
     const clerk = await clerkClient()
     await clerk.users.deleteUser(userId)

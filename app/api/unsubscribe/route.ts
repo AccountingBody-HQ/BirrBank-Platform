@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       .from('email_subscribers')
       .select('id, status')
       .eq('email', email.toLowerCase().trim())
-      .eq('platform', 'hrlake')
+      .eq('platform', 'birrbank')
       .single()
 
     if (!existing || existing.status === 'unsubscribed') {
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         unsubscribed_at: new Date().toISOString(),
       })
       .eq('email', email.toLowerCase().trim())
-      .eq('platform', 'hrlake')
+      .eq('platform', 'birrbank')
 
     if (error) {
       console.error('Supabase unsubscribe error:', error)

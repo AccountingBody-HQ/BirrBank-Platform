@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 
 export async function POST(req: Request) {
   try {
@@ -18,15 +19,12 @@ export async function POST(req: Request) {
     } = body
 
     // Save to Supabase contact_submissions table
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = createSupabaseAdminClient()
 
     const { error: dbError } = await supabase
       .from('contact_submissions')
       .insert({
-        platform: 'hrlake',
+        platform: 'birrbank',
         full_name,
         email,
         organisation: organisation || null,
@@ -46,8 +44,8 @@ export async function POST(req: Request) {
     if (process.env.RESEND_API_KEY) {
       try {
         const subject = form_type === 'correction'
-          ? `[HRLake] Data correction request — ${country || 'Unknown country'}`
-          : `[HRLake] Contact form — ${full_name}`
+          ? `[BirrBank] Data correction request — ${country || 'Unknown country'}`
+          : `[BirrBank] Contact form — ${full_name}`
 
         const html = form_type === 'correction'
           ? `
@@ -75,8 +73,8 @@ export async function POST(req: Request) {
             Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: 'HRLake <onboarding@resend.dev>',
-            to: [process.env.ADMIN_EMAIL || 'admin@hrlake.com'],
+            from: 'BirrBank <onboarding@resend.dev>',
+            to: [process.env.ADMIN_EMAIL || 'admin@birrbank.com'],
             subject,
             html,
           }),
