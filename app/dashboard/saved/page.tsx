@@ -1,132 +1,58 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@supabase/supabase-js'
-import { Calculator, ArrowLeft, ArrowRight, Globe } from 'lucide-react'
-import DeleteButton from '@/components/DeleteButton'
+import { BookmarkCheck, ArrowLeft, ArrowRight, Building2, TrendingUp } from 'lucide-react'
+
+export const dynamic = "force-dynamic"
 
 export const metadata = {
-  title: 'Saved Calculations | HRLake',
-  description: 'Your saved payroll calculations.',
+  title: 'Saved Comparisons | BirrBank',
+  description: 'Your saved institution comparisons and rate searches.',
 }
 
-async function getSavedCalculations(userId: string) {
-  try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
-    const { data } = await supabase
-      .schema('hrlake')
-      .from('saved_calculations')
-      .select('id, country_code, name, created_at, results, inputs')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-    return data || []
-  } catch {
-    return []
-  }
-}
-
-export default async function SavedCalculationsPage() {
+export default async function SavedComparisonsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
-
-  const calculations = await getSavedCalculations(userId)
 
   return (
     <main className="bg-white flex-1">
 
       {/* Header */}
-      <div className="bg-slate-950 border-b border-slate-800">
+      <div className="relative overflow-hidden border-b border-slate-800" style={{ background: '#0f172a' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
-          <Link href="/dashboard/"
+          <Link href="/dashboard"
             className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-6">
             <ArrowLeft size={15} /> Back to dashboard
           </Link>
-          <h1 className="text-2xl font-bold text-white">Saved Calculations</h1>
-          <p className="text-slate-400 text-sm mt-1">All your saved payroll calculations in one place</p>
+          <h1 className="font-serif font-bold text-white" style={{ fontSize: 'clamp(22px, 3vw, 32px)' }}>
+            Saved Comparisons
+          </h1>
+          <p className="text-slate-400 text-sm mt-1">Your saved institution comparisons and rate searches</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
 
-        {calculations.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-2xl p-16 text-center">
-            <Calculator size={48} className="text-slate-300 mx-auto mb-4" />
-            <h2 className="text-lg font-bold text-slate-700 mb-2">No saved calculations yet</h2>
-            <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
-              Run a payroll calculation for any country and save it to access it here any time.
-            </p>
-            <Link href="/payroll-tools/"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
-              Open Payroll Calculator <ArrowRight size={15} />
+        <div className="bg-white border border-slate-200 rounded-2xl p-16 text-center">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: '#eff6ff' }}>
+            <BookmarkCheck size={28} style={{ color: '#1D4ED8' }} />
+          </div>
+          <h2 className="text-lg font-bold text-slate-700 mb-2">No saved comparisons yet</h2>
+          <p className="text-slate-400 text-sm mb-8 max-w-sm mx-auto">
+            Browse institutions and rate comparisons across BirrBank and save them here for quick access.
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link href="/banking/savings-rates"
+              className="inline-flex items-center gap-2 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
+              style={{ background: '#1D4ED8' }}>
+              <TrendingUp size={15} /> Compare savings rates
+            </Link>
+            <Link href="/institutions"
+              className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-blue-300 text-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">
+              <Building2 size={15} /> Browse institutions <ArrowRight size={13} />
             </Link>
           </div>
-        ) : (
-          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-
-            {/* Table header */}
-            <div className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-4 bg-slate-900 gap-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Label</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Country</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Saved On</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Actions</span>
-            </div>
-
-            <div className="divide-y divide-slate-100">
-              {calculations.map((calc: any) => (
-                <div key={calc.id}
-                  className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-5 items-center gap-4 hover:bg-white transition-colors">
-
-                  <div>
-                    <div className="font-semibold text-slate-800 text-sm">
-                      {calc.name || 'Untitled calculation'}
-                    </div>
-                    {calc.inputs?.gross_salary && (
-                      <div className="text-slate-400 text-xs mt-0.5">
-                        Gross: {Number(calc.inputs?.gross_salary).toLocaleString()}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={`https://flagcdn.com/20x15/${calc.country_code?.toLowerCase()}.png`}
-                      alt={calc.country_code}
-                      width={20}
-                      height={15}
-                      className="rounded-sm shadow-sm"
-                    />
-                    <span className="font-mono text-slate-700 text-sm font-medium uppercase">
-                      {calc.country_code}
-                    </span>
-                  </div>
-
-                  <div className="text-slate-500 text-sm">
-                    {new Date(calc.created_at).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Link
-                      href={`/countries/${calc.country_code?.toLowerCase()}/payroll-calculator/?salary=${calc.inputs?.gross_salary}&period=${calc.inputs?.period || 'annual'}`}
-                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold transition-colors">
-                      <Globe size={12} /> Re-run
-                    </Link>
-                    <span className="text-slate-300">|</span>
-                    <DeleteButton id={calc.id} />
-                  </div>
-
-                </div>
-              ))}
-            </div>
-
-          </div>
-        )}
+        </div>
 
       </div>
     </main>
