@@ -28,7 +28,6 @@ const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 export default clerkMiddleware(async (auth, request) => {
   const path = request.nextUrl.pathname
 
-  // Roodber8 admin pages — redirect to login if no valid token
   if (path.startsWith('/roodber8') && !path.startsWith('/roodber8-login')) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
@@ -36,7 +35,6 @@ export default clerkMiddleware(async (auth, request) => {
     }
   }
 
-  // Admin API routes — return 401 if no valid token
   const isAdminApi = (
     (path.startsWith('/api/admin-') &&
       !path.startsWith('/api/admin-auth') &&
@@ -49,6 +47,7 @@ export default clerkMiddleware(async (auth, request) => {
     path.startsWith('/api/content-factory/') ||
     path.startsWith('/api/birrbank-')
   )
+
   if (isAdminApi) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
@@ -57,7 +56,8 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   if (isProtectedRoute(request)) {
-    await auth.protect({ unauthenticatedUrl: '/sign-in' })
+    const { userId } = await auth()
+    if (!userId) return NextResponse.redirect(new URL('/sign-in', request.url))
   }
 })
 
