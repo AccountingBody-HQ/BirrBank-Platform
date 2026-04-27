@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Privacy Policy — HRLake',
-  description: 'How HRLake collects, uses, and protects your personal data.',
+  title: 'Privacy Policy — BirrBank',
+  description: 'How BirrBank collects, uses, and protects your personal data.',
 }
 
 export default function PrivacyPolicyPage() {
@@ -10,8 +10,8 @@ export default function PrivacyPolicyPage() {
     <main className="bg-white flex-1">
 
       {/* HERO */}
-      <section className="relative bg-slate-950 overflow-hidden">
-        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)'}} />
+      <section className="relative overflow-hidden" style={{background:"#0f172a"}}>
+        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
             <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
@@ -19,14 +19,14 @@ export default function PrivacyPolicyPage() {
               <span>›</span>
               <span className="text-slate-300">Privacy Policy</span>
             </nav>
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8" style={{background:"rgba(29,78,216,0.15)",border:"1px solid rgba(29,78,216,0.3)"}}>
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
               <span className="text-blue-300 text-xs font-semibold tracking-wide">Legal</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
               Privacy Policy
             </h1>
-            <p className="text-slate-400 text-sm">Last updated: March 2026</p>
+            <p className="text-slate-400 text-sm">Last updated: April 2026</p>
           </div>
         </div>
       </section>
@@ -62,14 +62,14 @@ export default function PrivacyPolicyPage() {
             <div className="lg:col-span-3 prose prose-slate max-w-none">
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-12 not-prose">
                 <p className="text-blue-800 text-sm leading-relaxed">
-                  This Privacy Policy explains how HRLake.com (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) collects,
+                  This Privacy Policy explains how BirrBank.com (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) collects,
                   uses, and protects your personal data when you use our platform. We are committed to
                   protecting your privacy and complying with the UK GDPR and the Data Protection Act 2018.
                 </p>
               </div>
 
               <h2 id="who-we-are">1. Who we are</h2>
-              <p>HRLake.com is operated by AccountingBody HQ. We are the data controller for personal data collected through this website. If you have any questions about this policy or your personal data, please <Link href="/contact/">contact us</Link>.</p>
+              <p>BirrBank.com is operated by AccountingBody HQ. We are the data controller for personal data collected through this website. If you have any questions about this policy or your personal data, please <Link href="/contact">contact us</Link>.</p>
 
               <h2 id="data-we-collect">2. Data we collect</h2>
               <p>We collect the following categories of personal data:</p>
@@ -90,7 +90,7 @@ export default function PrivacyPolicyPage() {
                 <li>To provide and maintain your account and subscription</li>
                 <li>To process payments and manage your Pro plan</li>
                 <li>To send you service communications (account updates, subscription receipts)</li>
-                <li>To send you the monthly payroll updates newsletter, if you have subscribed</li>
+                <li>To send you the weekly BirrBank financial digest, if you have subscribed</li>
                 <li>To respond to contact form submissions and data correction requests</li>
                 <li>To improve the platform through usage analytics</li>
                 <li>To monitor for security threats and abuse</li>
@@ -111,7 +111,7 @@ export default function PrivacyPolicyPage() {
               <p>We do not share your personal data with any other third parties without your explicit consent, except where required by law.</p>
 
               <h2 id="cookies">5. Cookies</h2>
-              <p>We use cookies to operate the platform and improve your experience. For full details of the cookies we use and how to manage them, please read our <Link href="/cookie-policy/">Cookie Policy</Link>.</p>
+              <p>We use cookies to operate the platform and improve your experience. For full details of the cookies we use and how to manage them, please read our <Link href="/cookie-policy">Cookie Policy</Link>.</p>
 
               <h2 id="your-rights">6. Your rights</h2>
               <p>Under UK GDPR, you have the following rights regarding your personal data:</p>
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Right to object</strong> — you can object to certain processing activities</li>
                 <li><strong>Right to withdraw consent</strong> — where processing is based on consent, you can withdraw it at any time</li>
               </ul>
-              <p>To exercise any of these rights, please <Link href="/contact/">contact us</Link>. We will respond within 30 days.</p>
+              <p>To exercise any of these rights, please <Link href="/contact">contact us</Link>. We will respond within 30 days.</p>
 
               <h2 id="data-retention">7. Data retention</h2>
               <p>We retain your personal data for as long as your account is active and for a reasonable period thereafter in case you wish to return. Specific retention periods:</p>
@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
               <p>No method of transmission over the internet is 100% secure. While we do our best to protect your data, we cannot guarantee absolute security.</p>
 
               <h2 id="contact">9. Contact us</h2>
-              <p>If you have any questions about this Privacy Policy or wish to exercise your data rights, please <Link href="/contact/">contact us</Link>.</p>
+              <p>If you have any questions about this Privacy Policy or wish to exercise your data rights, please <Link href="/contact">contact us</Link>.</p>
               <p>If you are not satisfied with our response, you have the right to lodge a complaint with the Information Commissioner&apos;s Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a>.</p>
             </div>
           </div>

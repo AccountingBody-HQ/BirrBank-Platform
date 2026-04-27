@@ -2,8 +2,8 @@ import Link from 'next/link'
 import CookieSettingsButton from '@/components/CookieSettingsButton'
 
 export const metadata = {
-  title: 'Cookie Policy — HRLake',
-  description: 'How HRLake uses cookies and how to manage them.',
+  title: 'Cookie Policy — BirrBank',
+  description: 'How BirrBank uses cookies and how to manage them.',
 }
 
 export default function CookiePolicyPage() {
@@ -11,8 +11,8 @@ export default function CookiePolicyPage() {
     <main className="bg-white flex-1">
 
       {/* HERO */}
-      <section className="relative bg-slate-950 overflow-hidden">
-        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)'}} />
+      <section className="relative overflow-hidden" style={{background:"#0f172a"}}>
+        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
             <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
@@ -20,14 +20,14 @@ export default function CookiePolicyPage() {
               <span>›</span>
               <span className="text-slate-300">Cookie Policy</span>
             </nav>
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8" style={{background:"rgba(29,78,216,0.15)",border:"1px solid rgba(29,78,216,0.3)"}}>
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
               <span className="text-blue-300 text-xs font-semibold tracking-wide">Legal</span>
             </div>
             <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
               Cookie Policy
             </h1>
-            <p className="text-slate-400 text-sm">Last updated: March 2026</p>
+            <p className="text-slate-400 text-sm">Last updated: April 2026</p>
           </div>
         </div>
       </section>
@@ -62,7 +62,7 @@ export default function CookiePolicyPage() {
 
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-12 not-prose">
                 <p className="text-blue-800 text-sm leading-relaxed">
-                  This Cookie Policy explains how HRLake.com uses cookies and similar
+                  This Cookie Policy explains how BirrBank.com uses cookies and similar
                   technologies. We use cookies to operate the platform, remember your preferences,
                   and understand how visitors use the site. We do not use cookies for advertising.
                 </p>
@@ -90,8 +90,8 @@ export default function CookiePolicyPage() {
                     {[
                       { name: '__session',        provider: 'Clerk',               purpose: 'Maintains your authenticated session',              duration: 'Session' },
                       { name: '__client_uat',     provider: 'Clerk',               purpose: 'User authentication token',                        duration: '1 year'  },
-                      { name: 'hrlake_admin',        provider: 'HRLake', purpose: 'Admin area session (internal use only)',            duration: '7 days'  },
-                      { name: 'cookie_consent',   provider: 'HRLake', purpose: 'Stores your cookie consent preferences',           duration: '1 year'  },
+                      { name: 'hrlake_admin',        provider: 'BirrBank', purpose: 'Admin area session (internal use only)',            duration: '7 days'  },
+                      { name: 'cookie_consent',   provider: 'BirrBank', purpose: 'Stores your cookie consent preferences',           duration: '1 year'  },
                     ].map(row => (
                       <tr key={row.name} className="hover:bg-white">
                         <td className="px-5 py-3 font-mono text-xs text-slate-700">{row.name}</td>
@@ -174,7 +174,7 @@ export default function CookiePolicyPage() {
               </div>
 
               <h2 id="contact">7. Contact us</h2>
-              <p>If you have any questions about our use of cookies, please <Link href="/contact/">contact us</Link>. For information about how we handle your personal data more broadly, see our <Link href="/privacy-policy/">Privacy Policy</Link>.</p>
+              <p>If you have any questions about our use of cookies, please <Link href="/contact">contact us</Link>. For information about how we handle your personal data more broadly, see our <Link href="/privacy-policy">Privacy Policy</Link>.</p>
             </div>
           </div>
         </div>
