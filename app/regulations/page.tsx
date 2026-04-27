@@ -50,20 +50,20 @@ export default async function RegulationsPage() {
     <div className="min-h-screen bg-white">
 
       {/* ══════════════════════════════ HERO ══════════════════════════════════════ */}
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
-            <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link>
+      <section className="relative overflow-hidden" style={{ background: '#0f172a' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-8 pt-20 pb-14">
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-6">
+            <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link>
             <span>›</span>
             <span style={{ color: '#1D4ED8', fontWeight: 700 }}>Regulations</span>
           </div>
-          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>Intelligence · Regulations</p>
-          <h1 className="font-serif font-bold mb-5 text-slate-950" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#93c5fd' }}>Intelligence · Regulations</p>
+          <h1 className="font-serif font-bold mb-5 text-white" style={{ fontSize: 'clamp(36px, 4.5vw, 54px)', letterSpacing: '-1.8px', lineHeight: 1.08 }}>
             Ethiopian financial regulations —<br />
             <span style={{ color: '#1D4ED8' }}>NBE, ECMA and ECX directives.</span>
           </h1>
-          <p className="text-slate-600 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
+          <p className="text-slate-400 mb-8" style={{ fontSize: '16px', lineHeight: '1.8', maxWidth: '520px' }}>
             Every significant directive, proclamation and regulatory update from the National Bank of Ethiopia,
             Ethiopian Capital Markets Authority and Ethiopian Commodity Exchange — summarised and searchable.
           </p>
@@ -83,7 +83,7 @@ export default async function RegulationsPage() {
 
       {/* ══════════════════════════════ REGULATIONS TABLE ════════════════════════ */}
       <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
 
           <div className="flex items-center justify-between mb-8">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
@@ -154,7 +154,7 @@ export default async function RegulationsPage() {
 
       {/* ══════════════════════════════ DARK TRUST ════════════════════════════════ */}
       <section className="border-b border-slate-100" style={{ background: '#0f172a', padding: '72px 32px' }}>
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#93c5fd' }}>Source integrity</p>
             <h3 className="font-serif font-bold mb-2" style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', color: '#ffffff', letterSpacing: '-0.8px' }}>
@@ -185,7 +185,7 @@ export default async function RegulationsPage() {
 
       {/* ══════════════════════════════ EMAIL CAPTURE ════════════════════════════ */}
       <section className="bg-white" style={{ padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Regulatory alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>

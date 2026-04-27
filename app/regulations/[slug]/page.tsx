@@ -54,24 +54,24 @@ export default async function RegulationPage({ params }: { params: Promise<{ slu
     <div className="min-h-screen bg-white">
 
       {/* HERO */}
-      <section className="relative bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
+      <section className="relative overflow-hidden" style={{ background: '#0f172a' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(29,78,216,0.18) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
         <div className="relative max-w-4xl mx-auto px-8 pt-20 pb-14">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
-            <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link><span>›</span>
-            <Link href="/regulations" className="hover:text-slate-600 transition-colors">Regulations</Link><span>›</span>
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-6">
+            <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link><span>›</span>
+            <Link href="/regulations" className="hover:text-slate-300 transition-colors">Regulations</Link><span>›</span>
             <span style={{ color: '#1D4ED8', fontWeight: 700 }}>{reg.regulator}</span>
           </div>
           <span className="text-xs font-black rounded-full px-3 py-1 mb-6 inline-block"
             style={{ background: regStyle.bg, color: regStyle.color }}>
             {reg.regulator}
           </span>
-          <h1 className="font-serif font-bold text-slate-950 mb-5"
+          <h1 className="font-serif font-bold text-white mb-5"
             style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', letterSpacing: '-1.2px', lineHeight: 1.12 }}>
             {reg.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400">
-            {reg.category && <span className="font-semibold text-slate-500">{reg.category}</span>}
+          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 mt-4">
+            {reg.category && <span className="font-semibold text-slate-300">{reg.category}</span>}
             <span>·</span>
             <span>Published {fmtDate(reg.published_date)}</span>
             {reg.effective_date && (
