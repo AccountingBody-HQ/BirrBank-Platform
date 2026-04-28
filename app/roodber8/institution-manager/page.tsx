@@ -408,6 +408,24 @@ function AiPopulateTab() {
           website_url: result.institution.website_url,
           swift_code: result.institution.swift_code,
           nbe_licence_date: result.institution.nbe_licence_date,
+          phone: result.institution.phone,
+          email: result.institution.email,
+          description: result.institution.description,
+          headquarters_city: result.institution.headquarters_city,
+          founded_year: result.institution.founded_year,
+        }),
+      })
+    }
+
+    // Save digital services
+    if (result.digital_services) {
+      await fetch('/api/birrbank-digital-services', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save_digital_services',
+          institution_slug: selected,
+          ...result.digital_services,
         }),
       })
     }

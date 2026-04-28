@@ -25,7 +25,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { action, slug, name, type, swift_code, website_url, is_active, nbe_licence_date } = body
+    const { action, slug, name, type, swift_code, website_url, is_active, nbe_licence_date, phone, email, description, headquarters_city, founded_year } = body
     const supabase = createSupabaseAdminClient()
     const today = new Date().toISOString().split('T')[0]
 
@@ -81,11 +81,16 @@ export async function POST(req: Request) {
     }
 
     if (action === 'update_institution' && slug) {
-      const updates: Record<string, unknown> = { last_data_update: today }
+      const updates: Record<string, unknown> = {}
       if (website_url !== undefined) updates.website_url = website_url
       if (swift_code !== undefined) updates.swift_code = swift_code
       if (nbe_licence_date !== undefined) updates.nbe_licence_date = nbe_licence_date
       if (is_active !== undefined) updates.is_active = is_active
+      if (phone !== undefined) updates.phone = phone
+      if (email !== undefined) updates.email = email
+      if (description !== undefined) updates.description = description
+      if (headquarters_city !== undefined) updates.headquarters_city = headquarters_city
+      if (founded_year !== undefined) updates.founded_year = founded_year
 
       const { error } = await supabase
         .schema('birrbank')
