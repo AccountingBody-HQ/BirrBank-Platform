@@ -50,7 +50,6 @@ jobs:
                   "buying_rate": buying,
                   "selling_rate": selling,
                   "rate_date": today,
-                  "last_verified_date": today,
                   "source": "nbe_official",
                   "country_code": "ET"
               }]).encode()

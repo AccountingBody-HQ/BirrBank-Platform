@@ -20,7 +20,7 @@ export async function GET() {
   const { data: nbeRates } = await supabase
     .schema('birrbank')
     .from('exchange_rates')
-    .select('currency_code, buying_rate, selling_rate, rate_date, last_verified_date')
+    .select('currency_code, buying_rate, selling_rate, rate_date')
     .eq('institution_slug', 'nbe')
     .eq('rate_date', nbeDate)
     .order('currency_code')
@@ -29,7 +29,7 @@ export async function GET() {
   const { data: bankRates } = await supabase
     .schema('birrbank')
     .from('exchange_rates')
-    .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date, last_verified_date, institutions(name)')
+    .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date, institutions(name)')
     .neq('institution_slug', 'nbe')
     .order('rate_date', { ascending: false })
     .order('institution_slug')
@@ -70,7 +70,6 @@ export async function POST(req: Request) {
             buying_rate: Number(r.buying_rate),
             selling_rate: Number(r.selling_rate),
             rate_date: today,
-            last_verified_date: today,
             source: 'nbe_official',
             country_code: 'ET',
           }, { onConflict: 'institution_slug,currency_code,rate_date' })
@@ -89,7 +88,6 @@ export async function POST(req: Request) {
           buying_rate: Number(buying_rate),
           selling_rate: Number(selling_rate),
           rate_date: today,
-          last_verified_date: today,
           source: 'admin_verified',
           country_code: 'ET',
         }, { onConflict: 'institution_slug,currency_code,rate_date' })
