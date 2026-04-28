@@ -20,7 +20,7 @@ jobs:
           SUPABASE_URL = os.environ["SUPABASE_URL"]
           SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
 
-          TARGET_CURRENCIES = ["USD", "EUR", "GBP", "AED", "SAR", "CHF", "CNY", "JPY", "CAD", "AUD"]
+          TARGET_CURRENCIES = ["USD", "EUR", "GBP", "AED", "SAR", "CHF", "CNY", "JPY", "CAD", "AUD", "KES", "INR", "DJF", "DKK", "NOK", "SEK", "KWD", "ZAR"]
 
           today = datetime.date.today().isoformat()
           print(f"Fetching NBE rates for {today}...")
