@@ -411,8 +411,12 @@ function AiPopulateTab() {
           phone: result.institution.phone,
           email: result.institution.email,
           description: result.institution.description,
-          headquarters_city: result.institution.headquarters_city,
+          headquarters: result.institution.headquarters_city,
+          hq_region: result.institution.headquarters_city,
           founded_year: result.institution.founded_year,
+          nbe_licence_number: result.institution.nbe_licence_number,
+          ceo_name: result.institution.ceo_name,
+          branches_count: result.institution.branches_count,
         }),
       })
     }

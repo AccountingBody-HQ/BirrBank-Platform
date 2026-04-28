@@ -25,7 +25,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { action, slug, name, type, swift_code, website_url, is_active, nbe_licence_date, phone, email, description, headquarters_city, founded_year } = body
+    const { action, slug, name, type, swift_code, website_url, is_active, nbe_licence_date, phone, email, description, headquarters, hq_region, founded_year, nbe_licence_number, ceo_name, branches_count } = body
     const supabase = createSupabaseAdminClient()
     const today = new Date().toISOString().split('T')[0]
 
@@ -89,8 +89,12 @@ export async function POST(req: Request) {
       if (phone !== undefined) updates.phone = phone
       if (email !== undefined) updates.email = email
       if (description !== undefined) updates.description = description
-      if (headquarters_city !== undefined) updates.headquarters_city = headquarters_city
+      if (headquarters !== undefined) updates.headquarters = headquarters
+      if (hq_region !== undefined) updates.hq_region = hq_region
       if (founded_year !== undefined) updates.founded_year = founded_year
+      if (nbe_licence_number !== undefined) updates.nbe_licence_number = nbe_licence_number
+      if (ceo_name !== undefined) updates.ceo_name = ceo_name
+      if (branches_count !== undefined) updates.branches_count = branches_count
 
       const { error } = await supabase
         .schema('birrbank')

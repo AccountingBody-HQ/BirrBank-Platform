@@ -39,8 +39,13 @@ RETURN THIS EXACT JSON STRUCTURE:
     "website_url": "string or null",
     "founded_year": "integer or null",
     "headquarters_city": "string, default Addis Ababa",
+    "headquarters": "string, full address or city, default Addis Ababa",
+    "hq_region": "string, e.g. Addis Ababa, Oromia, Amhara etc.",
     "description": "200-300 word English description of the institution, its history, focus areas, and key products",
-    "nbe_licence_date": "YYYY-MM-DD or null"
+    "nbe_licence_date": "YYYY-MM-DD or null",
+    "nbe_licence_number": "string or null",
+    "ceo_name": "string or null",
+    "branches_count": "integer or null"
   },
   "savings_rates": [
     {
