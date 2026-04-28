@@ -5,22 +5,33 @@ export async function GET() {
   const supabase = createSupabaseAdminClient()
   const today = new Date().toISOString().split('T')[0]
 
-  // NBE official rates for today
+  // Get most recent NBE rate date
+  const { data: latestNbe } = await supabase
+    .schema('birrbank')
+    .from('exchange_rates')
+    .select('rate_date')
+    .eq('institution_slug', 'nbe')
+    .order('rate_date', { ascending: false })
+    .limit(1)
+    .single()
+  const nbeDate = latestNbe?.rate_date ?? today
+
+  // NBE official rates for most recent date
   const { data: nbeRates } = await supabase
     .schema('birrbank')
     .from('exchange_rates')
     .select('currency_code, buying_rate, selling_rate, rate_date, last_verified_date')
     .eq('institution_slug', 'nbe')
-    .eq('rate_date', today)
+    .eq('rate_date', nbeDate)
     .order('currency_code')
 
-  // All institutions that have FX rates (banks with their own rates)
+  // All institutions that have FX rates - most recent available
   const { data: bankRates } = await supabase
     .schema('birrbank')
     .from('exchange_rates')
     .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date, last_verified_date, institutions(name)')
     .neq('institution_slug', 'nbe')
-    .eq('rate_date', today)
+    .order('rate_date', { ascending: false })
     .order('institution_slug')
 
   // Institutions eligible for FX (type=bank with SWIFT)
