@@ -311,12 +311,12 @@ export default async function HomePage() {
                 <div className="divide-y divide-slate-100">
                   {pillars.map((p) => (
                     <Link key={p.key} href={p.href}
-                      className="flex items-center gap-4 transition-all duration-150 group"
+                      className="relative flex items-center gap-4 transition-all duration-150 group overflow-hidden hover:bg-slate-50"
                       style={{ padding: p.featured ? '20px 24px' : '14px 24px' }}
                       
                     >
                       {/* Left border accent on hover via group */}
-                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute left-0 inset-y-0 w-[3px] bg-blue-500 scale-y-0 group-hover:scale-y-100 transition-transform duration-150 origin-center" />
 
                       <div className="rounded-xl flex items-center justify-center shrink-0 transition-all"
                         style={p.featured
