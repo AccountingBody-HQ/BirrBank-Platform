@@ -313,7 +313,7 @@ export default async function HomePage() {
                     <Link key={p.key} href={p.href}
                       className="flex items-center gap-4 transition-all duration-150 group"
                       style={{ padding: p.featured ? '20px 24px' : '14px 24px' }}
-                      onMouseEnter={() => {}}
+                      
                     >
                       {/* Left border accent on hover via group */}
                       <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
