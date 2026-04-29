@@ -34,9 +34,9 @@ export default async function BankingHubPage() {
   const latestFxDate = latestFxDateRow?.rate_date ?? null
 
   const [ratesRes, fxRes, bankCountRes, mfiCountRes, paymentCountRes, transferCountRes, fxCurrenciesRes] = await Promise.all([
-    supabase.schema('birrBank').from('savings_rates').select('annual_rate, account_type, institution_slug, institutions(name)').eq('is_current', true).order('annual_rate', { ascending: false }).limit(5),
+    supabase.schema('birrbank').from('savings_rates').select('annual_rate, account_type, institution_slug, institutions(name)').eq('is_current', true).order('annual_rate', { ascending: false }).limit(5),
     latestFxDate
-      ? supabase.schema('birrBank').from('exchange_rates').select('currency_code, buying_rate, selling_rate').eq('institution_slug', 'nbe').eq('rate_date', latestFxDate).in('currency_code', ['USD','GBP','EUR'])
+      ? supabase.schema('birrbank').from('exchange_rates').select('currency_code, buying_rate, selling_rate').eq('institution_slug', 'nbe').eq('rate_date', latestFxDate).in('currency_code', ['USD','GBP','EUR'])
       : supabase.schema('birrbank').from('exchange_rates').select('currency_code, buying_rate, selling_rate').eq('institution_slug', 'nbe').order('rate_date', { ascending: false }).in('currency_code', ['USD','GBP','EUR']).limit(3),
     supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','bank').eq('is_active', true),
     supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','microfinance').eq('is_active', true),
