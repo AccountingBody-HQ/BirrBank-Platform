@@ -19,30 +19,18 @@ const ACCOUNT_TYPE_LABELS: Record<string, string> = {
 const CURRENCY_NAMES: Record<string, string> = {
   USD:'US Dollar', GBP:'British Pound', EUR:'Euro',
 }
-const SUB_PAGES = [
-  { label:'Savings Rates',   href:'/banking/savings-rates',  desc:'Compare savings and fixed deposit rates across all commercial banks.', stat:'Updated daily',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> },
-  { label:'Loan Comparison',  href:'/banking/loans',          desc:'Personal, car, home and business loan rates with EMI calculator.',   stat:'All loan types',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> },
-  { label:'FX Rates',         href:'/banking/fx-rates',       desc:'Official NBE indicative rates vs per-bank buying and selling rates.', stat:'7 currencies',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> },
-  { label:'Mobile Money',     href:'/banking/mobile-money',   desc:'TeleBirr, HelloCash, Amole and CBEBirr — compare all payment operators.', stat:'27 operators',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> },
-  { label:'Microfinance',     href:'/banking/microfinance',   desc:'Micro-loans, rural finance and SME credit from 55 licensed MFIs.',     stat:'55 MFIs',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
-  { label:'Money Transfer',   href:'/banking/money-transfer', desc:'Compare diaspora remittance fees and transfer speed across agencies.', stat:'65 agencies',
-    icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> },
-]
 
 export default async function BankingHubPage() {
   const supabase = createSupabaseAdminClient()
-  const today = new Date().toISOString().split('T')[0]
 
-  const [ratesRes, fxRes, bankCountRes, mfiCountRes] = await Promise.all([
+  const [ratesRes, fxRes, bankCountRes, mfiCountRes, paymentCountRes, transferCountRes, fxCurrenciesRes] = await Promise.all([
     supabase.schema('birrbank').from('savings_rates').select('annual_rate, account_type, institution_slug, institutions(name)').eq('is_current', true).order('annual_rate', { ascending: false }).limit(5),
     supabase.schema('birrbank').from('exchange_rates').select('currency_code, buying_rate, selling_rate').eq('institution_slug', 'nbe').order('rate_date', { ascending: false }).in('currency_code', ['USD','GBP','EUR']).limit(3),
     supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','bank').eq('is_active', true),
     supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','microfinance').eq('is_active', true),
+    supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','payment_operator').eq('is_active', true),
+    supabase.schema('birrbank').from('institutions').select('count', { count:'exact', head:true }).eq('type','money_transfer').eq('is_active', true),
+    supabase.schema('birrbank').from('exchange_rates').select('currency_code').eq('institution_slug', 'nbe'),
   ])
 
   const TOP_SAVINGS = (ratesRes.data ?? []).map((r: any, i: number) => ({
@@ -54,9 +42,28 @@ export default async function BankingHubPage() {
     currency: r.currency_code, name: CURRENCY_NAMES[r.currency_code] ?? r.currency_code,
     buy: Number(r.buying_rate).toFixed(2), sell: Number(r.selling_rate).toFixed(2),
   }))
-  const bankCount = bankCountRes.count ?? 32
-  const mfiCount = mfiCountRes.count ?? 55
-  const bestRate = TOP_SAVINGS[0]?.rate ?? '—'
+
+  const bankCount     = bankCountRes.count ?? 32
+  const mfiCount      = mfiCountRes.count ?? 0
+  const paymentCount  = paymentCountRes.count ?? 0
+  const transferCount = transferCountRes.count ?? 0
+  const fxCurrencyCount = new Set((fxCurrenciesRes.data ?? []).map((r: any) => r.currency_code)).size
+  const bestRate      = TOP_SAVINGS[0]?.rate ?? '—'
+
+  const SUB_PAGES = [
+    { label:'Savings Rates',   href:'/banking/savings-rates',  desc:'Compare savings and fixed deposit rates across all commercial banks.', stat:'Updated daily',
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> },
+    { label:'Loan Comparison',  href:'/banking/loans',          desc:'Personal, car, home and business loan rates with EMI calculator.',   stat:'All loan types',
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> },
+    { label:'FX Rates',         href:'/banking/fx-rates',       desc:'Official NBE indicative rates vs per-bank buying and selling rates.', stat:`${fxCurrencyCount} currencies`,
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> },
+    { label:'Mobile Money',     href:'/banking/mobile-money',   desc:'TeleBirr, HelloCash, Amole and CBEBirr — compare all payment operators.', stat:`${paymentCount} operators`,
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> },
+    { label:'Microfinance',     href:'/banking/microfinance',   desc:'Micro-loans, rural finance and SME credit from licensed MFIs.',     stat:`${mfiCount} MFIs`,
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
+    { label:'Money Transfer',   href:'/banking/money-transfer', desc:'Compare diaspora remittance fees and transfer speed across agencies.', stat:`${transferCount} agencies`,
+      icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> },
+  ]
 
   return (
     <main className="bg-white flex-1">
@@ -82,20 +89,18 @@ export default async function BankingHubPage() {
             Savings rates, loans, FX and digital services across all {bankCount} commercial banks — verified from official sources and updated weekly.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/banking/savings-rates"
-              className="hero-btn hero-btn-primary">
+            <Link href="/banking/savings-rates" className="hero-btn hero-btn-primary">
               Compare savings rates
             </Link>
-            <Link href="/banking/fx-rates"
-              className="hero-btn hero-btn-secondary">
+            <Link href="/banking/fx-rates" className="hero-btn hero-btn-secondary">
               Check FX rates
             </Link>
           </div>
           <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[
-              { value: String(bankCount), label: 'Commercial banks' },
+              { value: String(bankCount),  label: 'Commercial banks' },
               { value: bestRate !== '—' ? bestRate + '%' : '—', label: 'Best savings rate' },
-              { value: String(mfiCount), label: 'Microfinance institutes' },
+              { value: String(mfiCount),   label: 'Microfinance institutions' },
             ].map(s => (
               <div key={s.label} className="text-center py-6 border-r border-slate-800 last:border-r-0">
                 <div className="font-mono font-black text-white mb-1" style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-1px' }}>{s.value}</div>
@@ -109,6 +114,7 @@ export default async function BankingHubPage() {
       {/* SUB-PAGE CARDS */}
       <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Explore</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize: 'clamp(22px, 3vw, 40px)', letterSpacing: '-0.5px' }}>
             The complete Ethiopian banking picture.
@@ -139,10 +145,13 @@ export default async function BankingHubPage() {
       <section style={{ background: '#ffffff', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-            <h2 className="font-serif font-bold text-slate-950"
-              style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
-              Best savings rates today
-            </h2>
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Live data</p>
+              <h2 className="font-serif font-bold text-slate-950"
+                style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+                Best savings rates today
+              </h2>
+            </div>
             <Link href="/banking/savings-rates" className="flex items-center gap-1 text-sm font-bold shrink-0" style={{ color: '#1D4ED8' }}>
               See all {bankCount} banks <ChevronRight size={13} />
             </Link>
@@ -156,7 +165,7 @@ export default async function BankingHubPage() {
                 </div>
               ))}
             </div>
-            {TOP_SAVINGS.map(r => (
+            {TOP_SAVINGS.length > 0 ? TOP_SAVINGS.map(r => (
               <div key={r.rank}
                 className={'grid grid-cols-12 items-center border-b border-slate-100 transition-colors ' + (r.rank===1 ? 'bg-blue-50' : 'bg-white hover:bg-slate-50')}
                 style={{ padding: r.rank===1 ? '18px 24px' : '14px 24px' }}>
@@ -178,7 +187,11 @@ export default async function BankingHubPage() {
                     style={{ fontSize: r.rank===1 ? '24px' : '18px', letterSpacing: '-1px' }}>{r.rate}%</p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="py-10 text-center">
+                <p className="text-slate-500 text-sm">Savings rate data is being populated. Check back shortly.</p>
+              </div>
+            )}
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background:'#f8fafc', padding:'14px 24px' }}>
               <p className="text-xs text-slate-400">Official bank sources · NBE registry · Rates updated weekly</p>
               <Link href="/banking/savings-rates" className="text-xs font-bold" style={{ color:'#1D4ED8' }}>Full comparison →</Link>
@@ -192,10 +205,13 @@ export default async function BankingHubPage() {
       <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-            <h2 className="font-serif font-bold text-slate-950"
-              style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
-              FX rates — NBE official snapshot
-            </h2>
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Live data</p>
+              <h2 className="font-serif font-bold text-slate-950"
+                style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+                FX rates — NBE official snapshot
+              </h2>
+            </div>
             <Link href="/banking/fx-rates" className="flex items-center gap-1 text-sm font-bold shrink-0" style={{ color:'#1D4ED8' }}>
               Full FX dashboard <ChevronRight size={13} />
             </Link>
@@ -232,6 +248,7 @@ export default async function BankingHubPage() {
       {/* TRUST */}
       <section style={{ background: '#0f172a', padding: '96px 0', borderTop: '1px solid #1e293b' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest text-center mb-4" style={{ color: '#93c5fd' }}>Why BirrBank</p>
           <h2 className="font-serif font-bold text-white text-center mb-12"
             style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', letterSpacing: '-0.5px' }}>
             The only platform covering all {bankCount} banks.
@@ -264,6 +281,7 @@ export default async function BankingHubPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: '#1D4ED8' }}>Stay informed</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(32px, 4vw, 46px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Rate changes, direct to your inbox.
