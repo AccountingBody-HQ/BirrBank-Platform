@@ -32,15 +32,18 @@ function formatMin(val: number) { return val.toLocaleString('en-ET') }
 export default async function SavingsRatesPage() {
   const supabase = createSupabaseAdminClient()
 
-  const [ratesRes, bankCountRes] = await Promise.all([
+  const [ratesRes, bankCountRes, totalInstitutionsRes] = await Promise.all([
     supabase.schema('birrbank').from('savings_rates')
       .select('annual_rate, account_type, minimum_balance_etb, is_sharia_compliant, last_verified_date, institution_slug, institutions(name, is_listed_on_esx)')
       .eq('is_current', true).order('annual_rate', { ascending: false }),
     supabase.schema('birrbank').from('institutions')
       .select('count', { count:'exact', head:true }).eq('type','bank').eq('is_active', true),
+    supabase.schema('birrbank').from('institutions')
+      .select('count', { count:'exact', head:true }).eq('is_active', true),
   ])
 
   const totalBanks = bankCountRes.count ?? 32
+  const totalInstitutions = totalInstitutionsRes.count ?? 225
   const SAVINGS_RATES = (ratesRes.data ?? []).map((r: any, i: number) => {
     const isESX = r.institutions?.is_listed_on_esx ?? false
     const isSharia = r.is_sharia_compliant
@@ -52,6 +55,7 @@ export default async function SavingsRatesPage() {
       rate: Number(r.annual_rate).toFixed(2),
       min: formatMin(Number(r.minimum_balance_etb ?? 0)),
       sharia: isSharia,
+      slug: r.institution_slug ?? '',
       verified: formatDate(r.last_verified_date),
       freshness: staleness(r.last_verified_date),
       badge: i === 0 ? 'Best rate' : isSharia ? 'Sharia' : isESX ? 'ESX listed' : null,
@@ -113,7 +117,7 @@ export default async function SavingsRatesPage() {
       {/* COMPARISON TABLE */}
       <section style={{ background: '#ffffff', padding: '64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SavingsRatesTable rates={SAVINGS_RATES} totalBanks={totalBanks} />
+          <SavingsRatesTable rates={SAVINGS_RATES} totalBanks={totalBanks} totalInstitutions={totalInstitutions} />
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
             Rates are for comparison purposes only and may change without notice. Always verify directly with the institution before opening an account. BirrBank is not a bank or financial adviser.
           </p>
