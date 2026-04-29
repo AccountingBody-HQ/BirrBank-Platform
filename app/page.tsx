@@ -288,7 +288,7 @@ export default async function HomePage() {
             {/* Right: 5-pillar live snapshot */}
             <div className="hidden lg:block">
               <div className="bg-white rounded-2xl overflow-hidden"
-                style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.08), 0 32px 80px rgba(0,0,0,0.5), 0 0 100px rgba(29,78,216,0.15), inset 4px 0 0 #1D4ED8' }}>
+                style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.08), 0 32px 80px rgba(0,0,0,0.5), 0 0 100px rgba(29,78,216,0.15), inset 3px 0 0 rgba(29,78,216,0.35)' }}>
                                 {/* Card header */}
                 <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                   <div>
