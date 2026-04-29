@@ -74,10 +74,10 @@ function GridCard({ inst }: { inst: Institution }) {
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex-1 min-w-0">
-            <p className={`font-bold text-sm leading-snug mb-1 ${inst.is_active ? 'text-slate-900 group-hover:text-blue-700' : 'text-slate-500'} transition-colors`}>
+            <p className={`font-bold text-sm leading-snug mb-1 line-clamp-2 ${inst.is_active ? 'text-slate-900 group-hover:text-blue-700' : 'text-slate-500'} transition-colors`}>
               {inst.name}
             </p>
-            {metric && <p className="text-xs text-slate-400 font-mono truncate">{metric}</p>}
+            <p className="text-xs text-slate-400 font-mono truncate">{metric ?? ' '}</p>
           </div>
           {inst.is_active && <ChevronRight size={14} className="text-slate-300 group-hover:text-blue-400 shrink-0 mt-0.5 transition-colors" />}
         </div>
