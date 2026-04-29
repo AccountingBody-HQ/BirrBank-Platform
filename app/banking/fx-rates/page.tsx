@@ -54,7 +54,15 @@ export default async function FxRatesPage() {
   for (const r of (nbeRes.data ?? [])) {
     if (!nbeMap[r.currency_code]) nbeMap[r.currency_code] = r
   }
-  const NBE_RATES = Object.values(nbeMap).sort((a: any, b: any) => a.currency_code.localeCompare(b.currency_code))
+  const CURRENCY_ORDER = ['USD','EUR','GBP','SAR','AED','CAD','AUD','CHF','CNY','KWD','NOK','SEK','DKK','KES','DJF','INR','ZAR','JPY']
+  const NBE_RATES = Object.values(nbeMap).sort((a: any, b: any) => {
+    const ai = CURRENCY_ORDER.indexOf(a.currency_code)
+    const bi = CURRENCY_ORDER.indexOf(b.currency_code)
+    if (ai === -1 && bi === -1) return a.currency_code.localeCompare(b.currency_code)
+    if (ai === -1) return 1
+    if (bi === -1) return -1
+    return ai - bi
+  })
   const nbeDate = NBE_RATES[0]?.rate_date ?? null
 
   // Dedupe bank rates
