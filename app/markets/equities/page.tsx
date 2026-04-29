@@ -50,12 +50,10 @@ export default async function EquitiesPage() {
             Every company trading on the Ethiopian Securities Exchange — prices, volumes, market cap, P/E ratios and dividend yields. Updated end-of-day.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/markets/ipo-pipeline" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/markets/ipo-pipeline" className="hero-btn hero-btn-primary">
               IPO pipeline
             </Link>
-            <Link href="/markets/bonds" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/markets/bonds" className="hero-btn hero-btn-secondary">
               Bonds & T-Bills
             </Link>
           </div>

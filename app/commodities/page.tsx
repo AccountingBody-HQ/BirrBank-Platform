@@ -60,12 +60,10 @@ export default async function CommoditiesPage() {
             Daily prices from the Ethiopian Commodity Exchange across all grades and origins. The only financial platform integrating commodity data with banking and investment intelligence.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/commodities/coffee" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/commodities/coffee" className="hero-btn hero-btn-primary">
               Coffee prices
             </Link>
-            <Link href="/commodities/sesame" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/commodities/sesame" className="hero-btn hero-btn-secondary">
               Sesame prices
             </Link>
           </div>

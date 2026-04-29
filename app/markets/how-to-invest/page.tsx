@@ -58,12 +58,10 @@ export default function HowToInvestPage() {
             Step-by-step guide to opening a brokerage account and buying ESX-listed shares. Covers both Ethiopian residents and diaspora investors.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/markets/equities" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/markets/equities" className="hero-btn hero-btn-primary">
               View ESX equities
             </Link>
-            <Link href="/markets/ipo-pipeline" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/markets/ipo-pipeline" className="hero-btn hero-btn-secondary">
               IPO pipeline
             </Link>
           </div>

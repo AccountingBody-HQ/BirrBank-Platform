@@ -46,10 +46,8 @@ export default async function GrainPricesPage() {
             ECX daily settlement prices for Ethiopian grains and legumes — wheat, kidney beans, soybeans, chickpeas and more. Prices in ETB per kilogram.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/commodities/coffee" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>Coffee prices</Link>
-            <Link href="/commodities/sesame" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>Sesame prices</Link>
+            <Link href="/commodities/coffee" className="hero-btn hero-btn-primary">Coffee prices</Link>
+            <Link href="/commodities/sesame" className="hero-btn hero-btn-secondary">Sesame prices</Link>
           </div>
           <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[

@@ -63,13 +63,11 @@ export default async function InsurancePage() {
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
             <Link href="/insurance/motor"
-              className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+              className="hero-btn hero-btn-primary">
               Compare motor insurance
             </Link>
             <Link href="/insurance/life"
-              className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+              className="hero-btn hero-btn-secondary">
               Life insurance
             </Link>
           </div>

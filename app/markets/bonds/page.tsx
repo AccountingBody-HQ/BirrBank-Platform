@@ -48,12 +48,10 @@ export default async function BondsPage() {
             Treasury bill auction results from the National Bank of Ethiopia — yields, tenors and minimum investments. Updated after each NBE auction.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/markets/equities" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/markets/equities" className="hero-btn hero-btn-primary">
               View ESX equities
             </Link>
-            <Link href="/markets/how-to-invest" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/markets/how-to-invest" className="hero-btn hero-btn-secondary">
               How to invest
             </Link>
           </div>

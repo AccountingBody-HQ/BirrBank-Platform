@@ -52,12 +52,10 @@ export default async function DiasporaPage() {
             Send money home cheaply, invest in Ethiopian stocks from abroad, open a diaspora bank account and track ETB exchange rates — all in one place.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/banking/money-transfer" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/banking/money-transfer" className="hero-btn hero-btn-primary">
               Compare remittance fees
             </Link>
-            <Link href="/banking/fx-rates" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/banking/fx-rates" className="hero-btn hero-btn-secondary">
               Check ETB rates
             </Link>
           </div>

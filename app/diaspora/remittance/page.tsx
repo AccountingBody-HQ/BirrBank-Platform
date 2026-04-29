@@ -42,12 +42,10 @@ export default async function RemittancePage() {
             Compare fees, exchange rate margins and transfer speeds across Western Union, MoneyGram, Wise, Dahabshiil and direct bank SWIFT transfers for all major diaspora corridors.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/banking/fx-rates" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/banking/fx-rates" className="hero-btn hero-btn-primary">
               Check ETB rates
             </Link>
-            <Link href="/diaspora/bank-account" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/diaspora/bank-account" className="hero-btn hero-btn-secondary">
               Open a bank account
             </Link>
           </div>

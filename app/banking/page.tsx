@@ -83,13 +83,11 @@ export default async function BankingHubPage() {
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
             <Link href="/banking/savings-rates"
-              className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize: 15, padding: '14px 32px', width: 200, background: '#1D4ED8', color: '#fff' }}>
+              className="hero-btn hero-btn-primary">
               Compare savings rates
             </Link>
             <Link href="/banking/fx-rates"
-              className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize: 15, padding: '14px 32px', width: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+              className="hero-btn hero-btn-secondary">
               Check FX rates
             </Link>
           </div>

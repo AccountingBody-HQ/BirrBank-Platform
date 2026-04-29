@@ -76,12 +76,10 @@ export default async function MarketsPage() {
             ESX-listed equities, the full IPO pipeline and Treasury bill yields — the complete intelligence layer for Ethiopian capital markets.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/markets/equities" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/markets/equities" className="hero-btn hero-btn-primary">
               View listed equities
             </Link>
-            <Link href="/markets/ipo-pipeline" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/markets/ipo-pipeline" className="hero-btn hero-btn-secondary">
               IPO pipeline
             </Link>
           </div>

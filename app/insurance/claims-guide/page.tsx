@@ -70,12 +70,10 @@ export default function ClaimsGuidePage() {
             Step-by-step guides for motor, health and property claims — what to do, what documents you need, and how to avoid having your claim reduced or rejected.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/insurance/motor" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/insurance/motor" className="hero-btn hero-btn-primary">
               Motor insurance
             </Link>
-            <Link href="/insurance/health" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/insurance/health" className="hero-btn hero-btn-secondary">
               Health insurance
             </Link>
           </div>

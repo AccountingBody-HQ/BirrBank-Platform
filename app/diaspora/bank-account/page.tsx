@@ -37,12 +37,10 @@ export default async function BankAccountPage() {
             Step-by-step guide to opening a diaspora savings or foreign currency account at Ethiopian commercial banks — requirements, documents and process explained.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link href="/banking/savings-rates" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, background:'#1D4ED8', color:'#fff' }}>
+            <Link href="/banking/savings-rates" className="hero-btn hero-btn-primary">
               Compare savings rates
             </Link>
-            <Link href="/diaspora/invest" className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize:15, padding:'14px 32px', minWidth:200, border:'1.5px solid rgba(255,255,255,0.2)', color:'#fff' }}>
+            <Link href="/diaspora/invest" className="hero-btn hero-btn-secondary">
               Invest from abroad
             </Link>
           </div>
