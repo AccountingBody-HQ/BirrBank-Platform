@@ -44,11 +44,13 @@ jobs:
                   continue
               buying = float(rate["buying"])
               selling = float(rate["selling"])
+              weighted = float(rate["weighted_average"])
               payload = json.dumps([{
                   "institution_slug": "nbe",
                   "currency_code": code,
                   "buying_rate": buying,
                   "selling_rate": selling,
+                  "weighted_average": weighted,
                   "rate_date": today,
                   "source": "nbe_official",
                   "country_code": "ET"

@@ -36,7 +36,7 @@ export default async function FxRatesPage() {
 
   const [nbeRes, bankRatesRes] = await Promise.all([
     supabase.schema('birrbank').from('exchange_rates')
-      .select('currency_code, buying_rate, selling_rate, rate_date')
+      .select('currency_code, buying_rate, selling_rate, weighted_average, rate_date')
       .eq('institution_slug', 'nbe')
       .order('rate_date', { ascending: false })
       .order('currency_code')
@@ -150,6 +150,7 @@ export default async function FxRatesPage() {
                     <th className="text-left text-xs font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell" style={{ padding: '12px 16px' }}>Code</th>
                     <th className="text-right text-xs font-black text-slate-400 uppercase tracking-widest" style={{ padding: '12px 20px' }}>Buying (ETB)</th>
                     <th className="text-right text-xs font-black text-slate-400 uppercase tracking-widest" style={{ padding: '12px 20px' }}>Selling (ETB)</th>
+                    <th className="text-right text-xs font-black text-slate-400 uppercase tracking-widest hidden md:table-cell" style={{ padding: '12px 20px' }}>Weighted Avg</th>
                     <th className="text-right text-xs font-black text-slate-400 uppercase tracking-widest hidden md:table-cell" style={{ padding: '12px 20px' }}>Spread</th>
                   </tr>
                 </thead>
@@ -176,6 +177,9 @@ export default async function FxRatesPage() {
                         </td>
                         <td className="text-right" style={{ padding: '13px 20px' }}>
                           <span className="font-mono font-black text-slate-950" style={{ fontSize: '15px' }}>{fmt(r.selling_rate)}</span>
+                        </td>
+                        <td className="text-right hidden md:table-cell" style={{ padding: '13px 20px' }}>
+                          <span className="font-mono font-semibold text-slate-600" style={{ fontSize: '13px' }}>{fmt(r.weighted_average)}</span>
                         </td>
                         <td className="text-right hidden md:table-cell" style={{ padding: '13px 20px' }}>
                           <span className="font-mono text-slate-400" style={{ fontSize: '13px' }}>{spread}</span>
