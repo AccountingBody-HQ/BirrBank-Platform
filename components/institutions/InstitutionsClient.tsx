@@ -48,9 +48,7 @@ function TypeBadge({ type }: { type: string }) {
 
 function CoverageBadge({ active, coverage }: { active: boolean; coverage: CoverageLevel | null }) {
   if (!active) return (
-    <span className="text-xs font-semibold rounded-full px-2.5 py-0.5 bg-slate-100 text-slate-400 ring-1 ring-slate-200">
-      Coming Soon
-    </span>
+    <span className="text-xs font-semibold rounded-full px-2.5 py-0.5 bg-slate-100 text-slate-400 ring-1 ring-slate-200">Coming Soon</span>
   )
   if (coverage === 'full') return (
     <span className="text-xs font-semibold rounded-full px-2.5 py-0.5 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Verified</span>
@@ -63,7 +61,6 @@ function CoverageBadge({ active, coverage }: { active: boolean; coverage: Covera
   )
 }
 
-// ── GRID CARD ──────────────────────────────────────────────────────────────
 function GridCard({ inst }: { inst: Institution }) {
   const color = TYPE_COLORS[inst.type] ?? '#64748b'
   const licenceYear = inst.nbe_licence_date ? new Date(inst.nbe_licence_date).getFullYear() : inst.founded_year ?? null
@@ -71,7 +68,7 @@ function GridCard({ inst }: { inst: Institution }) {
     : inst.swift_code ?? inst.nbe_licence_number ?? inst.hq_region ?? null
 
   const card = (
-    <div className={`group relative bg-white border rounded-2xl overflow-hidden transition-all duration-200 flex flex-col h-full ${inst.is_active ? 'border-slate-200 hover:border-blue-300 hover:shadow-lg cursor-pointer' : 'border-slate-200 opacity-60'}`}
+    <div className={`group relative bg-white border rounded-xl overflow-hidden transition-all duration-200 flex flex-col h-full ${inst.is_active ? 'border-slate-200 hover:border-l-4 hover:border-l-blue-500 hover:border-blue-200 hover:shadow-lg cursor-pointer' : 'border-slate-200 opacity-60'}`}
       style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
       <div style={{ height: 4, background: inst.is_active ? `linear-gradient(90deg, ${color}, ${color}cc)` : '#e2e8f0' }} />
       <div className="p-5 flex flex-col flex-1">
@@ -102,43 +99,33 @@ function GridCard({ inst }: { inst: Institution }) {
   return <Link href={`/institutions/${inst.slug}`} className="flex flex-col h-full">{card}</Link>
 }
 
-// ── LIST ROW ───────────────────────────────────────────────────────────────
-function ListRow({ inst, i }: { inst: Institution; i: number }) {
+function ListRow({ inst }: { inst: Institution }) {
   const color = TYPE_COLORS[inst.type] ?? '#64748b'
   const licenceYear = inst.nbe_licence_date ? new Date(inst.nbe_licence_date).getFullYear() : inst.founded_year ?? null
 
   const row = (
-    <div className={`flex items-center gap-4 py-3 px-4 rounded-xl transition-all ${inst.is_active ? 'hover:bg-slate-50 cursor-pointer' : 'opacity-50'}`}
-      style={{ borderBottom: '1px solid #f1f5f9' }}>
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-black"
+    <div className={`grid items-center py-3 px-4 transition-all ${inst.is_active ? 'hover:bg-slate-50 cursor-pointer' : 'opacity-50'}`}
+      style={{ borderBottom: '1px solid #f1f5f9', gridTemplateColumns: '36px 1fr 130px 60px 90px 120px 20px' }}>
+      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black"
         style={{ background: `${color}18`, color, border: `1px solid ${color}30` }}>
         {(TYPE_LABELS[inst.type] ?? '?').slice(0,2).toUpperCase()}
       </div>
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 px-3">
         <p className={`font-semibold text-sm truncate ${inst.is_active ? 'text-slate-900' : 'text-slate-500'}`}>{inst.name}</p>
         {inst.swift_code && <p className="text-xs text-slate-400 font-mono">{inst.swift_code}</p>}
       </div>
-      <div className="hidden sm:flex items-center gap-3 shrink-0">
-        <TypeBadge type={inst.type} />
-        {licenceYear && <span className="text-xs text-slate-400 w-10 text-right">{licenceYear}</span>}
-        {inst.branches_count && <span className="text-xs text-slate-400 w-20 text-right">{inst.branches_count} branches</span>}
-        <div className="w-24 flex justify-end">
-          <CoverageBadge active={inst.is_active} coverage={inst.coverage_level} />
-        </div>
-        {inst.is_active ? (
-          <ChevronRight size={14} className="text-slate-300 shrink-0" />
-        ) : (
-          <div className="w-4" />
-        )}
-      </div>
+      <div><TypeBadge type={inst.type} /></div>
+      <div className="text-xs text-slate-400 text-right">{licenceYear ?? '—'}</div>
+      <div className="text-xs text-slate-400 text-right">{inst.branches_count ? `${inst.branches_count}` : '—'}</div>
+      <div className="flex justify-end"><CoverageBadge active={inst.is_active} coverage={inst.coverage_level} /></div>
+      <div className="flex justify-end">{inst.is_active ? <ChevronRight size={14} className="text-slate-300" /> : null}</div>
     </div>
   )
 
-  if (!inst.is_active) return <div key={inst.slug}>{row}</div>
-  return <Link key={inst.slug} href={`/institutions/${inst.slug}`}>{row}</Link>
+  if (!inst.is_active) return <div>{row}</div>
+  return <Link href={`/institutions/${inst.slug}`}>{row}</Link>
 }
 
-// ── MAIN CLIENT ────────────────────────────────────────────────────────────
 export default function InstitutionsClient({ institutions }: { institutions: Institution[] }) {
   const searchParams = useSearchParams()
   const typeParam = searchParams.get('type') ?? 'all'
@@ -166,7 +153,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
       )
     }
     if (type !== 'all') result = result.filter(i => i.type === type)
-    // Active first, then inactive — both alphabetical within group
     return result.sort((a, b) => {
       if (a.is_active && !b.is_active) return -1
       if (!a.is_active && b.is_active) return 1
@@ -178,7 +164,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
 
   return (
     <div>
-      {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -192,7 +177,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
             </button>
           )}
         </div>
-        {/* View toggle */}
         <div className="flex items-center gap-1 p-1 rounded-xl shrink-0" style={{ background: '#f1f5f9' }}>
           <button onClick={() => setView('grid')}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all"
@@ -207,7 +191,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
         </div>
       </div>
 
-      {/* Type filter tabs */}
       <div className="relative mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {TYPE_TABS.map(tab => (
@@ -217,21 +200,22 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
                 ? { background: '#1D4ED8', color: '#fff' }
                 : { background: '#f8fafc', color: '#475569', border: '1px solid #e2e8f0' }}>
               {tab.label}
-              {tab.value !== 'all' && typeCounts[tab.value] ? (
-                <span className="ml-1.5 text-xs opacity-70">({typeCounts[tab.value]})</span>
-              ) : tab.value === 'all' ? (
-                <span className="ml-1.5 text-xs opacity-70">({institutions.length})</span>
-              ) : null}
+              {tab.value === 'all'
+                ? <span className="ml-1.5 text-xs opacity-70">({institutions.length})</span>
+                : typeCounts[tab.value]
+                ? <span className="ml-1.5 text-xs opacity-70">({typeCounts[tab.value]})</span>
+                : null}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Results count */}
       <div className="flex items-center justify-between mb-5">
         <p className="text-sm text-slate-500">
-          {filtered.length === 0 ? 'No institutions found'
-            : <><span className="font-semibold text-slate-800">{activeFiltered}</span> profiled · <span className="text-slate-400">{filtered.length - activeFiltered} coming soon</span></>}
+          <span className="font-semibold text-slate-800">{activeFiltered}</span> profiled
+          {filtered.length - activeFiltered > 0 && (
+            <span className="text-slate-400"> · {filtered.length - activeFiltered} coming soon</span>
+          )}
         </p>
         {(search || type !== 'all') && (
           <button onClick={() => { setSearch(''); setType('all') }}
@@ -241,7 +225,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
         )}
       </div>
 
-      {/* Coverage legend */}
       <div className="flex flex-wrap items-center gap-3 mb-8 pb-6 border-b border-slate-100">
         <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Coverage:</span>
         {[
@@ -254,7 +237,6 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
         ))}
       </div>
 
-      {/* Grid or List */}
       {filtered.length > 0 ? (
         view === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -263,19 +245,18 @@ export default function InstitutionsClient({ institutions }: { institutions: Ins
         ) : (
           <div className="rounded-2xl overflow-hidden border border-slate-200">
             <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-            <div className="hidden sm:flex items-center gap-4 px-4 py-2 border-b border-slate-100" style={{ background: '#f8fafc' }}>
-              <div className="w-8 shrink-0" />
-              <div className="flex-1 text-xs font-black text-slate-400 uppercase tracking-widest">Institution</div>
-              <div className="hidden sm:flex items-center gap-3 shrink-0">
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest w-20">Type</span>
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest w-10 text-right">Est.</span>
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest w-20 text-right">Branches</span>
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest w-24 text-right">Coverage</span>
-                <div className="w-4" />
-              </div>
+            <div className="grid px-4 py-2 border-b border-slate-100"
+              style={{ background: '#f8fafc', gridTemplateColumns: '36px 1fr 130px 60px 90px 120px 20px' }}>
+              <div />
+              <div className="px-3 text-xs font-black text-slate-400 uppercase tracking-widest">Institution</div>
+              <div className="text-xs font-black text-slate-400 uppercase tracking-widest">Type</div>
+              <div className="text-xs font-black text-slate-400 uppercase tracking-widest text-right">Est.</div>
+              <div className="text-xs font-black text-slate-400 uppercase tracking-widest text-right">Branches</div>
+              <div className="text-xs font-black text-slate-400 uppercase tracking-widest text-right">Coverage</div>
+              <div />
             </div>
-            <div className="divide-y divide-slate-100 px-2 py-2">
-              {filtered.map((inst, i) => <ListRow key={inst.slug} inst={inst} i={i} />)}
+            <div className="divide-y divide-slate-50 px-2 py-1">
+              {filtered.map(inst => <ListRow key={inst.slug} inst={inst} />)}
             </div>
           </div>
         )

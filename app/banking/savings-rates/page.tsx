@@ -88,12 +88,12 @@ export default async function SavingsRatesPage() {
           <div className="flex flex-wrap gap-3 mb-10">
             <Link href="/banking/fx-rates"
               className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, background: '#1D4ED8', color: '#fff' }}>
+              style={{ fontSize: 15, padding: '14px 32px', width: 200, background: '#1D4ED8', color: '#fff' }}>
               Check FX rates
             </Link>
             <Link href="/banking/loans"
               className="font-bold rounded-full transition-all text-center"
-              style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+              style={{ fontSize: 15, padding: '14px 32px', width: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
               Compare loan rates
             </Link>
           </div>

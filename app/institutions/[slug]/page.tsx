@@ -132,12 +132,12 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
               <div className="flex flex-wrap gap-3">
                 <Link href="/banking/savings-rates"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, background: '#1D4ED8', color: '#fff' }}>
+                  style={{ fontSize: 15, padding: '14px 32px', width: 200, background: '#1D4ED8', color: '#fff' }}>
                   Compare all rates
                 </Link>
                 <Link href="/institutions"
                   className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', minWidth: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+                  style={{ fontSize: 15, padding: '14px 32px', width: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
                   All institutions
                 </Link>
               </div>
