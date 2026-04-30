@@ -32,7 +32,7 @@ def upsert(slug, rates):
         return 0
     body = json.dumps(records).encode()
     req = urllib.request.Request(
-        f"{SUPABASE_URL}/rest/v1/exchange_rates",
+        f"{SUPABASE_URL}/rest/v1/exchange_rates?on_conflict=institution_slug,currency_code,rate_date",
         data=body,
         headers={
             "apikey": SUPABASE_KEY,
@@ -74,9 +74,9 @@ def scrape_dashen():
     for row in rows:
         cells = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.DOTALL)]
         cells = [c for c in cells if c]
-        if len(cells) >= 3 and cells[0] in CODES and cells[0] not in seen:
+        if len(cells) >= 4 and cells[0] in CODES and cells[0] not in seen:
             try:
-                rates.append({"currency_code": cells[0], "buying_rate": float(cells[1]), "selling_rate": float(cells[2])})
+                rates.append({"currency_code": cells[0], "buying_rate": float(cells[2]), "selling_rate": float(cells[3])})
                 seen.add(cells[0])
             except:
                 pass
@@ -137,14 +137,23 @@ def scrape_zemen():
 
 def scrape_coop():
     html = fetch("https://coopbankoromia.com.et/daily-exchange-rates/")
-    m = re.search(r"var exchangeRates\s*=\s*(\{[^;]+\});", html)
+    m = re.search(r"var exchangeRates\s*=\s*(\{.*?\});\s*
+", html, re.DOTALL)
+    if not m:
+        m = re.search(r"var exchangeRates\s*=\s*(\{[^<]+\})", html)
     if not m:
         return []
-    data = json.loads(m.group(1))
+    try:
+        data = json.loads(m.group(1))
+    except:
+        return []
     rates = []
     for code, info in data.items():
         try:
-            rates.append({"currency_code": code, "buying_rate": float(info["buying"]), "selling_rate": float(info["selling"])})
+            buying = info.get("buying") or info.get("transaction_buying")
+            selling = info.get("selling") or info.get("transaction_selling")
+            if buying and selling:
+                rates.append({"currency_code": code, "buying_rate": float(buying), "selling_rate": float(selling)})
         except:
             pass
     return rates
@@ -266,23 +275,23 @@ def scrape_gadaa():
 def scrape_zamzam():
     html = fetch("https://zamzambank.com/exchange-rates/")
     rows = re.findall(r"<tr[^>]*>(.*?)</tr>", html, re.DOTALL)
-    CMAP = {"USD":"USD","US Dollar":"USD","GBP":"GBP","Pound Sterling":"GBP",
-            "EUR":"EUR","Euro":"EUR","SAR":"SAR","Saudi Riyal":"SAR",
-            "AED":"AED","UAE Dirham":"AED","CHF":"CHF","Swiss Frank":"CHF",
-            "CAD":"CAD","Canadian Dollar":"CAD","CNY":"CNY","Chinese Yuan":"CNY"}
     rates = []
     seen = set()
+    CODES = {"USD","EUR","GBP","SAR","AED","CHF","CAD","CNY","JPY","KES","AUD","NOK","SEK","DKK","KWD","ZAR","INR","DJF"}
     for row in rows:
         cells = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.DOTALL)]
+        cells = [re.sub(r"&#[0-9]+;", " ", c).strip() for c in cells]
         cells = [c for c in cells if c]
         if len(cells) >= 3:
-            code = CMAP.get(cells[0])
-            if code and code not in seen:
-                try:
-                    rates.append({"currency_code": code, "buying_rate": float(cells[1]), "selling_rate": float(cells[2])})
-                    seen.add(code)
-                except:
-                    pass
+            code_m = re.match(r"([A-Z]{3})\s", cells[0])
+            if code_m:
+                code = code_m.group(1)
+                if code in CODES and code not in seen:
+                    try:
+                        rates.append({"currency_code": code, "buying_rate": float(cells[1]), "selling_rate": float(cells[2])})
+                        seen.add(code)
+                    except:
+                        pass
     return rates
 
 BANKS = [
