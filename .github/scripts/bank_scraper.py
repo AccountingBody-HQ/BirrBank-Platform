@@ -307,7 +307,6 @@ BANKS = [
     ("dashen-bank", scrape_dashen),
     ("wegagen-bank", scrape_wegagen),
     ("nib-international-bank", scrape_nib),
-    ("zemen-bank", scrape_zemen),
     ("cooperative-bank-of-oromia", scrape_coop),
     ("bunna-international-bank", scrape_bunna),
     ("berhan-bank", scrape_berhan),
