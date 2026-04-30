@@ -32,7 +32,7 @@ def upsert(slug, rates):
         return 0
     body = json.dumps(records).encode()
     req = urllib.request.Request(
-        f"{SUPABASE_URL}/rest/v1/exchange_rates?on_conflict=institution_slug,currency_code,rate_date",
+        f"{SUPABASE_URL}/rest/v1/exchange_rates",
         data=body,
         headers={
             "apikey": SUPABASE_KEY,
