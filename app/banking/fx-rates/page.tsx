@@ -25,7 +25,7 @@ function fmt(val: number | null) {
 }
 function fmt2(val: number | null) {
   if (val == null) return '\u2014'
-  return Number(val).toFixed(2)
+  return Number(val).toFixed(4)
 }
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
