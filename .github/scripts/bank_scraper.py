@@ -137,10 +137,7 @@ def scrape_zemen():
 
 def scrape_coop():
     html = fetch("https://coopbankoromia.com.et/daily-exchange-rates/")
-    m = re.search(r"var exchangeRates\s*=\s*(\{.*?\});\s*
-", html, re.DOTALL)
-    if not m:
-        m = re.search(r"var exchangeRates\s*=\s*(\{[^<]+\})", html)
+    m = re.search(r"var exchangeRates\s*=\s*(\{[^<]+\})", html)
     if not m:
         return []
     try:
