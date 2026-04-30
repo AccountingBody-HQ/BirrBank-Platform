@@ -30,21 +30,32 @@ def upsert(slug, rates):
     ]
     if not records:
         return 0
-    body = json.dumps(records).encode()
-    req = urllib.request.Request(
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json",
+        "Accept-Profile": "birrbank",
+        "Content-Profile": "birrbank"
+    }
+    # Delete today records for this bank first
+    del_req = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/exchange_rates?institution_slug=eq.{slug}&rate_date=eq.{TODAY}",
+        headers=headers,
+        method="DELETE"
+    )
+    try:
+        with urllib.request.urlopen(del_req, timeout=15) as r:
+            r.read()
+    except:
+        pass
+    # Insert fresh
+    ins_req = urllib.request.Request(
         f"{SUPABASE_URL}/rest/v1/exchange_rates",
-        data=body,
-        headers={
-            "apikey": SUPABASE_KEY,
-            "Authorization": f"Bearer {SUPABASE_KEY}",
-            "Content-Type": "application/json",
-            "Prefer": "resolution=merge-duplicates",
-            "Accept-Profile": "birrbank",
-            "Content-Profile": "birrbank"
-        },
+        data=json.dumps(records).encode(),
+        headers=headers,
         method="POST"
     )
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(ins_req, timeout=30) as r:
         r.read()
     print(f"  {slug}: {len(records)} rates saved")
     return len(records)
