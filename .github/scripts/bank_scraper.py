@@ -39,7 +39,7 @@ def upsert(slug, rates):
     }
     # Delete today records for this bank first
     del_req = urllib.request.Request(
-        f"{SUPABASE_URL}/rest/v1/exchange_rates?institution_slug=eq.{slug}&rate_date=eq.{TODAY}",
+        f"{SUPABASE_URL}/rest/v1/exchange_rates?institution_slug=eq.{slug}",
         headers=headers,
         method="DELETE"
     )
