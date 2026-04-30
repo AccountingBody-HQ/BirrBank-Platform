@@ -296,11 +296,11 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                         <div className="flex items-center gap-6 text-sm">
                           <div className="text-center">
                             <p className="text-xs text-slate-400 mb-0.5">Buy</p>
-                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].buying_rate).toFixed(2)}</p>
+                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].buying_rate).toFixed(4)}</p>
                           </div>
                           <div className="text-center">
                             <p className="text-xs text-slate-400 mb-0.5">Sell</p>
-                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].selling_rate).toFixed(2)}</p>
+                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].selling_rate).toFixed(4)}</p>
                           </div>
                         </div>
                       </div>
