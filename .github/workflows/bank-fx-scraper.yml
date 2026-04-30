@@ -1,0 +1,16 @@
+name: Bank FX Rate Scraper (14 Banks)
+on:
+  schedule:
+    - cron: '30 6 * * 1-5'
+  workflow_dispatch:
+jobs:
+  scrape-bank-rates:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Run scraper
+        run: python3 .github/scripts/bank_scraper.py
