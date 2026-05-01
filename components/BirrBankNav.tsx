@@ -44,21 +44,21 @@ export default function Navigation({ institutionCounts = {} }: NavProps) {
 
   const NAV = [
     { label: 'Banking', href: '/banking', sub: [
-      { label: 'Savings Rates',   href: '/banking/savings-rates#content',  desc: 'Compare all 32 banks' },
-      { label: 'Loan Comparison', href: '/banking/loans#content',          desc: 'Rates and terms' },
-      { label: 'FX Rates',        href: '/banking/fx-rates#content',       desc: 'NBE official rates' },
-      { label: 'Mobile Money',    href: '/banking/mobile-money#content',   desc: 'Payment operators' },
-      { label: 'Microfinance',    href: '/banking/microfinance#content',   desc: `${c.microfinance || 58} MFIs covered` },
-      { label: 'Money Transfer',  href: '/banking/money-transfer#content', desc: 'Remittance comparison' },
+      { label: 'Savings Rates',   href: '/banking/savings-rates',  desc: 'Compare all 32 banks' },
+      { label: 'Loan Comparison', href: '/banking/loans',          desc: 'Rates and terms' },
+      { label: 'FX Rates',        href: '/banking/fx-rates',       desc: 'NBE official rates' },
+      { label: 'Mobile Money',    href: '/banking/mobile-money',   desc: 'Payment operators' },
+      { label: 'Microfinance',    href: '/banking/microfinance',   desc: `${c.microfinance || 58} MFIs covered` },
+      { label: 'Money Transfer',  href: '/banking/money-transfer', desc: 'Remittance comparison' },
     ]},
     { label: 'Institutions', href: '/institutions', sub: [
-      { label: 'All Institutions',    href: '/institutions',                      desc: `${totalInstitutions || 222} NBE-regulated entities` },
-      { label: 'Banks',               href: '/institutions?type=bank',             desc: `${c.bank || 32} licensed commercial banks` },
-      { label: 'Microfinance',        href: '/institutions?type=microfinance',     desc: `${c.microfinance || 58} MFIs nationwide` },
-      { label: 'Payment Operators',   href: '/institutions?type=payment_operator', desc: 'Mobile money and wallets' },
-      { label: 'FX Bureaux',          href: '/institutions?type=fx_bureau',        desc: `${c.fx_bureau || 13} independent bureaux` },
-      { label: 'Money Transfer',      href: '/institutions?type=money_transfer',   desc: `${c.money_transfer || 65} remittance agencies` },
-      { label: 'Insurance Companies', href: '/institutions?type=insurer',          desc: `${c.insurer || 18} licensed insurers` },
+      { label: 'All Institutions',    href: '/institutions#registry',             desc: `${totalInstitutions || 222} NBE-regulated entities` },
+      { label: 'Banks',               href: '/institutions?type=bank#registry',    desc: `${c.bank || 32} licensed commercial banks` },
+      { label: 'Microfinance',        href: '/institutions?type=microfinance#registry', desc: `${c.microfinance || 58} MFIs nationwide` },
+      { label: 'Payment Operators',   href: '/institutions?type=payment_operator#registry', desc: 'Mobile money and wallets' },
+      { label: 'FX Bureaux',          href: '/institutions?type=fx_bureau#registry', desc: `${c.fx_bureau || 13} independent bureaux` },
+      { label: 'Money Transfer',      href: '/institutions?type=money_transfer#registry', desc: `${c.money_transfer || 65} remittance agencies` },
+      { label: 'Insurance Companies', href: '/institutions?type=insurer#registry', desc: `${c.insurer || 18} licensed insurers` },
     ]},
     { label: 'Insurance', href: '/insurance', sub: [
       { label: 'Motor Insurance',    href: '/insurance/motor',        desc: 'Compare all providers' },
@@ -89,7 +89,7 @@ export default function Navigation({ institutionCounts = {} }: NavProps) {
       { label: 'Send Money Home',     href: '/diaspora/remittance',   desc: 'Best transfer rates' },
       { label: 'Invest from Abroad',  href: '/diaspora/invest',       desc: 'ESX and property' },
       { label: 'Open a Bank Account', href: '/diaspora/bank-account', desc: 'SWIFT-enabled banks' },
-      { label: 'Track ETB Rates',     href: '/banking/fx-rates#content',      desc: 'Live FX dashboard' },
+      { label: 'Track ETB Rates',     href: '/banking/fx-rates',      desc: 'Live FX dashboard' },
     ]},
   ]
 

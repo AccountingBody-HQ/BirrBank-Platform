@@ -124,7 +124,7 @@ export default async function BankingHubPage() {
       </section>
 
       {/* SUB-PAGE CARDS */}
-      <section id="content" style={{ background: '#f8fafc', padding: '96px 0' }}>
+      <section style={{ background: '#f8fafc', padding: '96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Explore</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"

@@ -70,7 +70,7 @@ export default async function MobileMoneyPage() {
       </section>
 
       {/* OPERATORS GRID */}
-      <section id="content" style={{ background:'#ffffff', padding:'64px 0 96px' }}>
+      <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
           <h2 className="font-serif font-bold text-slate-950 mb-8"

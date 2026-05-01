@@ -146,7 +146,7 @@ export default async function LoansPage() {
       </section>
 
       {/* LOAN TABLES */}
-      <section id="content" style={{ background:'#ffffff', padding:'64px 0 96px' }}>
+      <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <LoanTable loans={personal} title="Personal loans" />
           <LoanTable loans={home} title="Home mortgage loans" />
