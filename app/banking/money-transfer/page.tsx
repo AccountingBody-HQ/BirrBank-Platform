@@ -151,9 +151,9 @@ export default async function MoneyTransferPage() {
               <div className="mt-12">
                 <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
                 <h3 className="font-serif font-bold text-slate-950 mb-2" style={{ fontSize:'clamp(18px, 2vw, 24px)', letterSpacing:'-0.5px' }}>
-                  All {unrated.length} other licensed agencies
+                  All {agencyCount} NBE-licensed agencies
                 </h3>
-                <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Fee data not yet available. Click any agency to view their profile.</p>
+                <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Fee data not yet available for these agencies. Click any to view their profile.</p>
                 <div className="rounded-2xl overflow-hidden border border-slate-200">
                   <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                   {unrated.map((ag: any, i: number) => (
