@@ -12,6 +12,7 @@ import Navigation from '@/components/BirrBankNav'
 import Footer from '@/components/BirrBankFooter'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 
 // --- FONT ---
 const inter = Inter({
@@ -162,6 +163,17 @@ export default async function RootLayout({
 }) {
 
 
+  const supabase = createSupabaseAdminClient()
+  const { data: typeCounts } = await supabase
+    .schema('birrbank')
+    .from('institutions')
+    .select('type')
+
+  const counts: Record<string, number> = {}
+  for (const row of (typeCounts ?? [])) {
+    counts[row.type] = (counts[row.type] ?? 0) + 1
+  }
+
   return (
     <ClerkProvider>
       <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
@@ -170,7 +182,7 @@ export default async function RootLayout({
         </head>
         <body className="bg-white font-sans antialiased">
           <GoogleTagManagerBody />
-          <Navigation />
+          <Navigation institutionCounts={counts} />
           {children}
           <Footer />
           <Analytics />

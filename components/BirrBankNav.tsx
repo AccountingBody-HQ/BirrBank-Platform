@@ -4,58 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
-const NAV = [
-  { label: 'Banking', href: '/banking', sub: [
-    { label: 'Savings Rates',   href: '/banking/savings-rates',  desc: 'Compare all 32 banks' },
-    { label: 'Loan Comparison', href: '/banking/loans',          desc: 'Rates and terms' },
-    { label: 'FX Rates',        href: '/banking/fx-rates',       desc: 'NBE official rates' },
-    { label: 'Mobile Money',    href: '/banking/mobile-money',   desc: 'Payment operators' },
-    { label: 'Microfinance',    href: '/banking/microfinance',   desc: '55 MFIs covered' },
-    { label: 'Money Transfer',  href: '/banking/money-transfer', desc: 'Remittance comparison' },
-  ]},
-  { label: 'Institutions', href: '/institutions', sub: [
-    { label: 'All Institutions',    href: '/institutions',                      desc: '218 NBE-regulated entities' },
-    { label: 'Banks',               href: '/institutions?type=bank',             desc: '32 licensed commercial banks' },
-    { label: 'Microfinance',        href: '/institutions?type=microfinance',     desc: '55 MFIs nationwide' },
-    { label: 'Payment Operators',   href: '/institutions?type=payment_operator', desc: 'Mobile money and wallets' },
-    { label: 'FX Bureaux',          href: '/institutions?type=fx_bureau',        desc: '13 independent bureaux' },
-    { label: 'Money Transfer',      href: '/institutions?type=money_transfer',   desc: '65 remittance agencies' },
-    { label: 'Insurance Companies', href: '/institutions?type=insurer',          desc: '18 licensed insurers' },
-  ]},
-  { label: 'Insurance', href: '/insurance', sub: [
-    { label: 'Motor Insurance',    href: '/insurance/motor',        desc: 'Compare all providers' },
-    { label: 'Life Insurance',     href: '/insurance/life',         desc: '18 insurers' },
-    { label: 'Health Insurance',   href: '/insurance/health',       desc: 'Individual and group' },
-    { label: 'Property Insurance', href: '/insurance/property',     desc: 'Home and commercial' },
-    { label: 'Claims Guide',       href: '/insurance/claims-guide', desc: 'How to claim' },
-  ]},
-  { label: 'Markets', href: '/markets', sub: [
-    { label: 'Listed Equities', href: '/markets/equities',     desc: 'ESX listed companies' },
-    { label: 'IPO Pipeline',    href: '/markets/ipo-pipeline', desc: '45+ in pipeline' },
-    { label: 'Bonds & T-Bills', href: '/markets/bonds',        desc: 'Debt instruments' },
-    { label: 'How to Invest',   href: '/markets/how-to-invest',desc: 'Beginner guide' },
-  ]},
-  { label: 'Commodities', href: '/commodities', sub: [
-    { label: 'Coffee Prices', href: '/commodities/coffee',  desc: 'ECX daily prices' },
-    { label: 'Sesame Prices', href: '/commodities/sesame',  desc: 'Grade by grade' },
-    { label: 'Grain Prices',  href: '/commodities/grains',  desc: 'All grains' },
-    { label: 'How ECX Works', href: '/commodities/ecx-guide', desc: 'Exchange explained' },
-  ]},
-  { label: 'Intelligence', href: '/guides', sub: [
-    { label: 'Guides',       href: '/guides',       desc: '500+ financial guides' },
-    { label: 'Regulations',  href: '/regulations',  desc: 'NBE directives' },
-    { label: 'AI Assistant', href: '/ai-assistant', desc: 'Ask any question' },
-  ]},
-  { label: 'Diaspora', href: '/diaspora', sub: [
-    { label: 'Diaspora Hub',        href: '/diaspora',              desc: 'Everything for diaspora' },
-    { label: 'Send Money Home',     href: '/diaspora/remittance',   desc: 'Best transfer rates' },
-    { label: 'Invest from Abroad',  href: '/diaspora/invest',       desc: 'ESX and property' },
-    { label: 'Open a Bank Account', href: '/diaspora/bank-account', desc: 'SWIFT-enabled banks' },
-    { label: 'Track ETB Rates',     href: '/banking/fx-rates',      desc: 'Live FX dashboard' },
-  ]},
-]
+type NavProps = { institutionCounts?: Record<string, number> }
 
-function MobileSection({ item, onClose }: { item: typeof NAV[0]; onClose: () => void }) {
+function MobileSection({ item, onClose }: { item: { label: string; href: string; sub: { label: string; href: string; desc: string }[] }; onClose: () => void }) {
   const [open, setOpen] = useState(false)
   return (
     <div>
@@ -83,10 +34,64 @@ function MobileSection({ item, onClose }: { item: typeof NAV[0]; onClose: () => 
   )
 }
 
-export default function Navigation() {
+export default function Navigation({ institutionCounts = {} }: NavProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+
+  const c = institutionCounts
+  const totalInstitutions = Object.values(c).reduce((a, b) => a + b, 0)
+
+  const NAV = [
+    { label: 'Banking', href: '/banking', sub: [
+      { label: 'Savings Rates',   href: '/banking/savings-rates',  desc: 'Compare all 32 banks' },
+      { label: 'Loan Comparison', href: '/banking/loans',          desc: 'Rates and terms' },
+      { label: 'FX Rates',        href: '/banking/fx-rates',       desc: 'NBE official rates' },
+      { label: 'Mobile Money',    href: '/banking/mobile-money',   desc: 'Payment operators' },
+      { label: 'Microfinance',    href: '/banking/microfinance',   desc: `${c.microfinance || 58} MFIs covered` },
+      { label: 'Money Transfer',  href: '/banking/money-transfer', desc: 'Remittance comparison' },
+    ]},
+    { label: 'Institutions', href: '/institutions', sub: [
+      { label: 'All Institutions',    href: '/institutions',                      desc: `${totalInstitutions || 222} NBE-regulated entities` },
+      { label: 'Banks',               href: '/institutions?type=bank',             desc: `${c.bank || 32} licensed commercial banks` },
+      { label: 'Microfinance',        href: '/institutions?type=microfinance',     desc: `${c.microfinance || 58} MFIs nationwide` },
+      { label: 'Payment Operators',   href: '/institutions?type=payment_operator', desc: 'Mobile money and wallets' },
+      { label: 'FX Bureaux',          href: '/institutions?type=fx_bureau',        desc: `${c.fx_bureau || 13} independent bureaux` },
+      { label: 'Money Transfer',      href: '/institutions?type=money_transfer',   desc: `${c.money_transfer || 65} remittance agencies` },
+      { label: 'Insurance Companies', href: '/institutions?type=insurer',          desc: `${c.insurer || 18} licensed insurers` },
+    ]},
+    { label: 'Insurance', href: '/insurance', sub: [
+      { label: 'Motor Insurance',    href: '/insurance/motor',        desc: 'Compare all providers' },
+      { label: 'Life Insurance',     href: '/insurance/life',         desc: '18 insurers' },
+      { label: 'Health Insurance',   href: '/insurance/health',       desc: 'Individual and group' },
+      { label: 'Property Insurance', href: '/insurance/property',     desc: 'Home and commercial' },
+      { label: 'Claims Guide',       href: '/insurance/claims-guide', desc: 'How to claim' },
+    ]},
+    { label: 'Markets', href: '/markets', sub: [
+      { label: 'Listed Equities', href: '/markets/equities',      desc: 'ESX listed companies' },
+      { label: 'IPO Pipeline',    href: '/markets/ipo-pipeline',  desc: '45+ in pipeline' },
+      { label: 'Bonds & T-Bills', href: '/markets/bonds',         desc: 'Debt instruments' },
+      { label: 'How to Invest',   href: '/markets/how-to-invest', desc: 'Beginner guide' },
+    ]},
+    { label: 'Commodities', href: '/commodities', sub: [
+      { label: 'Coffee Prices', href: '/commodities/coffee',    desc: 'ECX daily prices' },
+      { label: 'Sesame Prices', href: '/commodities/sesame',    desc: 'Grade by grade' },
+      { label: 'Grain Prices',  href: '/commodities/grains',    desc: 'All grains' },
+      { label: 'How ECX Works', href: '/commodities/ecx-guide', desc: 'Exchange explained' },
+    ]},
+    { label: 'Intelligence', href: '/guides', sub: [
+      { label: 'Guides',       href: '/guides',       desc: '500+ financial guides' },
+      { label: 'Regulations',  href: '/regulations',  desc: 'NBE directives' },
+      { label: 'AI Assistant', href: '/ai-assistant', desc: 'Ask any question' },
+    ]},
+    { label: 'Diaspora', href: '/diaspora', sub: [
+      { label: 'Diaspora Hub',        href: '/diaspora',              desc: 'Everything for diaspora' },
+      { label: 'Send Money Home',     href: '/diaspora/remittance',   desc: 'Best transfer rates' },
+      { label: 'Invest from Abroad',  href: '/diaspora/invest',       desc: 'ESX and property' },
+      { label: 'Open a Bank Account', href: '/diaspora/bank-account', desc: 'SWIFT-enabled banks' },
+      { label: 'Track ETB Rates',     href: '/banking/fx-rates',      desc: 'Live FX dashboard' },
+    ]},
+  ]
 
   const isActive = (href: string) => pathname === '/' ? href === '/' : pathname.startsWith(href)
 
