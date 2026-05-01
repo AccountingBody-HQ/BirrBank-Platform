@@ -81,9 +81,11 @@ export default async function MotorInsurancePage() {
       {/* PRODUCTS TABLE */}
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">
-            {totalCount} products · Sorted by premium (low to high)
-          </p>
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Live data</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+            Motor insurance — premium comparison.
+          </h2>
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
@@ -145,6 +147,7 @@ export default async function MotorInsurancePage() {
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Buying guide</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             What to look for when choosing motor insurance.
@@ -193,6 +196,7 @@ export default async function MotorInsurancePage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Stay informed</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Motor premium changes, direct to your inbox.
