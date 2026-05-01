@@ -12,6 +12,7 @@ import Navigation from '@/components/BirrBankNav'
 import Footer from '@/components/BirrBankFooter'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent'
+import HashScroller from '@/components/HashScroller'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 
 // --- FONT ---
@@ -183,6 +184,7 @@ export default async function RootLayout({
         <body className="bg-white font-sans antialiased">
           <GoogleTagManagerBody />
           <Navigation institutionCounts={counts} />
+          <HashScroller />
           {children}
           <Footer />
           <Analytics />
