@@ -115,7 +115,7 @@ export default async function SavingsRatesPage() {
       </section>
 
       {/* COMPARISON TABLE */}
-      <section style={{ background: '#ffffff', padding: '64px 0 96px' }}>
+      <section id="content" style={{ background: '#ffffff', padding: '64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SavingsRatesTable rates={SAVINGS_RATES} totalBanks={totalBanks} totalInstitutions={totalInstitutions} />
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">

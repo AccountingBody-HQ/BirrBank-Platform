@@ -150,7 +150,7 @@ export default async function FxRatesPage() {
       </section>
 
       {/* MAIN RATES TABLE */}
-      <section style={{ background: '#ffffff', padding: '64px 0 80px' }}>
+      <section id="content" style={{ background: '#ffffff', padding: '64px 0 80px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* NBE TABLE */}
