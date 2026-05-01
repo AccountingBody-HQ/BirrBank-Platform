@@ -32,6 +32,20 @@ export default async function MoneyTransferPage() {
   const agencies = agenciesRes.data ?? []
   // Build slug->verified date map from fee table
   const transferDateMap: Record<string, string> = {}
+  // Slugs already shown in fee table — exclude from agencies list
+  const feeTableSlugs = new Set(transfers.map((t: any) => t.institution_slug))
+  // Normalised names from fee table — catches slug mismatches (e.g. western-union vs western-union-ethiopia)
+  const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+  const feeTableNames = new Set(transfers.map((t: any) => normalize(t.institutions?.name ?? t.institution_slug)))
+  // Filter agencies: exclude if slug matches OR if normalised name is a substring of a fee table name or vice versa
+  const filteredAgencies = agencies.filter((ag: any) => {
+    if (feeTableSlugs.has(ag.slug)) return false
+    const agNorm = normalize(ag.name)
+    for (const fName of feeTableNames) {
+      if (agNorm.includes(fName) || fName.includes(agNorm)) return false
+    }
+    return true
+  })
   for (const t of transfers) {
     if (t.institution_slug && t.last_verified_date && !transferDateMap[t.institution_slug]) {
       transferDateMap[t.institution_slug] = new Date(t.last_verified_date).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
@@ -156,12 +170,12 @@ export default async function MoneyTransferPage() {
             return (
               <div className="mt-12">
                 <h3 className="font-serif font-bold text-slate-950 mb-2" style={{ fontSize:'clamp(18px, 2vw, 24px)', letterSpacing:'-0.5px' }}>
-                  All {agencies.length} NBE-licensed money transfer agencies
+                  All {filteredAgencies.length} NBE-licensed money transfer agencies
                 </h3>
                 <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Click any agency to view their full profile. Fee comparison data above covers international remittance services.</p>
                 <div className="rounded-2xl overflow-hidden border border-slate-200">
                   <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-                  {agencies.map((ag: any, i: number) => (
+                  {filteredAgencies.map((ag: any, i: number) => (
                     <Link key={ag.slug} href={`/institutions/${ag.slug}`}
                       className="flex items-center justify-between hover:bg-slate-50 transition-colors"
                       style={{ padding:'12px 24px', borderBottom: i < agencies.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
