@@ -65,6 +65,7 @@ export default function Navigation({ institutionCounts = {} }: NavProps) {
       { label: 'Life Insurance',     href: '/insurance/life',         desc: '18 insurers' },
       { label: 'Health Insurance',   href: '/insurance/health',       desc: 'Individual and group' },
       { label: 'Property Insurance', href: '/insurance/property',     desc: 'Home and commercial' },
+      { label: 'Travel Insurance',    href: '/insurance/travel',       desc: 'International and domestic' },
       { label: 'Claims Guide',       href: '/insurance/claims-guide', desc: 'How to claim' },
     ]},
     { label: 'Markets', href: '/markets', sub: [
