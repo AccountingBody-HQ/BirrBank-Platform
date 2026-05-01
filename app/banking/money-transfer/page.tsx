@@ -145,23 +145,19 @@ export default async function MoneyTransferPage() {
 
           {/* Remaining agencies without fee data */}
           {agencies.length > 0 && (() => {
-            const ratedSlugs = new Set(transfers.map((t: any) => t.institution_slug))
-            const ratedNames = new Set(transfers.map((t: any) => (t.institutions?.name ?? t.institution_slug).toLowerCase()))
-            const unrated = agencies.filter((ag: any) => !ratedSlugs.has(ag.slug) && !ratedNames.has(ag.name.toLowerCase()))
-            if (unrated.length === 0) return null
+            if (agencies.length === 0) return null
             return (
               <div className="mt-12">
-                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
                 <h3 className="font-serif font-bold text-slate-950 mb-2" style={{ fontSize:'clamp(18px, 2vw, 24px)', letterSpacing:'-0.5px' }}>
-                  All other NBE-licensed agencies
+                  All {agencies.length} NBE-licensed money transfer agencies
                 </h3>
-                <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Fee data not yet available for these agencies. Click any to view their profile.</p>
+                <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Click any agency to view their full profile. Fee comparison data above covers international remittance services.</p>
                 <div className="rounded-2xl overflow-hidden border border-slate-200">
                   <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-                  {unrated.map((ag: any, i: number) => (
+                  {agencies.map((ag: any, i: number) => (
                     <Link key={ag.slug} href={`/institutions/${ag.slug}`}
                       className="flex items-center justify-between hover:bg-slate-50 transition-colors"
-                      style={{ padding:'12px 24px', borderBottom: i < unrated.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                      style={{ padding:'12px 24px', borderBottom: i < agencies.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
                       <div className="flex items-center gap-3">
                         <span className="font-semibold text-slate-800" style={{ fontSize:'14px' }}>{ag.name}</span>
                         {ag.headquarters && <span className="text-xs text-slate-400 hidden sm:inline">{ag.headquarters}</span>}
