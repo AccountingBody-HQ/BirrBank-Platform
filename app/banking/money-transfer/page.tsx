@@ -81,6 +81,11 @@ export default async function MoneyTransferPage() {
       {/* TRANSFER TABLE */}
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Live data</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
+            Remittance services — fee comparison.
+          </h2>
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
@@ -140,6 +145,7 @@ export default async function MoneyTransferPage() {
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Sending guide</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             How to find the cheapest remittance route.
