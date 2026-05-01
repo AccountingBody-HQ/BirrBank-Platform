@@ -95,14 +95,17 @@ export default function ClaimsGuidePage() {
       {CLAIM_TYPES.map(ct => (
         <section key={ct.type} style={{ background: CLAIM_TYPES.indexOf(ct) % 2 === 0 ? '#ffffff' : '#f8fafc', padding:'96px 0', borderTop:'1px solid #e2e8f0' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-10">
-              <h2 className="font-serif font-bold text-slate-950"
-                style={{ fontSize:'clamp(22px, 3vw, 34px)', letterSpacing:'-0.5px' }}>
-                {ct.type}
-              </h2>
-              <Link href={ct.href} className="text-xs font-bold" style={{ color:'#1D4ED8' }}>
-                Compare products <ChevronRight size={11} className="inline" />
-              </Link>
+            <div className="mb-10">
+              <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Step-by-step guide</p>
+              <div className="flex items-center gap-3">
+                <h2 className="font-serif font-bold text-slate-950"
+                  style={{ fontSize:'clamp(22px, 3vw, 34px)', letterSpacing:'-0.5px' }}>
+                  {ct.type}
+                </h2>
+                <Link href={ct.href} className="text-xs font-bold" style={{ color:'#1D4ED8' }}>
+                  Compare products <ChevronRight size={11} className="inline" />
+                </Link>
+              </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {ct.steps.map(s => (
@@ -141,6 +144,7 @@ export default function ClaimsGuidePage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Stay informed</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Insurance updates, direct to your inbox.
