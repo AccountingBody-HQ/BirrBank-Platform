@@ -79,7 +79,8 @@ export default async function MobileMoneyPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {operators.length > 0 ? operators.map((op: any, i: number) => (
-              <Link key={op.slug} href={`/institutions/${op.slug}`} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden block">
+              <div key={op.slug} className="relative bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden">
+                <Link href={`/institutions/${op.slug}`} className="absolute inset-0 z-0" aria-label={op.name} />
                 <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                 <div style={{ padding:'24px' }}>
                   <div className="flex items-center justify-between mb-3">
@@ -105,14 +106,14 @@ export default async function MobileMoneyPage() {
                       <div className="flex justify-between text-xs">
                         <span className="text-slate-400">Website</span>
                         <a href={op.website_url} target="_blank" rel="noopener noreferrer"
-                          className="font-semibold hover:underline flex items-center gap-1" style={{ color:'#1D4ED8' }}>
+                          className="relative z-10 font-semibold hover:underline flex items-center gap-1" style={{ color:'#1D4ED8' }}>
                           <Globe size={10} />{op.website_url.replace('https://','').replace('http://','').replace('www.','').split('/')[0]}
                         </a>
                       </div>
                     )}
                   </div>
                 </div>
-              </Link>
+              </div>
             )) : (
               <div className="col-span-3 py-10 text-center"><p className="text-slate-500 text-sm">Payment operator data is being populated.</p></div>
             )}
