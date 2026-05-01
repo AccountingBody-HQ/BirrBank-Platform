@@ -6,7 +6,7 @@ import { ChevronRight } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Microfinance Institutions in Ethiopia — All 55 NBE-Licensed MFIs | BirrBank',
+  title: 'Microfinance Institutions in Ethiopia — All NBE-Licensed MFIs | BirrBank',
   description: 'Every NBE-licensed microfinance institution in Ethiopia — micro-loans, rural finance, agricultural credit and SME lending.',
 }
 
@@ -14,7 +14,7 @@ export default async function MicrofinancePage() {
   const supabase = createSupabaseAdminClient()
   const [mfiRes, countRes] = await Promise.all([
     supabase.schema('birrbank').from('institutions').select('*').eq('type','microfinance').eq('is_active',true).order('name'),
-    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','microfinance').eq('is_active',true),
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','microfinance'),
   ])
   const mfis = mfiRes.data ?? []
   const mfiCount = countRes.count ?? 0
@@ -72,6 +72,11 @@ export default async function MicrofinancePage() {
       {/* MFI TABLE */}
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
+            All {mfiCount} licensed microfinance institutions.
+          </h2>
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
@@ -110,6 +115,7 @@ export default async function MicrofinancePage() {
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>MFI guide</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             What microfinance institutions offer.
