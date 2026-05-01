@@ -23,7 +23,7 @@ export default async function MoneyTransferPage() {
   const supabase = createSupabaseAdminClient()
   const [transferRes, agencyCountRes] = await Promise.all([
     supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current',true).order('fee_percentage',{ascending:true}),
-    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','money_transfer').eq('is_active',true),
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','money_transfer'),
   ])
   const transfers = transferRes.data ?? []
   const agencyCount = agencyCountRes.count ?? 0
