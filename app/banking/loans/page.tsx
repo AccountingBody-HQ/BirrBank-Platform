@@ -27,6 +27,7 @@ function fmtETB(val: number | null | undefined) {
 function LoanTable({ loans, title }: { loans: any[]; title: string }) {
   return (
     <div className="mb-12">
+      <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Live data</p>
       <h3 className="font-serif font-bold text-slate-950 mb-6"
         style={{ fontSize:'clamp(20px, 2.5vw, 26px)', letterSpacing:'-0.5px' }}>{title}</h3>
       <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
@@ -45,9 +46,10 @@ function LoanTable({ loans, title }: { loans: any[]; title: string }) {
                 style={i===0 ? { background:'#1D4ED8', color:'#fff' } : { background:'#f1f5f9', color:'#94a3b8' }}>
                 {i===0 ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}
               </div>
-              <p className={'font-bold ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
+              <Link href={`/institutions/${r.institutions?.slug ?? r.institution_slug}`}
+                className={'font-bold hover:underline ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
                 {r.institutions?.name ?? r.institution_slug}
-              </p>
+              </Link>
               <p className={'font-mono font-black ' + (i===0 ? 'text-blue-700' : 'text-slate-800')} style={{ fontSize:i===0?'22px':'16px', letterSpacing:'-0.5px' }}>
                 {fmt(r.min_rate)}%
               </p>
@@ -58,7 +60,7 @@ function LoanTable({ loans, title }: { loans: any[]; title: string }) {
             </div>
             <div className="sm:hidden flex items-center gap-3" style={{ padding:'13px 16px' }}>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-slate-800 text-sm">{r.institutions?.name ?? r.institution_slug}</p>
+                <Link href={`/institutions/${r.institutions?.slug ?? r.institution_slug}`} className="font-bold text-slate-800 text-sm hover:underline">{r.institutions?.name ?? r.institution_slug}</Link>
                 <p className="text-xs text-slate-400">{r.max_tenure_months ? r.max_tenure_months+' months max' : '—'} · {fmtETB(r.max_amount_etb)}</p>
               </div>
               <p className="font-mono font-black text-slate-800 shrink-0" style={{ fontSize:'18px' }}>{fmt(r.min_rate)}%</p>
@@ -80,9 +82,9 @@ export default async function LoansPage() {
   const supabase = createSupabaseAdminClient()
 
   const [personalRes, homeRes, businessRes, bankCountRes] = await Promise.all([
-    supabase.schema('birrbank').from('loan_rates').select('*, institutions(name)').eq('loan_type','personal').eq('is_current',true).order('min_rate',{ascending:true}),
-    supabase.schema('birrbank').from('loan_rates').select('*, institutions(name)').eq('loan_type','home_mortgage').eq('is_current',true).order('min_rate',{ascending:true}),
-    supabase.schema('birrbank').from('loan_rates').select('*, institutions(name)').eq('loan_type','business').eq('is_current',true).order('min_rate',{ascending:true}),
+    supabase.schema('birrbank').from('loan_rates').select('*, institution_slug, institutions(name, slug)').eq('loan_type','personal').eq('is_current',true).order('min_rate',{ascending:true}),
+    supabase.schema('birrbank').from('loan_rates').select('*, institution_slug, institutions(name, slug)').eq('loan_type','home_mortgage').eq('is_current',true).order('min_rate',{ascending:true}),
+    supabase.schema('birrbank').from('loan_rates').select('*, institution_slug, institutions(name, slug)').eq('loan_type','business').eq('is_current',true).order('min_rate',{ascending:true}),
     supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','bank').eq('is_active',true),
   ])
 
@@ -158,7 +160,8 @@ export default async function LoansPage() {
       {/* EMI CALCULATOR */}
       <section style={{ background:'#f8fafc', padding:'0 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-serif font-bold text-slate-950 mb-4 pt-16"
+          <p className="text-xs font-black uppercase tracking-widest mb-3 pt-16" style={{ color: '#1D4ED8' }}>EMI calculator</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-4"
             style={{ fontSize:'clamp(26px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
             Calculate your monthly repayment.
           </h2>
@@ -172,6 +175,7 @@ export default async function LoansPage() {
       {/* GUIDE */}
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Borrowing guide</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             How to choose the best loan in Ethiopia.
