@@ -177,31 +177,7 @@ export default async function MoneyTransferPage() {
         </div>
       </section>
 
-      {/* AGENCIES GRID */}
-      {agencies.length > 0 && (
-      <section style={{ background:'#f8fafc', padding:'64px 0 96px' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
-          <h2 className="font-serif font-bold text-slate-950 mb-8"
-            style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
-            All licensed money transfer agencies.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {agencies.map((ag: any) => (
-              <Link key={ag.slug} href={`/institutions/${ag.slug}`}
-                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden block">
-                <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-                <div style={{ padding:'20px 24px' }}>
-                  <p className="font-bold text-slate-900 mb-1" style={{ fontSize:'15px' }}>{ag.name}</p>
-                  {ag.headquarters && <p className="text-xs text-slate-400 mb-2">{ag.headquarters}</p>}
-                  {ag.description && <p className="text-sm text-slate-500 line-clamp-2" style={{ lineHeight:1.7 }}>{ag.description}</p>}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-      )}
+
 
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
