@@ -91,6 +91,13 @@ export default async function FxRatesPage() {
   const bestGbpBuy  = Math.max(...BANK_RATES.map((r: any) => parseNum(r.gbp_buy)  ?? -Infinity))
   const bestGbpSell = Math.min(...BANK_RATES.map((r: any) => parseNum(r.gbp_sell) ?? Infinity))
 
+  // Most recent bank scraper date for display
+  const bankDate = (bankRatesRes.data ?? []).length > 0
+    ? formatDate((bankRatesRes.data ?? []).reduce((latest: any, r: any) =>
+        r.rate_date > latest.rate_date ? r : latest
+      ).rate_date)
+    : null
+
   const nbeUSD = nbeMap['USD'], nbeEUR = nbeMap['EUR'], nbeGBP = nbeMap['GBP']
   const nbeRow = [
     fmt(nbeUSD?.buying_rate ?? null), fmt(nbeUSD?.selling_rate ?? null),
@@ -233,6 +240,14 @@ export default async function FxRatesPage() {
                 </h2>
                 <p className="text-slate-500 mt-1" style={{ fontSize: '13px' }}>Sell rate is what you pay when buying foreign currency. Buy rate is what you receive when selling.</p>
               </div>
+              {bankDate && (
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+                  <span className="text-xs font-bold text-slate-600 bg-slate-100 rounded-full px-3 py-1.5">
+                    {bankDate}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
