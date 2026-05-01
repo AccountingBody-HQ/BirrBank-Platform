@@ -21,12 +21,14 @@ function fmtETB(val: number | null | undefined) {
 
 export default async function MoneyTransferPage() {
   const supabase = createSupabaseAdminClient()
-  const [transferRes, agencyCountRes] = await Promise.all([
+  const [transferRes, agencyCountRes, agenciesRes] = await Promise.all([
     supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current',true).order('fee_percentage',{ascending:true}),
     supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','money_transfer'),
+    supabase.schema('birrbank').from('institutions').select('slug,name,description,website_url,headquarters,operational_status').eq('type','money_transfer').eq('is_active',true).order('name'),
   ])
   const transfers = transferRes.data ?? []
   const agencyCount = agencyCountRes.count ?? 0
+  const agencies = agenciesRes.data ?? []
 
   return (
     <main className="bg-white flex-1">
@@ -99,9 +101,9 @@ export default async function MoneyTransferPage() {
                 <div className="hidden sm:grid items-start"
                   style={{ gridTemplateColumns:'1fr 110px 130px 110px 130px 110px', padding:i===0?'18px 24px':'14px 24px' }}>
                   <div>
-                    <p className={'font-bold ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
+                    <Link href={`/institutions/${t.institution_slug}`} className={'font-bold hover:underline ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
                       {t.institutions?.name ?? t.institution_slug}
-                    </p>
+                    </Link>
                     {t.notes && <p className="text-xs text-slate-400 mt-0.5">{t.notes}</p>}
                     {t.destination_countries && (
                       <div className="flex flex-wrap gap-1 mt-2">
@@ -122,7 +124,7 @@ export default async function MoneyTransferPage() {
                 </div>
                 <div className="sm:hidden" style={{ padding:'14px 16px' }}>
                   <div className="flex items-start justify-between gap-3 mb-1">
-                    <p className="font-bold text-slate-800 text-sm">{t.institutions?.name ?? t.institution_slug}</p>
+                    <Link href={`/institutions/${t.institution_slug}`} className="font-bold text-slate-800 text-sm hover:underline">{t.institutions?.name ?? t.institution_slug}</Link>
                     <p className="font-mono font-bold text-slate-800 shrink-0">{t.fee_percentage ? Number(t.fee_percentage).toFixed(2)+'%' : '—'}</p>
                   </div>
                   <p className="text-xs text-slate-400">{t.processing_hours ? t.processing_hours+'h processing' : '—'} · {fmtETB(t.min_amount_etb)} min</p>
@@ -141,6 +143,32 @@ export default async function MoneyTransferPage() {
           </p>
         </div>
       </section>
+
+      {/* AGENCIES GRID */}
+      {agencies.length > 0 && (
+      <section style={{ background:'#f8fafc', padding:'64px 0 96px' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
+            All licensed money transfer agencies.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {agencies.map((ag: any) => (
+              <Link key={ag.slug} href={`/institutions/${ag.slug}`}
+                className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden block">
+                <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                <div style={{ padding:'20px 24px' }}>
+                  <p className="font-bold text-slate-900 mb-1" style={{ fontSize:'15px' }}>{ag.name}</p>
+                  {ag.headquarters && <p className="text-xs text-slate-400 mb-2">{ag.headquarters}</p>}
+                  {ag.description && <p className="text-sm text-slate-500 line-clamp-2" style={{ lineHeight:1.7 }}>{ag.description}</p>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+      )}
 
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
