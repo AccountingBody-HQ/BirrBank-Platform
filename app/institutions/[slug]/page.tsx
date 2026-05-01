@@ -130,14 +130,10 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                 <p className="text-slate-400 mb-6" style={{ fontSize: '15px', lineHeight: 1.8, maxWidth: '540px' }}>{inst.description}</p>
               )}
               <div className="flex flex-wrap gap-3">
-                <Link href="/banking/savings-rates"
-                  className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', width: 200, background: '#1D4ED8', color: '#fff' }}>
+                <Link href="/banking/savings-rates" className="hero-btn hero-btn-primary">
                   Compare all rates
                 </Link>
-                <Link href="/institutions"
-                  className="font-bold rounded-full transition-all"
-                  style={{ fontSize: 15, padding: '14px 32px', width: 200, border: '1.5px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+                <Link href="/institutions" className="hero-btn hero-btn-secondary">
                   All institutions
                 </Link>
               </div>
@@ -154,7 +150,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                   { label: 'Type', value: typeLabel },
                   { label: 'Licence date', value: fmtDate(inst.nbe_licence_date) },
                   { label: 'SWIFT', value: inst.swift_code ?? '—' },
-                  { label: 'Coverage', value: inst.coverage_level === 'full' ? 'Verified' : inst.coverage_level === 'partial' ? 'Partial' : 'Basic' },
+                  { label: 'Coverage', value: inst.coverage_level === 'full' ? 'Verified' : inst.coverage_level === 'partial' ? 'Partial' : 'Profiled' },
                 ].map(row => (
                   <div key={row.label} className="flex items-center justify-between px-5 py-3">
                     <span className="text-xs" style={{ color: '#475569' }}>{row.label}</span>
@@ -436,10 +432,13 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
         <section style={{ background: '#f8fafc', padding: '80px 0', borderTop: '1px solid #e2e8f0' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-8">
-              <h2 className="font-serif font-bold text-slate-950"
-                style={{ fontSize: 'clamp(20px, 2.5vw, 30px)', letterSpacing: '-0.5px' }}>
-                Related institutions
-              </h2>
+              <div>
+                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>More like this</p>
+                <h2 className="font-serif font-bold text-slate-950"
+                  style={{ fontSize: 'clamp(20px, 2.5vw, 30px)', letterSpacing: '-0.5px' }}>
+                  Related institutions
+                </h2>
+              </div>
               <Link href={`/institutions?type=${inst.type}`} className="flex items-center gap-1 text-sm font-bold transition-colors" style={{ color: '#1D4ED8' }}>
                 View all <ChevronRight size={14} />
               </Link>
