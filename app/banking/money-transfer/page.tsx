@@ -24,7 +24,8 @@ export default async function MoneyTransferPage() {
   const [transferRes, agencyCountRes, agenciesRes] = await Promise.all([
     supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current',true).order('fee_percentage',{ascending:true}),
     supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('type','money_transfer'),
-    supabase.schema('birrbank').from('institutions').select('slug,name,description,website_url,headquarters,operational_status').eq('type','money_transfer').eq('is_active',true).order('name'),
+    supabase.schema('birrbank').from('institutions').select('slug,name,headquarters').eq('type','money_transfer').eq('is_active',true).order('name'),
+
   ])
   const transfers = transferRes.data ?? []
   const agencyCount = agencyCountRes.count ?? 0
@@ -145,13 +146,14 @@ export default async function MoneyTransferPage() {
           {/* Remaining agencies without fee data */}
           {agencies.length > 0 && (() => {
             const ratedSlugs = new Set(transfers.map((t: any) => t.institution_slug))
-            const unrated = agencies.filter((ag: any) => !ratedSlugs.has(ag.slug))
+            const ratedNames = new Set(transfers.map((t: any) => (t.institutions?.name ?? t.institution_slug).toLowerCase()))
+            const unrated = agencies.filter((ag: any) => !ratedSlugs.has(ag.slug) && !ratedNames.has(ag.name.toLowerCase()))
             if (unrated.length === 0) return null
             return (
               <div className="mt-12">
                 <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
                 <h3 className="font-serif font-bold text-slate-950 mb-2" style={{ fontSize:'clamp(18px, 2vw, 24px)', letterSpacing:'-0.5px' }}>
-                  All {agencyCount} NBE-licensed agencies
+                  All other NBE-licensed agencies
                 </h3>
                 <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Fee data not yet available for these agencies. Click any to view their profile.</p>
                 <div className="rounded-2xl overflow-hidden border border-slate-200">
