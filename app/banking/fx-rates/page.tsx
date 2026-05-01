@@ -82,6 +82,15 @@ export default async function FxRatesPage() {
   }
   const BANK_RATES = Object.values(bankMap)
 
+  // Compute best rates per column (best buy = highest, best sell = lowest)
+  const parseNum = (v: string | undefined) => v && v !== '\u2014' ? parseFloat(v) : null
+  const bestUsdBuy  = Math.max(...BANK_RATES.map((r: any) => parseNum(r.usd_buy)  ?? -Infinity))
+  const bestUsdSell = Math.min(...BANK_RATES.map((r: any) => parseNum(r.usd_sell) ?? Infinity))
+  const bestEurBuy  = Math.max(...BANK_RATES.map((r: any) => parseNum(r.eur_buy)  ?? -Infinity))
+  const bestEurSell = Math.min(...BANK_RATES.map((r: any) => parseNum(r.eur_sell) ?? Infinity))
+  const bestGbpBuy  = Math.max(...BANK_RATES.map((r: any) => parseNum(r.gbp_buy)  ?? -Infinity))
+  const bestGbpSell = Math.min(...BANK_RATES.map((r: any) => parseNum(r.gbp_sell) ?? Infinity))
+
   const nbeUSD = nbeMap['USD'], nbeEUR = nbeMap['EUR'], nbeGBP = nbeMap['GBP']
   const nbeRow = [
     fmt(nbeUSD?.buying_rate ?? null), fmt(nbeUSD?.selling_rate ?? null),
@@ -260,22 +269,57 @@ export default async function FxRatesPage() {
                         <span className="text-xs font-bold text-blue-600">Daily</span>
                       </td>
                     </tr>
-                    {BANK_RATES.length > 0 ? BANK_RATES.map((r: any, i: number) => (
+                    {BANK_RATES.length > 0 ? BANK_RATES.map((r: any, i: number) => {
+                      const isBestUsdBuy  = parseNum(r.usd_buy)  === bestUsdBuy
+                      const isBestUsdSell = parseNum(r.usd_sell) === bestUsdSell
+                      const isBestEurBuy  = parseNum(r.eur_buy)  === bestEurBuy
+                      const isBestEurSell = parseNum(r.eur_sell) === bestEurSell
+                      const isBestGbpBuy  = parseNum(r.gbp_buy)  === bestGbpBuy
+                      const isBestGbpSell = parseNum(r.gbp_sell) === bestGbpSell
+                      const bestCell = { background: '#f0fdf4', color: '#15803d', fontWeight: 800 }
+                      const normalBuyCell  = { color: '#475569', fontWeight: 400 }
+                      const normalSellCell = { color: '#0f172a', fontWeight: 700 }
+                      return (
                       <tr key={r.slug} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#ffffff' : '#fafbfc' }}>
                         <td style={{ padding: '13px 20px' }}>
                           <Link href={`/institutions/${r.slug}`} className="font-semibold text-slate-800 hover:text-blue-700 transition-colors" style={{ fontSize: '14px' }}>
                             {r.bank}
                           </Link>
                         </td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.usd_buy ?? '\u2014'}</span></td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.usd_sell ?? '\u2014'}</span></td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.eur_buy ?? '\u2014'}</span></td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.eur_sell ?? '\u2014'}</span></td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.gbp_buy ?? '\u2014'}</span></td>
-                        <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.gbp_sell ?? '\u2014'}</span></td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestUsdBuy ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '13px', ...(isBestUsdBuy ? bestCell : normalBuyCell) }}>
+                            {r.usd_buy ?? '\u2014'}{isBestUsdBuy && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9650;</span>}
+                          </span>
+                        </td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestUsdSell ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '14px', ...(isBestUsdSell ? bestCell : normalSellCell) }}>
+                            {r.usd_sell ?? '\u2014'}{isBestUsdSell && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9660;</span>}
+                          </span>
+                        </td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestEurBuy ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '13px', ...(isBestEurBuy ? bestCell : normalBuyCell) }}>
+                            {r.eur_buy ?? '\u2014'}{isBestEurBuy && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9650;</span>}
+                          </span>
+                        </td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestEurSell ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '14px', ...(isBestEurSell ? bestCell : normalSellCell) }}>
+                            {r.eur_sell ?? '\u2014'}{isBestEurSell && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9660;</span>}
+                          </span>
+                        </td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestGbpBuy ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '13px', ...(isBestGbpBuy ? bestCell : normalBuyCell) }}>
+                            {r.gbp_buy ?? '\u2014'}{isBestGbpBuy && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9650;</span>}
+                          </span>
+                        </td>
+                        <td className="text-right" style={{ padding: '13px 16px', ...(isBestGbpSell ? { background: '#f0fdf4' } : {}) }}>
+                          <span className="font-mono" style={{ fontSize: '14px', ...(isBestGbpSell ? bestCell : normalSellCell) }}>
+                            {r.gbp_sell ?? '\u2014'}{isBestGbpSell && <span className="ml-1 text-xs" style={{ color: '#16a34a' }}>&#9660;</span>}
+                          </span>
+                        </td>
                         <td className="text-right" style={{ padding: '13px 16px' }}><span className="text-xs text-slate-400">{r.verified}</span></td>
                       </tr>
-                    )) : (
+                      )
+                    }) : (
                       <tr>
                         <td colSpan={8} className="text-center py-10">
                           <p className="text-sm text-slate-400">Per-bank rates are updated daily. Check back soon.</p>
