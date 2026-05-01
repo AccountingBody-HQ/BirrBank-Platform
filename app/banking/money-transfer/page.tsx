@@ -141,6 +141,39 @@ export default async function MoneyTransferPage() {
           <p className="text-xs text-slate-400 mt-5 text-center leading-relaxed">
             Transfer fees and exchange rates may vary. Always check the actual cost at the point of transfer. BirrBank is not a money transfer service.
           </p>
+
+          {/* Remaining agencies without fee data */}
+          {agencies.length > 0 && (() => {
+            const ratedSlugs = new Set(transfers.map((t: any) => t.institution_slug))
+            const unrated = agencies.filter((ag: any) => !ratedSlugs.has(ag.slug))
+            if (unrated.length === 0) return null
+            return (
+              <div className="mt-12">
+                <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
+                <h3 className="font-serif font-bold text-slate-950 mb-2" style={{ fontSize:'clamp(18px, 2vw, 24px)', letterSpacing:'-0.5px' }}>
+                  All {unrated.length} other licensed agencies
+                </h3>
+                <p className="text-slate-500 mb-6" style={{ fontSize:'13px' }}>Fee data not yet available. Click any agency to view their profile.</p>
+                <div className="rounded-2xl overflow-hidden border border-slate-200">
+                  <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
+                  {unrated.map((ag: any, i: number) => (
+                    <Link key={ag.slug} href={`/institutions/${ag.slug}`}
+                      className="flex items-center justify-between hover:bg-slate-50 transition-colors"
+                      style={{ padding:'12px 24px', borderBottom: i < unrated.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold text-slate-800" style={{ fontSize:'14px' }}>{ag.name}</span>
+                        {ag.headquarters && <span className="text-xs text-slate-400 hidden sm:inline">{ag.headquarters}</span>}
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs text-slate-400">Rate not yet available</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </section>
 
