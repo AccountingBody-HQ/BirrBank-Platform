@@ -66,8 +66,8 @@ export default async function InstitutionsPage() {
           <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[
               { value: String(totalCount), label: 'NBE-licensed institutions' },
-              { value: String(activeCount), label: 'Fully profiled' },
-              { value: '8', label: 'Institution categories' },
+              { value: String(activeCount), label: 'Active institutions' },
+              { value: String(Object.keys(typeCounts).length), label: 'Institution categories' },
             ].map(s => (
               <div key={s.label} className="text-center py-6 border-r border-slate-800 last:border-r-0">
                 <div className="font-mono font-black text-white mb-1"
@@ -82,6 +82,11 @@ export default async function InstitutionsPage() {
       {/* INTERACTIVE SECTION */}
       <section style={{ padding: '64px 0 96px', background: '#ffffff' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
+          <h2 className="font-serif font-bold text-slate-950 mb-8"
+            style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.5px' }}>
+            Browse and filter all licensed institutions.
+          </h2>
           <Suspense fallback={<div className="text-center py-20 text-slate-400 text-sm">Loading...</div>}>
             <InstitutionsClient institutions={all} />
           </Suspense>
