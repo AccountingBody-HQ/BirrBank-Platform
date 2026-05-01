@@ -30,6 +30,13 @@ export default async function MoneyTransferPage() {
   const transfers = transferRes.data ?? []
   const agencyCount = agencyCountRes.count ?? 0
   const agencies = agenciesRes.data ?? []
+  // Build slug->verified date map from fee table
+  const transferDateMap: Record<string, string> = {}
+  for (const t of transfers) {
+    if (t.institution_slug && t.last_verified_date && !transferDateMap[t.institution_slug]) {
+      transferDateMap[t.institution_slug] = new Date(t.last_verified_date).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+    }
+  }
 
   return (
     <main className="bg-white flex-1">
@@ -163,7 +170,11 @@ export default async function MoneyTransferPage() {
                         {ag.headquarters && <span className="text-xs text-slate-400 hidden sm:inline">{ag.headquarters}</span>}
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs text-slate-400">Rate not yet available</span>
+                        {transferDateMap[ag.slug] ? (
+                          <span className="text-xs font-semibold text-emerald-600">Verified {transferDateMap[ag.slug]}</span>
+                        ) : (
+                          <span className="text-xs text-slate-400">Rate not yet available</span>
+                        )}
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
                     </Link>
