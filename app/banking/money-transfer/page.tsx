@@ -35,17 +35,8 @@ export default async function MoneyTransferPage() {
   // Slugs already shown in fee table — exclude from agencies list
   const feeTableSlugs = new Set(transfers.map((t: any) => t.institution_slug))
   // Normalised names from fee table — catches slug mismatches (e.g. western-union vs western-union-ethiopia)
-  const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
-  const feeTableNames = new Set(transfers.map((t: any) => normalize(t.institutions?.name ?? t.institution_slug)))
-  // Filter agencies: exclude if slug matches OR if normalised name is a substring of a fee table name or vice versa
-  const filteredAgencies = agencies.filter((ag: any) => {
-    if (feeTableSlugs.has(ag.slug)) return false
-    const agNorm = normalize(ag.name)
-    for (const fName of feeTableNames) {
-      if (agNorm.includes(fName) || fName.includes(agNorm)) return false
-    }
-    return true
-  })
+  // Simple slug exclusion — database is clean, no fuzzy matching needed
+  const filteredAgencies = agencies.filter((ag: any) => !feeTableSlugs.has(ag.slug))
   for (const t of transfers) {
     if (t.institution_slug && t.last_verified_date && !transferDateMap[t.institution_slug]) {
       transferDateMap[t.institution_slug] = new Date(t.last_verified_date).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
