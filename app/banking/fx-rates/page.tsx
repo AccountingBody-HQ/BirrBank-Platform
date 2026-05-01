@@ -23,10 +23,6 @@ function fmt(val: number | null) {
   if (val == null) return '\u2014'
   return Number(val).toFixed(4)
 }
-function fmt2(val: number | null) {
-  if (val == null) return '\u2014'
-  return Number(val).toFixed(4)
-}
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
 }
@@ -34,7 +30,7 @@ function formatDate(dateStr: string) {
 export default async function FxRatesPage() {
   const supabase = createSupabaseAdminClient()
 
-  const [nbeRes, bankRatesRes] = await Promise.all([
+  const [nbeRes, bankRatesRes, instRes] = await Promise.all([
     supabase.schema('birrbank').from('exchange_rates')
       .select('currency_code, buying_rate, selling_rate, weighted_average, rate_date')
       .eq('institution_slug', 'nbe')
@@ -42,12 +38,21 @@ export default async function FxRatesPage() {
       .order('currency_code')
       .limit(40),
     supabase.schema('birrbank').from('exchange_rates')
-      .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date, institutions(name)')
+      .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date')
       .neq('institution_slug', 'nbe')
       .order('rate_date', { ascending: false })
       .in('currency_code', ['USD','EUR','GBP'])
       .limit(200),
+    supabase.schema('birrbank').from('institutions')
+      .select('slug, name')
+      .eq('is_active', true),
   ])
+
+  // Build slug -> name lookup
+  const instNames: Record<string, string> = {}
+  for (const inst of (instRes.data ?? [])) {
+    instNames[inst.slug] = inst.name
+  }
 
   // Dedupe NBE — one per currency (most recent)
   const nbeMap: Record<string, any> = {}
@@ -69,19 +74,19 @@ export default async function FxRatesPage() {
   const bankMap: Record<string, any> = {}
   for (const r of (bankRatesRes.data ?? [])) {
     const slug = r.institution_slug
-    if (!bankMap[slug]) bankMap[slug] = { bank: (r as any).institutions?.name ?? slug, verified: formatDate(r.rate_date) }
+    if (!bankMap[slug]) bankMap[slug] = { bank: instNames[slug] ?? slug, slug, verified: formatDate(r.rate_date) }
     if (!bankMap[slug][r.currency_code.toLowerCase() + '_buy']) {
-      bankMap[slug][r.currency_code.toLowerCase() + '_buy'] = fmt2(r.buying_rate)
-      bankMap[slug][r.currency_code.toLowerCase() + '_sell'] = fmt2(r.selling_rate)
+      bankMap[slug][r.currency_code.toLowerCase() + '_buy'] = fmt(r.buying_rate)
+      bankMap[slug][r.currency_code.toLowerCase() + '_sell'] = fmt(r.selling_rate)
     }
   }
   const BANK_RATES = Object.values(bankMap)
 
   const nbeUSD = nbeMap['USD'], nbeEUR = nbeMap['EUR'], nbeGBP = nbeMap['GBP']
   const nbeRow = [
-    fmt2(nbeUSD?.buying_rate ?? null), fmt2(nbeUSD?.selling_rate ?? null),
-    fmt2(nbeEUR?.buying_rate ?? null), fmt2(nbeEUR?.selling_rate ?? null),
-    fmt2(nbeGBP?.buying_rate ?? null), fmt2(nbeGBP?.selling_rate ?? null),
+    fmt(nbeUSD?.buying_rate ?? null), fmt(nbeUSD?.selling_rate ?? null),
+    fmt(nbeEUR?.buying_rate ?? null), fmt(nbeEUR?.selling_rate ?? null),
+    fmt(nbeGBP?.buying_rate ?? null), fmt(nbeGBP?.selling_rate ?? null),
   ]
 
   const displayDate = nbeDate
@@ -135,6 +140,7 @@ export default async function FxRatesPage() {
           {/* NBE TABLE */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
+              <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>Live data</p>
               <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.5px' }}>
                 NBE indicative rates
               </h2>
@@ -212,6 +218,7 @@ export default async function FxRatesPage() {
           <div className="mt-16">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <div>
+                <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: '#1D4ED8' }}>Compare banks</p>
                 <h2 className="font-serif font-bold text-slate-950" style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.5px' }}>
                   USD, EUR &amp; GBP &#8212; all banks compared
                 </h2>
@@ -254,9 +261,11 @@ export default async function FxRatesPage() {
                       </td>
                     </tr>
                     {BANK_RATES.length > 0 ? BANK_RATES.map((r: any, i: number) => (
-                      <tr key={r.bank} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#ffffff' : '#fafbfc' }}>
+                      <tr key={r.slug} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#ffffff' : '#fafbfc' }}>
                         <td style={{ padding: '13px 20px' }}>
-                          <span className="font-semibold text-slate-800" style={{ fontSize: '14px' }}>{r.bank}</span>
+                          <Link href={`/institutions/${r.slug}`} className="font-semibold text-slate-800 hover:text-blue-700 transition-colors" style={{ fontSize: '14px' }}>
+                            {r.bank}
+                          </Link>
                         </td>
                         <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono text-slate-600" style={{ fontSize: '13px' }}>{r.usd_buy ?? '\u2014'}</span></td>
                         <td className="text-right" style={{ padding: '13px 16px' }}><span className="font-mono font-bold text-slate-800" style={{ fontSize: '14px' }}>{r.usd_sell ?? '\u2014'}</span></td>
