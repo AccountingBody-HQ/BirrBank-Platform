@@ -72,13 +72,14 @@ export default async function MobileMoneyPage() {
       {/* OPERATORS GRID */}
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>NBE registry</p>
           <h2 className="font-serif font-bold text-slate-950 mb-8"
             style={{ fontSize:'clamp(22px, 3vw, 36px)', letterSpacing:'-0.5px' }}>
             All {operatorCount} licensed payment operators
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {operators.length > 0 ? operators.map((op: any, i: number) => (
-              <div key={op.slug} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden">
+              <Link key={op.slug} href={`/institutions/${op.slug}`} className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden block">
                 <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                 <div style={{ padding:'24px' }}>
                   <div className="flex items-center justify-between mb-3">
@@ -111,7 +112,7 @@ export default async function MobileMoneyPage() {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             )) : (
               <div className="col-span-3 py-10 text-center"><p className="text-slate-500 text-sm">Payment operator data is being populated.</p></div>
             )}
@@ -123,6 +124,7 @@ export default async function MobileMoneyPage() {
       {/* GUIDE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#1D4ED8' }}>Platform guide</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             Ethiopian mobile money explained.
