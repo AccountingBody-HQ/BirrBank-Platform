@@ -127,7 +127,7 @@ export default function Navigation({ institutionCounts = {} }: NavProps) {
                   {item.label} <ChevronDown size={12} className={'transition-transform ' + (openDropdown === item.label ? 'rotate-180' : '')} />
                 </Link>
                 {openDropdown === item.label && (
-                  <div className="absolute left-0 top-full pt-2 w-64 z-50">
+                  <div className="absolute left-0 top-full pt-2 w-64 z-50 dropdown-slide">
                     <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, boxShadow: '0 20px 48px rgba(0,0,0,0.5)', padding: '6px 0' }}>
                       {item.sub.map(s => (
                         <Link key={s.href} href={s.href}
