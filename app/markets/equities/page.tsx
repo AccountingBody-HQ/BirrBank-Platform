@@ -75,7 +75,7 @@ export default async function EquitiesPage() {
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{securities.length} equities · End-of-day</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{securities.length} equities · ESX listed</p>
             <span className="text-xs font-semibold text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5">
               Prices updated manually
             </span>
