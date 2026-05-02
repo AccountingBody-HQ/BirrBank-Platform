@@ -59,7 +59,7 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
     supabase.schema('birrbank').from('savings_rates').select('*').eq('institution_slug', slug).eq('is_current', true).order('annual_rate', { ascending: false }),
     supabase.schema('birrbank').from('loan_rates').select('*').eq('institution_slug', slug).eq('is_current', true).order('min_rate', { ascending: true }),
     supabase.schema('birrbank').from('digital_services').select('*').eq('institution_slug', slug).single(),
-    supabase.schema('birrbank').from('exchange_rates').select('*').eq('institution_slug', slug).in('currency_code', ['USD','EUR','GBP']).order('rate_date', { ascending: false }).limit(6),
+    supabase.schema('birrbank').from('exchange_rates').select('*').eq('institution_slug', slug).in('currency_code', ['USD','EUR','GBP']).order('rate_date', { ascending: false }).limit(12),
     inst.is_listed_on_esx ? supabase.schema('birrbank').from('listed_securities').select('*').eq('institution_slug', slug).single() : Promise.resolve({ data: null }),
     supabase.schema('birrbank').from('institutions').select('slug, name, type, coverage_level, nbe_licence_date, branches_count').eq('type', inst.type).eq('is_active', true).neq('slug', slug).limit(4),
   ])
@@ -67,8 +67,15 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
   const savings = savingsRes.data ?? []
   const loans = loanRes.data ?? []
   const digital = digitalRes.data
-  const fxMap: Record<string,any> = {}
-  for (const r of (fxRes.data ?? [])) { if (!fxMap[r.currency_code]) fxMap[r.currency_code] = r }
+  // Build fxMap: { USD: { cash: {...}, transactional: {...} }, ... }
+  const fxMap: Record<string, { cash?: any; transactional?: any }> = {}
+  for (const r of (fxRes.data ?? [])) {
+    if (!fxMap[r.currency_code]) fxMap[r.currency_code] = {}
+    const rtype = r.rate_type ?? 'transactional'
+    if (!fxMap[r.currency_code][rtype as 'cash' | 'transactional']) {
+      fxMap[r.currency_code][rtype as 'cash' | 'transactional'] = r
+    }
+  }
   const security = secRes.data
   const related = relatedRes.data ?? []
   const bestRate = savings[0] ? Number(savings[0].annual_rate).toFixed(2) + '%' : null
@@ -286,26 +293,45 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                 </div>
                 {Object.keys(fxMap).length > 0 ? (
                   <div className="divide-y divide-slate-100">
-                    {['USD','EUR','GBP'].filter(c => fxMap[c]).map(ccy => (
-                      <div key={ccy} className="px-6 py-4 flex items-center justify-between">
-                        <div>
-                          <span className="font-mono font-bold text-slate-700">{ccy} / ETB</span>
-                          {fxMap[ccy].rate_date && (
-                            <p className="text-xs text-slate-400 mt-0.5">{new Date(fxMap[ccy].rate_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                    {['USD','EUR','GBP'].filter(c => fxMap[c]).map(ccy => {
+                      const cash = fxMap[ccy].cash
+                      const trans = fxMap[ccy].transactional
+                      const dateRow = cash ?? trans
+                      return (
+                        <div key={ccy} className="px-6 py-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <span className="font-mono font-bold text-slate-700">{ccy} / ETB</span>
+                              {dateRow?.rate_date && (
+                                <p className="text-xs text-slate-400 mt-0.5">{new Date(dateRow.rate_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                              <span className="w-16 text-center">Buy</span>
+                              <span className="w-16 text-center">Sell</span>
+                            </div>
+                          </div>
+                          {trans && (
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-xs text-slate-500 font-medium">Transactional</span>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono font-black text-slate-900 w-16 text-center" style={{fontSize:'13px'}}>{Number(trans.buying_rate).toFixed(4)}</span>
+                                <span className="font-mono font-black text-slate-900 w-16 text-center" style={{fontSize:'13px'}}>{Number(trans.selling_rate).toFixed(4)}</span>
+                              </div>
+                            </div>
+                          )}
+                          {cash && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-slate-500 font-medium">Cash</span>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-slate-600 w-16 text-center" style={{fontSize:'13px'}}>{Number(cash.buying_rate).toFixed(4)}</span>
+                                <span className="font-mono text-slate-600 w-16 text-center" style={{fontSize:'13px'}}>{Number(cash.selling_rate).toFixed(4)}</span>
+                              </div>
+                            </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-6 text-sm">
-                          <div className="text-center">
-                            <p className="text-xs text-slate-400 mb-0.5">Buy</p>
-                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].buying_rate).toFixed(4)}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-xs text-slate-400 mb-0.5">Sell</p>
-                            <p className="font-mono font-black text-slate-900">{Number(fxMap[ccy].selling_rate).toFixed(4)}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 ) : (
                   <div className="px-6 py-12 text-center">

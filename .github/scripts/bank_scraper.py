@@ -25,7 +25,7 @@ def upsert(slug, rates):
     records = [
         {"institution_slug": slug, "country_code": "ET", "currency_code": r["currency_code"],
          "buying_rate": r["buying_rate"], "selling_rate": r["selling_rate"],
-         "rate_date": TODAY, "source": "scraped"}
+         "rate_date": TODAY, "source": "scraped", "rate_type": r.get("rate_type", "transactional")}
         for r in rates if r.get("buying_rate") and r.get("selling_rate")
     ]
     if not records:
@@ -67,13 +67,17 @@ def scrape_cbe():
         return rates
     for item in data[0].get("ExchangeRate", []):
         code = item.get("currency", {}).get("CurrencyCode")
-        buying = item.get("transactionalBuying")
-        selling = item.get("transactionalSelling")
-        if code and buying and selling:
-            try:
-                rates.append({"currency_code": code, "buying_rate": float(buying), "selling_rate": float(selling)})
-            except:
-                pass
+        if not code:
+            continue
+        try:
+            cb, cs = item.get("cashBuying"), item.get("cashSelling")
+            tb, ts = item.get("transactionalBuying"), item.get("transactionalSelling")
+            if cb and cs:
+                rates.append({"currency_code": code, "buying_rate": float(cb), "selling_rate": float(cs), "rate_type": "cash"})
+            if tb and ts:
+                rates.append({"currency_code": code, "buying_rate": float(tb), "selling_rate": float(ts), "rate_type": "transactional"})
+        except:
+            pass
     return rates
 
 def scrape_dashen():
@@ -99,13 +103,17 @@ def scrape_wegagen():
     for item in data.get("data", []):
         attrs = item.get("attributes", {})
         code = attrs.get("code")
-        buying = attrs.get("buying") or attrs.get("tra_buying")
-        selling = attrs.get("selling") or attrs.get("tra_selling")
-        if code and buying and selling:
-            try:
-                rates.append({"currency_code": code, "buying_rate": float(buying), "selling_rate": float(selling)})
-            except:
-                pass
+        if not code:
+            continue
+        try:
+            cb, cs = attrs.get("buying"), attrs.get("selling")
+            tb, ts = attrs.get("tra_buying"), attrs.get("tra_selling")
+            if cb and cs:
+                rates.append({"currency_code": code, "buying_rate": float(cb), "selling_rate": float(cs), "rate_type": "cash"})
+            if tb and ts:
+                rates.append({"currency_code": code, "buying_rate": float(tb), "selling_rate": float(ts), "rate_type": "transactional"})
+        except:
+            pass
     return rates
 
 def scrape_nib():
@@ -158,10 +166,12 @@ def scrape_coop():
     rates = []
     for code, info in data.items():
         try:
-            buying = info.get("buying") or info.get("transaction_buying")
-            selling = info.get("selling") or info.get("transaction_selling")
-            if buying and selling:
-                rates.append({"currency_code": code, "buying_rate": float(buying), "selling_rate": float(selling)})
+            cb, cs = info.get("buying"), info.get("selling")
+            tb, ts = info.get("transaction_buying"), info.get("transaction_selling")
+            if cb and cs:
+                rates.append({"currency_code": code, "buying_rate": float(cb), "selling_rate": float(cs), "rate_type": "cash"})
+            if tb and ts:
+                rates.append({"currency_code": code, "buying_rate": float(tb), "selling_rate": float(ts), "rate_type": "transactional"})
         except:
             pass
     return rates
@@ -203,15 +213,21 @@ def scrape_addis():
     rates = []
     for item in data:
         code = item.get("currency")
-        buying = item.get("transactionBuying") or item.get("buying")
-        selling = item.get("transactionSelling") or item.get("selling")
-        if code and code != "ETB" and buying and selling:
-            try:
-                b, s = float(buying), float(selling)
+        if not code or code == "ETB":
+            continue
+        try:
+            cb, cs = item.get("buying"), item.get("selling")
+            tb, ts = item.get("transactionBuying"), item.get("transactionSelling")
+            if cb and cs:
+                b, s = float(cb), float(cs)
                 if b > 0 and s > 0:
-                    rates.append({"currency_code": code, "buying_rate": b, "selling_rate": s})
-            except:
-                pass
+                    rates.append({"currency_code": code, "buying_rate": b, "selling_rate": s, "rate_type": "cash"})
+            if tb and ts:
+                b, s = float(tb), float(ts)
+                if b > 0 and s > 0:
+                    rates.append({"currency_code": code, "buying_rate": b, "selling_rate": s, "rate_type": "transactional"})
+        except:
+            pass
     return rates
 
 def scrape_amhara():
