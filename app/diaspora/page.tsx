@@ -80,6 +80,7 @@ export default async function DiasporaPage() {
 
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Diaspora services</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(22px, 3vw, 40px)', letterSpacing:'-0.5px' }}>
             Everything the Ethiopian diaspora needs.
@@ -109,10 +110,13 @@ export default async function DiasporaPage() {
         <section style={{ background:'#ffffff', padding:'96px 0' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+              <div>
+              <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color:'#1D4ED8' }}>IPO pipeline</p>
               <h2 className="font-serif font-bold text-slate-950"
                 style={{ fontSize:'clamp(22px, 2.8vw, 32px)', letterSpacing:'-0.5px' }}>
                 {ipoCount}+ upcoming ESX listings
               </h2>
+              </div>
               <Link href="/markets/ipo-pipeline" className="flex items-center gap-1 text-sm font-bold shrink-0" style={{ color:'#1D4ED8' }}>
                 Full pipeline <ChevronRight size={13} />
               </Link>
@@ -155,6 +159,7 @@ export default async function DiasporaPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Stay connected</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               ETB rate and remittance updates, direct to your inbox.
