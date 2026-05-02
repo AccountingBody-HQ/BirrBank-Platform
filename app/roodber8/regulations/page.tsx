@@ -50,6 +50,15 @@ export default function RegulationsAdmin() {
     load()
   }
 
+  const [editingId, setEditingId] = useState<string|null>(null)
+  const [editUrl, setEditUrl] = useState('')
+
+  async function saveUrl(id: string) {
+    await fetch('/api/birrbank-regulations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update_url', id, full_text_url: editUrl }) })
+    setEditingId(null)
+    load()
+  }
+
   async function del(id: string, title: string) {
     if (!confirm('Delete: ' + title + '?')) return
     await fetch('/api/birrbank-regulations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) })

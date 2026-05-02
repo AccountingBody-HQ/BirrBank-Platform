@@ -41,6 +41,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true })
     }
 
+    if (action === 'update_url') {
+      const { id, full_text_url } = body
+      const { error } = await supabase.schema('birrbank').from('regulations').update({ full_text_url: full_text_url || null }).eq('id', id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ ok: true })
+    }
+
     if (action === 'delete') {
       const { id } = body
       const { error } = await supabase.schema('birrbank').from('regulations').delete().eq('id', id)
