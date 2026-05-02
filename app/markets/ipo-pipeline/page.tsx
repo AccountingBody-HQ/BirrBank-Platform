@@ -108,7 +108,7 @@ export default async function IpoPipelinePage() {
                       <p className="font-bold text-slate-800" style={{ fontSize:'14px' }}>{ipo.company_name}</p>
                       {ipo.description && <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{ipo.description}</p>}
                     </div>
-                    <p className="text-sm text-slate-500">{ipo.sector ?? '—'}</p>
+                    <p className="text-sm text-slate-500 truncate" title={ipo.sector ?? ''}>{ipo.sector ?? '—'}</p>
                     <p className="font-mono text-sm text-slate-600">{fmtAmount(ipo.total_raise_etb)}</p>
                     <p className="text-sm text-slate-500">{ipo.lead_manager ?? '—'}</p>
                     <p className="text-sm text-slate-500">{fmtDate(ipo.expected_listing_date)}</p>
