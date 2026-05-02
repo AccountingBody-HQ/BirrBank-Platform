@@ -3,6 +3,7 @@ import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 import { ChevronRight } from 'lucide-react'
+import RateTypeToggle from '@/components/RateTypeToggle'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -257,18 +258,7 @@ export default async function FxRatesPage({ searchParams }: { searchParams: Prom
                   USD, EUR &amp; GBP &#8212; all banks compared
                 </h2>
                 <p className="text-slate-500 mt-1" style={{ fontSize: '13px' }}>Sell rate is what you pay when buying foreign currency. Buy rate is what you receive when selling.</p>
-                <div className="flex items-center gap-2 mt-3">
-                  <Link href="/banking/fx-rates?type=transactional"
-                    className="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
-                    style={rateType === 'transactional' ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
-                    Transactional
-                  </Link>
-                  <Link href="/banking/fx-rates?type=cash"
-                    className="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
-                    style={rateType === 'cash' ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
-                    Cash
-                  </Link>
-                </div>
+                <RateTypeToggle rateType={rateType} />
               </div>
               {bankDate && (
                 <div className="flex items-center gap-2 shrink-0">
