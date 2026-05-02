@@ -6,13 +6,14 @@ SUPABASE_URL = os.environ["SUPABASE_URL"]
 SERVICE_KEY  = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
 TODAY        = datetime.date.today().isoformat()
 
-TICKERS = {
-    "Awash Bank Share Company": "AB",
-    "Gadaa Bank Share Company": "GB",
-    "Wegagen Bank Share Company": "WB",
-    "Awash Bank": "AB",
-    "Gadaa Bank": "GB",
-    "Wegagen Bank": "WB",
+# Official ESX tickers (confirmed from listed-companies page)
+SYMBOL_MAP = {
+    "AWAB": "AWAB",
+    "GDAB": "GDAB",
+    "WGBX": "WGBX",
+    "Awash Bank":  "AWAB",
+    "Gadaa Bank":  "GDAB",
+    "Wegagen Bank":"WGBX",
 }
 
 def sb_request(method, path, payload=None, extra_headers=None):
@@ -30,64 +31,76 @@ def sb_request(method, path, payload=None, extra_headers=None):
     with urllib.request.urlopen(req, timeout=20) as r:
         return r.status, r.read().decode()
 
+async def try_page(page, url):
+    print(f"\nTrying: {url}")
+    try:
+        await page.goto(url, wait_until="networkidle", timeout=60000)
+        text = await page.inner_text("body")
+        # Check if any ESX symbols or price keywords appear
+        has_data = any(k in text for k in ["AWAB","GDAB","WGBX","Last Price","Close Price","Trade Price","ETB"])
+        print(f"  Has price data: {has_data}")
+        if has_data:
+            print(f"  TEXT SAMPLE:\n{text[:3000]}")
+        else:
+            # Print a smaller sample anyway
+            print(f"  TEXT SAMPLE (no prices):\n{text[:500]}")
+        return text if has_data else None
+    except Exception as e:
+        print(f"  Error: {e}")
+        return None
+
 async def scrape():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page    = await browser.new_page()
         page.set_default_timeout(60000)
 
-        print("Loading ESX listed companies page...")
-        await page.goto("https://esx.et/equity-market/listed-companies/", wait_until="networkidle")
+        # Try all candidate pages
+        candidates = [
+            "https://esx.et/market-data/",
+            "https://esx.et/equity-market/",
+            "https://esx.et/equity-market/main-market/",
+            "https://esx.et/equity-market/growth-market/",
+            "https://esx.et/trading/",
+            "https://esx.et/live-market/",
+        ]
 
-        # Dump full page text so we can see what rendered
-        body_text = await page.inner_text("body")
-        print("PAGE TEXT SAMPLE:")
-        print(body_text[:4000])
+        found_text = None
+        for url in candidates:
+            result = await try_page(page, url)
+            if result:
+                found_text = result
+                break
 
-        # Try to find any table
+        if not found_text:
+            print("\nNo price data found on any page.")
+            print("Dumping full market-data page for manual inspection...")
+            await page.goto("https://esx.et/market-data/", wait_until="networkidle")
+            full = await page.inner_text("body")
+            print(full[:5000])
+            await browser.close()
+            return []
+
+        # Parse prices from found text
         results = []
-        tables = await page.query_selector_all("table")
-        print(f"Tables found: {len(tables)}")
-
-        for tbl in tables:
-            headers = await tbl.query_selector_all("th")
-            header_texts = [await h.inner_text() for h in headers]
-            print(f"Table headers: {header_texts}")
-
-            rows = await tbl.query_selector_all("tr")
-            for row in rows[1:]:
-                cells = await row.query_selector_all("td")
-                texts = [await c.inner_text() for c in cells]
-                print(f"Row: {texts}")
-
-                # Match company name to ticker
-                ticker = None
-                for name, t in TICKERS.items():
-                    if any(name.lower() in cell.lower() for cell in texts):
-                        ticker = t
-                        break
-
-                if not ticker:
-                    continue
-
-                # Extract price - look for numeric values
-                price = change = volume = None
-                for t in texts:
-                    clean = t.strip().replace(",","").replace("ETB","").strip()
-                    try:
-                        val = float(clean)
-                        if price is None and val > 0:
-                            price = val
-                        elif change is None:
-                            change = val
-                        elif volume is None:
-                            volume = val
-                    except ValueError:
-                        continue
-
-                if price:
-                    results.append({"ticker": ticker, "price": price, "change": change, "volume": volume})
-                    print(f"  Scraped: {ticker} = {price} ETB ({change}%)")
+        lines = found_text.split("\n")
+        for i, line in enumerate(lines):
+            line = line.strip()
+            for symbol, ticker in SYMBOL_MAP.items():
+                if symbol in line:
+                    # Look for numeric price in nearby lines
+                    context = lines[max(0,i-3):i+6]
+                    print(f"  Found {symbol} context: {context}")
+                    for ctx_line in context:
+                        clean = ctx_line.strip().replace(",","").replace("ETB","").strip()
+                        try:
+                            val = float(clean)
+                            if val > 0 and val < 100000:
+                                results.append({"ticker": ticker, "price": val, "change": None, "volume": None})
+                                print(f"  Price: {ticker} = {val}")
+                                break
+                        except ValueError:
+                            continue
 
         await browser.close()
         return results
@@ -96,37 +109,25 @@ async def main():
     prices = await scrape()
 
     if not prices:
-        print("WARNING: No prices scraped. Check page structure above.")
+        print("\nNo prices found — scraper needs adjustment based on page structure above.")
         sys.exit(1)
 
-    print(f"Saving {len(prices)} prices to Supabase...")
+    print(f"\nSaving {len(prices)} prices...")
     saved = 0
     for p in prices:
         try:
-            # Update listed_securities
-            update = {
-                "last_price_etb":   p["price"],
-                "price_change_pct": p["change"],
-                "volume_today":     p["volume"],
-                "last_updated":     TODAY,
-            }
-            status, _ = sb_request(
-                "PATCH",
+            sb_request("PATCH",
                 f"listed_securities?ticker=eq.{p['ticker']}",
-                update
-            )
-            # Upsert price_history
-            sb_request(
-                "POST",
-                "price_history",
-                {"ticker": p["ticker"], "trade_date": TODAY, "close_price": p["price"],
-                 "volume": p["volume"], "country_code": "ET"},
-                {"Prefer": "resolution=merge-duplicates"}
-            )
+                {"last_price_etb": p["price"], "price_change_pct": p["change"],
+                 "volume_today": p["volume"], "last_updated": TODAY})
+            sb_request("POST", "price_history",
+                {"ticker": p["ticker"], "trade_date": TODAY,
+                 "close_price": p["price"], "country_code": "ET"},
+                {"Prefer": "resolution=merge-duplicates"})
             saved += 1
             print(f"  Saved {p['ticker']}")
         except Exception as e:
-            print(f"  Error saving {p['ticker']}: {e}")
+            print(f"  Error {p['ticker']}: {e}")
 
     print(f"Done: {saved}/{len(prices)} saved")
     if saved == 0:
