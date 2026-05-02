@@ -16,6 +16,7 @@ const NAV = [
   { href: '/roodber8/content-factory',      exact: false, icon: Sparkles,        label: 'Content Factory',     sub: 'AI article generation'       },
   { href: '/roodber8/securities',           exact: false, icon: TrendingUp,      label: 'Securities',          sub: 'ESX equities and IPOs'       },
   { href: '/roodber8/commodities',          exact: false, icon: Coffee,          label: 'Commodities',         sub: 'ECX prices and grades'       },
+  { href: '/roodber8/regulations',          exact: false, icon: FileText,        label: 'Regulations',         sub: 'NBE, ECMA & ECX directives'  },
   { href: '/roodber8/settings',             exact: false, icon: Settings,        label: 'Settings',            sub: 'Config & environment'        },
 ]
 
