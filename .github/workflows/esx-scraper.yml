@@ -1,9 +1,10 @@
 name: ESX equity scraper
 
 on:
-  schedule:
-    # 15:00 UTC = 18:00 EAT (after ESX close Mon-Fri)
-    - cron: "0 15 * * 1-5"
+  # ESX does not currently publish prices publicly
+  # Re-enable schedule when a public data source becomes available
+  # schedule:
+  #   - cron: "0 15 * * 1-5"
   workflow_dispatch:
 
 jobs:
