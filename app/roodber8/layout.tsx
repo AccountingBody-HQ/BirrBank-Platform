@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, ShieldCheck, Sparkles,
   BarChart3, Settings, LogOut, ExternalLink,
-  ChevronRight, RefreshCw, TrendingUp, Coffee
+  ChevronRight, RefreshCw, TrendingUp, Coffee, FileText
 } from 'lucide-react'
 
 const NAV = [
