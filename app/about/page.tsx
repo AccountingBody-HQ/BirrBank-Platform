@@ -169,12 +169,8 @@ export default async function AboutPage() {
             <p className="text-slate-400 leading-relaxed max-w-xl">All savings rates, FX rates, ESX prices, ECX commodity data and insurance comparisons are free — no account required.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 shrink-0">
-            <Link href="/banking/savings-rates" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
-              Compare savings rates <ArrowRight size={15} />
-            </Link>
-            <Link href="/markets/equities" className="inline-flex items-center gap-2 border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
-              View ESX equities
-            </Link>
+            <Link href="/banking/savings-rates" className="hero-btn hero-btn-primary">Compare savings rates</Link>
+            <Link href="/markets/equities" className="hero-btn hero-btn-secondary">View ESX equities</Link>
           </div>
         </div>
       </section>
