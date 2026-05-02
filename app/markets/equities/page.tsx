@@ -76,12 +76,9 @@ export default async function EquitiesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{securities.length} equities · End-of-day</p>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-100 rounded-full px-3 py-1.5">
-                {today}
-              </span>
-            </div>
+            <span className="text-xs font-semibold text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5">
+              Prices updated manually
+            </span>
           </div>
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
@@ -128,7 +125,7 @@ export default async function EquitiesPage() {
               <div className="py-12 text-center"><p className="text-slate-500 text-sm">No equities data available. Check back after market hours.</p></div>
             )}
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background:'#f8fafc', padding:'14px 24px' }}>
-              <p className="text-xs text-slate-400">Source: Ethiopian Securities Exchange (esx.et) · End-of-day prices</p>
+              <p className="text-xs text-slate-400">Source: Ethiopian Securities Exchange (esx.et) · Prices sourced from ESX and updated manually</p>
               <Link href="/markets/ipo-pipeline" className="text-xs font-bold" style={{ color:'#1D4ED8' }}>IPO pipeline →</Link>
             </div>
           </div>
