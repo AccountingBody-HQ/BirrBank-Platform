@@ -288,7 +288,12 @@ export default async function InstitutionPage({ params }: { params: Promise<{ sl
                   <div className="divide-y divide-slate-100">
                     {['USD','EUR','GBP'].filter(c => fxMap[c]).map(ccy => (
                       <div key={ccy} className="px-6 py-4 flex items-center justify-between">
-                        <span className="font-mono font-bold text-slate-700">{ccy} / ETB</span>
+                        <div>
+                          <span className="font-mono font-bold text-slate-700">{ccy} / ETB</span>
+                          {fxMap[ccy].rate_date && (
+                            <p className="text-xs text-slate-400 mt-0.5">{new Date(fxMap[ccy].rate_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                          )}
+                        </div>
                         <div className="flex items-center gap-6 text-sm">
                           <div className="text-center">
                             <p className="text-xs text-slate-400 mb-0.5">Buy</p>

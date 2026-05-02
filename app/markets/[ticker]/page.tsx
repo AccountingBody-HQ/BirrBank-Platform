@@ -38,11 +38,18 @@ export default async function TickerPage({ params }: { params: Promise<{ ticker:
   const { data: security } = await supabase
     .schema('birrbank')
     .from('listed_securities')
-    .select('*, institutions(name, slug)')
+    .select('*')
     .eq('ticker', ticker.toUpperCase())
     .single()
 
   if (!security) notFound()
+
+  // Separate institution lookup — join returns null on this table (Rule 21)
+  let institution: { name: string; slug: string } | null = null
+  if (security.institution_slug) {
+    const { data: instData } = await supabase.schema('birrbank').from('institutions').select('name, slug').eq('slug', security.institution_slug).single()
+    institution = instData
+  }
 
   // Price history — last 30 trading days
   const { data: history } = await supabase
@@ -62,7 +69,7 @@ export default async function TickerPage({ params }: { params: Promise<{ ticker:
       {/* HERO */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 900px 500px at 55% -80px, rgba(29,78,216,0.04) 0%, transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto px-8 pt-20 pb-14">
+        <div className="relative max-w-7xl mx-auto px-8 pt-20 pb-14">
           <div className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
             <Link href="/" className="hover:text-slate-600 transition-colors">Home</Link><span>›</span>
             <Link href="/markets" className="hover:text-slate-600 transition-colors">Markets</Link><span>›</span>
@@ -108,7 +115,7 @@ export default async function TickerPage({ params }: { params: Promise<{ ticker:
 
       {/* KEY STATS */}
       <section className="border-b border-slate-100 bg-white" style={{ padding: '48px 32px' }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
             {[
               { label: 'Last Price',    value: fmtETB(security.last_price_etb)     },
@@ -130,7 +137,7 @@ export default async function TickerPage({ params }: { params: Promise<{ ticker:
 
       {/* PRICE HISTORY + INSTITUTION LINK */}
       <section className="bg-white" style={{ padding: '64px 32px 96px' }}>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             {/* Price history table */}
@@ -165,16 +172,16 @@ export default async function TickerPage({ params }: { params: Promise<{ ticker:
             <div className="space-y-5">
 
               {/* Institution link */}
-              {security.institutions && (
+              {institution && (
                 <div className="rounded-2xl border border-slate-200 overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                   <div style={{ height: 3, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
                   <div style={{ padding: '20px' }}>
                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Institution profile</p>
-                    <p className="font-bold text-slate-900 mb-2">{security.institutions.name}</p>
+                    <p className="font-bold text-slate-900 mb-2">{institution.name}</p>
                     <p className="text-xs text-slate-500 mb-4" style={{ lineHeight: 1.6 }}>
                       View savings rates, loan rates, FX services and full institution profile on BirrBank.
                     </p>
-                    <Link href={'/institutions/' + security.institutions.slug}
+                    <Link href={'/institutions/' + institution.slug}
                       className="inline-flex items-center gap-2 font-bold rounded-full text-sm"
                       style={{ background: '#1D4ED8', color: '#fff', padding: '10px 18px' }}>
                       View institution <ArrowRight size={12} />
