@@ -101,6 +101,7 @@ export default async function MarketsPage() {
       {/* SUB-PAGE CARDS */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Capital markets</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(22px, 3vw, 40px)', letterSpacing:'-0.5px' }}>
             The full Ethiopian capital markets picture.
@@ -130,6 +131,7 @@ export default async function MarketsPage() {
       {/* LISTED SECURITIES */}
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Listed equities</p>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <h2 className="font-serif font-bold text-slate-950"
               style={{ fontSize:'clamp(22px, 2.8vw, 32px)', letterSpacing:'-0.5px' }}>
@@ -195,6 +197,7 @@ export default async function MarketsPage() {
       {/* IPO PIPELINE */}
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>IPO pipeline</p>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <h2 className="font-serif font-bold text-slate-950"
               style={{ fontSize:'clamp(22px, 2.8vw, 32px)', letterSpacing:'-0.5px' }}>
@@ -252,6 +255,7 @@ export default async function MarketsPage() {
       {/* T-BILLS */}
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Fixed income</p>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <h2 className="font-serif font-bold text-slate-950"
               style={{ fontSize:'clamp(22px, 2.8vw, 32px)', letterSpacing:'-0.5px' }}>
@@ -300,6 +304,7 @@ export default async function MarketsPage() {
       {/* TRUST */}
       <section style={{ background:'#0f172a', padding:'96px 0', borderTop:'1px solid #1e293b' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3 text-center" style={{ color:'#93c5fd' }}>Data integrity</p>
           <h2 className="font-serif font-bold text-white text-center mb-12"
             style={{ fontSize:'clamp(26px, 3.5vw, 40px)', letterSpacing:'-0.5px' }}>
             The only platform with the full picture.
@@ -332,6 +337,7 @@ export default async function MarketsPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Market intelligence</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               ESX updates and IPO alerts, direct to your inbox.
