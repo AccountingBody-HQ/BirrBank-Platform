@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import EmailCapture from '@/components/EmailCapture'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import { ChevronRight } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
@@ -9,12 +10,6 @@ export const metadata: Metadata = {
   description: 'Ethiopian stocks, T-bills, IPOs and fixed deposits — all accessible to diaspora investors with Ethiopian nationality.',
 }
 
-const INVESTMENT_OPTIONS = [
-  { title:'ESX Listed Equities', href:'/markets/equities', risk:'Medium-High', minInvest:'ETB 5,000', returns:'Market-driven', liquidity:'Daily trading', desc:'Buy shares in Wegagen Bank, Gadaa Bank, Ethiopian Insurance Corporation and future listings on the Ethiopian Securities Exchange. Diaspora with Ethiopian nationality can open a CSD account and trade.', badge:'Available now' },
-  { title:'IPO Subscriptions', href:'/markets/ipo-pipeline', risk:'Medium-High', minInvest:'Varies by IPO', returns:'Listing price gain', liquidity:'Post-listing only', desc:'Subscribe to shares in upcoming IPOs before they list on the ESX. Apply through a licensed ECMA broker during the subscription window.', badge:'45+ in pipeline' },
-  { title:'NBE Treasury Bills', href:'/markets/bonds', risk:'Low', minInvest:'ETB 1,000', returns:'Up to 9.15% p.a.', liquidity:'Held to maturity', desc:'Invest in Ethiopian government T-bills with tenors from 28 days to 364 days. Sovereign risk only — the lowest risk investment in Ethiopia. Purchase through a licensed broker or CBE branch.', badge:'Lowest risk' },
-  { title:'Fixed Deposit Accounts', href:'/banking/savings-rates', risk:'Very Low', minInvest:'ETB 5,000', returns:'Up to 9.50% p.a.', liquidity:'Fixed term', desc:'Open a fixed deposit account at an Ethiopian commercial bank. Requires a diaspora bank account — 12 Ethiopian banks now accept remote account opening for diaspora. Covered by NBE depositor protection.', badge:'Best rate 9.50%' },
-]
 const STEPS = [
   { step:'01', title:'Confirm your eligibility', body:'Ethiopian nationals living abroad can invest in ESX-listed shares, T-bills and bank fixed deposits. Foreign nationals of non-Ethiopian origin face restrictions on certain instruments. Confirm your status with an ECMA-licensed broker.' },
   { step:'02', title:'Open a CSD account for equities', body:'To hold ESX shares, you need a Central Securities Depository (CSD) account. This can be opened remotely through some licensed brokers using your Ethiopian passport and foreign bank account details.' },
@@ -35,7 +30,26 @@ const RISK_COLORS: Record<string,{ background:string; color:string }> = {
   'Medium-High': { background:'#fef3c7', color:'#92400e' },
 }
 
-export default function DiasporaInvestPage() {
+export default async function DiasporaInvestPage() {
+  const supabase = createSupabaseAdminClient()
+  const [tbillRes, savingsRes, ipoCountRes, equitiesRes] = await Promise.all([
+    supabase.schema('birrbank').from('debt_instruments').select('yield_pct').like('instrument_type','tbill%').eq('is_current',true).order('yield_pct',{ascending:false}).limit(1),
+    supabase.schema('birrbank').from('savings_rates').select('annual_rate').eq('is_current',true).order('annual_rate',{ascending:false}).limit(1),
+    supabase.schema('birrbank').from('ipo_pipeline').select('count',{count:'exact',head:true}).neq('status','listed').neq('status','withdrawn'),
+    supabase.schema('birrbank').from('listed_securities').select('count',{count:'exact',head:true}).eq('security_type','equity'),
+  ])
+  const bestTbill   = tbillRes.data?.[0]?.yield_pct ? Number(tbillRes.data[0].yield_pct).toFixed(2)+'% p.a.' : 'Competitive yield'
+  const bestSavings = savingsRes.data?.[0]?.annual_rate ? Number(savingsRes.data[0].annual_rate).toFixed(2)+'% p.a.' : 'Up to 9.50% p.a.'
+  const ipoCount    = ipoCountRes.count ?? 0
+  const equityCount = equitiesRes.count ?? 0
+
+  const INVESTMENT_OPTIONS = [
+    { title:'ESX Listed Equities', href:'/markets/equities', risk:'Medium-High', minInvest:'ETB 5,000', returns:'Market-driven', liquidity:'Daily trading', desc:`Buy shares in ${equityCount} companies currently trading on the Ethiopian Securities Exchange. Diaspora with Ethiopian nationality can open a CSD account and trade through a licensed broker.`, badge:`${equityCount} listed` },
+    { title:'IPO Subscriptions', href:'/markets/ipo-pipeline', risk:'Medium-High', minInvest:'Varies by IPO', returns:'Listing price gain', liquidity:'Post-listing only', desc:`Subscribe to shares in upcoming IPOs before they list on the ESX. Apply through a licensed ECMA broker during the subscription window. ${ipoCount}+ prospectuses currently in the pipeline.`, badge:`${ipoCount}+ in pipeline` },
+    { title:'NBE Treasury Bills', href:'/markets/bonds', risk:'Low', minInvest:'ETB 1,000', returns:bestTbill, liquidity:'Held to maturity', desc:'Invest in Ethiopian government T-bills with tenors from 28 days to 364 days. Sovereign risk only — the lowest risk investment in Ethiopia. Purchase through a licensed broker or CBE branch.', badge:'Lowest risk' },
+    { title:'Fixed Deposit Accounts', href:'/banking/savings-rates', risk:'Very Low', minInvest:'ETB 5,000', returns:bestSavings, liquidity:'Fixed term', desc:'Open a fixed deposit account at an Ethiopian commercial bank. Requires a diaspora bank account — 12 Ethiopian banks now accept remote account opening for diaspora. Covered by NBE depositor protection.', badge:`Best rate ${bestSavings}` },
+  ]
+
   return (
     <main className="bg-white flex-1">
       <section className="relative overflow-hidden" style={{ background:'#0f172a' }}>
@@ -67,7 +81,7 @@ export default function DiasporaInvestPage() {
           </div>
           <div className="grid grid-cols-3 mt-2 pt-8 border-t border-slate-800">
             {[
-              { value:'4', label:'Investment types available' },
+              { value:String(equityCount), label:'ESX-listed companies' },
               { value:'ETB 1K', label:'Minimum T-bill investment' },
               { value:'ECMA', label:'Licensed broker required' },
             ].map(s => (
@@ -82,6 +96,7 @@ export default function DiasporaInvestPage() {
 
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Investment options</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             What diaspora investors can access.
@@ -127,6 +142,7 @@ export default function DiasporaInvestPage() {
 
       <section style={{ background:'#f8fafc', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Step by step</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             How to start investing in Ethiopia from abroad.
@@ -148,6 +164,7 @@ export default function DiasporaInvestPage() {
 
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Investor FAQ</p>
           <h2 className="font-serif font-bold text-slate-950 mb-10"
             style={{ fontSize:'clamp(26px, 3vw, 38px)', letterSpacing:'-0.5px' }}>
             Common questions from diaspora investors.
@@ -192,6 +209,7 @@ export default function DiasporaInvestPage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Stay ahead</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               ESX and IPO updates, direct to your inbox.
