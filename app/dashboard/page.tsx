@@ -126,7 +126,7 @@ export default async function DashboardPage() {
               {[
                 { href: '/banking/savings-rates', icon: TrendingUp,    label: 'Savings Rates',        sub: 'Best rates across all Ethiopian banks' },
                 { href: '/banking/fx-rates',      icon: Shield,        label: 'FX Rates',             sub: 'NBE and bank foreign exchange rates' },
-                { href: '/institutions',          icon: Building2,     label: 'All Institutions',     sub: '278 NBE-regulated entities' },
+                { href: '/institutions',          icon: Building2,     label: 'All Institutions',     sub: `${institutionCount} NBE-regulated entities` },
                 { href: '/ai-assistant',          icon: MessageSquare, label: 'BirrBank AI',          sub: 'Ask anything about Ethiopian finance' },
               ].map(item => (
                 <Link key={item.href} href={item.href}
