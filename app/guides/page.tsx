@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Layers } from 'lucide-react'
 import { getBirrBankGuides } from '@/lib/sanity'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import EmailCapture from '@/components/EmailCapture'
 export const dynamic = 'force-dynamic'
 
@@ -29,8 +30,13 @@ const CONTENT_TYPE_PILLAR: Record<string, string> = {
 }
 
 export default async function GuidesPage() {
-  const guides = await getBirrBankGuides()
+  const supabase = createSupabaseAdminClient()
+  const [guides, instRes] = await Promise.all([
+    getBirrBankGuides(),
+    supabase.schema('birrbank').from('institutions').select('count',{count:'exact',head:true}).eq('is_active',true),
+  ])
   const totalCount = guides.length
+  const institutionCount = instRes.count ?? 214
 
   return (
     <div className="flex-1 bg-white">
@@ -53,7 +59,7 @@ export default async function GuidesPage() {
           </div>
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: '214', label: 'NBE Institutions' },
+              { value: String(institutionCount), label: 'NBE Institutions' },
               { value: '5',   label: 'Pillars Covered'  },
               { value: 'Free', label: 'Full Access'      },
               { value: 'ETB', label: 'Local Currency'    },
@@ -119,7 +125,7 @@ export default async function GuidesPage() {
       </section>
 
       <section className="bg-white" style={{ padding: '96px 32px' }}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Guide alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
