@@ -15,10 +15,13 @@ function fmtETB(val: number | null | undefined) { if (val == null) return '—';
 
 export default async function RemittancePage() {
   const supabase = createSupabaseAdminClient()
-  const [transferRes] = await Promise.all([
-    supabase.schema('birrbank').from('transfer_services').select('*, institutions(name)').eq('is_current',true).order('fee_percentage',{ascending:true}),
+  const [transferRes, instRes] = await Promise.all([
+    supabase.schema('birrbank').from('transfer_services').select('*').eq('is_current',true).order('fee_percentage',{ascending:true}),
+    supabase.schema('birrbank').from('institutions').select('slug, name').eq('is_active',true),
   ])
   const transfers = transferRes.data ?? []
+  const instNames: Record<string, string> = {}
+  for (const inst of (instRes.data ?? [])) { instNames[inst.slug] = inst.name }
 
   return (
     <main className="bg-white flex-1">
@@ -66,6 +69,7 @@ export default async function RemittancePage() {
 
       <section style={{ background:'#ffffff', padding:'64px 0 96px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-black uppercase tracking-widest mb-6" style={{ color:'#1D4ED8' }}>Fee comparison</p>
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
@@ -80,7 +84,7 @@ export default async function RemittancePage() {
                   style={{ gridTemplateColumns:'1fr 110px 130px 110px 130px 110px', padding:i===0?'18px 24px':'14px 24px' }}>
                   <div>
                     <p className={'font-bold ' + (i===0 ? 'text-blue-900' : 'text-slate-800')} style={{ fontSize:i===0?'15px':'14px' }}>
-                      {t.institutions?.name ?? t.institution_slug}
+                      {instNames[t.institution_slug] ?? t.institution_slug}
                     </p>
                     {t.notes && <p className="text-xs text-slate-400 mt-0.5">{t.notes}</p>}
                     {t.destination_countries && (
@@ -102,7 +106,7 @@ export default async function RemittancePage() {
                 </div>
                 <div className="sm:hidden" style={{ padding:'14px 16px' }}>
                   <div className="flex items-start justify-between gap-3 mb-1">
-                    <p className="font-bold text-slate-800 text-sm">{t.institutions?.name ?? t.institution_slug}</p>
+                    <p className="font-bold text-slate-800 text-sm">{instNames[t.institution_slug] ?? t.institution_slug}</p>
                     <p className="font-mono font-bold text-slate-800 shrink-0">{t.fee_percentage ? Number(t.fee_percentage).toFixed(2)+'%' : '—'}</p>
                   </div>
                   <p className="text-xs text-slate-400">{t.processing_hours ? t.processing_hours+'h processing' : '—'} · {fmtETB(t.min_amount_etb)} min</p>
@@ -140,6 +144,7 @@ export default async function RemittancePage() {
       <section style={{ background:'#ffffff', padding:'96px 0' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
+            <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color:'#1D4ED8' }}>Stay informed</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5"
               style={{ fontSize:'clamp(30px, 3.5vw, 42px)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
               Fee changes, direct to your inbox.
