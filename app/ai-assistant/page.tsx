@@ -40,8 +40,8 @@ export default async function AiAssistantPage() {
     <AiChatClient
       userId={userId || null}
       monthlyUsage={monthlyUsage}
-      freeAnonLimit={5}
-      freeUserLimit={10}
+      freeAnonLimit={9999}
+      freeUserLimit={9999}
     />
   );
 }

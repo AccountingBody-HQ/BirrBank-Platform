@@ -164,9 +164,7 @@ export default function AiChatClient({ userId, monthlyUsage, freeAnonLimit, free
               <div className="text-slate-400 text-xs">Ethiopian financial intelligence</div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {!userId && <a href="/sign-in" className="text-blue-600 text-xs font-semibold hover:text-blue-700">Sign in</a>}
-          </div>
+          <div className="flex items-center gap-2">{/* sign-in hidden — future use */}</div>
         </div>
       </div>
 
