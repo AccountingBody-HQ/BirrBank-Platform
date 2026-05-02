@@ -141,7 +141,7 @@ export default async function RegulationsPage() {
             )}
 
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
-              <p className="text-xs text-slate-400">Sources: <a href="https://nbe.gov.et/directives/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">NBE directives</a> · <a href="https://ecma.gov.et/regulations/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECMA regulations</a> · <a href="https://www.ecx.com.et/Rules.aspx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECX rules</a> · Updated as directives are published</p>
+              <p className="text-xs text-slate-400">Sources: <a href="https://nbe.gov.et/directives/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">NBE directives</a> · <a href="https://ecma.gov.et/laws-regulation/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECMA regulations</a> · <a href="https://www.ecx.com.et" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECX</a> · Updated as directives are published</p>
             </div>
           </div>
 
