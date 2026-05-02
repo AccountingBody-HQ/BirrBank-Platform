@@ -141,7 +141,7 @@ export default async function RegulationsPage() {
             )}
 
             <div className="flex items-center justify-between border-t border-slate-200" style={{ background: '#f9fafb', padding: '14px 24px' }}>
-              <p className="text-xs text-slate-400">Sources: NBE (nbe.gov.et) · ECMA (ecma.gov.et) · ECX (ecx.com.et) · Updated as directives are published</p>
+              <p className="text-xs text-slate-400">Sources: <a href="https://nbe.gov.et/proclamations-directives/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">NBE directives</a> · <a href="https://ecma.gov.et" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECMA</a> · <a href="https://www.ecx.com.et" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline">ECX</a> · Updated as directives are published</p>
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export default async function RegulationsPage() {
       <section className="bg-white" style={{ padding: '96px 32px' }}>
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Regulatory alerts</p>
+            <p className="text-xs font-black uppercase tracking-widest mb-4" style={{ color:'#1D4ED8' }}>Regulatory alerts</p>
             <h2 className="font-serif font-bold text-slate-950 mb-5" style={{ fontSize: 'clamp(30px, 3.5vw, 42px)', letterSpacing: '-1.5px', lineHeight: 1.1 }}>
               New directives,<br />
               <span style={{ color: '#1D4ED8' }}>direct to your inbox.</span>
