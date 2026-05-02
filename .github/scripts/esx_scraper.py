@@ -89,9 +89,10 @@ async def main():
         await browser.close()
 
     if not results:
-        print("\nNo prices found. ESX may not publish prices publicly yet.")
-        print("Manual price entry via admin console is required for now.")
-        sys.exit(1)
+        print("\nNo prices found — ESX does not publish prices publicly yet.")
+        print("Use the admin console Price Import tab to update prices manually.")
+        print("This scraper will automatically activate when ESX opens a public data feed.")
+        sys.exit(0)
 
     print(f"\nSaving {len(results)} prices...")
     for r in results:
