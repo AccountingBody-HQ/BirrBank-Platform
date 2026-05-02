@@ -93,7 +93,7 @@ export default async function IpoPipelinePage() {
           <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
             <div style={{ height:4, background:'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
             <div className="hidden sm:grid border-b border-slate-200"
-              style={{ gridTemplateColumns:'1fr 120px 140px 130px 130px 160px', padding:'13px 24px', background:'#f8fafc' }}>
+              style={{ gridTemplateColumns:'1fr 160px 130px 150px 120px 150px', padding:'13px 24px', background:'#f8fafc' }}>
               {['Company','Sector','Total raise','Lead manager','Expected date','Status'].map(h => (
                 <p key={h} className="text-xs font-black text-slate-400 uppercase tracking-widest">{h}</p>
               ))}
@@ -103,12 +103,12 @@ export default async function IpoPipelinePage() {
               return (
                 <div key={ipo.id} className="border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors">
                   <div className="hidden sm:grid items-center"
-                    style={{ gridTemplateColumns:'1fr 120px 140px 130px 130px 160px', padding:'14px 24px' }}>
+                    style={{ gridTemplateColumns:'1fr 160px 130px 150px 120px 150px', padding:'14px 24px' }}>
                     <div>
                       <p className="font-bold text-slate-800" style={{ fontSize:'14px' }}>{ipo.company_name}</p>
                       {ipo.description && <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{ipo.description}</p>}
                     </div>
-                    <p className="text-sm text-slate-500 truncate" title={ipo.sector ?? ''}>{ipo.sector ?? '—'}</p>
+                    <p className="text-sm text-slate-500">{ipo.sector ?? '—'}</p>
                     <p className="font-mono text-sm text-slate-600">{fmtAmount(ipo.total_raise_etb)}</p>
                     <p className="text-sm text-slate-500">{ipo.lead_manager ?? '—'}</p>
                     <p className="text-sm text-slate-500">{fmtDate(ipo.expected_listing_date)}</p>
