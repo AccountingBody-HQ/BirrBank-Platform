@@ -152,15 +152,15 @@ def main():
             "country_code":     "ET",
         }
         try:
-            sb_request("POST", "commodity_prices", row,
-                {"Prefer": "resolution=merge-duplicates"})
-            sb_request("POST", "commodity_history", {
+            sb_request("POST", "commodity_prices?on_conflict=commodity_code,trade_date", row,
+                {"Prefer": "resolution=merge-duplicates,return=minimal"})
+            sb_request("POST", "commodity_history?on_conflict=commodity_code,trade_date", {
                 "commodity_code": p["commodity_code"],
                 "trade_date":     TODAY,
                 "price_etb":      p["price_etb"],
                 "volume_kg":      p["volume_kg"],
                 "country_code":   "ET",
-            }, {"Prefer": "resolution=merge-duplicates"})
+            }, {"Prefer": "resolution=merge-duplicates,return=minimal"})
             saved += 1
         except Exception as e:
             print(f"  Error {p['commodity_code']}: {e}")
