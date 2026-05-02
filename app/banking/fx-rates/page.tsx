@@ -27,7 +27,9 @@ function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
 }
 
-export default async function FxRatesPage() {
+export default async function FxRatesPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
+  const { type } = await searchParams
+  const rateType = type === 'cash' ? 'cash' : 'transactional'
   const supabase = createSupabaseAdminClient()
 
   const [nbeRes, bankRatesRes, instRes] = await Promise.all([
@@ -70,11 +72,10 @@ export default async function FxRatesPage() {
   })
   const nbeDate = NBE_RATES[0]?.rate_date ?? null
 
-  // Dedupe bank rates — prefer transactional, fallback to cash
+  // Dedupe bank rates — filter by selected rateType, fallback to other type
   const bankMap: Record<string, any> = {}
-  // First pass: transactional rates
   for (const r of (bankRatesRes.data ?? [])) {
-    if ((r.rate_type ?? 'transactional') !== 'transactional') continue
+    if ((r.rate_type ?? 'transactional') !== rateType) continue
     const slug = r.institution_slug
     if (!bankMap[slug]) bankMap[slug] = { bank: instNames[slug] ?? slug, slug, verified: formatDate(r.rate_date) }
     const prefix = r.currency_code.toLowerCase()
@@ -83,9 +84,10 @@ export default async function FxRatesPage() {
       bankMap[slug][prefix + '_sell'] = fmt(r.selling_rate)
     }
   }
-  // Second pass: fill gaps with cash rates
+  // Fill gaps with the other rate type
+  const fallbackType = rateType === 'transactional' ? 'cash' : 'transactional'
   for (const r of (bankRatesRes.data ?? [])) {
-    if ((r.rate_type ?? 'transactional') !== 'cash') continue
+    if ((r.rate_type ?? 'transactional') !== fallbackType) continue
     const slug = r.institution_slug
     if (!bankMap[slug]) bankMap[slug] = { bank: instNames[slug] ?? slug, slug, verified: formatDate(r.rate_date) }
     const prefix = r.currency_code.toLowerCase()
@@ -187,7 +189,8 @@ export default async function FxRatesPage() {
           {NBE_RATES.length > 0 ? (
             <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
               <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
-              <table className="w-full">
+              <div className="overflow-x-auto">
+              <table className="w-full" style={{ minWidth: 480 }}>
                 <thead>
                   <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                     <th className="text-left text-xs font-black text-slate-400 uppercase tracking-widest" style={{ padding: '12px 20px' }}>Currency</th>
@@ -233,6 +236,7 @@ export default async function FxRatesPage() {
                   })}
                 </tbody>
               </table>
+              </div>
               <div className="flex items-center justify-between border-t border-slate-100" style={{ background: '#f8fafc', padding: '12px 20px' }}>
                 <p className="text-xs text-slate-400">Source: National Bank of Ethiopia &#8212; nbe.gov.et</p>
                 <p className="text-xs text-slate-400">All rates ETB per 1 foreign unit</p>
@@ -253,6 +257,18 @@ export default async function FxRatesPage() {
                   USD, EUR &amp; GBP &#8212; all banks compared
                 </h2>
                 <p className="text-slate-500 mt-1" style={{ fontSize: '13px' }}>Sell rate is what you pay when buying foreign currency. Buy rate is what you receive when selling.</p>
+                <div className="flex items-center gap-2 mt-3">
+                  <Link href="/banking/fx-rates?type=transactional"
+                    className="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
+                    style={rateType === 'transactional' ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
+                    Transactional
+                  </Link>
+                  <Link href="/banking/fx-rates?type=cash"
+                    className="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
+                    style={rateType === 'cash' ? { background: '#1D4ED8', color: '#fff' } : { background: '#f1f5f9', color: '#64748b' }}>
+                    Cash
+                  </Link>
+                </div>
               </div>
               {bankDate && (
                 <div className="flex items-center gap-2 shrink-0">
@@ -267,7 +283,7 @@ export default async function FxRatesPage() {
             <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
               <div style={{ height: 4, background: 'linear-gradient(90deg, #1D4ED8, #1E40AF)' }} />
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full" style={{ minWidth: 700 }}>
                   <thead>
                     <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                       <th className="text-left text-xs font-black text-slate-400 uppercase tracking-widest" style={{ padding: '12px 20px', minWidth: 180 }}>Bank</th>
@@ -359,7 +375,7 @@ export default async function FxRatesPage() {
                 </table>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-100" style={{ background: '#f8fafc', padding: '12px 20px' }}>
-                <p className="text-xs text-slate-400">Transactional rates shown where available, cash rates otherwise &#8212; NBE rate from nbe.gov.et &#8212; All rates ETB per 1 foreign unit</p>
+                <p className="text-xs text-slate-400">Showing {rateType} rates &#8212; NBE rate from nbe.gov.et &#8212; All rates ETB per 1 foreign unit</p>
                 <Link href="/institutions?type=bank" className="text-xs font-bold shrink-0" style={{ color: '#1D4ED8' }}>View all bank profiles &#8594;</Link>
               </div>
             </div>
