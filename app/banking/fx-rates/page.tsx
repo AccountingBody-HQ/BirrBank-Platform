@@ -38,11 +38,11 @@ export default async function FxRatesPage() {
       .order('currency_code')
       .limit(40),
     supabase.schema('birrbank').from('exchange_rates')
-      .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date')
+      .select('institution_slug, currency_code, buying_rate, selling_rate, rate_date, rate_type')
       .neq('institution_slug', 'nbe')
       .order('rate_date', { ascending: false })
       .in('currency_code', ['USD','EUR','GBP'])
-      .limit(200),
+      .limit(400),
     supabase.schema('birrbank').from('institutions')
       .select('slug, name')
       .eq('is_active', true),
@@ -70,14 +70,28 @@ export default async function FxRatesPage() {
   })
   const nbeDate = NBE_RATES[0]?.rate_date ?? null
 
-  // Dedupe bank rates
+  // Dedupe bank rates — prefer transactional, fallback to cash
   const bankMap: Record<string, any> = {}
+  // First pass: transactional rates
   for (const r of (bankRatesRes.data ?? [])) {
+    if ((r.rate_type ?? 'transactional') !== 'transactional') continue
     const slug = r.institution_slug
     if (!bankMap[slug]) bankMap[slug] = { bank: instNames[slug] ?? slug, slug, verified: formatDate(r.rate_date) }
-    if (!bankMap[slug][r.currency_code.toLowerCase() + '_buy']) {
-      bankMap[slug][r.currency_code.toLowerCase() + '_buy'] = fmt(r.buying_rate)
-      bankMap[slug][r.currency_code.toLowerCase() + '_sell'] = fmt(r.selling_rate)
+    const prefix = r.currency_code.toLowerCase()
+    if (!bankMap[slug][prefix + '_buy']) {
+      bankMap[slug][prefix + '_buy'] = fmt(r.buying_rate)
+      bankMap[slug][prefix + '_sell'] = fmt(r.selling_rate)
+    }
+  }
+  // Second pass: fill gaps with cash rates
+  for (const r of (bankRatesRes.data ?? [])) {
+    if ((r.rate_type ?? 'transactional') !== 'cash') continue
+    const slug = r.institution_slug
+    if (!bankMap[slug]) bankMap[slug] = { bank: instNames[slug] ?? slug, slug, verified: formatDate(r.rate_date) }
+    const prefix = r.currency_code.toLowerCase()
+    if (!bankMap[slug][prefix + '_buy']) {
+      bankMap[slug][prefix + '_buy'] = fmt(r.buying_rate)
+      bankMap[slug][prefix + '_sell'] = fmt(r.selling_rate)
     }
   }
   const BANK_RATES = Object.values(bankMap)
@@ -345,7 +359,7 @@ export default async function FxRatesPage() {
                 </table>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-slate-100" style={{ background: '#f8fafc', padding: '12px 20px' }}>
-                <p className="text-xs text-slate-400">Rates sourced from individual bank websites &#8212; NBE rate from nbe.gov.et &#8212; All rates ETB per 1 foreign unit</p>
+                <p className="text-xs text-slate-400">Transactional rates shown where available, cash rates otherwise &#8212; NBE rate from nbe.gov.et &#8212; All rates ETB per 1 foreign unit</p>
                 <Link href="/institutions?type=bank" className="text-xs font-bold shrink-0" style={{ color: '#1D4ED8' }}>View all bank profiles &#8594;</Link>
               </div>
             </div>
